@@ -1,211 +1,663 @@
 <!DOCTYPE html>
-<html lang="ru" id="htmlRoot">
+<html lang="ru" id="htmlRoot" class="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="pageTitle">АгроБот — Экономия воды</title>
-  <meta id="pageDesc" name="description" content="Умная система управления поливом для фермеров" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title id="pageTitle">Su-Tech — Точное земледелие</title>
+  <meta id="pageDesc" name="description" content="Интеллектуальная система управления орошением на базе модели FAO-56 Penman-Monteith" />
 
-  <!-- Telegram Mini App SDK — подключать ПЕРВЫМ -->
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Telegram Mini App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            agri: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+              950: '#052e16',
+              dark: '#03140a',
+              card: 'rgba(5, 46, 22, 0.45)',
+            }
+          }
+        }
+      }
+    }
+  </script>
 
   <style>
-    /* ── Кастомные анимации ─────────────────────────────────────────── */
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      33%       { transform: translateY(-8px) rotate(1deg); }
-      66%       { transform: translateY(-4px) rotate(-1deg); }
-    }
-
-    @keyframes fade-up {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulse-glow {
-      0%, 100% {
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0),
-                    0 8px 32px rgba(34, 197, 94, 0.25);
-      }
-      50% {
-        box-shadow: 0 0 0 10px rgba(34, 197, 94, 0.08),
-                    0 8px 48px rgba(34, 197, 94, 0.45);
-      }
-    }
-
-    @keyframes spin-slow {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-
-    @keyframes shimmer {
-      0%   { background-position: -200% center; }
-      100% { background-position:  200% center; }
-    }
-
-    /* ── Базовые стили ──────────────────────────────────────────────── */
-
+    /* ── Глобальные стили ── */
     html, body {
-      height: 100%;
+      min-height: 100%;
       margin: 0;
       padding: 0;
-      background-color: #052e16; /* green-950 */
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-                   'Helvetica Neue', Arial, sans-serif;
+      background-color: #03140a;
+      color: #f0fdf4;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
 
-    /* ── Иконка: плавающая анимация ─────────────────────────────────── */
-    .icon-float { animation: float 5s ease-in-out infinite; }
-
-    /* ── Карточки: постепенное появление ───────────────────────────── */
-    .fade-up-1 { animation: fade-up 0.5s ease-out 0.1s both; }
-    .fade-up-2 { animation: fade-up 0.5s ease-out 0.25s both; }
-    .fade-up-3 { animation: fade-up 0.5s ease-out 0.4s both; }
-    .fade-up-4 { animation: fade-up 0.5s ease-out 0.55s both; }
-    .fade-up-5 { animation: fade-up 0.5s ease-out 0.7s both; }
-
-    /* ── Кнопка: пульсирующее свечение ─────────────────────────────── */
-    .btn-pulse  { animation: pulse-glow 2.5s ease-in-out infinite; }
-    .btn-loading {
-      background: linear-gradient(
-        90deg,
-        #166534 0%, #16a34a 40%, #166534 60%, #166534 100%
-      );
-      background-size: 200% auto;
-      animation: shimmer 1.5s linear infinite;
-      opacity: 0.85;
-      cursor: not-allowed;
-    }
-
-    /* ── Статус-блок ────────────────────────────────────────────────── */
-    .status-block {
-      width: 100%;
-      border-radius: 1rem;
-      padding: 0.875rem 1rem;
-      text-align: center;
-    }
-    .status-loading { background: rgba(20, 83, 45, 0.5);  border: 1px solid rgba(34,197,94,0.2); }
-    .status-success { background: rgba(20, 83, 45, 0.7);  border: 1px solid rgba(34,197,94,0.4); }
-    .status-error   { background: rgba(127, 29, 29, 0.3); border: 1px solid rgba(239,68,68,0.3); }
-
-    /* ── Декоративные круги на фоне ─────────────────────────────────── */
-    .bg-orb {
+    /* ── Фоновые свечения ── */
+    .glow-orb {
       position: fixed;
       border-radius: 9999px;
-      filter: blur(80px);
+      filter: blur(100px);
       pointer-events: none;
       z-index: 0;
     }
+
+    /* ── Радарный эффект для GPS ── */
+    @keyframes radar-pulse {
+      0% { transform: scale(0.85); opacity: 0.8; }
+      50% { transform: scale(1.15); opacity: 0.2; }
+      100% { transform: scale(0.85); opacity: 0.8; }
+    }
+    .radar-circle {
+      animation: radar-pulse 3s ease-in-out infinite;
+    }
+
+    /* ── Анимация плавного перехода шагов ── */
+    .step-pane {
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .step-pane.hidden-pane {
+      display: none;
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    .step-pane.active-pane {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Акцентные свечения и карточки ── */
+    .glass-card {
+      background: rgba(6, 36, 18, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(34, 197, 94, 0.18);
+      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(34, 197, 94, 0.08);
+    }
+
+    .glass-card-interactive {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card-interactive:active {
+      transform: scale(0.98);
+    }
+
+    .card-selected {
+      background: rgba(16, 185, 129, 0.16) !important;
+      border-color: rgba(52, 211, 153, 0.8) !important;
+      box-shadow: 0 0 24px -2px rgba(16, 185, 129, 0.35), 0 8px 20px -4px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* ── Стилизованный скроллбар ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.2); border-radius: 4px; }
   </style>
 </head>
 
-<body class="flex items-start justify-center min-h-full px-5 py-8 overflow-x-hidden">
+<body class="relative flex flex-col min-h-screen text-slate-100 overflow-x-hidden selection:bg-emerald-500 selection:text-white">
 
-  <!-- Фоновые декоративные элементы -->
-  <div class="bg-orb w-72 h-72 bg-green-800 opacity-20 top-[-80px] right-[-60px]"></div>
-  <div class="bg-orb w-96 h-96 bg-green-900 opacity-30 bottom-[-100px] left-[-80px]"></div>
+  <!-- Фоновые декоративные сферы -->
+  <div class="glow-orb w-80 h-80 bg-emerald-600/15 top-[-100px] right-[-80px]"></div>
+  <div class="glow-orb w-96 h-96 bg-teal-700/10 bottom-[-120px] left-[-90px]"></div>
+  <div class="glow-orb w-64 h-64 bg-green-500/10 top-[40%] left-[20%]"></div>
 
-  <!-- Основной контейнер -->
-  <main class="relative z-10 w-full max-w-sm flex flex-col items-center gap-6">
+  <!-- Главный контейнер приложения -->
+  <div class="relative z-10 flex flex-col flex-1 w-full max-w-md mx-auto px-4 py-4 pb-24">
 
-    <!-- ── Иконка ──────────────────────────────────────────────────── -->
-    <div class="icon-float fade-up-1 mt-2">
-      <div class="w-24 h-24 rounded-3xl flex items-center justify-center"
-           style="background: linear-gradient(135deg, #14532d 0%, #166534 100%);
-                  box-shadow: 0 4px 24px rgba(34,197,94,0.2), inset 0 1px 0 rgba(255,255,255,0.07);">
-        <!-- SVG: капля воды с листом -->
-        <svg width="52" height="52" viewBox="0 0 52 52" fill="none"
-             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- Капля -->
-          <path d="M26 4 C26 4 10 22 10 33 C10 42.4 17.2 48 26 48
-                   C34.8 48 42 42.4 42 33 C42 22 26 4 26 4Z"
-                fill="#22c55e" opacity="0.95"/>
-          <!-- Блик на капле -->
-          <ellipse cx="20" cy="26" rx="4" ry="6"
-                   fill="white" opacity="0.15" transform="rotate(-20 20 26)"/>
-          <!-- Листик внутри -->
-          <path d="M26 38 C26 38 18 30 22 22 C26 30 34 22 34 22
-                   C30 30 26 38 26 38Z"
-                fill="#14532d" opacity="0.8"/>
-          <!-- Прожилка листа -->
-          <line x1="26" y1="38" x2="26" y2="22"
-                stroke="#dcfce7" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
-        </svg>
+    <!-- ── Шапка: Логотип, Статус, Переключатель языка ── -->
+    <header class="flex items-center justify-between gap-3 mb-4">
+      <div class="flex items-center gap-2.5">
+        <!-- Логотип Su-Tech -->
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-700 flex items-center justify-center shadow-lg shadow-emerald-900/50 border border-emerald-300/30">
+          <svg class="w-6 h-6 text-white drop-shadow" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+            <path d="M12 11c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#042f1a" opacity="0.4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-bold tracking-tight text-white text-base">Su-Tech</span>
+            <span class="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              FAO-56
+            </span>
+          </div>
+          <p id="headerSubtitle" class="text-[11px] text-emerald-400/80 font-medium">
+            Точное земледелие • РКНП «Дарын»
+          </p>
+        </div>
+      </div>
+
+      <!-- Переключатель языка KZ / RU -->
+      <div class="flex items-center p-1 rounded-xl bg-emerald-950/80 border border-emerald-500/30 shadow-inner">
+        <button
+          type="button"
+          id="langBtnKz"
+          onclick="setLanguage('kz')"
+          class="px-2.5 py-1 text-xs font-semibold rounded-lg transition-all text-emerald-300 hover:text-white"
+        >
+          ҚАЗ
+        </button>
+        <button
+          type="button"
+          id="langBtnRu"
+          onclick="setLanguage('ru')"
+          class="px-2.5 py-1 text-xs font-semibold rounded-lg transition-all bg-emerald-500 text-slate-950 shadow-sm"
+        >
+          РУС
+        </button>
+      </div>
+    </header>
+
+    <!-- ── Индикатор шагов (Stepper) ── -->
+    <div class="glass-card rounded-2xl p-3.5 mb-4">
+      <div class="flex items-center justify-between text-xs font-medium text-emerald-300 mb-2.5">
+        <span id="stepLabelIndicator" class="font-bold uppercase tracking-wider text-[11px] text-emerald-400">Шаг 1 из 4</span>
+        <span id="stepTitleIndicator" class="text-slate-300 text-xs">Локация участка</span>
+      </div>
+
+      <!-- Полоса прогресса -->
+      <div class="w-full h-1.5 bg-emerald-950/80 rounded-full overflow-hidden border border-emerald-500/20">
+        <div id="progressBar" class="h-full bg-gradient-to-r from-emerald-500 via-green-400 to-emerald-300 transition-all duration-300 rounded-full" style="width: 25%;"></div>
+      </div>
+
+      <!-- Иконки 4 шагов с кликом для быстрого перехода к пройденным шагам -->
+      <div class="grid grid-cols-4 gap-2 mt-3 text-center">
+        <!-- Шаг 1 -->
+        <button type="button" onclick="goToStep(1)" id="stepTab1" class="flex flex-col items-center gap-1 group">
+          <div id="stepDot1" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/30">
+            📍
+          </div>
+          <span id="stepTabName1" class="text-[10px] text-emerald-300 font-semibold tracking-tight">Локация</span>
+        </button>
+        <!-- Шаг 2 -->
+        <button type="button" onclick="goToStep(2)" id="stepTab2" class="flex flex-col items-center gap-1 group">
+          <div id="stepDot2" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all bg-emerald-900/50 text-emerald-400/60 border border-emerald-500/20">
+            🌾
+          </div>
+          <span id="stepTabName2" class="text-[10px] text-slate-400 font-medium tracking-tight">Культура</span>
+        </button>
+        <!-- Шаг 3 -->
+        <button type="button" onclick="goToStep(3)" id="stepTab3" class="flex flex-col items-center gap-1 group">
+          <div id="stepDot3" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all bg-emerald-900/50 text-emerald-400/60 border border-emerald-500/20">
+            📐
+          </div>
+          <span id="stepTabName3" class="text-[10px] text-slate-400 font-medium tracking-tight">Площадь</span>
+        </button>
+        <!-- Шаг 4 -->
+        <button type="button" onclick="goToStep(4)" id="stepTab4" class="flex flex-col items-center gap-1 group">
+          <div id="stepDot4" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all bg-emerald-900/50 text-emerald-400/60 border border-emerald-500/20">
+            💧
+          </div>
+          <span id="stepTabName4" class="text-[10px] text-slate-400 font-medium tracking-tight">Полив</span>
+        </button>
       </div>
     </div>
 
-    <!-- ── Заголовок ───────────────────────────────────────────────── -->
-    <div class="fade-up-2 text-center flex flex-col gap-2">
-      <h1 class="text-3xl font-bold tracking-tight"
-          style="color: #f0fdf4; letter-spacing: -0.5px;">
-        АгроБот
-      </h1>
-      <p id="subtitle" class="text-sm leading-relaxed" style="color: #86efac;">
-        Умная система управления поливом.<br>
-        Экономьте воду с первой минуты.
-      </p>
-    </div>
+    <!-- ── КОНТЕНТ ШАГОВ (Step Panes) ── -->
 
-    <!-- ── Шаги инструкции ─────────────────────────────────────────── -->
-    <div class="fade-up-3 w-full rounded-2xl p-4 flex flex-col gap-3"
-         style="background: rgba(20,83,45,0.4); border: 1px solid rgba(34,197,94,0.15);">
-      <p id="howToStart" class="text-xs font-semibold uppercase tracking-wider" style="color:#4ade80;">
-        Как начать
-      </p>
-
-      <div class="flex items-center gap-3">
-        <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-              style="background:rgba(34,197,94,0.15); color:#4ade80;">1</span>
-        <span id="step1" class="text-sm" style="color:#bbf7d0;">Нажмите кнопку ниже</span>
+    <!-- ==================== ШАГ 1: ЛОКАЦИЯ (GPS) ==================== -->
+    <section id="stepPane1" class="step-pane active-pane flex flex-col gap-4">
+      <div class="text-left">
+        <h2 id="step1Header" class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+          <span>Геопозиция участка</span>
+          <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">Спутники</span>
+        </h2>
+        <p id="step1Desc" class="text-xs text-emerald-200/70 mt-1 leading-relaxed">
+          Система запросит метеоданные (солнечную радиацию, ветер, влажность почвы) в точке координат по модели FAO-56.
+        </p>
       </div>
 
-      <div class="flex items-center gap-3">
-        <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-              style="background:rgba(34,197,94,0.15); color:#4ade80;">2</span>
-        <span id="step2" class="text-sm" style="color:#bbf7d0;">Разрешите доступ к геолокации</span>
+      <!-- Радарная карточка с анимацией -->
+      <div class="glass-card rounded-2xl p-5 flex flex-col items-center text-center relative overflow-hidden">
+        <!-- Декоративные концентрические круги радара -->
+        <div class="relative w-36 h-36 flex items-center justify-center my-2">
+          <div class="radar-circle absolute inset-0 rounded-full border border-emerald-500/20 bg-emerald-500/5"></div>
+          <div class="absolute inset-4 rounded-full border border-emerald-500/30 bg-emerald-500/5"></div>
+          <div class="absolute inset-9 rounded-full border border-emerald-500/40"></div>
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/30 text-2xl z-10 border border-emerald-300/40">
+            📡
+          </div>
+        </div>
+
+        <!-- Кнопка запроса GPS -->
+        <button
+          type="button"
+          id="btnGetLocation"
+          onclick="requestGeolocation()"
+          class="w-full mt-3 py-3.5 px-4 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 active:scale-[0.98] transition-all shadow-lg shadow-emerald-950/60 border border-emerald-400/30 flex items-center justify-center gap-2"
+        >
+          <span id="btnLocationIcon">🛰️</span>
+          <span id="btnLocationText">Определить GPS координаты</span>
+        </button>
+
+        <!-- Индикатор статуса поиска -->
+        <div id="gpsStatusBlock" class="hidden w-full mt-3 p-3 rounded-xl text-xs flex items-center justify-center gap-2">
+          <span id="gpsStatusSpinner" class="hidden animate-spin">🌀</span>
+          <span id="gpsStatusText">Поиск спутников...</span>
+        </div>
+
+        <!-- Карточка полученных координат -->
+        <div id="coordsCard" class="hidden w-full mt-3 p-3.5 rounded-xl bg-emerald-950/60 border border-emerald-500/30 text-left">
+          <div class="flex items-center justify-between pb-2 border-b border-emerald-500/20 mb-2">
+            <span id="coordsCardTitle" class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+              <span>✅</span> Координаты зафиксированы
+            </span>
+            <span id="coordsAccuracy" class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">
+              ±8 м
+            </span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+            <div>
+              <span id="labelLat" class="text-[10px] text-slate-400 font-sans block">Широта (Lat):</span>
+              <span id="displayLat" class="text-white font-semibold">43.238949°</span>
+            </div>
+            <div>
+              <span id="labelLon" class="text-[10px] text-slate-400 font-sans block">Долгота (Lon):</span>
+              <span id="displayLon" class="text-white font-semibold">76.889709°</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Кнопка демо-координат (для ПК и тестирования) -->
+        <button
+          type="button"
+          onclick="setDemoCoordinates()"
+          class="mt-3 text-[11px] text-emerald-400/80 hover:text-emerald-300 transition-colors flex items-center gap-1 underline underline-offset-2"
+        >
+          <span id="demoCoordsText">Использовать координаты поля (Туркестанская обл.)</span>
+        </button>
       </div>
 
-      <div class="flex items-center gap-3">
-        <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-              style="background:rgba(34,197,94,0.15); color:#4ade80;">3</span>
-        <span id="step3" class="text-sm" style="color:#bbf7d0;">Получите анализ вашего участка</span>
+      <!-- Карточка подсказки безопасности -->
+      <div class="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/10 text-[11px] text-emerald-300/70 flex items-start gap-2">
+        <span class="text-sm leading-none">🔒</span>
+        <span id="step1Privacy">
+          Координаты передаются исключительно в Open-Meteo API для расчёта фактической эвапотранспирации поля.
+        </span>
       </div>
-    </div>
+    </section>
 
-    <!-- ── Главная кнопка ──────────────────────────────────────────── -->
-    <div class="fade-up-4 w-full">
+    <!-- ==================== ШАГ 2: КУЛЬТУРА (CROP) ==================== -->
+    <section id="stepPane2" class="step-pane hidden-pane flex flex-col gap-4">
+      <div class="text-left">
+        <h2 id="step2Header" class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+          <span>Сельскохозяйственная культура</span>
+        </h2>
+        <p id="step2Desc" class="text-xs text-emerald-200/70 mt-1 leading-relaxed">
+          Коэффициент культуры ($K_c$) определяет биологическое водопотребление растения на данном этапе вегетации.
+        </p>
+      </div>
+
+      <!-- Сетка 2x2 культур -->
+      <div class="grid grid-cols-2 gap-3">
+
+        <!-- 1. Хлопок -->
+        <div
+          id="cropCard_cotton"
+          onclick="selectCrop('cotton')"
+          class="glass-card glass-card-interactive card-selected rounded-2xl p-4 flex flex-col items-center text-center cursor-pointer relative"
+        >
+          <div class="w-14 h-14 rounded-2xl bg-emerald-900/50 border border-emerald-500/30 flex items-center justify-center text-3xl mb-2.5 shadow-inner">
+            <!-- SVG: Хлопок -->
+            <svg class="w-8 h-8 text-emerald-200" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM12 18c-2.21 0-4-1.79-4-4 0-1.1.45-2.1 1.17-2.83l1.41 1.41C10.22 12.95 10 13.45 10 14c0 1.1.9 2 2 2s2-.9 2-2c0-.55-.22-1.05-.59-1.41l1.41-1.41C15.55 11.9 16 12.9 16 14c0 2.21-1.79 4-4 4z"/>
+            </svg>
+          </div>
+          <span id="cropName_cotton" class="text-sm font-bold text-white">Хлопок</span>
+          <span id="cropSub_cotton" class="text-[11px] text-emerald-300 font-medium">Мақта</span>
+          <div class="mt-2 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono">
+            Kc: 1.15
+          </div>
+          <div id="check_cotton" class="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-xs font-bold shadow">
+            ✓
+          </div>
+        </div>
+
+        <!-- 2. Кукуруза -->
+        <div
+          id="cropCard_corn"
+          onclick="selectCrop('corn')"
+          class="glass-card glass-card-interactive rounded-2xl p-4 flex flex-col items-center text-center cursor-pointer relative"
+        >
+          <div class="w-14 h-14 rounded-2xl bg-emerald-900/50 border border-emerald-500/30 flex items-center justify-center text-3xl mb-2.5 shadow-inner">
+            <!-- SVG: Кукуруза / Злаки -->
+            <svg class="w-8 h-8 text-amber-300" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C8.5 2 6 5.5 6 9.5c0 3.5 2 6 4 9.5l2 3 2-3c2-3.5 4-6 4-9.5C18 5.5 15.5 2 12 2zm-1 6h2v2h-2V8zm0 3h2v2h-2v-2zm-3-1h2v2H8v-2zm6 0h2v2h-2v-2z"/>
+            </svg>
+          </div>
+          <span id="cropName_corn" class="text-sm font-bold text-white">Кукуруза</span>
+          <span id="cropSub_corn" class="text-[11px] text-emerald-300 font-medium">Жүгері</span>
+          <div class="mt-2 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono">
+            Kc: 1.20
+          </div>
+          <div id="check_corn" class="hidden absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-xs font-bold shadow">
+            ✓
+          </div>
+        </div>
+
+        <!-- 3. Люцерна -->
+        <div
+          id="cropCard_alfalfa"
+          onclick="selectCrop('alfalfa')"
+          class="glass-card glass-card-interactive rounded-2xl p-4 flex flex-col items-center text-center cursor-pointer relative"
+        >
+          <div class="w-14 h-14 rounded-2xl bg-emerald-900/50 border border-emerald-500/30 flex items-center justify-center text-3xl mb-2.5 shadow-inner">
+            <!-- SVG: Трава / Люцерна -->
+            <svg class="w-8 h-8 text-green-300" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 3c-1.5 3-2 6-2 10 0 3 1.5 6 4 8 0-4 1-8 4-11C9 7 7.5 4.5 6 3zm12 0c-1.5 1.5-3 4-6 7 3 3 4 7 4 11 2.5-2 4-5 4-8 0-4-.5-7-2-10z"/>
+            </svg>
+          </div>
+          <span id="cropName_alfalfa" class="text-sm font-bold text-white">Люцерна</span>
+          <span id="cropSub_alfalfa" class="text-[11px] text-emerald-300 font-medium">Жоңышқа</span>
+          <div class="mt-2 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono">
+            Kc: 1.05
+          </div>
+          <div id="check_alfalfa" class="hidden absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-xs font-bold shadow">
+            ✓
+          </div>
+        </div>
+
+        <!-- 4. Томаты -->
+        <div
+          id="cropCard_tomato"
+          onclick="selectCrop('tomato')"
+          class="glass-card glass-card-interactive rounded-2xl p-4 flex flex-col items-center text-center cursor-pointer relative"
+        >
+          <div class="w-14 h-14 rounded-2xl bg-emerald-900/50 border border-emerald-500/30 flex items-center justify-center text-3xl mb-2.5 shadow-inner">
+            <!-- SVG: Томат -->
+            <svg class="w-8 h-8 text-rose-400" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2c.5 0 1 .5 1 1 0 1-1 2-1 2s2-1 3-1c.5 0 1 .5 1 1s-.5 1-1 1c2 0 4 1 5 3 2 4 1 9-3 12-3 2-8 2-11 0-4-3-5-8-3-12 1-2 3-3 5-3-.5 0-1-.5-1-1s.5-1 1-1c1 0 3 1 3 1s-1-1-1-2c0-.5.5-1 1-1z"/>
+            </svg>
+          </div>
+          <span id="cropName_tomato" class="text-sm font-bold text-white">Томаты</span>
+          <span id="cropSub_tomato" class="text-[11px] text-emerald-300 font-medium">Қызанақ</span>
+          <div class="mt-2 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono">
+            Kc: 1.15
+          </div>
+          <div id="check_tomato" class="hidden absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-xs font-bold shadow">
+            ✓
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Примечание о Kc -->
+      <div class="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/10 text-[11px] text-emerald-300/70 flex items-center gap-2">
+        <span class="text-base">ℹ️</span>
+        <span id="step2KcNote">
+          Коэффициенты $K_c$ откалиброваны по полевым методикам FAO Irrigation and Drainage Paper 56.
+        </span>
+      </div>
+    </section>
+
+    <!-- ==================== ШАГ 3: ПАРАМЕТРЫ ПОЛЯ (AREA) ==================== -->
+    <section id="stepPane3" class="step-pane hidden-pane flex flex-col gap-4">
+      <div class="text-left">
+        <h2 id="step3Header" class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+          <span>Параметры поля</span>
+        </h2>
+        <p id="step3Desc" class="text-xs text-emerald-200/70 mt-1 leading-relaxed">
+          Укажите площадь поливного сектора для масштабирования суммарной нормы подачи воды.
+        </p>
+      </div>
+
+      <!-- Карточка ввода площади и единиц -->
+      <div class="glass-card rounded-2xl p-5 flex flex-col gap-4">
+
+        <!-- Переключатель Сотки / Гектары -->
+        <div>
+          <label id="labelAreaUnit" class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-2 block">
+            Единица измерения площади:
+          </label>
+          <div class="grid grid-cols-2 gap-2 p-1.5 rounded-xl bg-emerald-950/80 border border-emerald-500/30">
+            <button
+              type="button"
+              id="unitBtn_sotka"
+              onclick="setAreaUnit('sotka')"
+              class="py-2.5 px-3 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white"
+            >
+              <span id="unitText_sotka">Сотки (100 м²)</span>
+            </button>
+            <button
+              type="button"
+              id="unitBtn_hectare"
+              onclick="setAreaUnit('hectare')"
+              class="py-2.5 px-3 rounded-lg text-xs font-bold transition-all bg-emerald-500 text-slate-950 shadow-md"
+            >
+              <span id="unitText_hectare">Гектары (10 000 м²)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Поле ввода площади -->
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label id="labelAreaValue" for="fieldAreaInput" class="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              Площадь участка:
+            </label>
+            <span id="currentAreaUnitBadge" class="text-[11px] font-mono text-emerald-300 px-2 py-0.5 rounded bg-emerald-500/20">
+              гектар
+            </span>
+          </div>
+
+          <div class="relative flex items-center">
+            <input
+              type="number"
+              id="fieldAreaInput"
+              min="0.1"
+              step="0.5"
+              value="10"
+              oninput="handleAreaChange(this.value)"
+              class="w-full py-3.5 px-4 pr-16 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-white text-2xl font-bold font-mono focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all shadow-inner"
+              placeholder="10"
+            />
+            <div id="inputUnitSuffix" class="absolute right-4 text-sm font-bold text-emerald-400/80 font-sans pointer-events-none">
+              га
+            </div>
+          </div>
+        </div>
+
+        <!-- Быстрые чипы пресетов -->
+        <div>
+          <span id="labelQuickPresets" class="text-[11px] text-slate-400 font-medium block mb-2">
+            Быстрый выбор:
+          </span>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="setPresetArea(1)" class="px-3 py-1.5 rounded-lg bg-emerald-900/40 border border-emerald-500/20 text-xs text-emerald-200 font-mono hover:bg-emerald-800/50 active:scale-95 transition-all">
+              1
+            </button>
+            <button type="button" onclick="setPresetArea(5)" class="px-3 py-1.5 rounded-lg bg-emerald-900/40 border border-emerald-500/20 text-xs text-emerald-200 font-mono hover:bg-emerald-800/50 active:scale-95 transition-all">
+              5
+            </button>
+            <button type="button" onclick="setPresetArea(10)" class="px-3 py-1.5 rounded-lg bg-emerald-900/40 border border-emerald-500/20 text-xs text-emerald-200 font-mono hover:bg-emerald-800/50 active:scale-95 transition-all">
+              10
+            </button>
+            <button type="button" onclick="setPresetArea(25)" class="px-3 py-1.5 rounded-lg bg-emerald-900/40 border border-emerald-500/20 text-xs text-emerald-200 font-mono hover:bg-emerald-800/50 active:scale-95 transition-all">
+              25
+            </button>
+            <button type="button" onclick="setPresetArea(50)" class="px-3 py-1.5 rounded-lg bg-emerald-900/40 border border-emerald-500/20 text-xs text-emerald-200 font-mono hover:bg-emerald-800/50 active:scale-95 transition-all">
+              50
+            </button>
+            <button type="button" onclick="setPresetArea(100)" class="px-3 py-1.5 rounded-lg bg-emerald-900/40 border border-emerald-500/20 text-xs text-emerald-200 font-mono hover:bg-emerald-800/50 active:scale-95 transition-all">
+              100
+            </button>
+          </div>
+        </div>
+
+        <!-- Конверсионная справка -->
+        <div class="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/20 text-[11px] text-emerald-300 flex items-center justify-between">
+          <span id="areaCalcEquivalentLabel">Эквивалент в метрах:</span>
+          <span id="areaInM2" class="font-mono font-bold text-white">100 000 м² (1 000 соток)</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== ШАГ 4: ТИП ПОЛИВА (IRRIGATION & CALC) ==================== -->
+    <section id="stepPane4" class="step-pane hidden-pane flex flex-col gap-4">
+      <div class="text-left">
+        <h2 id="step4Header" class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+          <span>Тип оросительной системы</span>
+        </h2>
+        <p id="step4Desc" class="text-xs text-emerald-200/70 mt-1 leading-relaxed">
+          Коэффициент полезного действия (КПД) определяет технологические потери воды при доставке к корням.
+        </p>
+      </div>
+
+      <!-- Карточки выбора типа полива -->
+      <div class="flex flex-col gap-3">
+
+        <!-- 1. Капельный полив (КПД 90%) -->
+        <div
+          id="irrigCard_drip"
+          onclick="selectIrrigation('drip')"
+          class="glass-card glass-card-interactive card-selected rounded-2xl p-4 cursor-pointer relative"
+        >
+          <div class="flex items-start gap-3.5">
+            <div class="w-12 h-12 rounded-xl bg-emerald-900/50 border border-emerald-500/40 flex items-center justify-center text-2xl flex-shrink-0 shadow-inner">
+              💧
+            </div>
+            <div class="flex-1 pr-6">
+              <div class="flex items-center gap-2">
+                <span id="irrigTitle_drip" class="text-sm font-bold text-white">Капельный полив</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  КПД 90%
+                </span>
+              </div>
+              <p id="irrigDesc_drip" class="text-xs text-emerald-200/70 mt-1 leading-snug">
+                Адресная подача в прикорневую зону. Минимальное испарение, экономия воды до 40%.
+              </p>
+            </div>
+          </div>
+          <div id="checkIrrig_drip" class="absolute top-4 right-4 w-5 h-5 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-xs font-bold shadow">
+            ✓
+          </div>
+        </div>
+
+        <!-- 2. Арычный полив (КПД 50%) -->
+        <div
+          id="irrigCard_furrow"
+          onclick="selectIrrigation('furrow')"
+          class="glass-card glass-card-interactive rounded-2xl p-4 cursor-pointer relative"
+        >
+          <div class="flex items-start gap-3.5">
+            <div class="w-12 h-12 rounded-xl bg-emerald-900/50 border border-emerald-500/40 flex items-center justify-center text-2xl flex-shrink-0 shadow-inner">
+              🌊
+            </div>
+            <div class="flex-1 pr-6">
+              <div class="flex items-center gap-2">
+                <span id="irrigTitle_furrow" class="text-sm font-bold text-white">Арычный полив</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  КПД 50%
+                </span>
+              </div>
+              <p id="irrigDesc_furrow" class="text-xs text-emerald-200/70 mt-1 leading-snug">
+                Традиционный самотечный способ. Потери до 50% объема на фильтрацию и испарение.
+              </p>
+            </div>
+          </div>
+          <div id="checkIrrig_furrow" class="hidden absolute top-4 right-4 w-5 h-5 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-xs font-bold shadow">
+            ✓
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Итоговая карточка сводки перед расчетом -->
+      <div class="glass-card rounded-2xl p-4 flex flex-col gap-2.5">
+        <div class="flex items-center justify-between pb-2 border-b border-emerald-500/20">
+          <span id="summaryTitle" class="text-xs font-bold uppercase tracking-wider text-emerald-400">
+            Итоговые параметры расчета:
+          </span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">
+            JSON Ready
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div>
+            <span id="sumLabelCoords" class="text-[10px] text-slate-400 block">Локация:</span>
+            <span id="sumValCoords" class="font-mono text-emerald-200 font-medium">43.2389, 76.8897</span>
+          </div>
+          <div>
+            <span id="sumLabelCrop" class="text-[10px] text-slate-400 block">Культура:</span>
+            <span id="sumValCrop" class="text-emerald-200 font-semibold">Хлопок (Мақта)</span>
+          </div>
+          <div>
+            <span id="sumLabelArea" class="text-[10px] text-slate-400 block">Площадь:</span>
+            <span id="sumValArea" class="text-emerald-200 font-semibold">10 гектар</span>
+          </div>
+          <div>
+            <span id="sumLabelIrrig" class="text-[10px] text-slate-400 block">Технология:</span>
+            <span id="sumValIrrig" class="text-emerald-200 font-semibold">Капельный (КПД 90%)</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── Ошибки и системные уведомления (Toast) ── -->
+    <div id="appToast" class="hidden my-3 p-3 rounded-xl text-xs font-medium text-center border transition-all"></div>
+
+  </div>
+
+  <!-- ── ФИКСИРОВАННАЯ НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ ── -->
+  <footer class="fixed bottom-0 left-0 right-0 z-50 p-4 bg-emerald-950/90 backdrop-blur-xl border-t border-emerald-500/20 shadow-2xl">
+    <div class="max-w-md mx-auto flex items-center gap-3">
+      <!-- Кнопка "Назад" -->
       <button
-        id="locationBtn"
-        class="btn-pulse w-full flex items-center justify-center gap-3
-               rounded-2xl text-white font-bold text-lg
-               active:scale-95 transition-transform duration-150 select-none"
-        style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-               padding: 20px 24px;
-               border: none; cursor: pointer;"
-        aria-label="Определить геолокацию и отправить в бот"
+        type="button"
+        id="btnPrevStep"
+        onclick="prevStep()"
+        class="hidden py-3.5 px-4 rounded-xl font-bold text-sm text-emerald-300 bg-emerald-900/50 hover:bg-emerald-900 border border-emerald-500/30 active:scale-95 transition-all flex items-center justify-center gap-1"
       >
-        <span id="btnIcon" style="font-size: 22px; line-height: 1;">📍</span>
-        <span id="btnLabel">Определить локацию</span>
+        <span>←</span>
+        <span id="btnPrevText">Назад</span>
+      </button>
+
+      <!-- Основная кнопка "Далее" / "Рассчитать норму полива" -->
+      <button
+        type="button"
+        id="btnNextStep"
+        onclick="handleNextOrSubmit()"
+        class="flex-1 py-3.5 px-6 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-300 hover:from-emerald-300 hover:to-green-300 active:scale-[0.98] transition-all shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 border border-emerald-200/40"
+      >
+        <span id="btnNextText">Далее</span>
+        <span id="btnNextIcon">→</span>
       </button>
     </div>
+  </footer>
 
-    <!-- ── Статус (скрыт по умолчанию) ───────────────────────────── -->
-    <div id="statusBlock" class="fade-up-4 hidden">
-      <p id="statusText" class="text-sm font-medium"></p>
-    </div>
-
-    <!-- ── Подпись безопасности ────────────────────────────────────── -->
-    <p id="securityNote" class="fade-up-5 text-xs text-center pb-2" style="color:#4ade80; opacity:0.6;">
-      🔒 Координаты используются только для анализа вашего участка
-    </p>
-
-  </main>
-
+  <!-- Основной модуль логики -->
   <script src="js/app.js"></script>
 </body>
 </html>

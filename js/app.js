@@ -1,7 +1,7 @@
 /**
  * Su-Tech — Интеллектуальная система точного земледелия (Telegram WebApp)
  * Научный модуль расчета норм полива по модели FAO-56 Penman-Monteith
- * Двуязычная поддержка (KZ / RU)
+ * Все 4 блока на одной странице. Отправка sendData() ТОЛЬКО по финальной кнопке внизу!
  */
 
 // ─── 1. Инициализация Telegram WebApp SDK ──────────────────────────────────────
@@ -10,12 +10,6 @@ const tg = window.Telegram?.WebApp || {
   expand: () => {},
   close: () => {},
   sendData: (data) => console.log('Telegram.WebApp.sendData:', data),
-  BackButton: {
-    show: () => {},
-    hide: () => {},
-    onClick: (fn) => {},
-    offClick: (fn) => {}
-  },
   HapticFeedback: {
     impactOccurred: () => {},
     notificationOccurred: () => {}
@@ -31,13 +25,12 @@ try {
 
 // ─── 2. Состояние приложения (State) ──────────────────────────────────────────
 const state = {
-  step: 1,                 // Текущий шаг визарда: 1..4
-  latitude: null,          // Широта
+  latitude: null,          // Широта (определяется кнопкой GPS)
   longitude: null,         // Долгота
-  accuracy: null,          // Точность GPS (м)
+  accuracy: null,          // Точность в метрах
   crop: 'cotton',          // Культура: 'cotton' | 'corn' | 'alfalfa' | 'tomato'
-  area: 10.0,              // Площадь
-  area_unit: 'hectare',    // 'sotka' | 'hectare'
+  area: 10.0,              // Площадь поля
+  area_unit: 'hectare',    // 'hectare' | 'sotka'
   irrigation_type: 'drip', // 'drip' | 'furrow'
   lang: 'ru',              // Язык: 'ru' | 'kz'
   isRequestingGps: false,
@@ -50,24 +43,11 @@ const I18N = {
     pageDesc: 'Интеллектуальная система управления орошением на базе модели FAO-56 Penman-Monteith',
     headerSubtitle: 'Точное земледелие • РКНП «Дарын»',
 
-    // Индикаторы шагов
-    stepLabelIndicator: (step) => `Шаг ${step} из 4`,
-    stepTitles: {
-      1: 'Локация участка',
-      2: 'Выбор культуры',
-      3: 'Параметры поля',
-      4: 'Тип полива и расчет',
-    },
-    stepTabs: {
-      1: 'Локация',
-      2: 'Культура',
-      3: 'Площадь',
-      4: 'Полив',
-    },
-
-    // Шаг 1: Локация
-    step1Header: 'Геопозиция участка',
-    step1Desc: 'Система запросит метеоданные (радиацию, ветер, влажность почвы) в точке координат по модели FAO-56.',
+    // Блок 1: Локация
+    block1Title: 'Локация участка (GPS)',
+    block1StatusWait: 'Ожидает GPS',
+    block1StatusReady: 'Координаты определены',
+    block1Desc: 'Определите координаты поля для автоматического запроса спутниковой радиации, ветра и влажности почвы по модели FAO-56.',
     btnLocationText: 'Определить GPS координаты',
     btnLocationLoading: 'Поиск спутников GPS...',
     gpsSearching: 'Определение точных спутниковых координат...',
@@ -75,23 +55,20 @@ const I18N = {
     labelLat: 'Широта (Lat):',
     labelLon: 'Долгота (Lon):',
     demoCoordsText: 'Использовать координаты поля (Туркестанская обл.)',
-    step1Privacy: 'Координаты передаются исключительно в Open-Meteo API для расчёта фактической эвапотранспирации поля.',
 
-    // Шаг 2: Культура
-    step2Header: 'Сельскохозяйственная культура',
-    step2Desc: 'Коэффициент культуры (Kc) определяет биологическое водопотребление растения на данном этапе вегетации.',
+    // Блок 2: Культура
+    block2Title: 'Сельскохозяйственная культура',
+    block2Desc: 'Выберите культуру для учета биологического коэффициента транспирации (Kc).',
     crops: {
       cotton:  { name: 'Хлопок', sub: 'Мақта' },
       corn:    { name: 'Кукуруза', sub: 'Жүгері' },
       alfalfa: { name: 'Люцерна', sub: 'Жоңышқа' },
       tomato:  { name: 'Томаты', sub: 'Қызанақ' },
     },
-    step2KcNote: 'Коэффициенты Kc откалиброваны по полевым методикам FAO Irrigation and Drainage Paper 56.',
 
-    // Шаг 3: Площадь
-    step3Header: 'Параметры поля',
-    step3Desc: 'Укажите площадь поливного сектора для масштабирования суммарной нормы подачи воды.',
-    labelAreaUnit: 'Единица измерения площади:',
+    // Блок 3: Площадь
+    block3Title: 'Параметры поля',
+    labelAreaUnit: 'Единица измерения:',
     unitText_sotka: 'Сотки (100 м²)',
     unitText_hectare: 'Гектары (10 000 м²)',
     labelAreaValue: 'Площадь участка:',
@@ -100,44 +77,43 @@ const I18N = {
     unitSuffix_sotka: 'сот.',
     unitSuffix_hectare: 'га',
     labelQuickPresets: 'Быстрый выбор:',
-    areaCalcEquivalentLabel: 'Эквивалент в метрах:',
-    equivFormat: (m2, sotka) => `${m2.toLocaleString('ru-RU')} м² (${sotka.toLocaleString('ru-RU')} сот.)`,
+    areaCalcEquivalentLabel: 'Эквивалент:',
+    equivFormat: (m2, sotka) => `${m2.toLocaleString('ru-RU')} м² (${sotka.toLocaleString('ru-RU')} соток)`,
 
-    // Шаг 4: Полив
-    step4Header: 'Тип оросительной системы',
-    step4Desc: 'Коэффициент полезного действия (КПД) определяет технологические потери воды при доставке к корням.',
+    // Блок 4: Полив
+    block4Title: 'Тип оросительной системы',
     irrig: {
       drip: {
         title: 'Капельный полив',
-        desc: 'Адресная подача в прикорневую зону. Минимальное испарение, экономия воды до 40-50%.',
+        desc: 'Адресная подача в прикорневую зону. Экономия воды до 40-50%.',
         badge: 'КПД 90%',
       },
       furrow: {
         title: 'Арычный полив',
-        desc: 'Традиционный самотечный способ. Потери до 50% объема на фильтрацию и испарение.',
+        desc: 'Традиционный самотечный полив. Высокие потери на фильтрацию.',
         badge: 'КПД 50%',
       },
     },
-    summaryTitle: 'Итоговые параметры расчета:',
+
+    // Сводка и отправка
+    summaryTitle: 'Сводка параметров:',
     sumLabelCoords: 'Локация:',
     sumLabelCrop: 'Культура:',
     sumLabelArea: 'Площадь:',
     sumLabelIrrig: 'Технология:',
-    noCoordsYet: 'Не определены',
-
-    // Кнопки навигации
-    btnPrevText: 'Назад',
-    btnNextText: 'Далее',
+    noCoordsYet: 'Не определены (нажмите GPS)',
     btnSubmitText: 'Рассчитать норму полива',
+    submitHint: 'Сбор всех 4 параметров и спутниковый расчет по формуле FAO-56 Penman-Monteith',
 
-    // Ошибки и уведомления
+    // Уведомления и ошибки
     errNoGpsSupport: '❌ Ваш браузер или устройство не поддерживает геолокацию.',
-    errGpsDenied: '🔒 Доступ к геопозиции отклонен. Разрешите GPS в настройках или нажмите демо-координаты.',
+    errGpsDenied: '🔒 Доступ к GPS отклонен. Разрешите геолокацию или используйте демо-координаты.',
     errGpsTimeout: '⏱️ Превышено время ожидания GPS. Попробуйте еще раз или используйте демо-точку.',
     errGpsUnknown: '❌ Ошибка определения локации. Попробуйте снова.',
-    errNeedLocation: '⚠️ Сначала определите координаты участка (GPS или демо-точка)!',
-    errInvalidArea: '⚠️ Введите корректную площадь участка (больше 0)!',
-    successPayloadSent: '✅ Данные переданы! Бот производит расчет по модели FAO-56...',
+    gpsSuccessToast: '✅ Координаты поля успешно зафиксированы!',
+    errNeedLocation: '⚠️ Сначала нажмите "Определить GPS координаты" в Блоке 1!',
+    errInvalidArea: '⚠️ Введите площадь поля больше 0!',
+    successPayloadSent: '✅ Данные отправлены в бот! Производится расчет по модели FAO-56...',
   },
 
   kz: {
@@ -145,24 +121,11 @@ const I18N = {
     pageDesc: 'FAO-56 Penman-Monteith моделі негізінде суаруды басқарудың зияткерлік жүйесі',
     headerSubtitle: 'Дәл егіншілік • РҒПК «Дарын»',
 
-    // Индикаторы шагов
-    stepLabelIndicator: (step) => `${step}-қадам (барлығы 4)`,
-    stepTitles: {
-      1: 'Учаскенің орналасуы',
-      2: 'Дақылды таңдау',
-      3: 'Алқап параметрлері',
-      4: 'Суару түрі және есептеу',
-    },
-    stepTabs: {
-      1: 'Орналасу',
-      2: 'Дақыл',
-      3: 'Алаң',
-      4: 'Суару',
-    },
-
-    // Шаг 1: Локация
-    step1Header: 'Учаскенің геопозициясы',
-    step1Desc: 'Жүйе FAO-56 моделі бойынша нүктедегі метеодеректерді (күн радиациясы, жел, топырақ ылғалы) сұрайды.',
+    // Блок 1: Локация
+    block1Title: 'Алаңның орналасуы (GPS)',
+    block1StatusWait: 'GPS күтілуде',
+    block1StatusReady: 'Координаттар тіркелді',
+    block1Desc: 'FAO-56 моделі бойынша күн радиациясы, жел және топырақ ылғалын автоматты түрде сұрау үшін алқап координаттарын анықтаңыз.',
     btnLocationText: 'GPS координаттарын анықтау',
     btnLocationLoading: 'GPS спутниктерін іздеу...',
     gpsSearching: 'Нақты спутниктік координаттар анықталуда...',
@@ -170,23 +133,20 @@ const I18N = {
     labelLat: 'Ендік (Lat):',
     labelLon: 'Бойлық (Lon):',
     demoCoordsText: 'Алқаптың үлгі координаттары (Түркістан обл.)',
-    step1Privacy: 'Координаттар тек алқаптың нақты эвапотранспирациясын есептеу үшін Open-Meteo API-ге жіберіледі.',
 
-    // Шаг 2: Культура
-    step2Header: 'Ауыл шаруашылығы дақылы',
-    step2Desc: 'Дақыл коэффициенті (Kc) өсімдіктің вегетация кезеңіндегі биологиялық су қажеттілігін анықтайды.',
+    // Блок 2: Культура
+    block2Title: 'Ауыл шаруашылығы дақылы',
+    block2Desc: 'Биологиялық транспирация коэффициентін (Kc) ескеру үшін дақылды таңдаңыз.',
     crops: {
       cotton:  { name: 'Мақта', sub: 'Хлопок' },
       corn:    { name: 'Жүгері', sub: 'Кукуруза' },
       alfalfa: { name: 'Жоңышқа', sub: 'Люцерна' },
       tomato:  { name: 'Қызанақ', sub: 'Томаты' },
     },
-    step2KcNote: 'Kc коэффициенттері FAO Irrigation and Drainage Paper 56 әдістемесіне сәйкес калибрленген.',
 
-    // Шаг 3: Площадь
-    step3Header: 'Алқап параметрлері',
-    step3Desc: 'Жалпы су беру нормасын масштабтау үшін суармалы сектордың көлемін көрсетіңіз.',
-    labelAreaUnit: 'Ауданның өлшем бірлігі:',
+    // Блок 3: Площадь
+    block3Title: 'Алқап параметрлері',
+    labelAreaUnit: 'Өлшем бірлігі:',
     unitText_sotka: 'Соттық (100 м²)',
     unitText_hectare: 'Гектар (10 000 м²)',
     labelAreaValue: 'Учаске ауданы:',
@@ -195,48 +155,47 @@ const I18N = {
     unitSuffix_sotka: 'сот.',
     unitSuffix_hectare: 'га',
     labelQuickPresets: 'Жылдам таңдау:',
-    areaCalcEquivalentLabel: 'Метрдегі баламасы:',
-    equivFormat: (m2, sotka) => `${m2.toLocaleString('ru-RU')} м² (${sotka.toLocaleString('ru-RU')} сот.)`,
+    areaCalcEquivalentLabel: 'Эквивалент:',
+    equivFormat: (m2, sotka) => `${m2.toLocaleString('ru-RU')} м² (${sotka.toLocaleString('ru-RU')} соттық)`,
 
-    // Шаг 4: Полив
-    step4Header: 'Суару жүйесінің түрі',
-    step4Desc: 'Пайдалы әсер коэффициенті (ПӘК) суды тамырға жеткізу кезіндегі технологиялық шығындарды анықтайды.',
+    // Блок 4: Полив
+    block4Title: 'Суару жүйесінің түрі',
     irrig: {
       drip: {
         title: 'Тамшылатып суару',
-        desc: 'Тамыр аймағына дәл жеткізу. Ең аз булану, суды 40-50%-ға дейін үнемдеу.',
+        desc: 'Тамыр аймағына дәл жеткізу. Суды 40-50%-ға дейін үнемдеу.',
         badge: 'ПӘК 90%',
       },
       furrow: {
         title: 'Арықпен суару',
-        desc: 'Дәстүрлі өздігінен ағатын әдіс. Сүзілу мен булануға 50%-ға дейін шығын болады.',
+        desc: 'Дәстүрлі өздігінен ағатын суару. Сүзілу мен булануға шығын жоғары.',
         badge: 'ПӘК 50%',
       },
     },
-    summaryTitle: 'Есептеудің қорытынды параметрлері:',
+
+    // Сводка и отправка
+    summaryTitle: 'Параметрлер қорытындысы:',
     sumLabelCoords: 'Орналасуы:',
     sumLabelCrop: 'Дақыл:',
     sumLabelArea: 'Ауданы:',
     sumLabelIrrig: 'Технология:',
-    noCoordsYet: 'Анықталмаған',
+    noCoordsYet: 'Анықталмаған (GPS басыңыз)',
+    btnSubmitText: 'Суару нормасын есептеу',
+    submitHint: 'Барлық 4 параметрді жинау және FAO-56 Penman-Monteith формуласымен есептеу',
 
-    // Кнопки навигации
-    btnPrevText: 'Артқа',
-    btnNextText: 'Келесі',
-    btnSubmitText: 'Суару мөлшерін есептеу',
-
-    // Ошибки и уведомления
+    // Уведомления и ошибки
     errNoGpsSupport: '❌ Құрылғыңыз немесе браузер геолокацияны қолдамайды.',
-    errGpsDenied: '🔒 Геопозицияға рұқсат берілмеді. GPS қосыңыз немесе үлгі координаттарды басыңыз.',
-    errGpsTimeout: '⏱️ GPS күту уақыты өтіп кетті. Қайталап көріңіз немесе үлгі нүктені таңдаңыз.',
+    errGpsDenied: '🔒 GPS рұқсаты берілмеді. Геолокацияны қосыңыз немесе үлгі нүктені таңдаңыз.',
+    errGpsTimeout: '⏱️ GPS күту уақыты өтіп кетті. Қайталап көріңіз немесе үлгі нүктені басыңыз.',
     errGpsUnknown: '❌ Орналасқан жерді анықтау қатесі. Қайталап көріңіз.',
-    errNeedLocation: '⚠️ Алдымен учаскенің координаттарын анықтаңыз (GPS немесе үлгі нүкте)!',
-    errInvalidArea: '⚠️ Алқаптың дұрыс ауданын енгізіңіз (0-ден үлкен)!',
-    successPayloadSent: '✅ Деректер жіберілді! Бот FAO-56 моделі бойынша есептеу жүргізуде...',
+    gpsSuccessToast: '✅ Алқап координаттары сәтті тіркелді!',
+    errNeedLocation: '⚠️ Алдымен 1-блокта "GPS координаттарын анықтау" түймесін басыңыз!',
+    errInvalidArea: '⚠️ 0-ден үлкен алқап ауданын енгізіңіз!',
+    successPayloadSent: '✅ Деректер ботқа жіберілді! FAO-56 моделі бойынша есептеу жүргізілуде...',
   },
 };
 
-// ─── 4. Управление языком интерфейса ───────────────────────────────────────────
+// ─── 4. Управление языком (KZ / RU) ───────────────────────────────────────────
 function initLanguage() {
   const urlParams = new URLSearchParams(window.location.search);
   const langParam = urlParams.get('lang')?.toLowerCase();
@@ -253,7 +212,7 @@ function setLanguage(lang) {
   if (state.lang === lang) return;
   state.lang = lang;
 
-  // Обновляем query-параметр без перезагрузки страницы
+  // Обновляем query-параметр без перезагрузки
   const url = new URL(window.location);
   url.searchParams.set('lang', lang);
   window.history.replaceState({}, '', url);
@@ -281,17 +240,9 @@ function applyLanguage(lang) {
     btnKz.className = 'px-2.5 py-1 text-xs font-semibold rounded-lg transition-all text-emerald-300 hover:text-white';
   }
 
-  // Индикаторы шагов
-  document.getElementById('stepLabelIndicator').textContent = t.stepLabelIndicator(state.step);
-  document.getElementById('stepTitleIndicator').textContent = t.stepTitles[state.step];
-  document.getElementById('stepTabName1').textContent = t.stepTabs[1];
-  document.getElementById('stepTabName2').textContent = t.stepTabs[2];
-  document.getElementById('stepTabName3').textContent = t.stepTabs[3];
-  document.getElementById('stepTabName4').textContent = t.stepTabs[4];
-
-  // Шаг 1
-  document.getElementById('step1Header').firstElementChild.textContent = t.step1Header;
-  document.getElementById('step1Desc').textContent = t.step1Desc;
+  // Блок 1
+  document.getElementById('block1Title').textContent = t.block1Title;
+  document.getElementById('block1Desc').textContent = t.block1Desc;
   if (!state.isRequestingGps) {
     document.getElementById('btnLocationText').textContent = t.btnLocationText;
   } else {
@@ -301,20 +252,18 @@ function applyLanguage(lang) {
   document.getElementById('labelLat').textContent = t.labelLat;
   document.getElementById('labelLon').textContent = t.labelLon;
   document.getElementById('demoCoordsText').textContent = t.demoCoordsText;
-  document.getElementById('step1Privacy').textContent = t.step1Privacy;
+  updateBlock1StatusPill();
 
-  // Шаг 2
-  document.getElementById('step2Header').firstElementChild.textContent = t.step2Header;
-  document.getElementById('step2Desc').textContent = t.step2Desc;
+  // Блок 2
+  document.getElementById('block2Title').textContent = t.block2Title;
+  document.getElementById('block2Desc').textContent = t.block2Desc;
   for (const cropKey of ['cotton', 'corn', 'alfalfa', 'tomato']) {
     document.getElementById(`cropName_${cropKey}`).textContent = t.crops[cropKey].name;
     document.getElementById(`cropSub_${cropKey}`).textContent = t.crops[cropKey].sub;
   }
-  document.getElementById('step2KcNote').textContent = t.step2KcNote;
 
-  // Шаг 3
-  document.getElementById('step3Header').firstElementChild.textContent = t.step3Header;
-  document.getElementById('step3Desc').textContent = t.step3Desc;
+  // Блок 3
+  document.getElementById('block3Title').textContent = t.block3Title;
   document.getElementById('labelAreaUnit').textContent = t.labelAreaUnit;
   document.getElementById('unitText_sotka').textContent = t.unitText_sotka;
   document.getElementById('unitText_hectare').textContent = t.unitText_hectare;
@@ -323,26 +272,37 @@ function applyLanguage(lang) {
   document.getElementById('areaCalcEquivalentLabel').textContent = t.areaCalcEquivalentLabel;
   updateAreaUnitUI();
 
-  // Шаг 4
-  document.getElementById('step4Header').firstElementChild.textContent = t.step4Header;
-  document.getElementById('step4Desc').textContent = t.step4Desc;
+  // Блок 4
+  document.getElementById('block4Title').textContent = t.block4Title;
   document.getElementById('irrigTitle_drip').textContent = t.irrig.drip.title;
   document.getElementById('irrigDesc_drip').textContent = t.irrig.drip.desc;
   document.getElementById('irrigTitle_furrow').textContent = t.irrig.furrow.title;
   document.getElementById('irrigDesc_furrow').textContent = t.irrig.furrow.desc;
 
+  // Сводка и кнопка
   document.getElementById('summaryTitle').textContent = t.summaryTitle;
   document.getElementById('sumLabelCoords').textContent = t.sumLabelCoords;
   document.getElementById('sumLabelCrop').textContent = t.sumLabelCrop;
   document.getElementById('sumLabelArea').textContent = t.sumLabelArea;
   document.getElementById('sumLabelIrrig').textContent = t.sumLabelIrrig;
-
-  // Кнопки навигации
-  document.getElementById('btnPrevText').textContent = t.btnPrevText;
-  updateNavButtons();
+  document.getElementById('btnSubmitText').textContent = t.btnSubmitText;
+  document.getElementById('submitHint').textContent = t.submitHint;
 }
 
-// ─── 5. Геолокация (GPS и Демо) ───────────────────────────────────────────────
+function updateBlock1StatusPill() {
+  const t = I18N[state.lang] || I18N.ru;
+  const pill = document.getElementById('block1StatusPill');
+
+  if (state.latitude !== null && state.longitude !== null) {
+    pill.className = 'text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+    pill.textContent = `✅ ${t.block1StatusReady}`;
+  } else {
+    pill.className = 'text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30';
+    pill.textContent = t.block1StatusWait;
+  }
+}
+
+// ─── 5. Геолокация (ТОЛЬКО получение координат, БЕЗ sendData!) ───────────────
 function requestGeolocation() {
   if (state.isRequestingGps) return;
 
@@ -358,16 +318,13 @@ function requestGeolocation() {
   const btnText = document.getElementById('btnLocationText');
   const btnIcon = document.getElementById('btnLocationIcon');
   const statusBlock = document.getElementById('gpsStatusBlock');
-  const statusSpinner = document.getElementById('gpsStatusSpinner');
   const statusText = document.getElementById('gpsStatusText');
 
   btn.classList.add('opacity-75');
   btnIcon.textContent = '⏳';
   btnText.textContent = t.btnLocationLoading;
 
-  statusBlock.className = 'w-full mt-3 p-3 rounded-xl text-xs flex items-center justify-center gap-2 bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 animate-pulse';
   statusBlock.classList.remove('hidden');
-  statusSpinner.classList.remove('hidden');
   statusText.textContent = t.gpsSearching;
 
   try {
@@ -382,12 +339,16 @@ function requestGeolocation() {
       btnText.textContent = t.btnLocationText;
       statusBlock.classList.add('hidden');
 
+      // Сохраняем координаты в состояние
       state.latitude = position.coords.latitude;
       state.longitude = position.coords.longitude;
-      state.accuracy = Math.round(position.coords.accuracy || 10);
+      state.accuracy = Math.round(position.coords.accuracy || 8);
 
+      // Обновляем отображение в Блоке 1 и в Сводке (БЕЗ закрытия и БЕЗ sendData!)
       renderCoordinates();
+      updateBlock1StatusPill();
       updateSummaryCard();
+      showToast(t.gpsSuccessToast, 'success');
 
       try {
         tg.HapticFeedback?.notificationOccurred('success');
@@ -415,13 +376,17 @@ function requestGeolocation() {
 }
 
 function setDemoCoordinates() {
-  // Координаты опытного поливного участка в Туркестанской области (Отырарский район, бассейн Сырдарьи)
+  const t = I18N[state.lang] || I18N.ru;
+
+  // Опытный поливной участок (Туркестанская область, Отырарский район)
   state.latitude = 43.301540;
   state.longitude = 68.256850;
   state.accuracy = 5;
 
   renderCoordinates();
+  updateBlock1StatusPill();
   updateSummaryCard();
+  showToast(t.gpsSuccessToast, 'success');
 
   try {
     tg.HapticFeedback?.impactOccurred('medium');
@@ -436,10 +401,10 @@ function renderCoordinates() {
 
   document.getElementById('displayLat').textContent = `${state.latitude.toFixed(6)}°`;
   document.getElementById('displayLon').textContent = `${state.longitude.toFixed(6)}°`;
-  document.getElementById('coordsAccuracy').textContent = `±${state.accuracy || 8} м`;
+  document.getElementById('coordsAccuracy').textContent = `±${state.accuracy || 5} м`;
 }
 
-// ─── 6. Выбор культуры (Crop Selection) ───────────────────────────────────────
+// ─── 6. Выбор культуры (Блок 2) ───────────────────────────────────────────────
 function selectCrop(cropKey) {
   state.crop = cropKey;
 
@@ -463,7 +428,7 @@ function selectCrop(cropKey) {
   } catch (e) {}
 }
 
-// ─── 7. Параметры поля (Area & Units) ─────────────────────────────────────────
+// ─── 7. Параметры поля: площадь и единицы (Блок 3) ───────────────────────────
 function setAreaUnit(unit) {
   if (state.area_unit === unit) return;
   state.area_unit = unit;
@@ -484,13 +449,13 @@ function updateAreaUnitUI() {
   const suffix = document.getElementById('inputUnitSuffix');
 
   if (state.area_unit === 'hectare') {
-    btnHectare.className = 'py-2.5 px-3 rounded-lg text-xs font-bold transition-all bg-emerald-500 text-slate-950 shadow-md';
-    btnSotka.className = 'py-2.5 px-3 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white';
+    btnHectare.className = 'py-2 px-3 rounded-lg text-xs font-bold transition-all bg-emerald-500 text-slate-950 shadow-md';
+    btnSotka.className = 'py-2 px-3 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white';
     badge.textContent = t.unitBadge_hectare;
     suffix.textContent = t.unitSuffix_hectare;
   } else {
-    btnSotka.className = 'py-2.5 px-3 rounded-lg text-xs font-bold transition-all bg-emerald-500 text-slate-950 shadow-md';
-    btnHectare.className = 'py-2.5 px-3 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white';
+    btnSotka.className = 'py-2 px-3 rounded-lg text-xs font-bold transition-all bg-emerald-500 text-slate-950 shadow-md';
+    btnHectare.className = 'py-2 px-3 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white';
     badge.textContent = t.unitBadge_sotka;
     suffix.textContent = t.unitSuffix_sotka;
   }
@@ -538,7 +503,7 @@ function recalculateAreaEquivalent() {
   equivEl.textContent = t.equivFormat(m2, sotka);
 }
 
-// ─── 8. Тип полива (Irrigation Selection) ─────────────────────────────────────
+// ─── 8. Тип полива (Блок 4) ───────────────────────────────────────────────────
 function selectIrrigation(type) {
   state.irrigation_type = type;
 
@@ -562,7 +527,7 @@ function selectIrrigation(type) {
   } catch (e) {}
 }
 
-// ─── 9. Сводная карточка (Summary Card) ───────────────────────────────────────
+// ─── 9. Сводная карточка параметров ──────────────────────────────────────────
 function updateSummaryCard() {
   const t = I18N[state.lang] || I18N.ru;
 
@@ -570,8 +535,10 @@ function updateSummaryCard() {
   const coordsVal = document.getElementById('sumValCoords');
   if (state.latitude !== null && state.longitude !== null) {
     coordsVal.textContent = `${state.latitude.toFixed(4)}°, ${state.longitude.toFixed(4)}°`;
+    coordsVal.className = 'font-mono text-emerald-300 font-semibold text-[11px]';
   } else {
     coordsVal.textContent = t.noCoordsYet;
+    coordsVal.className = 'font-mono text-amber-300/80 font-medium text-[11px]';
   }
 
   // Культура
@@ -587,149 +554,25 @@ function updateSummaryCard() {
   document.getElementById('sumValIrrig').textContent = `${irrigInfo.title} (${irrigInfo.badge})`;
 }
 
-// ─── 10. Пошаговая навигация (Wizard Engine) ──────────────────────────────────
-function goToStep(targetStep) {
-  if (targetStep === state.step) return;
-
-  // При переходе вперед проверяем обязательные поля
-  if (targetStep > state.step) {
-    if (!validateCurrentStep()) return;
-  }
-
-  setStep(targetStep);
-}
-
-function nextStep() {
-  if (!validateCurrentStep()) return;
-
-  if (state.step < 4) {
-    setStep(state.step + 1);
-  }
-}
-
-function prevStep() {
-  if (state.step > 1) {
-    setStep(state.step - 1);
-  }
-}
-
-function setStep(newStep) {
-  state.step = newStep;
+// ─── 10. ФИНАЛЬНАЯ ОТПРАВКА: ТОЛЬКО по нажатию на кнопку внизу! ───────────────
+function submitFinalCalculation() {
   const t = I18N[state.lang] || I18N.ru;
 
-  // 1. Переключение экранов
-  for (let i = 1; i <= 4; i++) {
-    const pane = document.getElementById(`stepPane${i}`);
-    if (i === newStep) {
-      pane.classList.remove('hidden-pane');
-      pane.classList.add('active-pane');
-    } else {
-      pane.classList.remove('active-pane');
-      pane.classList.add('hidden-pane');
-    }
+  // 1. Проверка наличия координат
+  if (state.latitude === null || state.longitude === null) {
+    showToast(t.errNeedLocation, 'warning');
+    document.getElementById('block1').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
   }
 
-  // 2. Обновление прогресс-бара
-  const progressPercent = (newStep / 4) * 100;
-  document.getElementById('progressBar').style.width = `${progressPercent}%`;
-
-  // 3. Обновление иконок табов
-  document.getElementById('stepLabelIndicator').textContent = t.stepLabelIndicator(newStep);
-  document.getElementById('stepTitleIndicator').textContent = t.stepTitles[newStep];
-
-  for (let i = 1; i <= 4; i++) {
-    const dot = document.getElementById(`stepDot${i}`);
-    const name = document.getElementById(`stepTabName${i}`);
-
-    if (i === newStep) {
-      dot.className = 'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/30 ring-2 ring-emerald-300';
-      name.className = 'text-[10px] text-emerald-300 font-bold tracking-tight';
-    } else if (i < newStep) {
-      dot.className = 'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all bg-emerald-700 text-white shadow-sm';
-      name.className = 'text-[10px] text-emerald-400/80 font-medium tracking-tight';
-    } else {
-      dot.className = 'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all bg-emerald-900/50 text-emerald-400/50 border border-emerald-500/20';
-      name.className = 'text-[10px] text-slate-400 font-medium tracking-tight';
-    }
+  // 2. Проверка площади
+  if (!state.area || state.area <= 0) {
+    showToast(t.errInvalidArea, 'warning');
+    document.getElementById('block3').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
   }
 
-  // 4. Кнопки навигации и Telegram BackButton
-  updateNavButtons();
-
-  // Скролл вверх окна
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  try {
-    tg.HapticFeedback?.impactOccurred('light');
-  } catch (e) {}
-}
-
-function updateNavButtons() {
-  const t = I18N[state.lang] || I18N.ru;
-  const btnPrev = document.getElementById('btnPrevStep');
-  const btnNext = document.getElementById('btnNextStep');
-  const btnNextText = document.getElementById('btnNextText');
-  const btnNextIcon = document.getElementById('btnNextIcon');
-
-  if (state.step === 1) {
-    btnPrev.classList.add('hidden');
-    try {
-      tg.BackButton?.hide();
-    } catch (e) {}
-  } else {
-    btnPrev.classList.remove('hidden');
-    try {
-      tg.BackButton?.show();
-      tg.BackButton?.onClick(prevStep);
-    } catch (e) {}
-  }
-
-  if (state.step === 4) {
-    btnNextText.textContent = t.btnSubmitText;
-    btnNextIcon.textContent = '🚀';
-    btnNext.className = 'flex-1 py-3.5 px-6 rounded-xl font-extrabold text-sm text-slate-950 bg-gradient-to-r from-emerald-400 via-green-400 to-teal-300 hover:from-emerald-300 hover:to-teal-200 active:scale-[0.98] transition-all shadow-xl shadow-emerald-500/30 flex items-center justify-center gap-2 border border-emerald-100/40';
-  } else {
-    btnNextText.textContent = t.btnNextText;
-    btnNextIcon.textContent = '→';
-    btnNext.className = 'flex-1 py-3.5 px-6 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-300 hover:from-emerald-300 hover:to-green-300 active:scale-[0.98] transition-all shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 border border-emerald-200/40';
-  }
-}
-
-function validateCurrentStep() {
-  const t = I18N[state.lang] || I18N.ru;
-
-  if (state.step === 1) {
-    if (state.latitude === null || state.longitude === null) {
-      showToast(t.errNeedLocation, 'warning');
-      return false;
-    }
-  }
-
-  if (state.step === 3) {
-    if (!state.area || state.area <= 0) {
-      showToast(t.errInvalidArea, 'warning');
-      return false;
-    }
-  }
-
-  return true;
-}
-
-function handleNextOrSubmit() {
-  if (state.step < 4) {
-    nextStep();
-  } else {
-    submitIrrigationCalculation();
-  }
-}
-
-// ─── 11. Отправка данных в Telegram (sendData) ───────────────────────────────
-function submitIrrigationCalculation() {
-  const t = I18N[state.lang] || I18N.ru;
-
-  if (!validateCurrentStep()) return;
-
-  // Сборка полного JSON объекта
+  // 3. Сборка полного JSON объекта
   const payload = {
     latitude: Number(state.latitude.toFixed(6)),
     longitude: Number(state.longitude.toFixed(6)),
@@ -740,7 +583,7 @@ function submitIrrigationCalculation() {
   };
 
   const payloadString = JSON.stringify(payload);
-  console.log('Отправка в бота Su-Tech:', payloadString);
+  console.log('Отправка в бота Su-Tech через sendData():', payloadString);
 
   showToast(t.successPayloadSent, 'success');
 
@@ -748,7 +591,7 @@ function submitIrrigationCalculation() {
     tg.HapticFeedback?.notificationOccurred('success');
   } catch (e) {}
 
-  // Отправка в бот через Telegram.WebApp.sendData()
+  // 4. Отправка в бот и закрытие WebApp
   setTimeout(() => {
     try {
       tg.sendData(payloadString);
@@ -759,10 +602,10 @@ function submitIrrigationCalculation() {
     try {
       tg.close();
     } catch (e) {}
-  }, 500);
+  }, 400);
 }
 
-// ─── 12. Всплывающие уведомления (Toast) ──────────────────────────────────────
+// ─── 11. Всплывающие уведомления (Toast) ──────────────────────────────────────
 let toastTimer = null;
 function showToast(message, type = 'info') {
   const toast = document.getElementById('appToast');
@@ -770,16 +613,16 @@ function showToast(message, type = 'info') {
 
   clearTimeout(toastTimer);
 
-  let bg = 'bg-emerald-950/90 text-emerald-200 border-emerald-500/30';
+  let bg = 'bg-emerald-950/95 text-emerald-200 border-emerald-500/40 shadow-emerald-950/80';
   if (type === 'error') {
-    bg = 'bg-rose-950/90 text-rose-200 border-rose-500/40 shadow-rose-900/50';
+    bg = 'bg-rose-950/95 text-rose-200 border-rose-500/50 shadow-rose-950/80';
   } else if (type === 'warning') {
-    bg = 'bg-amber-950/90 text-amber-200 border-amber-500/40 shadow-amber-900/50';
+    bg = 'bg-amber-950/95 text-amber-200 border-amber-500/50 shadow-amber-950/80';
   } else if (type === 'success') {
-    bg = 'bg-emerald-900/90 text-emerald-100 border-emerald-400 shadow-emerald-900/50';
+    bg = 'bg-emerald-900/95 text-emerald-100 border-emerald-400/60 shadow-emerald-950/80';
   }
 
-  toast.className = `fixed top-5 left-4 right-4 z-50 p-3.5 rounded-xl text-xs font-semibold text-center border shadow-2xl backdrop-blur-md transition-all ${bg}`;
+  toast.className = `fixed top-4 left-4 right-4 z-50 p-3.5 rounded-xl text-xs font-semibold text-center border shadow-2xl backdrop-blur-md transition-all ${bg}`;
   toast.textContent = message;
   toast.classList.remove('hidden');
 
@@ -791,10 +634,10 @@ function showToast(message, type = 'info') {
 
   toastTimer = setTimeout(() => {
     toast.classList.add('hidden');
-  }, 4000);
+  }, 3500);
 }
 
-// ─── 13. Инициализация при загрузке страницы ─────────────────────────────────
+// ─── 12. Инициализация при загрузке DOM ───────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initLanguage();
   recalculateAreaEquivalent();

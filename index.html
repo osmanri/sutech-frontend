@@ -6,116 +6,111 @@
   <title id="pageTitle">Su-Tech — Точное земледелие</title>
   <meta id="pageDesc" name="description" content="Интеллектуальная система управления орошением на базе модели FAO-56 Penman-Monteith" />
 
-  <!-- ── Google Fonts: Lexend + Source Sans 3 (master.md §3.1) ── -->
+  <!-- ══════════════════════════════════════════════════════
+       TYPOGRAPHY — ui-ux-pro-max BM25 Result
+       Primary Font (B2B AgroTech / Enterprise SaaS):
+         "Friendly SaaS" → Plus Jakarta Sans (single-family)
+         fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+       Mono fallback: Fira Code (data / coords)
+       Source: typography.csv row #13 (Friendly SaaS) + design-system output
+       ══════════════════════════════════════════════════════ -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
 
-  <!-- ── Telegram Mini App SDK ── -->
+  <!-- ══ Tailwind CDN ══════════════════════════════════════ -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- ══ Tailwind Config — Typography per ui-ux-pro-max skill ══ -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            /* ui-ux-pro-max: "Friendly SaaS / Enterprise SaaS"
+               fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+               Single versatile font. Modern alternative to Inter. */
+            sans:    ['"Plus Jakarta Sans"', 'sans-serif'],
+            /* Mono: Fira Code — data labels, coordinates, Kc values */
+            mono:    ['"Fira Code"', 'Courier New', 'monospace'],
+          },
+          colors: {
+            /* Clean Light Agro — master.md §10 */
+            primary:   '#1A7A4A',
+            'primary-hover':  '#15663D',
+            'primary-active': '#114F2F',
+            secondary: '#1E5FA8',
+            accent:    '#D97706',
+            background:'#F4F7F2',
+            surface:   '#FFFFFF',
+            'surface-raised': '#FAFCF9',
+            foreground:'#1C2B1E',
+            muted:     '#4A5E4D',
+            faint:     '#7A9080',
+            border:    '#D1E0D4',
+            'border-strong': '#9DB8A3',
+            success:   '#16A34A',
+            'success-bg': '#DCFCE7',
+            warning:   '#D97706',
+            'warning-bg': '#FEF3C7',
+            error:     '#DC2626',
+            'error-bg': '#FEE2E2',
+            info:      '#1E5FA8',
+            'info-bg': '#DBEAFE',
+          },
+          fontSize: {
+            /* ui-ux-pro-max typography scale:
+               ExtraBold 800 — screen titles/hero (leading-tight)
+               Bold 700      — section headers   (leading-snug)
+               SemiBold 600  — card titles, buttons
+               Medium 500    — labels (uppercase, tracking-wide)
+               Regular 400   — body text (leading-normal) */
+            '2xs': ['0.625rem',  { lineHeight: '1rem'   }],
+            xs:    ['0.75rem',   { lineHeight: '1.125rem'}],
+            sm:    ['0.875rem',  { lineHeight: '1.375rem'}],
+            base:  ['1rem',      { lineHeight: '1.5rem'  }],
+            md:    ['1.125rem',  { lineHeight: '1.5rem'  }],
+            lg:    ['1.25rem',   { lineHeight: '1.75rem' }],
+            xl:    ['1.5rem',    { lineHeight: '2rem'    }],
+            '2xl': ['1.875rem',  { lineHeight: '2.25rem' }],
+            '3xl': ['2.25rem',   { lineHeight: '2.75rem' }],
+          },
+          borderRadius: {
+            card: '12px',
+            inner: '8px',
+            pill: '9999px',
+          },
+          boxShadow: {
+            card:       '0 1px 3px rgba(28,43,30,0.08), 0 4px 12px rgba(28,43,30,0.06)',
+            'card-hover':'0 4px 8px rgba(28,43,30,0.12), 0 12px 28px rgba(28,43,30,0.10)',
+            'btn-primary':'0 1px 2px rgba(26,122,74,0.3)',
+            'btn-hover': '0 4px 12px rgba(26,122,74,0.35)',
+            'ring-primary':'0 0 0 3px rgba(26,122,74,0.3)',
+            submit:     '0 2px 4px rgba(26,122,74,0.3), 0 8px 20px rgba(26,122,74,0.2)',
+            'submit-hover':'0 4px 8px rgba(26,122,74,0.4), 0 12px 28px rgba(26,122,74,0.25)',
+          },
+          transitionDuration: {
+            'fast':   '150ms',
+            'normal': '250ms',
+            'slow':   '400ms',
+          },
+          animation: {
+            'pulse-slow': 'pulse 1.5s ease-in-out infinite',
+            'spin-slow':  'spin 1s linear infinite',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Telegram Mini App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
-    /* ══════════════════════════════════════════════════════════════
-       DESIGN TOKENS — master.md §10 (Clean Light Agro)
-       ══════════════════════════════════════════════════════════════ */
-    :root {
-      /* Colors */
-      --color-primary:          #1A7A4A;
-      --color-primary-hover:    #15663D;
-      --color-primary-active:   #114F2F;
-      --color-on-primary:       #FFFFFF;
-      --color-secondary:        #1E5FA8;
-      --color-on-secondary:     #FFFFFF;
-      --color-accent:           #D97706;
-      --color-on-accent:        #FFFFFF;
-      --color-background:       #F4F7F2;
-      --color-surface:          #FFFFFF;
-      --color-surface-raised:   #FAFCF9;
-      --color-foreground:       #1C2B1E;
-      --color-foreground-muted: #4A5E4D;
-      --color-foreground-faint: #7A9080;
-      --color-border:           #D1E0D4;
-      --color-border-strong:    #9DB8A3;
-      --color-ring:             #1A7A4A;
-      --color-success:          #16A34A;
-      --color-success-bg:       #DCFCE7;
-      --color-warning:          #D97706;
-      --color-warning-bg:       #FEF3C7;
-      --color-error:            #DC2626;
-      --color-error-bg:         #FEE2E2;
-      --color-on-error:         #FFFFFF;
-      --color-info:             #1E5FA8;
-      --color-info-bg:          #DBEAFE;
-
-      /* Typography */
-      --font-heading: 'Lexend', sans-serif;
-      --font-body:    'Source Sans 3', sans-serif;
-      --font-mono:    'Fira Code', 'Courier New', monospace;
-
-      --text-xs:    0.75rem;
-      --text-sm:    0.875rem;
-      --text-base:  1rem;
-      --text-md:    1.125rem;
-      --text-lg:    1.25rem;
-      --text-xl:    1.5rem;
-      --text-2xl:   1.875rem;
-      --text-3xl:   2.25rem;
-      --text-hero:  3rem;
-
-      --weight-regular:   400;
-      --weight-medium:    500;
-      --weight-semibold:  600;
-      --weight-bold:      700;
-      --weight-extrabold: 800;
-
-      --leading-tight:   1.2;
-      --leading-snug:    1.35;
-      --leading-normal:  1.5;
-
-      --tracking-tight: -0.02em;
-      --tracking-wide:   0.04em;
-
-      /* Spacing */
-      --space-1:  0.25rem;
-      --space-2:  0.5rem;
-      --space-3:  0.75rem;
-      --space-4:  1rem;
-      --space-5:  1.25rem;
-      --space-6:  1.5rem;
-      --space-8:  2rem;
-      --space-10: 2.5rem;
-      --space-12: 3rem;
-
-      /* Components */
-      --card-radius:       12px;
-      --card-radius-inner:  8px;
-      --card-shadow:       0 1px 3px rgba(28,43,30,0.08), 0 4px 12px rgba(28,43,30,0.06);
-      --card-shadow-hover: 0 4px 8px rgba(28,43,30,0.12), 0 12px 28px rgba(28,43,30,0.10);
-      --card-padding:      var(--space-6);
-      --card-border:       1px solid var(--color-border);
-
-      --btn-radius:   8px;
-      --btn-h-sm:     36px;
-      --btn-h-md:     44px;
-      --btn-h-lg:     52px;
-      --btn-h-xl:     60px;
-
-      --input-radius: 8px;
-      --input-height: 44px;
-      --nav-width:    240px;
-
-      /* Motion */
-      --motion-instant:  80ms;
-      --motion-fast:    150ms;
-      --motion-normal:  250ms;
-      --motion-slow:    400ms;
-
-      --ease-standard:   cubic-bezier(0.4, 0, 0.2, 1);
-      --ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
-      --ease-spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    /* ── Reduced Motion ── */
+    /* ── Reduced motion (skill: ui-ux-pro-max, checklist item) ── */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration:        0.01ms !important;
@@ -124,1300 +119,745 @@
       }
     }
 
-    /* ══════════════════════════════════════════════════════════════
-       BASE
-       ══════════════════════════════════════════════════════════════ */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body {
-      min-height: 100%;
-      background-color: var(--color-background);
-      color: var(--color-foreground);
-      font-family: var(--font-body);
-      font-size: var(--text-base);
-      font-weight: var(--weight-regular);
-      line-height: var(--leading-normal);
-      -webkit-font-smoothing: antialiased;
+    /* ── Base resets ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-font-smoothing: antialiased; }
+    body {
+      background-color: #F4F7F2;
+      color: #1C2B1E;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
 
-    /* ══════════════════════════════════════════════════════════════
-       LAYOUT
-       ══════════════════════════════════════════════════════════════ */
-    .app-shell {
-      width: 100%;
-      max-width: 480px;
-      margin: 0 auto;
-      padding: var(--space-4);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-5);
-      padding-bottom: var(--space-12);
+    /* ── Custom: scrollbar minimal ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #D1E0D4; border-radius: 999px; }
+
+    /* ── GPS Spinner ── */
+    @keyframes spin  { to { transform: rotate(360deg); } }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.55; } }
+    .gps-spin { animation: spin  1s linear infinite; }
+    .gps-pulse { animation: pulse 1.5s ease-in-out infinite; }
+
+    /* ── Toast transition ── */
+    .toast-enter { opacity: 0; transform: translateY(-8px); }
+    .toast-visible { opacity: 1; transform: translateY(0); transition: opacity 0.25s ease, transform 0.25s ease; }
+    .toast-exit { opacity: 0; transform: translateY(-8px); transition: opacity 0.25s ease, transform 0.25s ease; }
+
+    /* ── Crop/irrig card selected ring ── */
+    .card-selected {
+      background-color: #DCFCE7 !important;
+      border-color: #1A7A4A !important;
+      box-shadow: 0 0 0 2px #1A7A4A,
+                  0 4px 8px rgba(28,43,30,0.12),
+                  0 12px 28px rgba(28,43,30,0.10) !important;
     }
 
-    /* ══════════════════════════════════════════════════════════════
-       HEADER
-       ══════════════════════════════════════════════════════════════ */
-    .app-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-3);
-    }
+    /* ── Input number hide arrows ── */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
-    .logo-wrap {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-    }
-
-    .logo-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: var(--card-radius-inner);
-      background: linear-gradient(135deg, var(--color-primary) 0%, #15663D 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 8px rgba(26,122,74,0.35);
-      flex-shrink: 0;
-    }
-
-    .logo-icon svg { width: 24px; height: 24px; color: #fff; fill: #fff; }
-
-    .logo-text { display: flex; flex-direction: column; gap: 2px; }
-
-    .logo-name-row { display: flex; align-items: center; gap: var(--space-2); }
-
-    .logo-name {
-      font-family: var(--font-heading);
-      font-size: var(--text-md);
-      font-weight: var(--weight-bold);
-      color: var(--color-foreground);
-      letter-spacing: var(--tracking-tight);
-    }
-
-    .logo-badge {
-      font-family: var(--font-body);
-      font-size: 9px;
-      font-weight: var(--weight-bold);
-      letter-spacing: var(--tracking-wide);
-      text-transform: uppercase;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: var(--color-success-bg);
-      color: #14532D;
-      border: 1px solid rgba(22,163,74,0.3);
-    }
-
-    .logo-subtitle {
-      font-family: var(--font-body);
-      font-size: var(--text-xs);
-      font-weight: var(--weight-medium);
-      color: var(--color-foreground-muted);
-    }
-
-    /* ── Language switcher ── */
-    .lang-switcher {
-      display: flex;
-      align-items: center;
-      padding: 3px;
-      border-radius: calc(var(--btn-radius) + 4px);
-      background: var(--color-surface);
-      border: var(--card-border);
-      box-shadow: var(--card-shadow);
-      gap: 2px;
-    }
-
-    .lang-btn {
-      height: 32px;
-      padding: 0 var(--space-3);
-      border-radius: var(--btn-radius);
-      border: none;
-      font-family: var(--font-body);
-      font-size: var(--text-xs);
-      font-weight: var(--weight-semibold);
-      cursor: pointer;
-      color: var(--color-foreground-muted);
-      background: transparent;
-      transition: background var(--motion-fast) var(--ease-standard),
-                  color var(--motion-fast) var(--ease-standard);
-    }
-
-    .lang-btn.is-active {
-      background: var(--color-primary);
-      color: var(--color-on-primary);
-      box-shadow: 0 1px 4px rgba(26,122,74,0.3);
-    }
-
-    /* ══════════════════════════════════════════════════════════════
-       SECTION CARD (master.md §5.1 tokens)
-       ══════════════════════════════════════════════════════════════ */
-    .section-card {
-      background: var(--color-surface);
-      border: var(--card-border);
-      border-radius: var(--card-radius);
-      box-shadow: var(--card-shadow);
-      padding: var(--card-padding);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-4);
-      will-change: box-shadow;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      padding-bottom: var(--space-3);
-      border-bottom: 1px solid var(--color-border);
-    }
-
-    .step-badge {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: var(--color-primary);
-      color: var(--color-on-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-heading);
-      font-size: var(--text-xs);
-      font-weight: var(--weight-bold);
-      flex-shrink: 0;
-    }
-
-    .section-title {
-      flex: 1;
-      font-family: var(--font-heading);
-      font-size: var(--text-md);
-      font-weight: var(--weight-semibold);
-      color: var(--color-foreground);
-      line-height: var(--leading-snug);
-    }
-
-    .section-tag {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: var(--color-success-bg);
-      color: #14532D;
-      font-weight: var(--weight-semibold);
-      white-space: nowrap;
-    }
-
-    .section-desc {
-      font-family: var(--font-body);
-      font-size: var(--text-sm);
-      color: var(--color-foreground-muted);
-      line-height: var(--leading-normal);
-    }
-
-    /* ══════════════════════════════════════════════════════════════
-       STATUS BADGES (master.md §5.2)
-       ══════════════════════════════════════════════════════════════ */
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-1);
-      padding: 2px 10px;
-      border-radius: 999px;
-      font-family: var(--font-body);
-      font-size: var(--text-xs);
-      font-weight: var(--weight-bold);
-      letter-spacing: var(--tracking-wide);
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    .status-badge--ok      { background: var(--color-success-bg); color: #14532D; }
-    .status-badge--warning { background: var(--color-warning-bg); color: #78350F; }
-    .status-badge--error   { background: var(--color-error-bg);   color: #7F1D1D; }
-    .status-badge--info    { background: var(--color-info-bg);    color: #1E3A5F; }
-    .status-badge--offline { background: #F1F5F9;                 color: #475569; }
-
-    /* ══════════════════════════════════════════════════════════════
-       BUTTONS (master.md §5.3)
-       ══════════════════════════════════════════════════════════════ */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-2);
-      font-family: var(--font-body);
-      font-weight: var(--weight-semibold);
-      font-size: var(--text-base);
-      border-radius: var(--btn-radius);
-      border: none;
-      cursor: pointer;
-      transition: background var(--motion-fast) var(--ease-standard),
-                  box-shadow var(--motion-fast) var(--ease-standard),
-                  transform  var(--motion-instant) var(--ease-standard);
-      white-space: nowrap;
-      transform: translateZ(0);
-      text-decoration: none;
-    }
-    .btn:focus-visible {
+    /* ── Focus ring global ── */
+    :focus-visible {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(26,122,74,0.4);
+      box-shadow: 0 0 0 3px rgba(26,122,74,0.35) !important;
     }
-    .btn:disabled, .btn[aria-disabled="true"] {
-      opacity: 0.45; cursor: not-allowed; pointer-events: none;
-    }
-
-    .btn--sm  { height: var(--btn-h-sm);  padding: 0 var(--space-4); font-size: var(--text-sm); }
-    .btn--md  { height: var(--btn-h-md);  padding: 0 var(--space-6); }
-    .btn--lg  { height: var(--btn-h-lg);  padding: 0 var(--space-8); font-size: var(--text-md); }
-    .btn--xl  { height: var(--btn-h-xl);  padding: 0 var(--space-8); font-size: var(--text-lg); width: 100%; }
-    .btn--full { width: 100%; }
-
-    /* Primary */
-    .btn--primary {
-      background: var(--color-primary);
-      color: var(--color-on-primary);
-      box-shadow: 0 1px 2px rgba(26,122,74,0.3);
-    }
-    .btn--primary:hover  { background: var(--color-primary-hover); box-shadow: 0 4px 12px rgba(26,122,74,0.35); }
-    .btn--primary:active { background: var(--color-primary-active); transform: scale(0.97); }
-
-    /* Secondary */
-    .btn--secondary {
-      background: transparent;
-      color: var(--color-primary);
-      border: 1.5px solid var(--color-primary);
-    }
-    .btn--secondary:hover  { background: rgba(26,122,74,0.06); }
-    .btn--secondary:active { background: rgba(26,122,74,0.12); transform: scale(0.97); }
-
-    /* Ghost link */
-    .btn--ghost {
-      background: transparent;
-      color: var(--color-foreground-muted);
-      font-size: var(--text-sm);
-      height: auto;
-      padding: var(--space-1) var(--space-2);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-    .btn--ghost:hover { color: var(--color-primary); }
-
-    /* ══════════════════════════════════════════════════════════════
-       GPS SECTION
-       ══════════════════════════════════════════════════════════════ */
-    .gps-status-block {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-2);
-      padding: var(--space-3);
-      border-radius: var(--card-radius-inner);
-      background: var(--color-info-bg);
-      border: 1px solid rgba(30,95,168,0.2);
-      font-size: var(--text-sm);
-      color: var(--color-info);
-      animation: pulse-fade 1.5s ease-in-out infinite;
-    }
-    .gps-status-block.is-visible { display: flex; }
-
-    @keyframes pulse-fade {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.6; }
-    }
-
-    .coords-card {
-      display: none;
-      flex-direction: column;
-      gap: var(--space-3);
-      padding: var(--space-4);
-      border-radius: var(--card-radius-inner);
-      background: var(--color-surface-raised);
-      border: 1px solid var(--color-border);
-    }
-    .coords-card.is-visible { display: flex; }
-
-    .coords-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: var(--space-2);
-      border-bottom: 1px solid var(--color-border);
-    }
-
-    .coords-card-title {
-      font-family: var(--font-body);
-      font-size: var(--text-xs);
-      font-weight: var(--weight-bold);
-      letter-spacing: var(--tracking-wide);
-      text-transform: uppercase;
-      color: var(--color-primary);
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-    }
-
-    .coords-accuracy {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: var(--color-success-bg);
-      color: #14532D;
-      font-weight: var(--weight-semibold);
-    }
-
-    .coords-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-3);
-    }
-
-    .coords-item {}
-    .coords-label {
-      font-family: var(--font-body);
-      font-size: 10px;
-      color: var(--color-foreground-faint);
-      display: block;
-      margin-bottom: 2px;
-    }
-    .coords-value {
-      font-family: var(--font-mono);
-      font-size: var(--text-sm);
-      font-weight: var(--weight-semibold);
-      color: var(--color-foreground);
-    }
-
-    /* ══════════════════════════════════════════════════════════════
-       CROP GRID (master.md §5.1) — 4 per row on mobile
-       ══════════════════════════════════════════════════════════════ */
-    .crop-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: var(--space-2);
-    }
-
-    @media (max-width: 400px) {
-      .crop-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    .crop-card {
-      background: var(--color-surface);
-      border: var(--card-border);
-      border-radius: var(--card-radius-inner);
-      box-shadow: var(--card-shadow);
-      padding: var(--space-3) var(--space-2);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: var(--space-1);
-      cursor: pointer;
-      position: relative;
-      transition: box-shadow var(--motion-normal) var(--ease-standard),
-                  border-color var(--motion-normal) var(--ease-standard),
-                  background var(--motion-normal) var(--ease-standard);
-      will-change: box-shadow;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .crop-card:hover { box-shadow: var(--card-shadow-hover); }
-    .crop-card:active { transform: scale(0.97); }
-
-    .crop-card.is-selected {
-      background: var(--color-success-bg);
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 2px var(--color-primary), var(--card-shadow-hover);
-    }
-
-    .crop-icon-wrap {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--card-radius-inner);
-      background: var(--color-background);
-      border: 1px solid var(--color-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .crop-card.is-selected .crop-icon-wrap {
-      background: rgba(26,122,74,0.1);
-      border-color: rgba(26,122,74,0.35);
-    }
-    .crop-icon-wrap svg { width: 22px; height: 22px; }
-
-    .crop-name {
-      font-family: var(--font-heading);
-      font-size: var(--text-xs);
-      font-weight: var(--weight-semibold);
-      color: var(--color-foreground);
-      line-height: var(--leading-snug);
-    }
-    .crop-sub {
-      font-family: var(--font-body);
-      font-size: 10px;
-      color: var(--color-foreground-muted);
-    }
-    .crop-kc {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      padding: 1px 5px;
-      border-radius: 4px;
-      background: var(--color-background);
-      color: var(--color-foreground-muted);
-      border: 1px solid var(--color-border);
-      margin-top: 1px;
-    }
-    .crop-card.is-selected .crop-kc {
-      background: rgba(26,122,74,0.12);
-      border-color: rgba(26,122,74,0.3);
-      color: var(--color-primary);
-    }
-
-    .crop-check {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: var(--color-primary);
-      color: var(--color-on-primary);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      font-size: 9px;
-      font-weight: var(--weight-bold);
-      box-shadow: 0 1px 3px rgba(26,122,74,0.4);
-    }
-    .crop-card.is-selected .crop-check { display: flex; }
-
-    /* ══════════════════════════════════════════════════════════════
-       AREA SECTION
-       ══════════════════════════════════════════════════════════════ */
-    .irrigation-toggle {
-      display: flex;
-      gap: var(--space-1);
-      padding: 3px;
-      background: var(--color-background);
-      border: var(--card-border);
-      border-radius: calc(var(--btn-radius) + 4px);
-    }
-    .toggle-btn {
-      flex: 1;
-      height: 40px;
-      border-radius: var(--btn-radius);
-      border: none;
-      font-family: var(--font-body);
-      font-weight: var(--weight-medium);
-      font-size: var(--text-sm);
-      cursor: pointer;
-      background: transparent;
-      color: var(--color-foreground-muted);
-      transition: background var(--motion-normal) var(--ease-standard),
-                  color var(--motion-normal) var(--ease-standard),
-                  box-shadow var(--motion-normal) var(--ease-standard);
-    }
-    .toggle-btn.is-active {
-      background: var(--color-surface);
-      color: var(--color-primary);
-      font-weight: var(--weight-semibold);
-      box-shadow: 0 1px 4px rgba(28,43,30,0.12);
-    }
-    .toggle-btn:active { transform: scale(0.97); }
-
-    .form-label {
-      font-family: var(--font-body);
-      font-size: var(--text-xs);
-      font-weight: var(--weight-bold);
-      letter-spacing: var(--tracking-wide);
-      text-transform: uppercase;
-      color: var(--color-foreground-muted);
-      display: block;
-      margin-bottom: var(--space-2);
-    }
-
-    .input-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    /* Input (master.md §5.5) */
-    .input {
-      height: var(--input-height);
-      padding: 0 var(--space-4);
-      padding-right: 56px;
-      background: var(--color-surface);
-      border: 1.5px solid var(--color-border);
-      border-radius: var(--input-radius);
-      font-family: var(--font-mono);
-      font-size: var(--text-xl);
-      font-weight: var(--weight-bold);
-      color: var(--color-foreground);
-      outline: none;
-      width: 100%;
-      transition: border-color var(--motion-fast) var(--ease-standard),
-                  box-shadow var(--motion-fast) var(--ease-standard);
-      -webkit-appearance: textfield;
-      appearance: textfield;
-    }
-    .input::-webkit-inner-spin-button,
-    .input::-webkit-outer-spin-button { -webkit-appearance: none; }
-    .input::placeholder { color: var(--color-foreground-faint); }
-    .input:hover  { border-color: var(--color-border-strong); }
-    .input:focus  { border-color: var(--color-ring); box-shadow: 0 0 0 3px rgba(26,122,74,0.2); }
-
-    .input-suffix {
-      position: absolute;
-      right: var(--space-4);
-      font-family: var(--font-body);
-      font-size: var(--text-sm);
-      font-weight: var(--weight-bold);
-      color: var(--color-foreground-muted);
-      pointer-events: none;
-    }
-
-    /* Preset chips */
-    .presets-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-    }
-
-    .preset-chip {
-      height: 32px;
-      padding: 0 var(--space-3);
-      border-radius: var(--card-radius-inner);
-      border: 1.5px solid var(--color-border);
-      background: var(--color-surface);
-      font-family: var(--font-mono);
-      font-size: var(--text-sm);
-      font-weight: var(--weight-medium);
-      color: var(--color-foreground-muted);
-      cursor: pointer;
-      transition: background var(--motion-fast) var(--ease-standard),
-                  border-color var(--motion-fast) var(--ease-standard),
-                  color var(--motion-fast) var(--ease-standard);
-    }
-    .preset-chip:hover  { background: var(--color-success-bg); border-color: var(--color-primary); color: var(--color-primary); }
-    .preset-chip:active { transform: scale(0.95); }
-
-    .area-equiv {
-      padding: var(--space-3) var(--space-4);
-      border-radius: var(--card-radius-inner);
-      background: var(--color-background);
-      border: var(--card-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: var(--text-sm);
-      color: var(--color-foreground-muted);
-    }
-    .area-equiv-value {
-      font-family: var(--font-mono);
-      font-weight: var(--weight-bold);
-      color: var(--color-foreground);
-    }
-
-    /* ══════════════════════════════════════════════════════════════
-       IRRIGATION METHOD CARDS (master.md §5.3 style)
-       ══════════════════════════════════════════════════════════════ */
-    .irrig-list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-    }
-
-    .irrig-card {
-      background: var(--color-surface);
-      border: var(--card-border);
-      border-radius: var(--card-radius-inner);
-      box-shadow: var(--card-shadow);
-      padding: var(--space-4);
-      cursor: pointer;
-      position: relative;
-      transition: box-shadow var(--motion-normal) var(--ease-standard),
-                  border-color var(--motion-normal) var(--ease-standard),
-                  background var(--motion-normal) var(--ease-standard);
-      will-change: box-shadow;
-    }
-    .irrig-card:hover { box-shadow: var(--card-shadow-hover); }
-    .irrig-card:active { transform: scale(0.99); }
-
-    .irrig-card.is-selected {
-      background: var(--color-success-bg);
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 2px var(--color-primary), var(--card-shadow-hover);
-    }
-
-    .irrig-card-body { display: flex; align-items: flex-start; gap: var(--space-3); padding-right: var(--space-8); }
-
-    .irrig-icon-wrap {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--card-radius-inner);
-      background: var(--color-background);
-      border: 1px solid var(--color-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .irrig-card.is-selected .irrig-icon-wrap {
-      background: rgba(26,122,74,0.1);
-      border-color: rgba(26,122,74,0.35);
-    }
-    .irrig-icon-wrap svg { width: 22px; height: 22px; }
-
-    .irrig-info { flex: 1; }
-    .irrig-title-row { display: flex; align-items: center; gap: var(--space-2); margin-bottom: 4px; }
-
-    .irrig-title {
-      font-family: var(--font-heading);
-      font-size: var(--text-sm);
-      font-weight: var(--weight-semibold);
-      color: var(--color-foreground);
-    }
-
-    .irrig-eff-badge {
-      font-family: var(--font-body);
-      font-size: 10px;
-      font-weight: var(--weight-bold);
-      padding: 1px 7px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-    .irrig-eff-badge--high   { background: var(--color-success-bg); color: #14532D; }
-    .irrig-eff-badge--medium { background: var(--color-info-bg);    color: #1E3A5F; }
-    .irrig-eff-badge--low    { background: var(--color-warning-bg); color: #78350F; }
-
-    .irrig-desc {
-      font-family: var(--font-body);
-      font-size: var(--text-xs);
-      color: var(--color-foreground-muted);
-      line-height: var(--leading-normal);
-    }
-
-    .irrig-check {
-      position: absolute;
-      top: var(--space-3);
-      right: var(--space-3);
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--color-primary);
-      color: var(--color-on-primary);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: var(--weight-bold);
-      box-shadow: 0 1px 4px rgba(26,122,74,0.4);
-      flex-shrink: 0;
-    }
-    .irrig-card.is-selected .irrig-check { display: flex; }
-
-    /* ══════════════════════════════════════════════════════════════
-       SUMMARY CARD
-       ══════════════════════════════════════════════════════════════ */
-    .summary-card {
-      background: var(--color-surface);
-      border: var(--card-border);
-      border-radius: var(--card-radius);
-      box-shadow: var(--card-shadow);
-      padding: var(--card-padding);
-    }
-
-    .summary-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: var(--space-3);
-      border-bottom: var(--card-border);
-      margin-bottom: var(--space-4);
-    }
-
-    .summary-header-title {
-      font-family: var(--font-body);
-      font-size: var(--text-xs);
-      font-weight: var(--weight-bold);
-      letter-spacing: var(--tracking-wide);
-      text-transform: uppercase;
-      color: var(--color-foreground-muted);
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-4);
-    }
-
-    .summary-item-label {
-      font-family: var(--font-body);
-      font-size: 10px;
-      color: var(--color-foreground-faint);
-      display: block;
-      margin-bottom: 2px;
-    }
-    .summary-item-value {
-      font-family: var(--font-body);
-      font-size: var(--text-sm);
-      font-weight: var(--weight-semibold);
-      color: var(--color-foreground);
-    }
-    .summary-item-value--mono {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-    }
-    .summary-item-value--warn { color: var(--color-accent); }
-
-    /* ══════════════════════════════════════════════════════════════
-       SUBMIT SECTION
-       ══════════════════════════════════════════════════════════════ */
-    .submit-section { display: flex; flex-direction: column; gap: var(--space-2); }
-
-    .btn--submit {
-      width: 100%;
-      height: var(--btn-h-xl);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-3);
-      font-family: var(--font-heading);
-      font-size: var(--text-md);
-      font-weight: var(--weight-bold);
-      border-radius: var(--card-radius);
-      border: none;
-      cursor: pointer;
-      background: var(--color-primary);
-      color: var(--color-on-primary);
-      box-shadow: 0 2px 4px rgba(26,122,74,0.3), 0 8px 20px rgba(26,122,74,0.2);
-      transition: background var(--motion-fast) var(--ease-standard),
-                  box-shadow var(--motion-fast) var(--ease-standard),
-                  transform  var(--motion-instant) var(--ease-standard);
-      transform: translateZ(0);
-    }
-    .btn--submit:hover  { background: var(--color-primary-hover); box-shadow: 0 4px 8px rgba(26,122,74,0.4), 0 12px 28px rgba(26,122,74,0.25); }
-    .btn--submit:active { background: var(--color-primary-active); transform: scale(0.97); }
-    .btn--submit:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(26,122,74,0.4); }
-    .btn--submit svg    { width: 22px; height: 22px; flex-shrink: 0; }
-
-    .submit-hint {
-      font-family: var(--font-body);
-      font-size: var(--text-xs);
-      color: var(--color-foreground-faint);
-      text-align: center;
-      line-height: var(--leading-normal);
-    }
-
-    /* ══════════════════════════════════════════════════════════════
-       TOAST (master.md micro-interactions)
-       ══════════════════════════════════════════════════════════════ */
-    .app-toast {
-      position: fixed;
-      top: var(--space-4);
-      left: var(--space-4);
-      right: var(--space-4);
-      z-index: 100;
-      padding: var(--space-3) var(--space-5);
-      border-radius: var(--card-radius-inner);
-      font-family: var(--font-body);
-      font-size: var(--text-sm);
-      font-weight: var(--weight-semibold);
-      text-align: center;
-      border: 1px solid transparent;
-      box-shadow: 0 8px 24px rgba(28,43,30,0.18);
-      display: none;
-      opacity: 0;
-      transform: translateY(-8px);
-      transition: opacity var(--motion-normal) var(--ease-decelerate),
-                  transform var(--motion-normal) var(--ease-decelerate);
-    }
-    .app-toast.is-visible {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .app-toast--success { background: var(--color-success-bg); color: #14532D; border-color: rgba(22,163,74,0.3); }
-    .app-toast--warning { background: var(--color-warning-bg); color: #78350F; border-color: rgba(217,119,6,0.3); }
-    .app-toast--error   { background: var(--color-error-bg);   color: #7F1D1D; border-color: rgba(220,38,38,0.3); }
-    .app-toast--info    { background: var(--color-info-bg);    color: #1E3A5F; border-color: rgba(30,95,168,0.3); }
-
-    /* ══════════════════════════════════════════════════════════════
-       DIVIDER / LABEL HELPERS
-       ══════════════════════════════════════════════════════════════ */
-    .divider { height: 1px; background: var(--color-border); margin: var(--space-1) 0; }
-
-    .section-inner { display: flex; flex-direction: column; gap: var(--space-4); }
-
-    .field-group { display: flex; flex-direction: column; gap: var(--space-2); }
   </style>
 </head>
 
 <body>
-  <main class="app-shell">
 
-    <!-- ══ HEADER ══════════════════════════════════════════════════ -->
-    <header class="app-header">
-      <div class="logo-wrap">
-        <div class="logo-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <!-- ══════════════════════════════════════════════════════
+       APP SHELL
+       ══════════════════════════════════════════════════════ -->
+  <main class="w-full max-w-[480px] mx-auto px-4 pb-12 flex flex-col gap-5 pt-4">
+
+    <!-- ══ HEADER ════════════════════════════════════════ -->
+    <header class="flex items-center justify-between gap-3">
+
+      <div class="flex items-center gap-3">
+        <!-- Logo icon -->
+        <div class="w-11 h-11 rounded-inner flex items-center justify-center flex-shrink-0 shadow-btn-primary"
+             style="background:linear-gradient(135deg,#1A7A4A 0%,#15663D 100%)">
+          <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
             <circle cx="12" cy="14" r="2.5" fill="rgba(255,255,255,0.35)"/>
           </svg>
         </div>
-        <div class="logo-text">
-          <div class="logo-name-row">
-            <span class="logo-name">Su-Tech</span>
-            <span class="logo-badge">FAO-56</span>
+
+        <!-- Logo text — ui-ux-pro-max: Bold 700 headings, Medium 500 subheadings -->
+        <div class="flex flex-col gap-0.5">
+          <div class="flex items-center gap-2">
+            <!-- SemiBold 700, tracking-tight — per skill weight scale -->
+            <span class="font-sans text-md font-bold text-foreground tracking-tight">Su-Tech</span>
+            <!-- Label badge: SemiBold 600, uppercase, tracking-wide — skill spec -->
+            <span class="font-sans text-[9px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-pill
+                         bg-success-bg text-[#14532D] border border-[rgba(22,163,74,0.3)]">FAO-56</span>
           </div>
-          <p class="logo-subtitle" id="headerSubtitle">Точное земледелие • РКНП «Дарын»</p>
+          <!-- Subtitle: Medium 500, xs — skill spec -->
+          <p class="font-sans text-xs font-medium text-muted" id="headerSubtitle">Точное земледелие • РКНП «Дарын»</p>
         </div>
       </div>
 
       <!-- Language switcher -->
-      <div class="lang-switcher" role="group" aria-label="Выбор языка">
-        <button type="button" id="langBtnKz" class="lang-btn" onclick="setLanguage('kz')">ҚАЗ</button>
-        <button type="button" id="langBtnRu" class="lang-btn is-active" onclick="setLanguage('ru')">РУС</button>
+      <div class="flex items-center p-1 rounded-[12px] bg-surface border border-border shadow-card gap-0.5"
+           role="group" aria-label="Выбор языка">
+        <button id="langBtnKz"
+                class="h-8 px-3 rounded-inner font-sans text-xs font-semibold cursor-pointer
+                       text-muted bg-transparent border-none
+                       transition-all duration-fast hover:text-foreground"
+                onclick="setLanguage('kz')">ҚАЗ</button>
+        <button id="langBtnRu"
+                class="h-8 px-3 rounded-inner font-sans text-xs font-semibold cursor-pointer
+                       bg-primary text-white border-none shadow-btn-primary
+                       transition-all duration-fast"
+                onclick="setLanguage('ru')">РУС</button>
       </div>
     </header>
 
-    <!-- ══ BLOCK 1: GPS ═════════════════════════════════════════════ -->
-    <section id="block1" class="section-card">
-      <div class="section-header">
-        <span class="step-badge" aria-hidden="true">1</span>
-        <h2 class="section-title" id="block1Title">Локация участка (GPS)</h2>
-        <span class="status-badge status-badge--warning" id="block1StatusPill">Ожидает GPS</span>
+    <!-- ══ BLOCK 1: GPS ════════════════════════════════════ -->
+    <section id="block1" class="bg-surface border border-border rounded-card shadow-card p-6 flex flex-col gap-4">
+
+      <div class="flex items-center gap-3 pb-3 border-b border-border">
+        <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center
+                     font-sans text-xs font-bold flex-shrink-0" aria-hidden="true">1</span>
+        <!-- Section title: SemiBold 600, md size — skill spec -->
+        <h2 class="flex-1 font-sans text-md font-semibold text-foreground leading-snug" id="block1Title">
+          Локация участка (GPS)
+        </h2>
+        <!-- Status badge: Bold 700, xs, uppercase, tracking-wide — skill labels spec -->
+        <span class="font-sans text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-pill
+                     bg-warning-bg text-[#78350F] whitespace-nowrap" id="block1StatusPill">
+          Ожидает GPS
+        </span>
       </div>
 
-      <p class="section-desc" id="block1Desc">
+      <!-- Section desc: Regular 400, sm — skill body spec -->
+      <p class="font-sans text-sm font-normal text-muted leading-normal" id="block1Desc">
         Определите координаты поля для автоматического запроса спутниковой радиации, ветра и влажности почвы по модели FAO-56.
       </p>
 
+      <!-- GPS button: SemiBold 600 — skill button spec -->
       <button
         type="button"
         id="btnGetLocation"
-        class="btn btn--primary btn--full btn--lg"
+        class="w-full h-13 flex items-center justify-center gap-2 font-sans font-semibold text-base
+               bg-primary text-white rounded-inner cursor-pointer border-none shadow-btn-primary
+               transition-all duration-fast hover:bg-primary-hover hover:shadow-btn-hover
+               active:bg-primary-active active:scale-[0.97]
+               focus-visible:shadow-ring-primary"
         onclick="requestGeolocation()"
         aria-label="Определить GPS координаты поля"
       >
-        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 2"/>
+        <svg aria-hidden="true" class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+          <circle cx="12" cy="12" r="9" stroke-dasharray="4 2"/>
         </svg>
         <span id="btnLocationText">Определить GPS координаты</span>
       </button>
 
-      <!-- GPS searching indicator -->
-      <div class="gps-status-block" id="gpsStatusBlock" role="status" aria-live="polite">
-        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;animation:spin 1s linear infinite">
+      <!-- GPS searching pulse -->
+      <div class="hidden items-center justify-center gap-2 p-3 rounded-inner
+                  bg-info-bg border border-[rgba(30,95,168,0.2)] gps-pulse"
+           id="gpsStatusBlock" role="status" aria-live="polite">
+        <svg aria-hidden="true" class="w-4 h-4 text-info gps-spin flex-shrink-0"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
         </svg>
-        <span id="gpsStatusText">Поиск спутников GPS...</span>
+        <span class="font-sans text-sm text-info font-medium" id="gpsStatusText">Поиск спутников GPS...</span>
       </div>
 
       <!-- Coords card -->
-      <div class="coords-card" id="coordsCard">
-        <div class="coords-card-header">
-          <span class="coords-card-title" id="coordsCardTitle">
-            <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="var(--color-primary)"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+      <div class="hidden flex-col gap-3 p-4 rounded-inner bg-surface-raised border border-border"
+           id="coordsCard">
+        <div class="flex items-center justify-between pb-2 border-b border-border">
+          <!-- Card title: Medium 500, xs, uppercase — skill label spec -->
+          <span class="font-sans text-xs font-medium uppercase tracking-wide text-primary flex items-center gap-1"
+                id="coordsCardTitle">
+            <svg class="w-3 h-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm3.707-9.293a1 1 0 0 0-1.414-1.414L9 10.586 7.707 9.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4z"/>
+            </svg>
             Координаты зафиксированы
           </span>
-          <span class="coords-accuracy" id="coordsAccuracy">±8 м</span>
+          <span class="font-mono text-[10px] font-medium px-2 py-0.5 rounded-pill
+                       bg-success-bg text-[#14532D]" id="coordsAccuracy">±8 м</span>
         </div>
-        <div class="coords-grid">
-          <div class="coords-item">
-            <span class="coords-label" id="labelLat">Широта (Lat):</span>
-            <span class="coords-value" id="displayLat">43.238949°</span>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <span class="font-sans text-[10px] text-faint block mb-0.5" id="labelLat">Широта (Lat):</span>
+            <span class="font-mono text-sm font-semibold text-foreground" id="displayLat">43.238949°</span>
           </div>
-          <div class="coords-item">
-            <span class="coords-label" id="labelLon">Долгота (Lon):</span>
-            <span class="coords-value" id="displayLon">76.889709°</span>
+          <div>
+            <span class="font-sans text-[10px] text-faint block mb-0.5" id="labelLon">Долгота (Lon):</span>
+            <span class="font-mono text-sm font-semibold text-foreground" id="displayLon">76.889709°</span>
           </div>
         </div>
       </div>
 
-      <!-- Demo coords link -->
-      <button type="button" class="btn btn--ghost" onclick="setDemoCoordinates()" style="align-self:center">
+      <!-- Demo coords ghost button -->
+      <button type="button"
+              class="self-center font-sans text-sm font-medium text-muted underline underline-offset-2
+                     cursor-pointer bg-transparent border-none
+                     hover:text-primary transition-colors duration-fast"
+              onclick="setDemoCoordinates()">
         <span id="demoCoordsText">Использовать координаты поля (Туркестанская обл.)</span>
       </button>
     </section>
 
-    <!-- ══ BLOCK 2: CROP ════════════════════════════════════════════ -->
-    <section id="block2" class="section-card">
-      <div class="section-header">
-        <span class="step-badge" aria-hidden="true">2</span>
-        <h2 class="section-title" id="block2Title">Сельскохозяйственная культура</h2>
-        <span class="section-tag">Kc</span>
+    <!-- ══ BLOCK 2: CROP ══════════════════════════════════ -->
+    <section id="block2" class="bg-surface border border-border rounded-card shadow-card p-6 flex flex-col gap-4">
+
+      <div class="flex items-center gap-3 pb-3 border-b border-border">
+        <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center
+                     font-sans text-xs font-bold flex-shrink-0" aria-hidden="true">2</span>
+        <h2 class="flex-1 font-sans text-md font-semibold text-foreground leading-snug" id="block2Title">
+          Сельскохозяйственная культура
+        </h2>
+        <!-- Mono tag label — skill: Fira Code for data/labels -->
+        <span class="font-mono text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D]
+                     font-semibold whitespace-nowrap">Kc</span>
       </div>
 
-      <p class="section-desc" id="block2Desc">
+      <p class="font-sans text-sm font-normal text-muted leading-normal" id="block2Desc">
         Выберите культуру для учёта биологического коэффициента транспирации (K<sub>c</sub>).
       </p>
 
-      <!-- 8 культур: 4 колонки × 2 ряда -->
-      <div class="crop-grid" role="radiogroup" aria-label="Выбор культуры">
+      <!-- 8 crops — 4 columns -->
+      <div class="grid grid-cols-4 gap-2" role="radiogroup" aria-label="Выбор культуры"
+           style="grid-template-columns: repeat(4,1fr)">
 
         <!-- 1. Пшеница -->
-        <div id="cropCard_wheat" class="crop-card" onclick="selectCrop('wheat')" role="radio" aria-checked="false" tabindex="0">
-          <div class="crop-icon-wrap">
-            <svg viewBox="0 0 24 24" fill="var(--color-accent)" aria-hidden="true">
+        <div id="cropCard_wheat"
+             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative transition-all duration-normal
+                    hover:shadow-card-hover active:scale-[0.97]"
+             onclick="selectCrop('wheat')" role="radio" aria-checked="false" tabindex="0">
+          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="#D97706" aria-hidden="true">
               <path d="M12 2c0 0-1 4-1 8s1 8 1 8M8 6c0 0 1 2 4 4M16 6c0 0-1 2-4 4M8 10c0 0 1 2 4 2M16 10c0 0-1 2-4 2M7 14c0 0 2 1 5 2M17 14c0 0-2 1-5 2"/>
               <rect x="11" y="18" width="2" height="4" rx="1"/>
             </svg>
           </div>
-          <span class="crop-name" id="cropName_wheat">Пшеница</span>
-          <span class="crop-sub"  id="cropSub_wheat">Бидай</span>
-          <span class="crop-kc">Kc: 1.10</span>
-          <span class="crop-check" aria-hidden="true">✓</span>
+          <!-- Card title: SemiBold 600, xs — skill spec -->
+          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_wheat">Пшеница</span>
+          <!-- Sub: Regular 400, 2xs — skill body spec -->
+          <span class="font-sans text-[10px] text-muted" id="cropSub_wheat">Бидай</span>
+          <!-- Data label: Mono — skill spec -->
+          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
+          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+                aria-hidden="true">✓</span>
         </div>
 
         <!-- 2. Хлопок -->
-        <div id="cropCard_cotton" class="crop-card is-selected" onclick="selectCrop('cotton')" role="radio" aria-checked="true" tabindex="0">
-          <div class="crop-icon-wrap">
-            <svg viewBox="0 0 24 24" fill="var(--color-primary)" aria-hidden="true">
+        <div id="cropCard_cotton"
+             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative transition-all duration-normal card-selected
+                    hover:shadow-card-hover active:scale-[0.97]"
+             onclick="selectCrop('cotton')" role="radio" aria-checked="true" tabindex="0">
+          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="#1A7A4A" aria-hidden="true">
               <path d="M12 6c-2 0-3 1.5-3 3s.5 2.5 1 3.5L12 21l2-8.5c.5-1 1-2 1-3.5 0-1.5-1-3-3-3z"/>
-              <path d="M8 8c-1 .5-2 1.5-2 3 0 1 .5 2 1 3" fill="none" stroke="var(--color-primary)" stroke-width="1.5"/>
-              <path d="M16 8c1 .5 2 1.5 2 3 0 1-.5 2-1 3" fill="none" stroke="var(--color-primary)" stroke-width="1.5"/>
+              <path d="M8 8c-1 .5-2 1.5-2 3 0 1 .5 2 1 3" fill="none" stroke="#1A7A4A" stroke-width="1.5"/>
+              <path d="M16 8c1 .5 2 1.5 2 3 0 1-.5 2-1 3" fill="none" stroke="#1A7A4A" stroke-width="1.5"/>
             </svg>
           </div>
-          <span class="crop-name" id="cropName_cotton">Хлопок</span>
-          <span class="crop-sub"  id="cropSub_cotton">Мақта</span>
-          <span class="crop-kc">Kc: 1.15</span>
-          <span class="crop-check" aria-hidden="true">✓</span>
+          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_cotton">Хлопок</span>
+          <span class="font-sans text-[10px] text-muted" id="cropSub_cotton">Мақта</span>
+          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.15</span>
+          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white flex items-center justify-center text-[9px] font-bold shadow-btn-primary"
+                aria-hidden="true">✓</span>
         </div>
 
         <!-- 3. Кукуруза -->
-        <div id="cropCard_corn" class="crop-card" onclick="selectCrop('corn')" role="radio" aria-checked="false" tabindex="0">
-          <div class="crop-icon-wrap">
-            <svg viewBox="0 0 24 24" fill="var(--color-accent)" aria-hidden="true">
+        <div id="cropCard_corn"
+             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative transition-all duration-normal
+                    hover:shadow-card-hover active:scale-[0.97]"
+             onclick="selectCrop('corn')" role="radio" aria-checked="false" tabindex="0">
+          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="#D97706" aria-hidden="true">
               <path d="M12 3c-.5 0-1 .5-1 1 0 1.5 1 3 1 3s1-1.5 1-3c0-.5-.5-1-1-1z"/>
               <rect x="9" y="7" width="6" height="11" rx="3"/>
               <path d="M9 9h6M9 11h6M9 13h6M9 15h6" fill="none" stroke="white" stroke-width="0.8"/>
-              <path d="M12 18v3" fill="none" stroke="var(--color-accent)" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M12 18v3" fill="none" stroke="#D97706" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
           </div>
-          <span class="crop-name" id="cropName_corn">Кукуруза</span>
-          <span class="crop-sub"  id="cropSub_corn">Жүгері</span>
-          <span class="crop-kc">Kc: 1.20</span>
-          <span class="crop-check" aria-hidden="true">✓</span>
+          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_corn">Кукуруза</span>
+          <span class="font-sans text-[10px] text-muted" id="cropSub_corn">Жүгері</span>
+          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.20</span>
+          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+                aria-hidden="true">✓</span>
         </div>
 
         <!-- 4. Рис -->
-        <div id="cropCard_rice" class="crop-card" onclick="selectCrop('rice')" role="radio" aria-checked="false" tabindex="0">
-          <div class="crop-icon-wrap">
-            <svg viewBox="0 0 24 24" fill="var(--color-primary)" aria-hidden="true">
+        <div id="cropCard_rice"
+             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative transition-all duration-normal
+                    hover:shadow-card-hover active:scale-[0.97]"
+             onclick="selectCrop('rice')" role="radio" aria-checked="false" tabindex="0">
+          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="#1A7A4A" aria-hidden="true">
               <ellipse cx="12" cy="9" rx="3" ry="5"/>
-              <path d="M9 8 C7 6 6 4 8 3M15 8 C17 6 18 4 16 3" fill="none" stroke="var(--color-primary)" stroke-width="1.3"/>
-              <path d="M12 14v7" fill="none" stroke="var(--color-foreground-muted)" stroke-width="1.5" stroke-linecap="round"/>
-              <path d="M9 17c0 2 1.5 3.5 3 4M15 17c0 2-1.5 3.5-3 4" fill="none" stroke="var(--color-foreground-muted)" stroke-width="1"/>
+              <path d="M9 8 C7 6 6 4 8 3M15 8 C17 6 18 4 16 3" fill="none" stroke="#1A7A4A" stroke-width="1.3"/>
+              <path d="M12 14v7" fill="none" stroke="#7A9080" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M9 17c0 2 1.5 3.5 3 4M15 17c0 2-1.5 3.5-3 4" fill="none" stroke="#7A9080" stroke-width="1"/>
             </svg>
           </div>
-          <span class="crop-name" id="cropName_rice">Рис</span>
-          <span class="crop-sub"  id="cropSub_rice">Күріш</span>
-          <span class="crop-kc">Kc: 1.25</span>
-          <span class="crop-check" aria-hidden="true">✓</span>
+          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_rice">Рис</span>
+          <span class="font-sans text-[10px] text-muted" id="cropSub_rice">Күріш</span>
+          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.25</span>
+          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+                aria-hidden="true">✓</span>
         </div>
 
         <!-- 5. Люцерна -->
-        <div id="cropCard_alfalfa" class="crop-card" onclick="selectCrop('alfalfa')" role="radio" aria-checked="false" tabindex="0">
-          <div class="crop-icon-wrap">
-            <svg viewBox="0 0 24 24" fill="var(--color-primary)" aria-hidden="true">
+        <div id="cropCard_alfalfa"
+             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative transition-all duration-normal
+                    hover:shadow-card-hover active:scale-[0.97]"
+             onclick="selectCrop('alfalfa')" role="radio" aria-checked="false" tabindex="0">
+          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="#1A7A4A" aria-hidden="true">
               <path d="M12 21c0 0-6-5-6-10a6 6 0 0 1 6-6 6 6 0 0 1 6 6c0 5-6 10-6 10z" opacity="0.7"/>
               <path d="M12 21V9M9 12c0 0 1-2 3-2M15 12c0 0-1-2-3-2"/>
             </svg>
           </div>
-          <span class="crop-name" id="cropName_alfalfa">Люцерна</span>
-          <span class="crop-sub"  id="cropSub_alfalfa">Жоңышқа</span>
-          <span class="crop-kc">Kc: 1.05</span>
-          <span class="crop-check" aria-hidden="true">✓</span>
+          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_alfalfa">Люцерна</span>
+          <span class="font-sans text-[10px] text-muted" id="cropSub_alfalfa">Жоңышқа</span>
+          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.05</span>
+          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+                aria-hidden="true">✓</span>
         </div>
 
         <!-- 6. Томаты -->
-        <div id="cropCard_tomato" class="crop-card" onclick="selectCrop('tomato')" role="radio" aria-checked="false" tabindex="0">
-          <div class="crop-icon-wrap">
-            <svg viewBox="0 0 24 24" fill="#E53E3E" aria-hidden="true">
-              <circle cx="12" cy="14" r="6"/>
-              <path d="M10 8c0 0 1-2 2-3 1 1 2 3 2 3M12 5V3" fill="none" stroke="var(--color-primary)" stroke-width="1.5" stroke-linecap="round"/>
+        <div id="cropCard_tomato"
+             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative transition-all duration-normal
+                    hover:shadow-card-hover active:scale-[0.97]"
+             onclick="selectCrop('tomato')" role="radio" aria-checked="false" tabindex="0">
+          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="14" r="6" fill="#E53E3E"/>
+              <path d="M10 8c0 0 1-2 2-3 1 1 2 3 2 3M12 5V3" fill="none" stroke="#1A7A4A" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
           </div>
-          <span class="crop-name" id="cropName_tomato">Томаты</span>
-          <span class="crop-sub"  id="cropSub_tomato">Қызанақ</span>
-          <span class="crop-kc">Kc: 1.15</span>
-          <span class="crop-check" aria-hidden="true">✓</span>
+          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_tomato">Томаты</span>
+          <span class="font-sans text-[10px] text-muted" id="cropSub_tomato">Қызанақ</span>
+          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.15</span>
+          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+                aria-hidden="true">✓</span>
         </div>
 
         <!-- 7. Подсолнечник -->
-        <div id="cropCard_sunflower" class="crop-card" onclick="selectCrop('sunflower')" role="radio" aria-checked="false" tabindex="0">
-          <div class="crop-icon-wrap">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="12" cy="12" r="3.5" fill="var(--color-accent)"/>
-              <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/>
+        <div id="cropCard_sunflower"
+             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative transition-all duration-normal
+                    hover:shadow-card-hover active:scale-[0.97]"
+             onclick="selectCrop('sunflower')" role="radio" aria-checked="false" tabindex="0">
+          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="3.5" fill="#D97706"/>
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"
+                    stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </div>
-          <span class="crop-name" id="cropName_sunflower">Подсолн.</span>
-          <span class="crop-sub"  id="cropSub_sunflower">Күнбағыс</span>
-          <span class="crop-kc">Kc: 1.00</span>
-          <span class="crop-check" aria-hidden="true">✓</span>
+          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_sunflower">Подсолн.</span>
+          <span class="font-sans text-[10px] text-muted" id="cropSub_sunflower">Күнбағыс</span>
+          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.00</span>
+          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+                aria-hidden="true">✓</span>
         </div>
 
         <!-- 8. Картофель -->
-        <div id="cropCard_potato" class="crop-card" onclick="selectCrop('potato')" role="radio" aria-checked="false" tabindex="0">
-          <div class="crop-icon-wrap">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
+        <div id="cropCard_potato"
+             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative transition-all duration-normal
+                    hover:shadow-card-hover active:scale-[0.97]"
+             onclick="selectCrop('potato')" role="radio" aria-checked="false" tabindex="0">
+          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" aria-hidden="true">
               <ellipse cx="12" cy="13" rx="6" ry="5" fill="#C8A05A"/>
               <ellipse cx="9" cy="10" rx="3" ry="2.5" fill="#D4A96A" transform="rotate(-20 9 10)"/>
               <circle cx="14" cy="9" r="1.5" fill="#C8A05A"/>
             </svg>
           </div>
-          <span class="crop-name" id="cropName_potato">Картофель</span>
-          <span class="crop-sub"  id="cropSub_potato">Картоп</span>
-          <span class="crop-kc">Kc: 1.10</span>
-          <span class="crop-check" aria-hidden="true">✓</span>
+          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_potato">Картофель</span>
+          <span class="font-sans text-[10px] text-muted" id="cropSub_potato">Картоп</span>
+          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
+          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+                aria-hidden="true">✓</span>
         </div>
 
       </div>
     </section>
 
-    <!-- ══ BLOCK 3: AREA ════════════════════════════════════════════ -->
-    <section id="block3" class="section-card">
-      <div class="section-header">
-        <span class="step-badge" aria-hidden="true">3</span>
-        <h2 class="section-title" id="block3Title">Параметры поля</h2>
-        <span class="section-tag" id="currentAreaUnitBadge">гектар</span>
+    <!-- ══ BLOCK 3: AREA ══════════════════════════════════ -->
+    <section id="block3" class="bg-surface border border-border rounded-card shadow-card p-6 flex flex-col gap-4">
+
+      <div class="flex items-center gap-3 pb-3 border-b border-border">
+        <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center
+                     font-sans text-xs font-bold flex-shrink-0" aria-hidden="true">3</span>
+        <h2 class="flex-1 font-sans text-md font-semibold text-foreground leading-snug" id="block3Title">
+          Параметры поля
+        </h2>
+        <!-- Section tag: Mono, label spec -->
+        <span class="font-mono text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D]
+                     font-semibold whitespace-nowrap" id="currentAreaUnitBadge">гектар</span>
       </div>
 
-      <div class="section-inner">
+      <div class="flex flex-col gap-4">
+
         <!-- Unit toggle -->
-        <div class="field-group">
-          <label class="form-label" id="labelAreaUnit">Единица измерения:</label>
-          <div class="irrigation-toggle" role="group" aria-label="Единица площади">
-            <button type="button" id="unitBtn_sotka" class="toggle-btn" onclick="setAreaUnit('sotka')" aria-pressed="false">
+        <div class="flex flex-col gap-2">
+          <!-- Form label: Medium 500, xs, uppercase, tracking-wide — skill label spec -->
+          <label class="font-sans text-xs font-medium uppercase tracking-wide text-muted" id="labelAreaUnit">
+            Единица измерения:
+          </label>
+          <div class="flex gap-1 p-1 bg-background border border-border rounded-[12px]"
+               role="group" aria-label="Единица площади">
+            <button type="button" id="unitBtn_sotka"
+                    class="flex-1 h-10 rounded-inner font-sans text-sm font-medium cursor-pointer
+                           text-muted bg-transparent border-none
+                           transition-all duration-normal hover:text-foreground"
+                    onclick="setAreaUnit('sotka')" aria-pressed="false">
               <span id="unitText_sotka">Сотки</span>
             </button>
-            <button type="button" id="unitBtn_hectare" class="toggle-btn is-active" onclick="setAreaUnit('hectare')" aria-pressed="true">
+            <button type="button" id="unitBtn_hectare"
+                    class="flex-1 h-10 rounded-inner font-sans text-sm font-semibold cursor-pointer
+                           bg-surface text-primary border-none shadow-card
+                           transition-all duration-normal"
+                    onclick="setAreaUnit('hectare')" aria-pressed="true">
               <span id="unitText_hectare">Гектары</span>
             </button>
           </div>
         </div>
 
         <!-- Area input -->
-        <div class="field-group">
-          <label class="form-label" id="labelAreaValue" for="fieldAreaInput">Площадь участка:</label>
-          <div class="input-wrap">
+        <div class="flex flex-col gap-2">
+          <label class="font-sans text-xs font-medium uppercase tracking-wide text-muted"
+                 id="labelAreaValue" for="fieldAreaInput">
+            Площадь участка:
+          </label>
+          <div class="relative flex items-center">
             <input
               type="number"
               id="fieldAreaInput"
-              class="input"
-              min="0.1"
-              step="0.5"
-              value="10"
-              placeholder="10"
+              class="w-full h-11 pl-4 pr-14 bg-surface border-[1.5px] border-border rounded-inner
+                     font-mono text-xl font-bold text-foreground outline-none
+                     transition-all duration-fast
+                     hover:border-border-strong
+                     focus:border-primary focus:shadow-ring-primary
+                     placeholder:text-faint"
+              min="0.1" step="0.5" value="10" placeholder="10"
               aria-label="Площадь участка"
               oninput="handleAreaChange(this.value)"
             />
-            <span class="input-suffix" id="inputUnitSuffix">га</span>
+            <!-- Suffix: Medium 500 label -->
+            <span class="absolute right-4 font-sans text-sm font-medium text-muted pointer-events-none"
+                  id="inputUnitSuffix">га</span>
           </div>
         </div>
 
         <!-- Preset chips -->
-        <div class="field-group">
-          <span class="form-label" id="labelQuickPresets">Быстрый выбор:</span>
-          <div class="presets-row" role="group" aria-label="Быстрый выбор площади">
-            <button type="button" class="preset-chip" onclick="setPresetArea(1)"  aria-label="1 га">1</button>
-            <button type="button" class="preset-chip" onclick="setPresetArea(5)"  aria-label="5 га">5</button>
-            <button type="button" class="preset-chip" onclick="setPresetArea(10)" aria-label="10 га">10</button>
-            <button type="button" class="preset-chip" onclick="setPresetArea(25)" aria-label="25 га">25</button>
-            <button type="button" class="preset-chip" onclick="setPresetArea(50)" aria-label="50 га">50</button>
-            <button type="button" class="preset-chip" onclick="setPresetArea(100)" aria-label="100 га">100</button>
+        <div class="flex flex-col gap-2">
+          <span class="font-sans text-xs font-medium uppercase tracking-wide text-muted"
+                id="labelQuickPresets">Быстрый выбор:</span>
+          <div class="flex flex-wrap gap-2" role="group" aria-label="Быстрый выбор площади">
+            <button type="button"
+                    class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
+                           font-mono text-sm font-medium text-muted cursor-pointer
+                           transition-all duration-fast
+                           hover:bg-success-bg hover:border-primary hover:text-primary
+                           active:scale-95"
+                    onclick="setPresetArea(1)">1</button>
+            <button type="button"
+                    class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
+                           font-mono text-sm font-medium text-muted cursor-pointer
+                           transition-all duration-fast
+                           hover:bg-success-bg hover:border-primary hover:text-primary
+                           active:scale-95"
+                    onclick="setPresetArea(5)">5</button>
+            <button type="button"
+                    class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
+                           font-mono text-sm font-medium text-muted cursor-pointer
+                           transition-all duration-fast
+                           hover:bg-success-bg hover:border-primary hover:text-primary
+                           active:scale-95"
+                    onclick="setPresetArea(10)">10</button>
+            <button type="button"
+                    class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
+                           font-mono text-sm font-medium text-muted cursor-pointer
+                           transition-all duration-fast
+                           hover:bg-success-bg hover:border-primary hover:text-primary
+                           active:scale-95"
+                    onclick="setPresetArea(25)">25</button>
+            <button type="button"
+                    class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
+                           font-mono text-sm font-medium text-muted cursor-pointer
+                           transition-all duration-fast
+                           hover:bg-success-bg hover:border-primary hover:text-primary
+                           active:scale-95"
+                    onclick="setPresetArea(50)">50</button>
+            <button type="button"
+                    class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
+                           font-mono text-sm font-medium text-muted cursor-pointer
+                           transition-all duration-fast
+                           hover:bg-success-bg hover:border-primary hover:text-primary
+                           active:scale-95"
+                    onclick="setPresetArea(100)">100</button>
           </div>
         </div>
 
         <!-- Equivalent -->
-        <div class="area-equiv" aria-live="polite">
-          <span id="areaCalcEquivalentLabel">Эквивалент:</span>
-          <span class="area-equiv-value" id="areaInM2">100 000 м² (1 000 соток)</span>
+        <div class="flex items-center justify-between p-3 rounded-inner bg-background border border-border"
+             aria-live="polite">
+          <span class="font-sans text-sm text-muted" id="areaCalcEquivalentLabel">Эквивалент:</span>
+          <span class="font-mono text-sm font-bold text-foreground" id="areaInM2">100 000 м² (1 000 соток)</span>
         </div>
+
       </div>
     </section>
 
-    <!-- ══ BLOCK 4: IRRIGATION METHOD ══════════════════════════════ -->
-    <section id="block4" class="section-card">
-      <div class="section-header">
-        <span class="step-badge" aria-hidden="true">4</span>
-        <h2 class="section-title" id="block4Title">Тип оросительной системы</h2>
-        <span class="section-tag">КПД (η)</span>
+    <!-- ══ BLOCK 4: IRRIGATION ════════════════════════════ -->
+    <section id="block4" class="bg-surface border border-border rounded-card shadow-card p-6 flex flex-col gap-4">
+
+      <div class="flex items-center gap-3 pb-3 border-b border-border">
+        <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center
+                     font-sans text-xs font-bold flex-shrink-0" aria-hidden="true">4</span>
+        <h2 class="flex-1 font-sans text-md font-semibold text-foreground leading-snug" id="block4Title">
+          Тип оросительной системы
+        </h2>
+        <span class="font-mono text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D]
+                     font-semibold whitespace-nowrap">КПД (η)</span>
       </div>
 
-      <p class="section-desc" id="block4Desc">
+      <p class="font-sans text-sm font-normal text-muted leading-normal" id="block4Desc">
         Выберите метод полива для корректного расчёта коэффициента эффективности применения воды.
       </p>
 
-      <div class="irrig-list" role="radiogroup" aria-label="Метод полива">
+      <div class="flex flex-col gap-3" role="radiogroup" aria-label="Метод полива">
 
         <!-- 1. Капельный -->
-        <div id="irrigCard_drip" class="irrig-card is-selected" onclick="selectIrrigation('drip')" role="radio" aria-checked="true" tabindex="0">
-          <div class="irrig-card-body">
-            <div class="irrig-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="var(--color-info)" aria-hidden="true">
+        <div id="irrigCard_drip"
+             class="bg-surface border border-border rounded-inner shadow-card p-4 cursor-pointer relative
+                    transition-all duration-normal card-selected
+                    hover:shadow-card-hover active:scale-[0.99]"
+             onclick="selectIrrigation('drip')" role="radio" aria-checked="true" tabindex="0">
+          <div class="flex items-start gap-3 pr-8">
+            <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="#1E5FA8" aria-hidden="true">
                 <path d="M12 3C10 7 7 10 7 14a5 5 0 0 0 10 0c0-4-3-7-5-11z"/>
                 <circle cx="12" cy="14" r="1.5" fill="white"/>
               </svg>
             </div>
-            <div class="irrig-info">
-              <div class="irrig-title-row">
-                <span class="irrig-title" id="irrigTitle_drip">Капельный полив</span>
-                <span class="irrig-eff-badge irrig-eff-badge--high" id="irrigBadge_drip">КПД 90%</span>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <!-- Card title: SemiBold 600, sm -->
+                <span class="font-sans text-sm font-semibold text-foreground" id="irrigTitle_drip">Капельный полив</span>
+                <!-- Efficiency badge: Bold 700, 10px — skill label -->
+                <span class="font-sans text-[10px] font-bold px-2 py-0.5 rounded-pill
+                             bg-success-bg text-[#14532D] whitespace-nowrap" id="irrigBadge_drip">КПД 90%</span>
               </div>
-              <p class="irrig-desc" id="irrigDesc_drip">Адресная подача в прикорневую зону. Экономия воды 40–50%.</p>
+              <p class="font-sans text-xs font-normal text-muted leading-normal" id="irrigDesc_drip">
+                Адресная подача в прикорневую зону. Экономия воды 40–50%.
+              </p>
             </div>
           </div>
-          <span class="irrig-check" aria-hidden="true">✓</span>
+          <span class="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center
+                       text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
         </div>
 
         <!-- 2. Дождевание -->
-        <div id="irrigCard_sprinkler" class="irrig-card" onclick="selectIrrigation('sprinkler')" role="radio" aria-checked="false" tabindex="0">
-          <div class="irrig-card-body">
-            <div class="irrig-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="var(--color-info)" aria-hidden="true">
+        <div id="irrigCard_sprinkler"
+             class="bg-surface border border-border rounded-inner shadow-card p-4 cursor-pointer relative
+                    transition-all duration-normal
+                    hover:shadow-card-hover active:scale-[0.99]"
+             onclick="selectIrrigation('sprinkler')" role="radio" aria-checked="false" tabindex="0">
+          <div class="flex items-start gap-3 pr-8">
+            <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="#1E5FA8" aria-hidden="true">
                 <path d="M4 14c0-1 1-2 2-2h1l1-4h8l1 4h1c1 0 2 1 2 2v1H4v-1z"/>
-                <path d="M6 15v3M9 15v3M12 15v3M15 15v3M18 15v3" stroke="var(--color-info)" stroke-width="1.5" stroke-linecap="round"/>
-                <circle cx="6" cy="19.5" r="0.7" fill="var(--color-info)"/>
-                <circle cx="9" cy="19.5" r="0.7" fill="var(--color-info)"/>
-                <circle cx="12" cy="19.5" r="0.7" fill="var(--color-info)"/>
-                <circle cx="15" cy="19.5" r="0.7" fill="var(--color-info)"/>
-                <circle cx="18" cy="19.5" r="0.7" fill="var(--color-info)"/>
+                <path d="M6 15v3M9 15v3M12 15v3M15 15v3M18 15v3" stroke="#1E5FA8" stroke-width="1.5" stroke-linecap="round"/>
               </svg>
             </div>
-            <div class="irrig-info">
-              <div class="irrig-title-row">
-                <span class="irrig-title" id="irrigTitle_sprinkler">Дождевание</span>
-                <span class="irrig-eff-badge irrig-eff-badge--medium" id="irrigBadge_sprinkler">КПД 75%</span>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="font-sans text-sm font-semibold text-foreground" id="irrigTitle_sprinkler">Дождевание</span>
+                <span class="font-sans text-[10px] font-bold px-2 py-0.5 rounded-pill
+                             bg-info-bg text-[#1E3A5F] whitespace-nowrap" id="irrigBadge_sprinkler">КПД 75%</span>
               </div>
-              <p class="irrig-desc" id="irrigDesc_sprinkler">Имитация дождя через форсунки. Равномерное распределение по площади.</p>
+              <p class="font-sans text-xs font-normal text-muted leading-normal" id="irrigDesc_sprinkler">
+                Имитация дождя через форсунки. Равномерное распределение по площади.
+              </p>
             </div>
           </div>
-          <span class="irrig-check" aria-hidden="true">✓</span>
+          <span class="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
+                       text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
         </div>
 
-        <!-- 3. Фронтальный (дождевальная машина) -->
-        <div id="irrigCard_pivot" class="irrig-card" onclick="selectIrrigation('pivot')" role="radio" aria-checked="false" tabindex="0">
-          <div class="irrig-card-body">
-            <div class="irrig-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-secondary)" stroke-width="1.8" aria-hidden="true">
+        <!-- 3. Фронтальный -->
+        <div id="irrigCard_pivot"
+             class="bg-surface border border-border rounded-inner shadow-card p-4 cursor-pointer relative
+                    transition-all duration-normal
+                    hover:shadow-card-hover active:scale-[0.99]"
+             onclick="selectIrrigation('pivot')" role="radio" aria-checked="false" tabindex="0">
+          <div class="flex items-start gap-3 pr-8">
+            <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none"
+                   stroke="#1E5FA8" stroke-width="1.8" aria-hidden="true">
                 <circle cx="12" cy="12" r="2"/>
                 <path d="M12 12 L20 8" stroke-linecap="round"/>
                 <path d="M20 8 L22 6M20 8 L20 5M20 8 L22 10" stroke-linecap="round"/>
                 <circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/>
               </svg>
             </div>
-            <div class="irrig-info">
-              <div class="irrig-title-row">
-                <span class="irrig-title" id="irrigTitle_pivot">Фронтальный (Pivot)</span>
-                <span class="irrig-eff-badge irrig-eff-badge--medium" id="irrigBadge_pivot">КПД 80%</span>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="font-sans text-sm font-semibold text-foreground" id="irrigTitle_pivot">Фронтальный (Pivot)</span>
+                <span class="font-sans text-[10px] font-bold px-2 py-0.5 rounded-pill
+                             bg-info-bg text-[#1E3A5F] whitespace-nowrap" id="irrigBadge_pivot">КПД 80%</span>
               </div>
-              <p class="irrig-desc" id="irrigDesc_pivot">Круговая дождевальная машина. Оптимален для крупных открытых участков.</p>
+              <p class="font-sans text-xs font-normal text-muted leading-normal" id="irrigDesc_pivot">
+                Круговая дождевальная машина. Оптимален для крупных открытых участков.
+              </p>
             </div>
           </div>
-          <span class="irrig-check" aria-hidden="true">✓</span>
+          <span class="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
+                       text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
         </div>
 
-        <!-- 4. Арычный (самотёчный) -->
-        <div id="irrigCard_furrow" class="irrig-card" onclick="selectIrrigation('furrow')" role="radio" aria-checked="false" tabindex="0">
-          <div class="irrig-card-body">
-            <div class="irrig-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.8" aria-hidden="true">
+        <!-- 4. Арычный -->
+        <div id="irrigCard_furrow"
+             class="bg-surface border border-border rounded-inner shadow-card p-4 cursor-pointer relative
+                    transition-all duration-normal
+                    hover:shadow-card-hover active:scale-[0.99]"
+             onclick="selectIrrigation('furrow')" role="radio" aria-checked="false" tabindex="0">
+          <div class="flex items-start gap-3 pr-8">
+            <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="1.8" aria-hidden="true">
                 <path d="M3 8 Q6 6 9 8 Q12 10 15 8 Q18 6 21 8" stroke-linecap="round"/>
                 <path d="M3 12 Q6 10 9 12 Q12 14 15 12 Q18 10 21 12" stroke-linecap="round"/>
                 <path d="M3 16 Q6 14 9 16 Q12 18 15 16 Q18 14 21 16" stroke-linecap="round"/>
               </svg>
             </div>
-            <div class="irrig-info">
-              <div class="irrig-title-row">
-                <span class="irrig-title" id="irrigTitle_furrow">Арычный полив</span>
-                <span class="irrig-eff-badge irrig-eff-badge--low" id="irrigBadge_furrow">КПД 50%</span>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="font-sans text-sm font-semibold text-foreground" id="irrigTitle_furrow">Арычный полив</span>
+                <span class="font-sans text-[10px] font-bold px-2 py-0.5 rounded-pill
+                             bg-warning-bg text-[#78350F] whitespace-nowrap" id="irrigBadge_furrow">КПД 50%</span>
               </div>
-              <p class="irrig-desc" id="irrigDesc_furrow">Традиционный самотечный полив. Высокие потери на фильтрацию.</p>
+              <p class="font-sans text-xs font-normal text-muted leading-normal" id="irrigDesc_furrow">
+                Традиционный самотечный полив. Высокие потери на фильтрацию.
+              </p>
             </div>
           </div>
-          <span class="irrig-check" aria-hidden="true">✓</span>
+          <span class="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
+                       text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
         </div>
 
-        <!-- 5. Подпочвенное орошение -->
-        <div id="irrigCard_subsurface" class="irrig-card" onclick="selectIrrigation('subsurface')" role="radio" aria-checked="false" tabindex="0">
-          <div class="irrig-card-body">
-            <div class="irrig-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <rect x="3" y="4" width="18" height="3" rx="1.5" fill="var(--color-foreground-muted)" opacity="0.3"/>
-                <rect x="3" y="9" width="18" height="1.5" rx="0.75" fill="var(--color-primary)"/>
-                <rect x="3" y="13" width="18" height="1.5" rx="0.75" fill="var(--color-primary)"/>
-                <path d="M7 9v5M12 9v5M17 9v5" stroke="var(--color-primary)" stroke-width="1" stroke-dasharray="2 2"/>
-                <path d="M3 19 Q12 16 21 19" stroke="var(--color-foreground-muted)" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        <!-- 5. Подпочвенное -->
+        <div id="irrigCard_subsurface"
+             class="bg-surface border border-border rounded-inner shadow-card p-4 cursor-pointer relative
+                    transition-all duration-normal
+                    hover:shadow-card-hover active:scale-[0.99]"
+             onclick="selectIrrigation('subsurface')" role="radio" aria-checked="false" tabindex="0">
+          <div class="flex items-start gap-3 pr-8">
+            <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="3" rx="1.5" fill="#7A9080" opacity="0.3"/>
+                <rect x="3" y="9"  width="18" height="1.5" rx="0.75" fill="#1A7A4A"/>
+                <rect x="3" y="13" width="18" height="1.5" rx="0.75" fill="#1A7A4A"/>
+                <path d="M7 9v5M12 9v5M17 9v5" stroke="#1A7A4A" stroke-width="1" stroke-dasharray="2 2"/>
+                <path d="M3 19 Q12 16 21 19" stroke="#7A9080" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
               </svg>
             </div>
-            <div class="irrig-info">
-              <div class="irrig-title-row">
-                <span class="irrig-title" id="irrigTitle_subsurface">Подпочвенное</span>
-                <span class="irrig-eff-badge irrig-eff-badge--high" id="irrigBadge_subsurface">КПД 95%</span>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="font-sans text-sm font-semibold text-foreground" id="irrigTitle_subsurface">Подпочвенное</span>
+                <span class="font-sans text-[10px] font-bold px-2 py-0.5 rounded-pill
+                             bg-success-bg text-[#14532D] whitespace-nowrap" id="irrigBadge_subsurface">КПД 95%</span>
               </div>
-              <p class="irrig-desc" id="irrigDesc_subsurface">Трубки под поверхностью почвы. Минимум испарения, максимум эффективности.</p>
+              <p class="font-sans text-xs font-normal text-muted leading-normal" id="irrigDesc_subsurface">
+                Трубки под поверхностью почвы. Минимум испарения, максимум эффективности.
+              </p>
             </div>
           </div>
-          <span class="irrig-check" aria-hidden="true">✓</span>
+          <span class="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
+                       text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
         </div>
 
       </div>
     </section>
 
-    <!-- ══ SUMMARY ═══════════════════════════════════════════════ -->
-    <div class="summary-card">
-      <div class="summary-header">
-        <span class="summary-header-title" id="summaryTitle">Сводка параметров</span>
-        <span class="status-badge status-badge--ok">Готово к расчёту</span>
+    <!-- ══ SUMMARY ════════════════════════════════════════ -->
+    <div class="bg-surface border border-border rounded-card shadow-card p-6">
+      <div class="flex items-center justify-between pb-3 border-b border-border mb-4">
+        <!-- Summary label: Medium 500, xs, uppercase, tracking-wide — skill label spec -->
+        <span class="font-sans text-xs font-medium uppercase tracking-wide text-muted"
+              id="summaryTitle">Сводка параметров</span>
+        <span class="font-sans text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-pill
+                     bg-success-bg text-[#14532D]">Готово к расчёту</span>
       </div>
-      <div class="summary-grid">
+      <div class="grid grid-cols-2 gap-4">
         <div>
-          <span class="summary-item-label" id="sumLabelCoords">Локация:</span>
-          <span class="summary-item-value summary-item-value--mono summary-item-value--warn" id="sumValCoords">Не определены</span>
+          <span class="font-sans text-[10px] text-faint block mb-0.5" id="sumLabelCoords">Локация:</span>
+          <span class="font-mono text-xs font-semibold text-accent" id="sumValCoords">Не определены</span>
         </div>
         <div>
-          <span class="summary-item-label" id="sumLabelCrop">Культура:</span>
-          <span class="summary-item-value" id="sumValCrop">Хлопок (Мақта)</span>
+          <span class="font-sans text-[10px] text-faint block mb-0.5" id="sumLabelCrop">Культура:</span>
+          <span class="font-sans text-sm font-semibold text-foreground" id="sumValCrop">Хлопок (Мақта)</span>
         </div>
         <div>
-          <span class="summary-item-label" id="sumLabelArea">Площадь:</span>
-          <span class="summary-item-value" id="sumValArea">10 гектар</span>
+          <span class="font-sans text-[10px] text-faint block mb-0.5" id="sumLabelArea">Площадь:</span>
+          <span class="font-sans text-sm font-semibold text-foreground" id="sumValArea">10 гектар</span>
         </div>
         <div>
-          <span class="summary-item-label" id="sumLabelIrrig">Технология:</span>
-          <span class="summary-item-value" id="sumValIrrig">Капельный (КПД 90%)</span>
+          <span class="font-sans text-[10px] text-faint block mb-0.5" id="sumLabelIrrig">Технология:</span>
+          <span class="font-sans text-sm font-semibold text-foreground" id="sumValIrrig">Капельный (КПД 90%)</span>
         </div>
       </div>
     </div>
 
-    <!-- ══ SUBMIT ═════════════════════════════════════════════════ -->
-    <div class="submit-section">
-      <button type="button" id="btnSubmitAll" class="btn--submit" onclick="submitFinalCalculation()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <!-- ══ SUBMIT ══════════════════════════════════════════ -->
+    <div class="flex flex-col gap-2">
+      <button type="button" id="btnSubmitAll"
+              class="w-full h-[60px] flex items-center justify-center gap-3
+                     font-sans text-md font-bold text-white
+                     bg-primary rounded-card border-none cursor-pointer
+                     shadow-submit transition-all duration-fast
+                     hover:bg-primary-hover hover:shadow-submit-hover
+                     active:bg-primary-active active:scale-[0.97]
+                     focus-visible:shadow-ring-primary"
+              onclick="submitFinalCalculation()">
+        <svg class="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14l4 4 5-5"/>
         </svg>
         <span id="btnSubmitText">Рассчитать норму полива</span>
       </button>
-      <p class="submit-hint" id="submitHint">
+      <!-- Submit hint: Regular 400, xs — skill body spec -->
+      <p class="font-sans text-xs font-normal text-faint text-center leading-normal"
+         id="submitHint">
         Спутниковый анализ и расчёт по формуле FAO-56 Penman-Monteith
       </p>
     </div>
 
   </main>
 
-  <!-- Toast notification -->
-  <div class="app-toast" id="appToast" role="alert" aria-live="assertive"></div>
+  <!-- ══ TOAST ══════════════════════════════════════════════ -->
+  <div id="appToast"
+       class="fixed top-4 left-4 right-4 z-50 hidden
+              px-5 py-3 rounded-inner text-sm font-semibold font-sans text-center
+              border shadow-card-hover toast-enter"
+       role="alert" aria-live="assertive"></div>
 
-  <!-- Spinner keyframes (GPS icon) -->
-  <style>
-    @keyframes spin { to { transform: rotate(360deg); } }
-  </style>
-
-  <script src="js/app.js?v=3.0.0"></script>
+  <script src="js/app.js?v=3.1.0"></script>
 </body>
 </html>

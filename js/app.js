@@ -905,10 +905,8 @@ function addKeyboardCardSupport() {
 // ─── 16. DOMContentLoaded — Инициализация ────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   isSubmitting = false;
-  const submitBtn = document.getElementById('btnSubmitAll');
-  if (submitBtn) {
-    submitBtn.disabled = false;
-  }
+  const btn = document.getElementById('btnSubmitAll') || document.querySelector('button[type="submit"]');
+  if (btn) btn.disabled = false;
 
   initLanguage();
   recalculateAreaEquivalent();

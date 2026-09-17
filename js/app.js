@@ -34,6 +34,7 @@ let currentUnit = 'hectare';
 let currentIrrigation = 'drip';
 let currentFieldType = 'open';
 let currentSaline = 'no';
+let isSubmitting = false;
 
 // Экспорт в window для прямого доступа и отладки
 window.currentCrop = currentCrop;
@@ -702,6 +703,7 @@ function updateSummaryCard() {
 
 // ─── 12. Финальная отправка ───────────────────────────────────────────────
 function submitFinalCalculation() {
+  if (isSubmitting) return;
   const t = I18N[state.lang] || I18N.ru;
 
   // 1. Проверка координат
@@ -804,9 +806,11 @@ function submitFinalCalculation() {
   showToast(t.successPayloadSent, 'success');
   triggerHaptic('success');
 
+  isSubmitting = true;
   // Press animation on submit button (master.md §7.3)
   const btn = document.getElementById('btnSubmitAll');
   if (btn) {
+    btn.disabled = true;
     btn.style.transform = 'scale(0.97)';
     setTimeout(() => { btn.style.transform = ''; }, 180);
   }
@@ -814,6 +818,12 @@ function submitFinalCalculation() {
   setTimeout(() => {
     try { tg.sendData(payloadString); } catch (err) { console.error('[Su-Tech] sendData error:', err); }
     try { tg.close(); } catch (_) {}
+    
+    // Сброс состояния на случай, если WebApp не закрылся (например, при отладке в браузере)
+    setTimeout(() => {
+      isSubmitting = false;
+      if (btn) btn.disabled = false;
+    }, 1000);
   }, 420);
 }
 
@@ -894,6 +904,12 @@ function addKeyboardCardSupport() {
 
 // ─── 16. DOMContentLoaded — Инициализация ────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  isSubmitting = false;
+  const submitBtn = document.getElementById('btnSubmitAll');
+  if (submitBtn) {
+    submitBtn.disabled = false;
+  }
+
   initLanguage();
   recalculateAreaEquivalent();
   updateFieldTypeUI();

@@ -6,6 +6,9 @@
   <title id="pageTitle">Su-Tech — Точное земледелие</title>
   <meta id="pageDesc" name="description" content="Интеллектуальная система управления орошением на базе модели FAO-56 Penman-Monteith" />
 
+  <link rel="icon" type="image/jpeg" href="img/logo.jpg" />
+  <link rel="apple-touch-icon" href="img/logo.jpg" />
+
   <!-- ══════════════════════════════════════════════════════
        TYPOGRAPHY — ui-ux-pro-max BM25 Result
        Primary Font (B2B AgroTech / Enterprise SaaS):
@@ -24,36 +27,32 @@
   <!-- ══ Tailwind CDN ══════════════════════════════════════ -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- ══ Tailwind Config — Typography per ui-ux-pro-max skill ══ -->
+  <!-- ══ Tailwind Config — Brand Palette from Official Logo ══ -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            /* ui-ux-pro-max: "Friendly SaaS / Enterprise SaaS"
-               fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
-               Single versatile font. Modern alternative to Inter. */
             sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
-            /* Mono: Fira Code — data labels, coordinates, Kc values */
             mono: ['"Inter"', '-apple-system', 'sans-serif'],
           },
           colors: {
-            /* Clean Light Agro — master.md §10 */
-            primary:   '#1A7A4A',
-            'primary-hover':  '#15663D',
-            'primary-active': '#114F2F',
-            secondary: '#1E5FA8',
+            /* Official Su-Tech Brand Palette sampled from Logo */
+            primary:   '#29B77D',
+            'primary-hover':  '#229E6B',
+            'primary-active': '#1C855A',
+            secondary: '#2F3C45',
             accent:    '#D97706',
-            background:'#F4F7F2',
+            background:'#F4F7F4',
             surface:   '#FFFFFF',
-            'surface-raised': '#FAFCF9',
-            foreground:'#1C2B1E',
-            muted:     '#4A5E4D',
-            faint:     '#7A9080',
-            border:    '#D1E0D4',
-            'border-strong': '#9DB8A3',
-            success:   '#16A34A',
-            'success-bg': '#DCFCE7',
+            'surface-raised': '#FAFCFA',
+            foreground:'#212C36',
+            muted:     '#4D5E6B',
+            faint:     '#7D8D99',
+            border:    '#D2E4DA',
+            'border-strong': '#98BEA9',
+            success:   '#29B77D',
+            'success-bg': '#E6F8F0',
             warning:   '#D97706',
             'warning-bg': '#FEF3C7',
             error:     '#DC2626',
@@ -62,12 +61,6 @@
             'info-bg': '#DBEAFE',
           },
           fontSize: {
-            /* ui-ux-pro-max typography scale:
-               ExtraBold 800 — screen titles/hero (leading-tight)
-               Bold 700      — section headers   (leading-snug)
-               SemiBold 600  — card titles, buttons
-               Medium 500    — labels (uppercase, tracking-wide)
-               Regular 400   — body text (leading-normal) */
             '2xs': ['0.625rem',  { lineHeight: '1rem'   }],
             xs:    ['0.75rem',   { lineHeight: '1.125rem'}],
             sm:    ['0.875rem',  { lineHeight: '1.375rem'}],
@@ -84,13 +77,13 @@
             pill: '9999px',
           },
           boxShadow: {
-            card:       '0 1px 3px rgba(28,43,30,0.08), 0 4px 12px rgba(28,43,30,0.06)',
-            'card-hover':'0 4px 8px rgba(28,43,30,0.12), 0 12px 28px rgba(28,43,30,0.10)',
-            'btn-primary':'0 1px 2px rgba(26,122,74,0.3)',
-            'btn-hover': '0 4px 12px rgba(26,122,74,0.35)',
-            'ring-primary':'0 0 0 3px rgba(26,122,74,0.3)',
-            submit:     '0 2px 4px rgba(26,122,74,0.3), 0 8px 20px rgba(26,122,74,0.2)',
-            'submit-hover':'0 4px 8px rgba(26,122,74,0.4), 0 12px 28px rgba(26,122,74,0.25)',
+            card:       '0 1px 3px rgba(33,44,54,0.06), 0 4px 12px rgba(33,44,54,0.05)',
+            'card-hover':'0 4px 8px rgba(33,44,54,0.10), 0 12px 28px rgba(33,44,54,0.08)',
+            'btn-primary':'0 1px 2px rgba(41,183,125,0.3)',
+            'btn-hover': '0 4px 12px rgba(41,183,125,0.35)',
+            'ring-primary':'0 0 0 3px rgba(41,183,125,0.3)',
+            submit:     '0 2px 4px rgba(41,183,125,0.3), 0 8px 20px rgba(41,183,125,0.2)',
+            'submit-hover':'0 4px 8px rgba(41,183,125,0.4), 0 12px 28px rgba(41,183,125,0.25)',
           },
           transitionDuration: {
             'fast':   '150ms',
@@ -126,13 +119,13 @@
     html { -webkit-font-smoothing: antialiased; }
     body {
       background:
-        radial-gradient(ellipse at 15% 0%, rgba(220, 252, 231, 0.5) 0%, transparent 45%),
+        radial-gradient(ellipse at 15% 0%, rgba(230, 248, 240, 0.7) 0%, transparent 45%),
         radial-gradient(ellipse at 85% 15%, rgba(219, 234, 254, 0.45) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 90%, rgba(254, 243, 199, 0.35) 0%, transparent 50%),
-        #F4F7F2;
+        radial-gradient(ellipse at 50% 90%, rgba(244, 247, 244, 0.6) 0%, transparent 50%),
+        #F4F7F4;
       background-attachment: fixed;
       min-height: 100vh;
-      color: #1C2B1E;
+      color: #212C36;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 1rem;
       font-weight: 400;
@@ -144,7 +137,7 @@
     /* ── Scrollbar minimal ── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #D1E0D4; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb { background: #D2E4DA; border-radius: 999px; }
 
     /* ── GPS Spinner ── */
     @keyframes spin  { to { transform: rotate(360deg); } }
@@ -163,10 +156,10 @@
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.85);
-      box-shadow: 0 1px 3px rgba(28, 43, 30, 0.04), 0 4px 12px rgba(28, 43, 30, 0.03);
+      box-shadow: 0 1px 3px rgba(33, 44, 54, 0.04), 0 4px 12px rgba(33, 44, 54, 0.03);
     }
     .glass-panel:hover {
-      box-shadow: 0 4px 16px rgba(28, 43, 30, 0.07), 0 10px 24px rgba(28, 43, 30, 0.04);
+      box-shadow: 0 4px 16px rgba(33, 44, 54, 0.07), 0 10px 24px rgba(33, 44, 54, 0.04);
     }
 
     /* ── Glassmorphism Interactive Card (crop & irrig cards) ── */
@@ -174,25 +167,25 @@
       background: rgba(255, 255, 255, 0.72);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(209, 224, 212, 0.75);
-      box-shadow: 0 1px 2px rgba(28, 43, 30, 0.04);
+      border: 1px solid rgba(210, 228, 218, 0.75);
+      box-shadow: 0 1px 2px rgba(33, 44, 54, 0.04);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .glass-card-interactive:hover {
       background: rgba(255, 255, 255, 0.95);
-      border-color: rgba(157, 184, 163, 0.9);
-      box-shadow: 0 4px 14px rgba(28, 43, 30, 0.08);
+      border-color: rgba(152, 190, 169, 0.9);
+      box-shadow: 0 4px 14px rgba(33, 44, 54, 0.08);
       transform: translateY(-1px);
     }
 
-    /* ── Selected Card Ring (Translucent Emerald Frosted Glass) ── */
+    /* ── Selected Card Ring (Logo Emerald & Mint Frosted Glass) ── */
     .card-selected, .is-selected, .active {
-      background: rgba(220, 252, 231, 0.78) !important;
+      background: rgba(230, 248, 240, 0.85) !important;
       backdrop-filter: blur(16px) !important;
       -webkit-backdrop-filter: blur(16px) !important;
-      border-color: #10B981 !important;
-      box-shadow: 0 0 0 2px #10B981,
-                  0 4px 16px rgba(16, 185, 129, 0.18) !important;
+      border-color: #29B77D !important;
+      box-shadow: 0 0 0 2px #29B77D,
+                  0 4px 16px rgba(41, 183, 125, 0.2) !important;
     }
 
     /* ── Input number hide arrows ── */
@@ -203,7 +196,7 @@
     /* ── Focus ring global ── */
     :focus-visible {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35) !important;
+      box-shadow: 0 0 0 3px rgba(41, 183, 125, 0.35) !important;
     }
   </style>
 </head>
@@ -219,23 +212,15 @@
     <header class="flex items-center justify-between gap-3">
 
       <div class="flex items-center gap-3">
-        <!-- Logo icon -->
-        <div class="w-11 h-11 rounded-inner flex items-center justify-center flex-shrink-0 shadow-btn-primary"
-             style="background:linear-gradient(135deg,#1A7A4A 0%,#15663D 100%)">
-          <i data-lucide="tractor" class="w-6 h-6 text-white"></i>
+        <!-- Official Su-Tech Brand Logo -->
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-white shadow-sm border border-border overflow-hidden p-0.5">
+          <img src="img/logo.jpg" alt="Su-Tech Logo" class="w-full h-full object-contain rounded-lg" />
         </div>
 
-        <!-- Logo text — ui-ux-pro-max: Bold 700 headings, Medium 500 subheadings -->
+        <!-- Header text: Strict minimalism Su-Tech & Smart Irrigation System -->
         <div class="flex flex-col gap-0.5">
-          <div class="flex items-center gap-2">
-            <!-- SemiBold 700, tracking-tight — per skill weight scale -->
-            <span class="text-md font-bold text-foreground tracking-tight">Su-Tech</span>
-            <!-- Label badge: SemiBold 600, uppercase, tracking-wide — skill spec -->
-            <span class="text-[9px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-pill
-                         bg-success-bg text-[#14532D] border border-[rgba(22,163,74,0.3)]">FAO-56</span>
-          </div>
-          <!-- Subtitle: Medium 500, xs — skill spec -->
-          <p class="text-xs font-medium text-muted" id="headerSubtitle">Точное земледелие • РКНП «Дарын»</p>
+          <span class="text-lg font-extrabold text-foreground tracking-tight leading-tight">Su-Tech</span>
+          <p class="text-xs font-medium text-muted tracking-wide leading-none" id="headerSubtitle">Smart Irrigation System</p>
         </div>
       </div>
 
@@ -355,11 +340,8 @@
                     cursor-pointer relative active:scale-[0.98]"
              onclick="selectCrop('wheat')" role="radio" aria-checked="false" tabindex="0">
           <div class="text-4xl flex items-center justify-center mx-auto mb-2">🌾</div>
-          <!-- Card title: SemiBold 600, xs — skill spec -->
           <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_wheat">Пшеница</span>
-          <!-- Sub: Regular 400, 2xs — skill body spec -->
           <span class="text-[10px] text-muted" id="cropSub_wheat">Бидай</span>
-          <!-- Data label: Mono — skill spec -->
           <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
           <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
@@ -393,21 +375,7 @@
                 aria-hidden="true">✓</span>
         </div>
 
-        <!-- 4. Рис -->
-        <div id="cropCard_rice"
-             data-crop="rice"
-             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative active:scale-[0.98]"
-             onclick="selectCrop('rice')" role="radio" aria-checked="false" tabindex="0">
-          <div class="text-4xl flex items-center justify-center mx-auto mb-2">🍚</div>
-          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_rice">Рис</span>
-          <span class="text-[10px] text-muted" id="cropSub_rice">Күріш</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.25</span>
-          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
-                aria-hidden="true">✓</span>
-        </div>
-
-        <!-- 5. Люцерна -->
+        <!-- 4. Люцерна -->
         <div id="cropCard_alfalfa"
              data-crop="alfalfa"
              class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
@@ -416,6 +384,20 @@
           <div class="text-4xl flex items-center justify-center mx-auto mb-2">🌿</div>
           <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_alfalfa">Люцерна</span>
           <span class="text-[10px] text-muted" id="cropSub_alfalfa">Жоңышқа</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.05</span>
+          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+                aria-hidden="true">✓</span>
+        </div>
+
+        <!-- 5. Бахча (Қарбыз/Қауын) -->
+        <div id="cropCard_melon"
+             data-crop="melon"
+             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative active:scale-[0.98]"
+             onclick="selectCrop('melon')" role="radio" aria-checked="false" tabindex="0">
+          <div class="text-4xl flex items-center justify-center mx-auto mb-2">🍉</div>
+          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_melon">Бахча</span>
+          <span class="text-[10px] text-muted" id="cropSub_melon">Қарбыз/Қауын</span>
           <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.05</span>
           <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
@@ -435,16 +417,16 @@
                 aria-hidden="true">✓</span>
         </div>
 
-        <!-- 7. Подсолнечник -->
-        <div id="cropCard_sunflower"
-             data-crop="sunflower"
+        <!-- 7. Картофель -->
+        <div id="cropCard_potato"
+             data-crop="potato"
              class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
                     cursor-pointer relative active:scale-[0.98]"
-             onclick="selectCrop('sunflower')" role="radio" aria-checked="false" tabindex="0">
-          <div class="text-4xl flex items-center justify-center mx-auto mb-2">🌻</div>
-          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_sunflower">Подсолн.</span>
-          <span class="text-[10px] text-muted" id="cropSub_sunflower">Күнбағыс</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.00</span>
+             onclick="selectCrop('potato')" role="radio" aria-checked="false" tabindex="0">
+          <div class="text-4xl flex items-center justify-center mx-auto mb-2">🥔</div>
+          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_potato">Картофель</span>
+          <span class="text-[10px] text-muted" id="cropSub_potato">Картоп</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
           <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
@@ -455,14 +437,7 @@
              class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
                     cursor-pointer relative active:scale-[0.98]"
              onclick="selectCrop('other')" role="radio" aria-checked="false" tabindex="0">
-          <div class="w-10 h-10 flex items-center justify-center mx-auto mb-2 text-emerald-600">
-            <i data-lucide="leaf" class="w-8 h-8">
-              <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
-                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
-              </svg>
-            </i>
-          </div>
+          <div class="text-4xl flex items-center justify-center mx-auto mb-2">⭐</div>
           <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_other">Другая культура</span>
           <span class="text-[10px] text-muted" id="cropSub_other">Басқа дақыл</span>
           <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.00</span>
@@ -529,7 +504,7 @@
                      hover:border-border-strong
                      focus:border-primary focus:shadow-ring-primary
                      placeholder:text-faint"
-              min="0.1" step="0.5" value="10" placeholder="10"
+              min="0.1" max="50000" step="0.5" value="10" placeholder="10"
               aria-label="Площадь участка"
               oninput="handleAreaChange(this.value)"
             />
@@ -594,6 +569,66 @@
              aria-live="polite">
           <span class="text-sm text-muted" id="areaCalcEquivalentLabel">Эквивалент:</span>
           <span class="text-sm font-bold text-foreground" id="areaInM2">100 000 м² (1 000 соток)</span>
+        </div>
+
+        <!-- ══ TWO CRITICAL TOGGLES ══════════════════════════════ -->
+
+        <!-- 1. Тип участка (Field Type) -->
+        <div class="flex flex-col gap-2 pt-3 border-t border-border/80">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-medium uppercase tracking-wide text-muted" id="labelFieldType">
+              Тип участка:
+            </label>
+            <span class="text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D] font-semibold" id="fieldTypeBadge">
+              Открытый грунт
+            </span>
+          </div>
+          <div class="flex gap-1 p-1 bg-background border border-border rounded-[12px]"
+               role="group" aria-label="Тип участка">
+            <button type="button" id="fieldTypeBtn_open" data-field="open"
+                    class="flex-1 h-10 rounded-inner text-sm font-semibold cursor-pointer
+                           bg-surface text-primary border-none shadow-card
+                           transition-all duration-normal"
+                    onclick="setFieldType('open')" aria-pressed="true">
+              <span id="fieldText_open">🌱 Открытый грунт</span>
+            </button>
+            <button type="button" id="fieldTypeBtn_greenhouse" data-field="greenhouse"
+                    class="flex-1 h-10 rounded-inner text-sm font-medium cursor-pointer
+                           text-muted bg-transparent border-none
+                           transition-all duration-normal hover:text-foreground"
+                    onclick="setFieldType('greenhouse')" aria-pressed="false">
+              <span id="fieldText_greenhouse">🏡 Теплица</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Засоленность почвы (Salinity Leaching) -->
+        <div class="flex flex-col gap-2 pt-2 border-t border-border/80">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-medium uppercase tracking-wide text-muted" id="labelSalinity">
+              Засоленность почвы:
+            </label>
+            <span class="text-[10px] px-2 py-0.5 rounded-pill bg-info-bg text-[#1E3A5F] font-semibold" id="salinityBadge">
+              Обычная почва
+            </span>
+          </div>
+          <div class="flex gap-1 p-1 bg-background border border-border rounded-[12px]"
+               role="group" aria-label="Засоленность почвы">
+            <button type="button" id="salinityBtn_no" data-saline="no"
+                    class="flex-1 h-10 rounded-inner text-sm font-semibold cursor-pointer
+                           bg-surface text-primary border-none shadow-card
+                           transition-all duration-normal"
+                    onclick="setSalinity('no')" aria-pressed="true">
+              <span id="salineText_no">🌾 Обычная почва</span>
+            </button>
+            <button type="button" id="salinityBtn_yes" data-saline="yes"
+                    class="flex-1 h-10 rounded-inner text-sm font-medium cursor-pointer
+                           text-muted bg-transparent border-none
+                           transition-all duration-normal hover:text-foreground"
+                    onclick="setSalinity('yes')" aria-pressed="false">
+              <span id="salineText_yes">🧂 Солончак (+15% промывка)</span>
+            </button>
+          </div>
         </div>
 
       </div>
@@ -774,6 +809,14 @@
         <div>
           <span class="text-[10px] text-faint block mb-0.5" id="sumLabelIrrig">Технология:</span>
           <span class="text-sm font-semibold text-foreground" id="sumValIrrig">Капельный (КПД 90%)</span>
+        </div>
+        <div>
+          <span class="text-[10px] text-faint block mb-0.5" id="sumLabelFieldType">Тип участка:</span>
+          <span class="text-sm font-semibold text-foreground" id="sumValFieldType">Открытый грунт</span>
+        </div>
+        <div>
+          <span class="text-[10px] text-faint block mb-0.5" id="sumLabelSaline">Почва:</span>
+          <span class="text-sm font-semibold text-foreground" id="sumValSaline">Обычная почва</span>
         </div>
       </div>
     </div>

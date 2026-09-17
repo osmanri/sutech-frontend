@@ -32,6 +32,8 @@ let selectedCrop = currentCrop; // Псевдоним для совместим�
 let currentArea = 10.0;
 let currentUnit = 'hectare';
 let currentIrrigation = 'drip';
+let currentFieldType = 'open';
+let currentSaline = 'no';
 
 // Экспорт в window для прямого доступа и отладки
 window.currentCrop = currentCrop;
@@ -39,6 +41,8 @@ window.selectedCrop = selectedCrop;
 window.currentArea = currentArea;
 window.currentUnit = currentUnit;
 window.currentIrrigation = currentIrrigation;
+window.currentFieldType = currentFieldType;
+window.currentSaline = currentSaline;
 
 const state = {
   latitude:         null,
@@ -48,19 +52,20 @@ const state = {
   area:             currentArea,
   area_unit:        currentUnit,
   irrigation_type:  currentIrrigation,
+  field_type:       currentFieldType,
+  is_saline:        currentSaline,
   lang:             'ru',
   isRequestingGps:  false,
 };
 
-// ─── 3. Данные культур (Kc-коэффициенты FAO-56) ───────────────────────────
+// ─── 3. Данные культур (Kc-коэффициенты FAO-56, строго 8 культур) ────────────
 const CROPS = {
   wheat:     { kc: 1.10 },
   cotton:    { kc: 1.15 },
   corn:      { kc: 1.20 },
-  rice:      { kc: 1.25 },
   alfalfa:   { kc: 1.05 },
+  melon:     { kc: 1.05 },
   tomato:    { kc: 1.15 },
-  sunflower: { kc: 1.00 },
   potato:    { kc: 1.10 },
   other:     { kc: 1.00 },
 };
@@ -77,9 +82,9 @@ const IRRIGATION_EFFICIENCY = {
 // ─── 5. Словарь локализации (i18n: KZ / RU) ──────────────────────────────
 const I18N = {
   ru: {
-    pageTitle:      'Su-Tech — Точное земледелие',
+    pageTitle:      'Su-Tech — Smart Irrigation',
     pageDesc:       'Интеллектуальная система управления орошением на базе модели FAO-56 Penman-Monteith',
-    headerSubtitle: 'Точное земледелие • РКНП «Дарын»',
+    headerSubtitle: 'Smart Irrigation System',
 
     block1Title:        'Локация участка (GPS)',
     block1StatusWait:   'Ожидает GPS',
@@ -98,10 +103,9 @@ const I18N = {
       wheat:     { name: 'Пшеница',         sub: 'Бидай'            },
       cotton:    { name: 'Хлопок',          sub: 'Мақта'            },
       corn:      { name: 'Кукуруза',        sub: 'Жүгері'           },
-      rice:      { name: 'Рис',             sub: 'Күріш'            },
       alfalfa:   { name: 'Люцерна',         sub: 'Жоңышқа'          },
+      melon:     { name: 'Бахча',           sub: 'Қарбыз/Қауын'     },
       tomato:    { name: 'Томаты',          sub: 'Қызанақ'          },
-      sunflower: { name: 'Подсолн.',        sub: 'Күнбағыс'         },
       potato:    { name: 'Картофель',       sub: 'Картоп'           },
       other:     { name: 'Другая культура', sub: 'Басқа дақыл'      },
     },
@@ -120,6 +124,19 @@ const I18N = {
     equivFormat: (m2, sotka) =>
       `${m2.toLocaleString('ru-RU')} м² (${sotka.toLocaleString('ru-RU')} соток)`,
 
+    // Два новых переключателя
+    labelFieldType:          'Тип участка:',
+    fieldText_open:          '🌱 Открытый грунт',
+    fieldText_greenhouse:    '🏡 Теплица',
+    fieldTypeBadge_open:     'Открытый грунт',
+    fieldTypeBadge_greenhouse:'Теплица',
+
+    labelSalinity:           'Засоленность почвы:',
+    salineText_no:           '🌾 Обычная почва',
+    salineText_yes:          '🧂 Солончак (+15% промывка)',
+    salineBadge_no:          'Обычная почва',
+    salineBadge_yes:         'Солончак (+15%)',
+
     block4Title: 'Тип оросительной системы',
     block4Desc:  'Выберите метод полива для корректного расчёта коэффициента эффективности применения воды.',
     irrig: {
@@ -130,14 +147,16 @@ const I18N = {
       subsurface: { title: 'Подпочвенное',          desc: 'Трубки под поверхностью почвы. Минимум испарения, максимум эффективности.', badge: 'КПД 95%' },
     },
 
-    summaryTitle:   'Сводка параметров',
-    sumLabelCoords: 'Локация:',
-    sumLabelCrop:   'Культура:',
-    sumLabelArea:   'Площадь:',
-    sumLabelIrrig:  'Технология:',
-    noCoordsYet:    'Не определены (нажмите GPS)',
-    btnSubmitText:  'Рассчитать норму полива',
-    submitHint:     'Спутниковый анализ и расчёт по формуле FAO-56 Penman-Monteith',
+    summaryTitle:      'Сводка параметров',
+    sumLabelCoords:    'Локация:',
+    sumLabelCrop:      'Культура:',
+    sumLabelArea:      'Площадь:',
+    sumLabelIrrig:     'Технология:',
+    sumLabelFieldType: 'Тип участка:',
+    sumLabelSaline:    'Почва:',
+    noCoordsYet:       'Не определены (нажмите GPS)',
+    btnSubmitText:     'Рассчитать норму полива',
+    submitHint:        'Спутниковый анализ и расчёт по формуле FAO-56 Penman-Monteith',
 
     errNoGpsSupport:    'Ваш браузер не поддерживает геолокацию.',
     errGpsDenied:       'Доступ к GPS отклонён. Разрешите геолокацию или используйте демо-координаты.',
@@ -145,14 +164,14 @@ const I18N = {
     errGpsUnknown:      'Ошибка определения локации. Попробуйте снова.',
     gpsSuccessToast:    'Координаты поля успешно зафиксированы!',
     errNeedLocation:    'Сначала определите GPS координаты в Блоке 1.',
-    errInvalidArea:     'Введите площадь поля больше 0.',
+    errInvalidArea:     'Введите площадь поля больше 0 и менее 50 000.',
     successPayloadSent: 'Данные отправлены в бот! Расчёт по модели FAO-56...',
   },
 
   kz: {
-    pageTitle:      'Su-Tech — Дәл егіншілік',
+    pageTitle:      'Su-Tech — Smart Irrigation',
     pageDesc:       'FAO-56 Penman-Monteith моделі негізінде суаруды басқарудың зияткерлік жүйесі',
-    headerSubtitle: 'Дәл егіншілік • РҒПК «Дарын»',
+    headerSubtitle: 'Smart Irrigation System',
 
     block1Title:        'Алаңның орналасуы (GPS)',
     block1StatusWait:   'GPS күтілуде',
@@ -171,10 +190,9 @@ const I18N = {
       wheat:     { name: 'Бидай',           sub: 'Пшеница'          },
       cotton:    { name: 'Мақта',           sub: 'Хлопок'           },
       corn:      { name: 'Жүгері',          sub: 'Кукуруза'         },
-      rice:      { name: 'Күріш',           sub: 'Рис'              },
       alfalfa:   { name: 'Жоңышқа',         sub: 'Люцерна'          },
+      melon:     { name: 'Бақша',           sub: 'Қарбыз/Қауын'     },
       tomato:    { name: 'Қызанақ',         sub: 'Томаты'           },
-      sunflower: { name: 'Күнбағыс',        sub: 'Подсолн.'         },
       potato:    { name: 'Картоп',          sub: 'Картофель'        },
       other:     { name: 'Басқа дақыл',     sub: 'Другая культура'  },
     },
@@ -193,6 +211,19 @@ const I18N = {
     equivFormat: (m2, sotka) =>
       `${m2.toLocaleString('ru-RU')} м² (${sotka.toLocaleString('ru-RU')} соттық)`,
 
+    // Екі жаңа қосқыш
+    labelFieldType:          'Алқап түрі:',
+    fieldText_open:          '🌱 Ашық топырақ',
+    fieldText_greenhouse:    '🏡 Жылыжай',
+    fieldTypeBadge_open:     'Ашық топырақ',
+    fieldTypeBadge_greenhouse:'Жылыжай',
+
+    labelSalinity:           'Топырақтың тұздануы:',
+    salineText_no:           '🌾 Қалыпты топырақ',
+    salineText_yes:          '🧂 Сортаң (+15% шаю)',
+    salineBadge_no:          'Қалыпты топырақ',
+    salineBadge_yes:         'Сортаң (+15%)',
+
     block4Title: 'Суару жүйесінің түрі',
     block4Desc:  'Су пайдалану тиімділік коэффициентін дұрыс есептеу үшін суару әдісін таңдаңыз.',
     irrig: {
@@ -203,14 +234,16 @@ const I18N = {
       subsurface: { title: 'Топырақасты суару',   desc: 'Топырақ асты трубалары. Минимум булану, максимум тиімділік.', badge: 'ПӘК 95%' },
     },
 
-    summaryTitle:   'Параметрлер қорытындысы',
-    sumLabelCoords: 'Орналасуы:',
-    sumLabelCrop:   'Дақыл:',
-    sumLabelArea:   'Ауданы:',
-    sumLabelIrrig:  'Технология:',
-    noCoordsYet:    'Анықталмаған (GPS басыңыз)',
-    btnSubmitText:  'Суару нормасын есептеу',
-    submitHint:     'Спутниктік талдау және FAO-56 Penman-Monteith формуласымен есептеу',
+    summaryTitle:      'Параметрлер қорытындысы',
+    sumLabelCoords:    'Орналасуы:',
+    sumLabelCrop:      'Дақыл:',
+    sumLabelArea:      'Ауданы:',
+    sumLabelIrrig:     'Технология:',
+    sumLabelFieldType: 'Алқап түрі:',
+    sumLabelSaline:    'Топырақ:',
+    noCoordsYet:       'Анықталмаған (GPS басыңыз)',
+    btnSubmitText:     'Суару нормасын есептеу',
+    submitHint:        'Спутниктік талдау және FAO-56 Penman-Monteith формуласымен есептеу',
 
     errNoGpsSupport:    'Құрылғыңыз немесе браузер геолокацияны қолдамайды.',
     errGpsDenied:       'GPS рұқсаты берілмеді. Геолокацияны қосыңыз немесе үлгі нүктені таңдаңыз.',
@@ -218,7 +251,7 @@ const I18N = {
     errGpsUnknown:      'Орналасқан жерді анықтау қатесі. Қайталап көріңіз.',
     gpsSuccessToast:    'Алқап координаттары сәтті тіркелді!',
     errNeedLocation:    'Алдымен 1-блокта GPS координаттарын анықтаңыз.',
-    errInvalidArea:     '0-ден үлкен алқап ауданын енгізіңіз.',
+    errInvalidArea:     '0-ден үлкен және 50 000-нан кем алқап ауданын енгізіңіз.',
     successPayloadSent: 'Деректер ботқа жіберілді! FAO-56 моделі бойынша есептеу жүргізілуде...',
   },
 };
@@ -274,7 +307,7 @@ function applyLanguage(lang) {
     if (sub) sub.textContent = t.crops[cropKey]?.sub ?? '';
   }
 
-  // Block 3 — Area
+  // Block 3 — Area & New Toggles
   document.getElementById('block3Title').textContent          = t.block3Title;
   document.getElementById('labelAreaUnit').textContent        = t.labelAreaUnit;
   document.getElementById('unitText_sotka').textContent       = t.unitText_sotka;
@@ -283,6 +316,24 @@ function applyLanguage(lang) {
   document.getElementById('labelQuickPresets').textContent    = t.labelQuickPresets;
   document.getElementById('areaCalcEquivalentLabel').textContent = t.areaCalcEquivalentLabel;
   updateAreaUnitUI();
+
+  // Field Type
+  const labelFieldType = document.getElementById('labelFieldType');
+  if (labelFieldType) labelFieldType.textContent = t.labelFieldType;
+  const fieldTextOpen = document.getElementById('fieldText_open');
+  if (fieldTextOpen) fieldTextOpen.textContent = t.fieldText_open;
+  const fieldTextGh = document.getElementById('fieldText_greenhouse');
+  if (fieldTextGh) fieldTextGh.textContent = t.fieldText_greenhouse;
+  updateFieldTypeUI();
+
+  // Salinity
+  const labelSalinity = document.getElementById('labelSalinity');
+  if (labelSalinity) labelSalinity.textContent = t.labelSalinity;
+  const salineTextNo = document.getElementById('salineText_no');
+  if (salineTextNo) salineTextNo.textContent = t.salineText_no;
+  const salineTextYes = document.getElementById('salineText_yes');
+  if (salineTextYes) salineTextYes.textContent = t.salineText_yes;
+  updateSalinityUI();
 
   // Block 4 — Irrigation
   document.getElementById('block4Title').textContent = t.block4Title;
@@ -302,6 +353,10 @@ function applyLanguage(lang) {
   document.getElementById('sumLabelCrop').textContent   = t.sumLabelCrop;
   document.getElementById('sumLabelArea').textContent   = t.sumLabelArea;
   document.getElementById('sumLabelIrrig').textContent  = t.sumLabelIrrig;
+  const sumLabelFieldType = document.getElementById('sumLabelFieldType');
+  if (sumLabelFieldType) sumLabelFieldType.textContent = t.sumLabelFieldType;
+  const sumLabelSaline = document.getElementById('sumLabelSaline');
+  if (sumLabelSaline) sumLabelSaline.textContent = t.sumLabelSaline;
   document.getElementById('btnSubmitText').textContent  = t.btnSubmitText;
   document.getElementById('submitHint').textContent     = t.submitHint;
 }
@@ -527,6 +582,71 @@ function selectIrrigation(type) {
   triggerHaptic('light');
 }
 
+// ─── 9.1 Новые переключатели: Тип участка и Засоленность ───────────────────
+function setFieldType(type) {
+  if (type !== 'open' && type !== 'greenhouse') return;
+  currentFieldType = type;
+  window.currentFieldType = type;
+  state.field_type = type;
+  updateFieldTypeUI();
+  updateSummaryCard();
+  triggerHaptic('light');
+}
+
+function updateFieldTypeUI() {
+  const t = I18N[state.lang] || I18N.ru;
+  const isOpen = state.field_type === 'open';
+  const btnOpen = document.getElementById('fieldTypeBtn_open');
+  const btnGh   = document.getElementById('fieldTypeBtn_greenhouse');
+  const activeClass   = 'flex-1 h-10 rounded-inner text-sm font-semibold cursor-pointer bg-surface text-primary border-none shadow-card transition-all duration-normal';
+  const inactiveClass = 'flex-1 h-10 rounded-inner text-sm font-medium cursor-pointer text-muted bg-transparent border-none transition-all duration-normal hover:text-foreground';
+
+  if (btnOpen) btnOpen.className = isOpen ? activeClass : inactiveClass;
+  if (btnGh)   btnGh.className   = isOpen ? inactiveClass : activeClass;
+  btnOpen?.setAttribute('aria-pressed', String(isOpen));
+  btnGh?.setAttribute('aria-pressed', String(!isOpen));
+
+  const badge = document.getElementById('fieldTypeBadge');
+  if (badge) {
+    badge.textContent = isOpen ? t.fieldTypeBadge_open : t.fieldTypeBadge_greenhouse;
+    badge.className = isOpen ?
+      'text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D] font-semibold' :
+      'text-[10px] px-2 py-0.5 rounded-pill bg-warning-bg text-[#78350F] font-semibold';
+  }
+}
+
+function setSalinity(saline) {
+  if (saline !== 'no' && saline !== 'yes') return;
+  currentSaline = saline;
+  window.currentSaline = saline;
+  state.is_saline = saline;
+  updateSalinityUI();
+  updateSummaryCard();
+  triggerHaptic('light');
+}
+
+function updateSalinityUI() {
+  const t = I18N[state.lang] || I18N.ru;
+  const isNormal = state.is_saline === 'no';
+  const btnNo  = document.getElementById('salinityBtn_no');
+  const btnYes = document.getElementById('salinityBtn_yes');
+  const activeClass   = 'flex-1 h-10 rounded-inner text-sm font-semibold cursor-pointer bg-surface text-primary border-none shadow-card transition-all duration-normal';
+  const inactiveClass = 'flex-1 h-10 rounded-inner text-sm font-medium cursor-pointer text-muted bg-transparent border-none transition-all duration-normal hover:text-foreground';
+
+  if (btnNo)  btnNo.className  = isNormal ? activeClass : inactiveClass;
+  if (btnYes) btnYes.className = isNormal ? inactiveClass : activeClass;
+  btnNo?.setAttribute('aria-pressed', String(isNormal));
+  btnYes?.setAttribute('aria-pressed', String(!isNormal));
+
+  const badge = document.getElementById('salinityBadge');
+  if (badge) {
+    badge.textContent = isNormal ? t.salineBadge_no : t.salineBadge_yes;
+    badge.className = isNormal ?
+      'text-[10px] px-2 py-0.5 rounded-pill bg-info-bg text-[#1E3A5F] font-semibold' :
+      'text-[10px] px-2 py-0.5 rounded-pill bg-warning-bg text-[#78350F] font-semibold';
+  }
+}
+
 // ─── 11. Сводная карточка ─────────────────────────────────────────────────
 function updateSummaryCard() {
   const t = I18N[state.lang] || I18N.ru;
@@ -556,6 +676,18 @@ function updateSummaryCard() {
   const irrigInfo = t.irrig[state.irrigation_type] || { title: state.irrigation_type, badge: '' };
   document.getElementById('sumValIrrig').textContent =
     `${irrigInfo.title} (${irrigInfo.badge})`;
+
+  // Field Type
+  const fieldTypeVal = document.getElementById('sumValFieldType');
+  if (fieldTypeVal) {
+    fieldTypeVal.textContent = state.field_type === 'open' ? t.fieldTypeBadge_open : t.fieldTypeBadge_greenhouse;
+  }
+
+  // Salinity
+  const salineVal = document.getElementById('sumValSaline');
+  if (salineVal) {
+    salineVal.textContent = state.is_saline === 'no' ? t.salineBadge_no : t.salineBadge_yes;
+  }
 }
 
 // ─── 12. Финальная отправка ───────────────────────────────────────────────
@@ -587,15 +719,15 @@ function submitFinalCalculation() {
   const areaInput = document.getElementById('fieldAreaInput');
   if (areaInput) {
     const parsedArea = parseFloat(areaInput.value);
-    if (!isNaN(parsedArea) && parsedArea > 0) {
+    if (!isNaN(parsedArea)) {
       currentArea = parsedArea;
     }
   }
   state.area = currentArea;
   window.currentArea = currentArea;
 
-  // Валидация площади
-  if (!currentArea || currentArea <= 0) {
+  // Валидация площади: строго больше 0 и менее 50 000
+  if (!currentArea || currentArea <= 0 || currentArea >= 50000) {
     showToast(t.errInvalidArea, 'warning');
     document.getElementById('block3')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
@@ -617,8 +749,28 @@ function submitFinalCalculation() {
   state.irrigation_type = currentIrrigation;
   window.currentIrrigation = currentIrrigation;
 
+  // Тип участка (field_type): считываем из data-field активной кнопки
+  const activeFieldBtn = document.querySelector('[data-field][aria-pressed="true"]');
+  if (activeFieldBtn && activeFieldBtn.dataset.field) {
+    currentFieldType = activeFieldBtn.dataset.field;
+  } else {
+    currentFieldType = state.field_type || 'open';
+  }
+  state.field_type = currentFieldType;
+  window.currentFieldType = currentFieldType;
+
+  // Засоленность (is_saline): считываем из data-saline активной кнопки
+  const activeSalineBtn = document.querySelector('[data-saline][aria-pressed="true"]');
+  if (activeSalineBtn && activeSalineBtn.dataset.saline) {
+    currentSaline = activeSalineBtn.dataset.saline;
+  } else {
+    currentSaline = state.is_saline || 'no';
+  }
+  state.is_saline = currentSaline;
+  window.currentSaline = currentSaline;
+
   // Собираем динамический payload strictly по спецификации:
-  // { latitude, longitude, crop: currentCrop, area: currentArea, area_unit: currentUnit, irrigation_type: currentIrrigation }
+  // { latitude, longitude, crop, area, area_unit, irrigation_type, field_type, is_saline }
   const payload = {
     latitude:         Number(state.latitude.toFixed(6)),
     longitude:        Number(state.longitude.toFixed(6)),
@@ -626,6 +778,8 @@ function submitFinalCalculation() {
     area:             Number(currentArea),
     area_unit:        currentUnit,
     irrigation_type:  currentIrrigation,
+    field_type:       currentFieldType,
+    is_saline:        currentSaline,
     kc:               CROPS[currentCrop]?.kc ?? 1.0,
     irrigation_eff:   IRRIGATION_EFFICIENCY[currentIrrigation] ?? 0.75,
     lang:             state.lang,
@@ -732,6 +886,8 @@ function addKeyboardCardSupport() {
 document.addEventListener('DOMContentLoaded', () => {
   initLanguage();
   recalculateAreaEquivalent();
+  updateFieldTypeUI();
+  updateSalinityUI();
   updateSummaryCard();
   addKeyboardCardSupport();
   initCropCards();

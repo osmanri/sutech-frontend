@@ -27,17 +27,28 @@ try {
 }
 
 // ─── 2. Состояние приложения ───────────────────────────────────────────────
-let selectedCrop = 'cotton'; // Внутренняя переменная выбранной культуры
+let currentCrop = 'cotton';
+let selectedCrop = currentCrop; // Псевдоним для совместимости
+let currentArea = 10.0;
+let currentUnit = 'hectare';
+let currentIrrigation = 'drip';
+
+// Экспорт в window для прямого доступа и отладки
+window.currentCrop = currentCrop;
+window.selectedCrop = selectedCrop;
+window.currentArea = currentArea;
+window.currentUnit = currentUnit;
+window.currentIrrigation = currentIrrigation;
 
 const state = {
   latitude:         null,
   longitude:        null,
   accuracy:         null,
-  crop:             'cotton',       // 8 культур
-  area:             10.0,
-  area_unit:        'hectare',      // 'hectare' | 'sotka'
-  irrigation_type:  'drip',         // 5 методов
-  lang:             'ru',           // 'ru' | 'kz'
+  crop:             currentCrop,
+  area:             currentArea,
+  area_unit:        currentUnit,
+  irrigation_type:  currentIrrigation,
+  lang:             'ru',
   isRequestingGps:  false,
 };
 
@@ -51,6 +62,7 @@ const CROPS = {
   tomato:    { kc: 1.15 },
   sunflower: { kc: 1.00 },
   potato:    { kc: 1.10 },
+  other:     { kc: 1.00 },
 };
 
 // ─── 4. Данные методов полива ─────────────────────────────────────────────
@@ -83,14 +95,15 @@ const I18N = {
     block2Title:  'Сельскохозяйственная культура',
     block2Desc:   'Выберите культуру для учёта биологического коэффициента транспирации (Kc).',
     crops: {
-      wheat:     { name: 'Пшеница',    sub: 'Бидай'     },
-      cotton:    { name: 'Хлопок',     sub: 'Мақта'     },
-      corn:      { name: 'Кукуруза',   sub: 'Жүгері'    },
-      rice:      { name: 'Рис',        sub: 'Күріш'     },
-      alfalfa:   { name: 'Люцерна',    sub: 'Жоңышқа'   },
-      tomato:    { name: 'Томаты',     sub: 'Қызанақ'   },
-      sunflower: { name: 'Подсолн.',   sub: 'Күнбағыс'  },
-      potato:    { name: 'Картофель',  sub: 'Картоп'    },
+      wheat:     { name: 'Пшеница',         sub: 'Бидай'            },
+      cotton:    { name: 'Хлопок',          sub: 'Мақта'            },
+      corn:      { name: 'Кукуруза',        sub: 'Жүгері'           },
+      rice:      { name: 'Рис',             sub: 'Күріш'            },
+      alfalfa:   { name: 'Люцерна',         sub: 'Жоңышқа'          },
+      tomato:    { name: 'Томаты',          sub: 'Қызанақ'          },
+      sunflower: { name: 'Подсолн.',        sub: 'Күнбағыс'         },
+      potato:    { name: 'Картофель',       sub: 'Картоп'           },
+      other:     { name: 'Другая культура', sub: 'Басқа дақыл'      },
     },
 
     block3Title:             'Параметры поля',
@@ -155,14 +168,15 @@ const I18N = {
     block2Title:  'Ауыл шаруашылығы дақылы',
     block2Desc:   'Биологиялық транспирация коэффициентін (Kc) ескеру үшін дақылды таңдаңыз.',
     crops: {
-      wheat:     { name: 'Бидай',     sub: 'Пшеница'   },
-      cotton:    { name: 'Мақта',     sub: 'Хлопок'    },
-      corn:      { name: 'Жүгері',    sub: 'Кукуруза'  },
-      rice:      { name: 'Күріш',     sub: 'Рис'       },
-      alfalfa:   { name: 'Жоңышқа',  sub: 'Люцерна'   },
-      tomato:    { name: 'Қызанақ',  sub: 'Томаты'    },
-      sunflower: { name: 'Күнбағыс', sub: 'Подсолн.'  },
-      potato:    { name: 'Картоп',   sub: 'Картофель' },
+      wheat:     { name: 'Бидай',           sub: 'Пшеница'          },
+      cotton:    { name: 'Мақта',           sub: 'Хлопок'           },
+      corn:      { name: 'Жүгері',          sub: 'Кукуруза'         },
+      rice:      { name: 'Күріш',           sub: 'Рис'              },
+      alfalfa:   { name: 'Жоңышқа',         sub: 'Люцерна'          },
+      tomato:    { name: 'Қызанақ',         sub: 'Томаты'           },
+      sunflower: { name: 'Күнбағыс',        sub: 'Подсолн.'         },
+      potato:    { name: 'Картоп',          sub: 'Картофель'        },
+      other:     { name: 'Басқа дақыл',     sub: 'Другая культура'  },
     },
 
     block3Title:             'Алқап параметрлері',
@@ -379,12 +393,15 @@ function renderCoordinates() {
   document.getElementById('coordsAccuracy').textContent = `±${state.accuracy || 5} м`;
 }
 
-// ─── 8. Выбор культуры (Блок 2) — 8 культур ──────────────────────────────
+// ─── 8. Выбор культуры (Блок 2) ──────────────────────────────────────────
 const ALL_CROPS = Object.keys(CROPS);
 
 function selectCrop(cropKey) {
   if (!cropKey || !CROPS[cropKey]) return;
+  currentCrop = cropKey;
   selectedCrop = cropKey;
+  window.currentCrop = cropKey;
+  window.selectedCrop = cropKey;
   state.crop = cropKey;
 
   const cropCards = document.querySelectorAll('.crop-card');
@@ -394,12 +411,18 @@ function selectCrop(cropKey) {
       card.classList.add('card-selected', 'active', 'border-emerald-500', 'ring-2', 'ring-emerald-500');
       card.setAttribute('aria-checked', 'true');
       const check = card.querySelector('.crop-check');
-      if (check) check.classList.remove('hidden');
+      if (check) {
+        check.classList.remove('hidden');
+        check.classList.add('flex');
+      }
     } else {
       card.classList.remove('card-selected', 'active', 'border-emerald-500', 'ring-2', 'ring-emerald-500');
       card.setAttribute('aria-checked', 'false');
       const check = card.querySelector('.crop-check');
-      if (check) check.classList.add('hidden');
+      if (check) {
+        check.classList.add('hidden');
+        check.classList.remove('flex');
+      }
     }
   });
 
@@ -413,34 +436,15 @@ function initCropCards() {
     card.addEventListener('click', function () {
       const crop = this.dataset.crop;
       if (!crop) return;
-
-      // 1. У всех карточек удаляется класс активности (зеленая рамка)
-      cropCards.forEach(c => {
-        c.classList.remove('card-selected', 'active', 'border-emerald-500', 'ring-2', 'ring-emerald-500');
-        c.setAttribute('aria-checked', 'false');
-        const check = c.querySelector('.crop-check');
-        if (check) check.classList.add('hidden');
-      });
-
-      // 2. Нажатой карточке добавляется класс активности
-      this.classList.add('card-selected', 'active', 'border-emerald-500', 'ring-2', 'ring-emerald-500');
-      this.setAttribute('aria-checked', 'true');
-      const activeCheck = this.querySelector('.crop-check');
-      if (activeCheck) activeCheck.classList.remove('hidden');
-
-      // 3. Внутренняя переменная selectedCrop обновляется на dataset.crop нажатой карточки
-      selectedCrop = crop;
-      state.crop = crop;
-
-      updateSummaryCard();
-      triggerHaptic('light');
+      selectCrop(crop);
     });
   });
 }
 
 // ─── 9. Параметры поля (Блок 3) ──────────────────────────────────────────
 function setAreaUnit(unit) {
-  if (state.area_unit === unit) return;
+  currentUnit = unit;
+  window.currentUnit = unit;
   state.area_unit = unit;
   updateAreaUnitUI();
   updateSummaryCard();
@@ -471,14 +475,19 @@ function updateAreaUnitUI() {
 
 function handleAreaChange(val) {
   const num = parseFloat(val);
-  state.area = (!isNaN(num) && num > 0) ? num : 0;
+  currentArea = (!isNaN(num) && num > 0) ? num : 0;
+  window.currentArea = currentArea;
+  state.area = currentArea;
   recalculateAreaEquivalent();
   updateSummaryCard();
 }
 
 function setPresetArea(val) {
+  currentArea = val;
+  window.currentArea = currentArea;
   state.area = val;
-  document.getElementById('fieldAreaInput').value = val;
+  const input = document.getElementById('fieldAreaInput');
+  if (input) input.value = val;
   recalculateAreaEquivalent();
   updateSummaryCard();
   triggerHaptic('light');
@@ -500,6 +509,8 @@ const ALL_IRRIG = Object.keys(IRRIGATION_EFFICIENCY);
 
 function selectIrrigation(type) {
   if (!IRRIGATION_EFFICIENCY.hasOwnProperty(type)) return;
+  currentIrrigation = type;
+  window.currentIrrigation = currentIrrigation;
   state.irrigation_type = type;
 
   for (const key of ALL_IRRIG) {
@@ -551,32 +562,77 @@ function updateSummaryCard() {
 function submitFinalCalculation() {
   const t = I18N[state.lang] || I18N.ru;
 
-  // Validate coordinates
+  // 1. Проверка координат
   if (state.latitude === null || state.longitude === null) {
     showToast(t.errNeedLocation, 'warning');
     document.getElementById('block1')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
 
-  // Validate area
-  if (!state.area || state.area <= 0) {
+  // 2. ДИНАМИЧЕСКИЙ сбор данных с экрана (Real-time State Inspection)
+
+  // Культура (crop): считываем с выбранной карточки
+  const activeCropCard = document.querySelector('.crop-card.card-selected, .crop-card.active, .crop-card[aria-checked="true"]');
+  if (activeCropCard && activeCropCard.dataset.crop) {
+    currentCrop = activeCropCard.dataset.crop;
+  } else if (!currentCrop) {
+    currentCrop = state.crop || 'cotton';
+  }
+  selectedCrop = currentCrop;
+  state.crop = currentCrop;
+  window.currentCrop = currentCrop;
+  window.selectedCrop = currentCrop;
+
+  // Площадь (area): считываем актуальное число из поля ввода
+  const areaInput = document.getElementById('fieldAreaInput');
+  if (areaInput) {
+    const parsedArea = parseFloat(areaInput.value);
+    if (!isNaN(parsedArea) && parsedArea > 0) {
+      currentArea = parsedArea;
+    }
+  }
+  state.area = currentArea;
+  window.currentArea = currentArea;
+
+  // Валидация площади
+  if (!currentArea || currentArea <= 0) {
     showToast(t.errInvalidArea, 'warning');
     document.getElementById('block3')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
 
-  // Build payload
+  // Единица площади (area_unit): гектар или сотка
+  const isHectActive = document.getElementById('unitBtn_hectare')?.getAttribute('aria-pressed') === 'true';
+  currentUnit = isHectActive ? 'hectare' : (state.area_unit || 'hectare');
+  state.area_unit = currentUnit;
+  window.currentUnit = currentUnit;
+
+  // Метод полива (irrigation_type): считываем с активной карточки
+  const activeIrrigCard = document.querySelector('.irrig-card.card-selected, .irrig-card.active, .irrig-card.is-selected, [id^="irrigCard_"][aria-checked="true"]');
+  if (activeIrrigCard) {
+    currentIrrigation = activeIrrigCard.id.replace('irrigCard_', '');
+  } else if (!currentIrrigation) {
+    currentIrrigation = state.irrigation_type || 'drip';
+  }
+  state.irrigation_type = currentIrrigation;
+  window.currentIrrigation = currentIrrigation;
+
+  // Собираем динамический payload strictly по спецификации:
+  // { latitude, longitude, crop: currentCrop, area: currentArea, area_unit: currentUnit, irrigation_type: currentIrrigation }
   const payload = {
     latitude:         Number(state.latitude.toFixed(6)),
     longitude:        Number(state.longitude.toFixed(6)),
-    crop:             state.crop,
-    kc:               CROPS[state.crop]?.kc ?? 1.0,
-    area:             Number(state.area),
-    area_unit:        state.area_unit,
-    irrigation_type:  state.irrigation_type,
-    irrigation_eff:   IRRIGATION_EFFICIENCY[state.irrigation_type] ?? 0.75,
+    crop:             currentCrop,
+    area:             Number(currentArea),
+    area_unit:        currentUnit,
+    irrigation_type:  currentIrrigation,
+    kc:               CROPS[currentCrop]?.kc ?? 1.0,
+    irrigation_eff:   IRRIGATION_EFFICIENCY[currentIrrigation] ?? 0.75,
     lang:             state.lang,
   };
+  if (state.accuracy) {
+    payload.accuracy = state.accuracy;
+  }
 
   const payloadString = JSON.stringify(payload);
   console.log('[Su-Tech] sendData payload:', payloadString);

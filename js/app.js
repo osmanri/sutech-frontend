@@ -79,7 +79,6 @@ const I18N = {
     coordsCardTitle:    'Координаты зафиксированы',
     labelLat:           'Широта (Lat):',
     labelLon:           'Долгота (Lon):',
-    demoCoordsText:     'Использовать координаты поля (Туркестанская обл.)',
 
     block2Title:  'Сельскохозяйственная культура',
     block2Desc:   'Выберите культуру для учёта биологического коэффициента транспирации (Kc).',
@@ -152,7 +151,6 @@ const I18N = {
     coordsCardTitle:    'Координаттар тіркелді',
     labelLat:           'Ендік (Lat):',
     labelLon:           'Бойлық (Lon):',
-    demoCoordsText:     'Алқаптың үлгі координаттары (Түркістан обл.)',
 
     block2Title:  'Ауыл шаруашылығы дақылы',
     block2Desc:   'Биологиялық транспирация коэффициентін (Kc) ескеру үшін дақылды таңдаңыз.',
@@ -250,7 +248,6 @@ function applyLanguage(lang) {
   document.getElementById('coordsCardTitle').textContent = t.coordsCardTitle;
   document.getElementById('labelLat').textContent    = t.labelLat;
   document.getElementById('labelLon').textContent    = t.labelLon;
-  document.getElementById('demoCoordsText').textContent = t.demoCoordsText;
   updateBlock1StatusPill();
 
   // Block 2 — Crop
@@ -369,21 +366,6 @@ function requestGeolocation() {
     },
     { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
   );
-}
-
-function setDemoCoordinates() {
-  // Опытный поливной участок — Туркестанская область, Отырарский район
-  state.latitude  = 43.301540;
-  state.longitude = 68.256850;
-  state.accuracy  = 5;
-
-  renderCoordinates();
-  updateBlock1StatusPill();
-  updateSummaryCard();
-
-  const t = I18N[state.lang] || I18N.ru;
-  showToast(t.gpsSuccessToast, 'success');
-  triggerHaptic('medium');
 }
 
 function renderCoordinates() {

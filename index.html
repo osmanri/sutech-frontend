@@ -277,19 +277,19 @@
         Определите координаты поля для автоматического запроса спутниковой радиации, ветра и влажности почвы по модели FAO-56.
       </p>
 
-      <!-- GPS button: SemiBold 600 — skill button spec -->
+      <!-- GPS button: Massive easy-touch button for farmers -->
       <button
         type="button"
         id="btnGetLocation"
-        class="w-full h-13 flex items-center justify-center gap-2 font-semibold text-base
-               bg-primary text-white rounded-inner cursor-pointer border-none shadow-btn-primary
+        class="w-full py-4 px-6 flex items-center justify-center gap-3 text-lg font-bold
+               bg-primary text-white rounded-xl cursor-pointer border-none shadow-btn-primary
                transition-all duration-fast hover:bg-primary-hover hover:shadow-btn-hover
-               active:bg-primary-active active:scale-[0.97]
+               active:bg-primary-active active:scale-[0.98]
                focus-visible:shadow-ring-primary"
         onclick="requestGeolocation()"
         aria-label="Определить GPS координаты поля"
       >
-        <i data-lucide="map-pin" class="w-5 h-5 flex-shrink-0"></i>
+        <i data-lucide="map-pin" class="w-6 h-6 flex-shrink-0"></i>
         <span id="btnLocationText">Определить GPS координаты</span>
       </button>
 
@@ -325,15 +325,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Demo coords ghost button -->
-      <button type="button"
-              class="self-center text-sm font-medium text-muted underline underline-offset-2
-                     cursor-pointer bg-transparent border-none
-                     hover:text-primary transition-colors duration-fast"
-              onclick="setDemoCoordinates()">
-        <span id="demoCoordsText">Использовать координаты поля (Туркестанская обл.)</span>
-      </button>
     </section>
 
     <!-- ══ BLOCK 2: CROP ══════════════════════════════════ -->

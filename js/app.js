@@ -126,14 +126,14 @@ const I18N = {
 
     // Два новых переключателя
     labelFieldType:          'Тип участка:',
-    fieldText_open:          '🌱 Открытое поле',
+    fieldText_open:          '☀️ Открытое поле',
     fieldText_greenhouse:    '🏡 Теплица',
     fieldTypeBadge_open:     'Открытое поле',
     fieldTypeBadge_greenhouse:'Теплица',
 
     labelSalinity:           'Засоленность почвы:',
-    salineText_no:           '🌾 Обычная почва',
-    salineText_yes:          '🧂 Солончак (+15% промывка)',
+    salineText_no:           'Обычная почва',
+    salineText_yes:          '🧂 Солончак',
     salineBadge_no:          'Обычная почва',
     salineBadge_yes:         'Солончак (+15%)',
 
@@ -155,7 +155,7 @@ const I18N = {
     sumLabelFieldType: 'Тип участка:',
     sumLabelSaline:    'Почва:',
     noCoordsYet:       'Не определены (нажмите GPS)',
-    btnSubmitText:     'Рассчитать норму полива',
+    btnSubmitText:     '💧 Рассчитать норму полива (FAO-56)',
     submitHint:        'Спутниковый анализ и расчёт по формуле FAO-56 Penman-Monteith',
 
     errNoGpsSupport:    'Ваш браузер не поддерживает геолокацию.',
@@ -213,14 +213,14 @@ const I18N = {
 
     // Екі жаңа қосқыш
     labelFieldType:          'Алқап түрі:',
-    fieldText_open:          '🌱 Ашық алқап',
+    fieldText_open:          '☀️ Ашық алқап',
     fieldText_greenhouse:    '🏡 Жылыжай',
     fieldTypeBadge_open:     'Ашық алқап',
     fieldTypeBadge_greenhouse:'Жылыжай',
 
     labelSalinity:           'Топырақтың тұздануы:',
-    salineText_no:           '🌾 Қалыпты топырақ',
-    salineText_yes:          '🧂 Сортаң (+15% шаю)',
+    salineText_no:           'Қалыпты топырақ',
+    salineText_yes:          '🧂 Сортаң',
     salineBadge_no:          'Қалыпты топырақ',
     salineBadge_yes:         'Сортаң (+15%)',
 
@@ -242,7 +242,7 @@ const I18N = {
     sumLabelFieldType: 'Алқап түрі:',
     sumLabelSaline:    'Топырақ:',
     noCoordsYet:       'Анықталмаған (GPS басыңыз)',
-    btnSubmitText:     'Суару нормасын есептеу',
+    btnSubmitText:     '💧 Суару нормасын есептеу (FAO-56)',
     submitHint:        'Спутниктік талдау және FAO-56 Penman-Monteith формуласымен есептеу',
 
     errNoGpsSupport:    'Құрылғыңыз немесе браузер геолокацияны қолдамайды.',

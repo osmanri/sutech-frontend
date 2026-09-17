@@ -150,16 +150,17 @@
     .toast-visible { opacity: 1; transform: translateY(0); transition: opacity 0.25s ease, transform 0.25s ease; }
     .toast-exit { opacity: 0; transform: translateY(-8px); transition: opacity 0.25s ease, transform 0.25s ease; }
 
-    /* ── Glassmorphism Surface Panel (8px grid rounded-2xl) ── */
+    /* ── Glassmorphism Surface Panel (Rounded 3xl & Soft Premium Elevation) ── */
     .glass-panel {
-      background: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.85);
-      box-shadow: 0 1px 3px rgba(33, 44, 54, 0.04), 0 4px 12px rgba(33, 44, 54, 0.03);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: 0 20px 25px -5px rgba(2, 44, 34, 0.05), 0 8px 10px -6px rgba(2, 44, 34, 0.05);
+      border-radius: 1.5rem;
     }
     .glass-panel:hover {
-      box-shadow: 0 4px 16px rgba(33, 44, 54, 0.07), 0 10px 24px rgba(33, 44, 54, 0.04);
+      box-shadow: 0 25px 30px -5px rgba(2, 44, 34, 0.08), 0 10px 12px -6px rgba(2, 44, 34, 0.06);
     }
 
     /* ── Glassmorphism Interactive Card (crop & irrig cards) ── */
@@ -201,7 +202,7 @@
   </style>
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased bg-gradient-to-b from-slate-50 via-emerald-50/20 to-white min-h-screen">
 
   <!-- ══════════════════════════════════════════════════════
        APP SHELL
@@ -590,7 +591,7 @@
                            bg-surface text-primary border-none shadow-card
                            transition-all duration-normal"
                     onclick="setFieldType('open')" aria-pressed="true">
-              <span id="fieldText_open">🌱 Открытое поле</span>
+              <span id="fieldText_open">☀️ Открытое поле</span>
             </button>
             <button type="button" id="fieldTypeBtn_greenhouse" data-field="greenhouse"
                     class="flex-1 h-10 rounded-inner text-sm font-medium cursor-pointer
@@ -619,14 +620,14 @@
                            bg-surface text-primary border-none shadow-card
                            transition-all duration-normal"
                     onclick="setSalinity('no')" aria-pressed="true">
-              <span id="salineText_no">🌾 Обычная почва</span>
+              <span id="salineText_no">Обычная почва</span>
             </button>
             <button type="button" id="salinityBtn_yes" data-saline="yes"
                     class="flex-1 h-10 rounded-inner text-sm font-medium cursor-pointer
                            text-muted bg-transparent border-none
                            transition-all duration-normal hover:text-foreground"
                     onclick="setSalinity('yes')" aria-pressed="false">
-              <span id="salineText_yes">🧂 Солончак (+15% промывка)</span>
+              <span id="salineText_yes">🧂 Солончак</span>
             </button>
           </div>
         </div>
@@ -655,18 +656,16 @@
 
         <!-- 1. Капельный -->
         <div id="irrigCard_drip"
-             class="glass-card-interactive rounded-xl shadow-sm p-4 cursor-pointer relative
+             class="glass-card-interactive rounded-2xl shadow-sm p-4 cursor-pointer relative
                     card-selected active active:scale-[0.99]"
              onclick="selectIrrigation('drip')" role="radio" aria-checked="true" tabindex="0">
           <div class="flex items-start gap-3 pr-8">
-            <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
+            <div class="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center flex-shrink-0">
               <i data-lucide="droplets" class="w-6 h-6 text-[#1E5FA8]"></i>
             </div>
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-1">
-                <!-- Card title: SemiBold 600, sm -->
                 <span class="text-sm font-semibold text-foreground" id="irrigTitle_drip">Капельный полив</span>
-                <!-- Efficiency badge: Bold 700, 10px — skill label -->
                 <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
                              bg-success-bg text-[#14532D] whitespace-nowrap" id="irrigBadge_drip">КПД 90%</span>
               </div>
@@ -681,11 +680,11 @@
 
         <!-- 2. Дождевание -->
         <div id="irrigCard_sprinkler"
-             class="glass-card-interactive rounded-xl shadow-sm p-4 cursor-pointer relative
+             class="glass-card-interactive rounded-2xl shadow-sm p-4 cursor-pointer relative
                     active:scale-[0.99]"
              onclick="selectIrrigation('sprinkler')" role="radio" aria-checked="false" tabindex="0">
           <div class="flex items-start gap-3 pr-8">
-            <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
+            <div class="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center flex-shrink-0">
               <i data-lucide="cloud-rain" class="w-6 h-6 text-[#1E5FA8]"></i>
             </div>
             <div class="flex-1">
@@ -703,37 +702,13 @@
                        text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
         </div>
 
-        <!-- 3. Фронтальный -->
-        <div id="irrigCard_pivot"
-             class="glass-card-interactive rounded-xl shadow-sm p-4 cursor-pointer relative
-                    active:scale-[0.99]"
-             onclick="selectIrrigation('pivot')" role="radio" aria-checked="false" tabindex="0">
-          <div class="flex items-start gap-3 pr-8">
-            <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
-              <i data-lucide="refresh-cw" class="w-6 h-6 text-[#1E5FA8]"></i>
-            </div>
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-sm font-semibold text-foreground" id="irrigTitle_pivot">Фронтальный (Pivot)</span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
-                             bg-info-bg text-[#1E3A5F] whitespace-nowrap" id="irrigBadge_pivot">КПД 80%</span>
-              </div>
-              <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_pivot">
-                Круговая дождевальная машина. Оптимален для крупных открытых участков.
-              </p>
-            </div>
-          </div>
-          <span class="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
-                       text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
-        </div>
-
-        <!-- 4. Арычный -->
+        <!-- 3. Арычный -->
         <div id="irrigCard_furrow"
-             class="glass-card-interactive rounded-xl shadow-sm p-4 cursor-pointer relative
+             class="glass-card-interactive rounded-2xl shadow-sm p-4 cursor-pointer relative
                     active:scale-[0.99]"
              onclick="selectIrrigation('furrow')" role="radio" aria-checked="false" tabindex="0">
           <div class="flex items-start gap-3 pr-8">
-            <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
+            <div class="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center flex-shrink-0">
               <i data-lucide="waves" class="w-6 h-6 text-[#D97706]"></i>
             </div>
             <div class="flex-1">
@@ -750,23 +725,6 @@
           <span class="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
                        text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
         </div>
-
-        <!-- 5. Подпочвенное -->
-        <div id="irrigCard_subsurface"
-             class="glass-card-interactive rounded-xl shadow-sm p-4 cursor-pointer relative
-                    active:scale-[0.99]"
-             onclick="selectIrrigation('subsurface')" role="radio" aria-checked="false" tabindex="0">
-          <div class="flex items-start gap-3 pr-8">
-            <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <rect x="3" y="4" width="18" height="3" rx="1.5" fill="#7A9080" opacity="0.3"/>
-                <rect x="3" y="9"  width="18" height="1.5" rx="0.75" fill="#1A7A4A"/>
-                <rect x="3" y="13" width="18" height="1.5" rx="0.75" fill="#1A7A4A"/>
-                <path d="M7 9v5M12 9v5M17 9v5" stroke="#1A7A4A" stroke-width="1" stroke-dasharray="2 2"/>
-                <path d="M3 19 Q12 16 21 19" stroke="#7A9080" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-              </svg>
-            </div>
-            <div class="flex-1">
               <div class="flex items-center gap-2 mb-1">
                 <span class="text-sm font-semibold text-foreground" id="irrigTitle_subsurface">Подпочвенное</span>
                 <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
@@ -836,7 +794,7 @@
              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14l4 4 5-5"/>
         </svg>
-        <span id="btnSubmitText">Рассчитать норму полива</span>
+        <span id="btnSubmitText">💧 Рассчитать норму полива (FAO-56)</span>
       </button>
       <!-- Submit hint: Regular 400, xs — skill body spec -->
       <p class="text-xs font-normal text-faint text-center leading-normal"

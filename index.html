@@ -376,7 +376,21 @@
                 aria-hidden="true">✓</span>
         </div>
 
-        <!-- 4. Люцерна -->
+        <!-- 4. Рис -->
+        <div id="cropCard_rice"
+             data-crop="rice"
+             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative active:scale-[0.98]"
+             onclick="selectCrop('rice')" role="radio" aria-checked="false" tabindex="0">
+          <div class="text-4xl flex items-center justify-center mx-auto mb-2">🍚</div>
+          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_rice">Рис</span>
+          <span class="text-[10px] text-muted" id="cropSub_rice">Күріш</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.25</span>
+          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+                aria-hidden="true">✓</span>
+        </div>
+
+        <!-- 5. Люцерна -->
         <div id="cropCard_alfalfa"
              data-crop="alfalfa"
              class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
@@ -390,7 +404,7 @@
                 aria-hidden="true">✓</span>
         </div>
 
-        <!-- 5. Бахча (Қарбыз/Қауын) -->
+        <!-- 6. Бахча (Қарбыз/Қауын) -->
         <div id="cropCard_melon"
              data-crop="melon"
              class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
@@ -404,7 +418,7 @@
                 aria-hidden="true">✓</span>
         </div>
 
-        <!-- 6. Томаты -->
+        <!-- 7. Томаты -->
         <div id="cropCard_tomato"
              data-crop="tomato"
              class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
@@ -418,7 +432,7 @@
                 aria-hidden="true">✓</span>
         </div>
 
-        <!-- 7. Картофель -->
+        <!-- 8. Картофель -->
         <div id="cropCard_potato"
              data-crop="potato"
              class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
@@ -428,20 +442,6 @@
           <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_potato">Картофель</span>
           <span class="text-[10px] text-muted" id="cropSub_potato">Картоп</span>
           <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
-          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
-                aria-hidden="true">✓</span>
-        </div>
-
-        <!-- 8. Другая культура -->
-        <div id="cropCard_other"
-             data-crop="other"
-             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative active:scale-[0.98]"
-             onclick="selectCrop('other')" role="radio" aria-checked="false" tabindex="0">
-          <div class="text-4xl flex items-center justify-center mx-auto mb-2">⭐</div>
-          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_other">Другая культура</span>
-          <span class="text-[10px] text-muted" id="cropSub_other">Басқа дақыл</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.00</span>
           <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
@@ -674,7 +674,7 @@
               </p>
             </div>
           </div>
-          <span class="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center
+          <span class="irrig-check absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center
                        text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
         </div>
 
@@ -694,15 +694,39 @@
                              bg-info-bg text-[#1E3A5F] whitespace-nowrap" id="irrigBadge_sprinkler">КПД 75%</span>
               </div>
               <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_sprinkler">
-                Имитация дождя через форсунки. Равномерное распределение по площади.
+                Имитация дождя через форсунки. Равномерное распределение.
               </p>
             </div>
           </div>
-          <span class="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
+          <span class="irrig-check absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
                        text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
         </div>
 
-        <!-- 3. Арычный -->
+        <!-- 3. Фронтальный (Pivot) -->
+        <div id="irrigCard_pivot"
+             class="glass-card-interactive rounded-2xl shadow-sm p-4 cursor-pointer relative
+                    active:scale-[0.99]"
+             onclick="selectIrrigation('pivot')" role="radio" aria-checked="false" tabindex="0">
+          <div class="flex items-start gap-3 pr-8">
+            <div class="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center flex-shrink-0">
+              <i data-lucide="rotate-cw" class="w-6 h-6 text-[#1E5FA8]"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-sm font-semibold text-foreground" id="irrigTitle_pivot">Фронтальный (Pivot)</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
+                             bg-info-bg text-[#1E3A5F] whitespace-nowrap" id="irrigBadge_pivot">КПД 80%</span>
+              </div>
+              <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_pivot">
+                Круговая дождевальная машина. Оптимален для крупных массивов.
+              </p>
+            </div>
+          </div>
+          <span class="irrig-check absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
+                       text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
+        </div>
+
+        <!-- 4. Арычный -->
         <div id="irrigCard_furrow"
              class="glass-card-interactive rounded-2xl shadow-sm p-4 cursor-pointer relative
                     active:scale-[0.99]"
@@ -722,20 +746,31 @@
               </p>
             </div>
           </div>
-          <span class="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
+          <span class="irrig-check absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
                        text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
         </div>
+
+        <!-- 5. Подпочвенное -->
+        <div id="irrigCard_subsurface"
+             class="glass-card-interactive rounded-2xl shadow-sm p-4 cursor-pointer relative
+                    active:scale-[0.99]"
+             onclick="selectIrrigation('subsurface')" role="radio" aria-checked="false" tabindex="0">
+          <div class="flex items-start gap-3 pr-8">
+            <div class="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center flex-shrink-0">
+              <i data-lucide="layers" class="w-6 h-6 text-[#14532D]"></i>
+            </div>
+            <div class="flex-1">
               <div class="flex items-center gap-2 mb-1">
                 <span class="text-sm font-semibold text-foreground" id="irrigTitle_subsurface">Подпочвенное</span>
                 <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
                              bg-success-bg text-[#14532D] whitespace-nowrap" id="irrigBadge_subsurface">КПД 95%</span>
               </div>
               <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_subsurface">
-                Трубки под поверхностью почвы. Минимум испарения, максимум эффективности.
+                Трубки под поверхностью почвы. Минимальное испарение, максимум эффекта.
               </p>
             </div>
           </div>
-          <span class="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
+          <span class="irrig-check absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
                        text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
         </div>
 

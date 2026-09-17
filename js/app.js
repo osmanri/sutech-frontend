@@ -18,6 +18,8 @@ const tg = window.Telegram?.WebApp || {
 };
 
 try {
+  window.Telegram.WebApp.expand();
+  window.Telegram.WebApp.ready();
   tg.ready();
   tg.expand();
 } catch (err) {
@@ -655,4 +657,6 @@ document.addEventListener('DOMContentLoaded', () => {
   selectCrop(state.crop);
   selectIrrigation(state.irrigation_type);
   setAreaUnit(state.area_unit);
+
+  lucide.createIcons();
 });

@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fira+Code:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet"
   />
 
@@ -33,9 +33,9 @@
             /* ui-ux-pro-max: "Friendly SaaS / Enterprise SaaS"
                fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
                Single versatile font. Modern alternative to Inter. */
-            sans:    ['"Plus Jakarta Sans"', 'sans-serif'],
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
             /* Mono: Fira Code — data labels, coordinates, Kc values */
-            mono:    ['"Fira Code"', 'Courier New', 'monospace'],
+            mono: ['"Inter"', '-apple-system', 'sans-serif'],
           },
           colors: {
             /* Clean Light Agro — master.md §10 */
@@ -112,7 +112,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    /* ── Reduced motion (skill: ui-ux-pro-max, checklist item) ── */
+    /* ── Reduced motion (skill: ui-ux-pro-max) ── */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration:        0.01ms !important;
@@ -121,13 +121,19 @@
       }
     }
 
-    /* ── Base resets ── */
+    /* ── Base resets & ambient glassmorphic canvas ── */
     *, *::before, *::after { box-sizing: border-box; }
     html { -webkit-font-smoothing: antialiased; }
     body {
-      background-color: #F4F7F2;
+      background:
+        radial-gradient(ellipse at 15% 0%, rgba(220, 252, 231, 0.5) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 15%, rgba(219, 234, 254, 0.45) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 90%, rgba(254, 243, 199, 0.35) 0%, transparent 50%),
+        #F4F7F2;
+      background-attachment: fixed;
+      min-height: 100vh;
       color: #1C2B1E;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 1rem;
       font-weight: 400;
       line-height: 1.5;
@@ -135,7 +141,7 @@
       user-select: none;
     }
 
-    /* ── Custom: scrollbar minimal ── */
+    /* ── Scrollbar minimal ── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #D1E0D4; border-radius: 999px; }
@@ -143,7 +149,7 @@
     /* ── GPS Spinner ── */
     @keyframes spin  { to { transform: rotate(360deg); } }
     @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.55; } }
-    .gps-spin { animation: spin  1s linear infinite; }
+    .gps-spin { animation: spin 1s linear infinite; }
     .gps-pulse { animation: pulse 1.5s ease-in-out infinite; }
 
     /* ── Toast transition ── */
@@ -151,13 +157,42 @@
     .toast-visible { opacity: 1; transform: translateY(0); transition: opacity 0.25s ease, transform 0.25s ease; }
     .toast-exit { opacity: 0; transform: translateY(-8px); transition: opacity 0.25s ease, transform 0.25s ease; }
 
-    /* ── Crop/irrig card selected ring ── */
+    /* ── Glassmorphism Surface Panel (8px grid rounded-2xl) ── */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 1px 3px rgba(28, 43, 30, 0.04), 0 4px 12px rgba(28, 43, 30, 0.03);
+    }
+    .glass-panel:hover {
+      box-shadow: 0 4px 16px rgba(28, 43, 30, 0.07), 0 10px 24px rgba(28, 43, 30, 0.04);
+    }
+
+    /* ── Glassmorphism Interactive Card (crop & irrig cards) ── */
+    .glass-card-interactive {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(209, 224, 212, 0.75);
+      box-shadow: 0 1px 2px rgba(28, 43, 30, 0.04);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card-interactive:hover {
+      background: rgba(255, 255, 255, 0.95);
+      border-color: rgba(157, 184, 163, 0.9);
+      box-shadow: 0 4px 14px rgba(28, 43, 30, 0.08);
+      transform: translateY(-1px);
+    }
+
+    /* ── Selected Card Ring (Translucent Emerald Frosted Glass) ── */
     .card-selected, .is-selected, .active {
-      background-color: #DCFCE7 !important;
+      background: rgba(220, 252, 231, 0.78) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
       border-color: #10B981 !important;
       box-shadow: 0 0 0 2px #10B981,
-                  0 4px 8px rgba(28,43,30,0.12),
-                  0 12px 28px rgba(28,43,30,0.10) !important;
+                  0 4px 16px rgba(16, 185, 129, 0.18) !important;
     }
 
     /* ── Input number hide arrows ── */
@@ -168,12 +203,12 @@
     /* ── Focus ring global ── */
     :focus-visible {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(26,122,74,0.35) !important;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35) !important;
     }
   </style>
 </head>
 
-<body>
+<body class="font-sans antialiased">
 
   <!-- ══════════════════════════════════════════════════════
        APP SHELL
@@ -194,26 +229,26 @@
         <div class="flex flex-col gap-0.5">
           <div class="flex items-center gap-2">
             <!-- SemiBold 700, tracking-tight — per skill weight scale -->
-            <span class="font-sans text-md font-bold text-foreground tracking-tight">Su-Tech</span>
+            <span class="text-md font-bold text-foreground tracking-tight">Su-Tech</span>
             <!-- Label badge: SemiBold 600, uppercase, tracking-wide — skill spec -->
-            <span class="font-sans text-[9px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-pill
+            <span class="text-[9px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-pill
                          bg-success-bg text-[#14532D] border border-[rgba(22,163,74,0.3)]">FAO-56</span>
           </div>
           <!-- Subtitle: Medium 500, xs — skill spec -->
-          <p class="font-sans text-xs font-medium text-muted" id="headerSubtitle">Точное земледелие • РКНП «Дарын»</p>
+          <p class="text-xs font-medium text-muted" id="headerSubtitle">Точное земледелие • РКНП «Дарын»</p>
         </div>
       </div>
 
       <!-- Language switcher -->
-      <div class="flex items-center p-1 rounded-[12px] bg-surface border border-border shadow-card gap-0.5"
+      <div class="flex items-center p-1 rounded-xl bg-white/70 backdrop-blur-md border border-white/60 shadow-sm gap-0.5"
            role="group" aria-label="Выбор языка">
         <button id="langBtnKz"
-                class="h-8 px-3 rounded-inner font-sans text-xs font-semibold cursor-pointer
+                class="h-8 px-3 rounded-inner text-xs font-semibold cursor-pointer
                        text-muted bg-transparent border-none
                        transition-all duration-fast hover:text-foreground"
                 onclick="setLanguage('kz')">ҚАЗ</button>
         <button id="langBtnRu"
-                class="h-8 px-3 rounded-inner font-sans text-xs font-semibold cursor-pointer
+                class="h-8 px-3 rounded-inner text-xs font-semibold cursor-pointer
                        bg-primary text-white border-none shadow-btn-primary
                        transition-all duration-fast"
                 onclick="setLanguage('ru')">РУС</button>
@@ -221,24 +256,24 @@
     </header>
 
     <!-- ══ BLOCK 1: GPS ════════════════════════════════════ -->
-    <section id="block1" class="bg-surface border border-border rounded-card shadow-card p-6 flex flex-col gap-4">
+    <section id="block1" class="glass-panel rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-6 flex flex-col gap-4">
 
       <div class="flex items-center gap-3 pb-3 border-b border-border">
         <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center
-                     font-sans text-xs font-bold flex-shrink-0" aria-hidden="true">1</span>
+                     text-xs font-bold flex-shrink-0" aria-hidden="true">1</span>
         <!-- Section title: SemiBold 600, md size — skill spec -->
-        <h2 class="flex-1 font-sans text-md font-semibold text-foreground leading-snug" id="block1Title">
+        <h2 class="flex-1 text-md font-semibold text-foreground leading-snug" id="block1Title">
           Локация участка (GPS)
         </h2>
         <!-- Status badge: Bold 700, xs, uppercase, tracking-wide — skill labels spec -->
-        <span class="font-sans text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-pill
+        <span class="text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-pill
                      bg-warning-bg text-[#78350F] whitespace-nowrap" id="block1StatusPill">
           Ожидает GPS
         </span>
       </div>
 
       <!-- Section desc: Regular 400, sm — skill body spec -->
-      <p class="font-sans text-sm font-normal text-muted leading-normal" id="block1Desc">
+      <p class="text-sm font-normal text-muted leading-normal" id="block1Desc">
         Определите координаты поля для автоматического запроса спутниковой радиации, ветра и влажности почвы по модели FAO-56.
       </p>
 
@@ -246,7 +281,7 @@
       <button
         type="button"
         id="btnGetLocation"
-        class="w-full h-13 flex items-center justify-center gap-2 font-sans font-semibold text-base
+        class="w-full h-13 flex items-center justify-center gap-2 font-semibold text-base
                bg-primary text-white rounded-inner cursor-pointer border-none shadow-btn-primary
                transition-all duration-fast hover:bg-primary-hover hover:shadow-btn-hover
                active:bg-primary-active active:scale-[0.97]
@@ -263,37 +298,37 @@
                   bg-info-bg border border-[rgba(30,95,168,0.2)] gps-pulse"
            id="gpsStatusBlock" role="status" aria-live="polite">
         <i data-lucide="loader" class="w-4 h-4 text-info gps-spin flex-shrink-0"></i>
-        <span class="font-sans text-sm text-info font-medium" id="gpsStatusText">Поиск спутников GPS...</span>
+        <span class="text-sm text-info font-medium" id="gpsStatusText">Поиск спутников GPS...</span>
       </div>
 
       <!-- Coords card -->
-      <div class="hidden flex-col gap-3 p-4 rounded-inner bg-surface-raised border border-border"
+      <div class="hidden flex-col gap-3 p-4 rounded-xl bg-white/60 backdrop-blur-sm border border-border/80 shadow-sm"
            id="coordsCard">
         <div class="flex items-center justify-between pb-2 border-b border-border">
           <!-- Card title: Medium 500, xs, uppercase — skill label spec -->
-          <span class="font-sans text-xs font-medium uppercase tracking-wide text-primary flex items-center gap-1"
+          <span class="text-xs font-medium uppercase tracking-wide text-primary flex items-center gap-1"
                 id="coordsCardTitle">
             <i data-lucide="check-circle" class="w-3 h-3"></i>
             Координаты зафиксированы
           </span>
-          <span class="font-mono text-[10px] font-medium px-2 py-0.5 rounded-pill
+          <span class="text-[10px] font-medium px-2 py-0.5 rounded-pill
                        bg-success-bg text-[#14532D]" id="coordsAccuracy">±8 м</span>
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <span class="font-sans text-[10px] text-faint block mb-0.5" id="labelLat">Широта (Lat):</span>
-            <span class="font-mono text-sm font-semibold text-foreground" id="displayLat">43.238949°</span>
+            <span class="text-[10px] text-faint block mb-0.5" id="labelLat">Широта (Lat):</span>
+            <span class="text-sm font-semibold text-foreground" id="displayLat">43.238949°</span>
           </div>
           <div>
-            <span class="font-sans text-[10px] text-faint block mb-0.5" id="labelLon">Долгота (Lon):</span>
-            <span class="font-mono text-sm font-semibold text-foreground" id="displayLon">76.889709°</span>
+            <span class="text-[10px] text-faint block mb-0.5" id="labelLon">Долгота (Lon):</span>
+            <span class="text-sm font-semibold text-foreground" id="displayLon">76.889709°</span>
           </div>
         </div>
       </div>
 
       <!-- Demo coords ghost button -->
       <button type="button"
-              class="self-center font-sans text-sm font-medium text-muted underline underline-offset-2
+              class="self-center text-sm font-medium text-muted underline underline-offset-2
                      cursor-pointer bg-transparent border-none
                      hover:text-primary transition-colors duration-fast"
               onclick="setDemoCoordinates()">
@@ -302,20 +337,20 @@
     </section>
 
     <!-- ══ BLOCK 2: CROP ══════════════════════════════════ -->
-    <section id="block2" class="bg-surface border border-border rounded-card shadow-card p-6 flex flex-col gap-4">
+    <section id="block2" class="glass-panel rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-6 flex flex-col gap-4">
 
       <div class="flex items-center gap-3 pb-3 border-b border-border">
         <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center
-                     font-sans text-xs font-bold flex-shrink-0" aria-hidden="true">2</span>
-        <h2 class="flex-1 font-sans text-md font-semibold text-foreground leading-snug" id="block2Title">
+                     text-xs font-bold flex-shrink-0" aria-hidden="true">2</span>
+        <h2 class="flex-1 text-md font-semibold text-foreground leading-snug" id="block2Title">
           Сельскохозяйственная культура
         </h2>
         <!-- Mono tag label — skill: Fira Code for data/labels -->
-        <span class="font-mono text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D]
+        <span class="text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D]
                      font-semibold whitespace-nowrap">Kc</span>
       </div>
 
-      <p class="font-sans text-sm font-normal text-muted leading-normal" id="block2Desc">
+      <p class="text-sm font-normal text-muted leading-normal" id="block2Desc">
         Выберите культуру для учёта биологического коэффициента транспирации (K<sub>c</sub>).
       </p>
 
@@ -325,17 +360,16 @@
         <!-- 1. Пшеница -->
         <div id="cropCard_wheat"
              data-crop="wheat"
-             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative transition-all duration-normal
-                    hover:shadow-card-hover active:scale-[0.97]"
+             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative active:scale-[0.98]"
              onclick="selectCrop('wheat')" role="radio" aria-checked="false" tabindex="0">
           <div class="text-4xl flex items-center justify-center mx-auto mb-2">🌾</div>
           <!-- Card title: SemiBold 600, xs — skill spec -->
-          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_wheat">Пшеница</span>
+          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_wheat">Пшеница</span>
           <!-- Sub: Regular 400, 2xs — skill body spec -->
-          <span class="font-sans text-[10px] text-muted" id="cropSub_wheat">Бидай</span>
+          <span class="text-[10px] text-muted" id="cropSub_wheat">Бидай</span>
           <!-- Data label: Mono — skill spec -->
-          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
           <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
@@ -343,14 +377,13 @@
         <!-- 2. Хлопок -->
         <div id="cropCard_cotton"
              data-crop="cotton"
-             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative transition-all duration-normal card-selected active border-emerald-500 ring-2 ring-emerald-500
-                    hover:shadow-card-hover active:scale-[0.97]"
+             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative card-selected active border-emerald-500 ring-2 ring-emerald-500 active:scale-[0.98]"
              onclick="selectCrop('cotton')" role="radio" aria-checked="true" tabindex="0">
           <div class="text-4xl flex items-center justify-center mx-auto mb-2">☁️</div>
-          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_cotton">Хлопок</span>
-          <span class="font-sans text-[10px] text-muted" id="cropSub_cotton">Мақта</span>
-          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.15</span>
+          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_cotton">Хлопок</span>
+          <span class="text-[10px] text-muted" id="cropSub_cotton">Мақта</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.15</span>
           <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white flex items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
@@ -358,14 +391,13 @@
         <!-- 3. Кукуруза -->
         <div id="cropCard_corn"
              data-crop="corn"
-             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative transition-all duration-normal
-                    hover:shadow-card-hover active:scale-[0.97]"
+             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative active:scale-[0.98]"
              onclick="selectCrop('corn')" role="radio" aria-checked="false" tabindex="0">
           <div class="text-4xl flex items-center justify-center mx-auto mb-2">🌽</div>
-          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_corn">Кукуруза</span>
-          <span class="font-sans text-[10px] text-muted" id="cropSub_corn">Жүгері</span>
-          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.20</span>
+          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_corn">Кукуруза</span>
+          <span class="text-[10px] text-muted" id="cropSub_corn">Жүгері</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.20</span>
           <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
@@ -373,14 +405,13 @@
         <!-- 4. Рис -->
         <div id="cropCard_rice"
              data-crop="rice"
-             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative transition-all duration-normal
-                    hover:shadow-card-hover active:scale-[0.97]"
+             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative active:scale-[0.98]"
              onclick="selectCrop('rice')" role="radio" aria-checked="false" tabindex="0">
           <div class="text-4xl flex items-center justify-center mx-auto mb-2">🍚</div>
-          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_rice">Рис</span>
-          <span class="font-sans text-[10px] text-muted" id="cropSub_rice">Күріш</span>
-          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.25</span>
+          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_rice">Рис</span>
+          <span class="text-[10px] text-muted" id="cropSub_rice">Күріш</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.25</span>
           <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
@@ -388,14 +419,13 @@
         <!-- 5. Люцерна -->
         <div id="cropCard_alfalfa"
              data-crop="alfalfa"
-             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative transition-all duration-normal
-                    hover:shadow-card-hover active:scale-[0.97]"
+             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative active:scale-[0.98]"
              onclick="selectCrop('alfalfa')" role="radio" aria-checked="false" tabindex="0">
           <div class="text-4xl flex items-center justify-center mx-auto mb-2">🌿</div>
-          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_alfalfa">Люцерна</span>
-          <span class="font-sans text-[10px] text-muted" id="cropSub_alfalfa">Жоңышқа</span>
-          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.05</span>
+          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_alfalfa">Люцерна</span>
+          <span class="text-[10px] text-muted" id="cropSub_alfalfa">Жоңышқа</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.05</span>
           <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
@@ -403,14 +433,13 @@
         <!-- 6. Томаты -->
         <div id="cropCard_tomato"
              data-crop="tomato"
-             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative transition-all duration-normal
-                    hover:shadow-card-hover active:scale-[0.97]"
+             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative active:scale-[0.98]"
              onclick="selectCrop('tomato')" role="radio" aria-checked="false" tabindex="0">
           <div class="text-4xl flex items-center justify-center mx-auto mb-2">🍅</div>
-          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_tomato">Томаты</span>
-          <span class="font-sans text-[10px] text-muted" id="cropSub_tomato">Қызанақ</span>
-          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.15</span>
+          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_tomato">Томаты</span>
+          <span class="text-[10px] text-muted" id="cropSub_tomato">Қызанақ</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.15</span>
           <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
@@ -418,14 +447,13 @@
         <!-- 7. Подсолнечник -->
         <div id="cropCard_sunflower"
              data-crop="sunflower"
-             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative transition-all duration-normal
-                    hover:shadow-card-hover active:scale-[0.97]"
+             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative active:scale-[0.98]"
              onclick="selectCrop('sunflower')" role="radio" aria-checked="false" tabindex="0">
           <div class="text-4xl flex items-center justify-center mx-auto mb-2">🌻</div>
-          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_sunflower">Подсолн.</span>
-          <span class="font-sans text-[10px] text-muted" id="cropSub_sunflower">Күнбағыс</span>
-          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.00</span>
+          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_sunflower">Подсолн.</span>
+          <span class="text-[10px] text-muted" id="cropSub_sunflower">Күнбағыс</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.00</span>
           <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
@@ -433,14 +461,13 @@
         <!-- 8. Картофель -->
         <div id="cropCard_potato"
              data-crop="potato"
-             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative transition-all duration-normal
-                    hover:shadow-card-hover active:scale-[0.97]"
+             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative active:scale-[0.98]"
              onclick="selectCrop('potato')" role="radio" aria-checked="false" tabindex="0">
           <div class="text-4xl flex items-center justify-center mx-auto mb-2">🥔</div>
-          <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_potato">Картофель</span>
-          <span class="font-sans text-[10px] text-muted" id="cropSub_potato">Картоп</span>
-          <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
+          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_potato">Картофель</span>
+          <span class="text-[10px] text-muted" id="cropSub_potato">Картоп</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
           <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
@@ -449,16 +476,16 @@
     </section>
 
     <!-- ══ BLOCK 3: AREA ══════════════════════════════════ -->
-    <section id="block3" class="bg-surface border border-border rounded-card shadow-card p-6 flex flex-col gap-4">
+    <section id="block3" class="glass-panel rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-6 flex flex-col gap-4">
 
       <div class="flex items-center gap-3 pb-3 border-b border-border">
         <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center
-                     font-sans text-xs font-bold flex-shrink-0" aria-hidden="true">3</span>
-        <h2 class="flex-1 font-sans text-md font-semibold text-foreground leading-snug" id="block3Title">
+                     text-xs font-bold flex-shrink-0" aria-hidden="true">3</span>
+        <h2 class="flex-1 text-md font-semibold text-foreground leading-snug" id="block3Title">
           Параметры поля
         </h2>
         <!-- Section tag: Mono, label spec -->
-        <span class="font-mono text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D]
+        <span class="text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D]
                      font-semibold whitespace-nowrap" id="currentAreaUnitBadge">гектар</span>
       </div>
 
@@ -467,20 +494,20 @@
         <!-- Unit toggle -->
         <div class="flex flex-col gap-2">
           <!-- Form label: Medium 500, xs, uppercase, tracking-wide — skill label spec -->
-          <label class="font-sans text-xs font-medium uppercase tracking-wide text-muted" id="labelAreaUnit">
+          <label class="text-xs font-medium uppercase tracking-wide text-muted" id="labelAreaUnit">
             Единица измерения:
           </label>
           <div class="flex gap-1 p-1 bg-background border border-border rounded-[12px]"
                role="group" aria-label="Единица площади">
             <button type="button" id="unitBtn_sotka"
-                    class="flex-1 h-10 rounded-inner font-sans text-sm font-medium cursor-pointer
+                    class="flex-1 h-10 rounded-inner text-sm font-medium cursor-pointer
                            text-muted bg-transparent border-none
                            transition-all duration-normal hover:text-foreground"
                     onclick="setAreaUnit('sotka')" aria-pressed="false">
               <span id="unitText_sotka">Сотки</span>
             </button>
             <button type="button" id="unitBtn_hectare"
-                    class="flex-1 h-10 rounded-inner font-sans text-sm font-semibold cursor-pointer
+                    class="flex-1 h-10 rounded-inner text-sm font-semibold cursor-pointer
                            bg-surface text-primary border-none shadow-card
                            transition-all duration-normal"
                     onclick="setAreaUnit('hectare')" aria-pressed="true">
@@ -491,7 +518,7 @@
 
         <!-- Area input -->
         <div class="flex flex-col gap-2">
-          <label class="font-sans text-xs font-medium uppercase tracking-wide text-muted"
+          <label class="text-xs font-medium uppercase tracking-wide text-muted"
                  id="labelAreaValue" for="fieldAreaInput">
             Площадь участка:
           </label>
@@ -500,7 +527,7 @@
               type="number"
               id="fieldAreaInput"
               class="w-full h-11 pl-4 pr-14 bg-surface border-[1.5px] border-border rounded-inner
-                     font-mono text-xl font-bold text-foreground outline-none
+                     text-xl font-bold text-foreground outline-none
                      transition-all duration-fast
                      hover:border-border-strong
                      focus:border-primary focus:shadow-ring-primary
@@ -510,54 +537,54 @@
               oninput="handleAreaChange(this.value)"
             />
             <!-- Suffix: Medium 500 label -->
-            <span class="absolute right-4 font-sans text-sm font-medium text-muted pointer-events-none"
+            <span class="absolute right-4 text-sm font-medium text-muted pointer-events-none"
                   id="inputUnitSuffix">га</span>
           </div>
         </div>
 
         <!-- Preset chips -->
         <div class="flex flex-col gap-2">
-          <span class="font-sans text-xs font-medium uppercase tracking-wide text-muted"
+          <span class="text-xs font-medium uppercase tracking-wide text-muted"
                 id="labelQuickPresets">Быстрый выбор:</span>
           <div class="flex flex-wrap gap-2" role="group" aria-label="Быстрый выбор площади">
             <button type="button"
                     class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
-                           font-mono text-sm font-medium text-muted cursor-pointer
+                           text-sm font-medium text-muted cursor-pointer
                            transition-all duration-fast
                            hover:bg-success-bg hover:border-primary hover:text-primary
                            active:scale-95"
                     onclick="setPresetArea(1)">1</button>
             <button type="button"
                     class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
-                           font-mono text-sm font-medium text-muted cursor-pointer
+                           text-sm font-medium text-muted cursor-pointer
                            transition-all duration-fast
                            hover:bg-success-bg hover:border-primary hover:text-primary
                            active:scale-95"
                     onclick="setPresetArea(5)">5</button>
             <button type="button"
                     class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
-                           font-mono text-sm font-medium text-muted cursor-pointer
+                           text-sm font-medium text-muted cursor-pointer
                            transition-all duration-fast
                            hover:bg-success-bg hover:border-primary hover:text-primary
                            active:scale-95"
                     onclick="setPresetArea(10)">10</button>
             <button type="button"
                     class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
-                           font-mono text-sm font-medium text-muted cursor-pointer
+                           text-sm font-medium text-muted cursor-pointer
                            transition-all duration-fast
                            hover:bg-success-bg hover:border-primary hover:text-primary
                            active:scale-95"
                     onclick="setPresetArea(25)">25</button>
             <button type="button"
                     class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
-                           font-mono text-sm font-medium text-muted cursor-pointer
+                           text-sm font-medium text-muted cursor-pointer
                            transition-all duration-fast
                            hover:bg-success-bg hover:border-primary hover:text-primary
                            active:scale-95"
                     onclick="setPresetArea(50)">50</button>
             <button type="button"
                     class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
-                           font-mono text-sm font-medium text-muted cursor-pointer
+                           text-sm font-medium text-muted cursor-pointer
                            transition-all duration-fast
                            hover:bg-success-bg hover:border-primary hover:text-primary
                            active:scale-95"
@@ -566,29 +593,29 @@
         </div>
 
         <!-- Equivalent -->
-        <div class="flex items-center justify-between p-3 rounded-inner bg-background border border-border"
+        <div class="flex items-center justify-between p-3.5 rounded-xl bg-white/50 backdrop-blur-sm border border-border/70 shadow-sm"
              aria-live="polite">
-          <span class="font-sans text-sm text-muted" id="areaCalcEquivalentLabel">Эквивалент:</span>
-          <span class="font-mono text-sm font-bold text-foreground" id="areaInM2">100 000 м² (1 000 соток)</span>
+          <span class="text-sm text-muted" id="areaCalcEquivalentLabel">Эквивалент:</span>
+          <span class="text-sm font-bold text-foreground" id="areaInM2">100 000 м² (1 000 соток)</span>
         </div>
 
       </div>
     </section>
 
     <!-- ══ BLOCK 4: IRRIGATION ════════════════════════════ -->
-    <section id="block4" class="bg-surface border border-border rounded-card shadow-card p-6 flex flex-col gap-4">
+    <section id="block4" class="glass-panel rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-6 flex flex-col gap-4">
 
       <div class="flex items-center gap-3 pb-3 border-b border-border">
         <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center
-                     font-sans text-xs font-bold flex-shrink-0" aria-hidden="true">4</span>
-        <h2 class="flex-1 font-sans text-md font-semibold text-foreground leading-snug" id="block4Title">
+                     text-xs font-bold flex-shrink-0" aria-hidden="true">4</span>
+        <h2 class="flex-1 text-md font-semibold text-foreground leading-snug" id="block4Title">
           Тип оросительной системы
         </h2>
-        <span class="font-mono text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D]
+        <span class="text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D]
                      font-semibold whitespace-nowrap">КПД (η)</span>
       </div>
 
-      <p class="font-sans text-sm font-normal text-muted leading-normal" id="block4Desc">
+      <p class="text-sm font-normal text-muted leading-normal" id="block4Desc">
         Выберите метод полива для корректного расчёта коэффициента эффективности применения воды.
       </p>
 
@@ -596,9 +623,8 @@
 
         <!-- 1. Капельный -->
         <div id="irrigCard_drip"
-             class="bg-surface border border-border rounded-inner shadow-card p-4 cursor-pointer relative
-                    transition-all duration-normal card-selected
-                    hover:shadow-card-hover active:scale-[0.99]"
+             class="glass-card-interactive rounded-xl shadow-sm p-4 cursor-pointer relative
+                    card-selected active active:scale-[0.99]"
              onclick="selectIrrigation('drip')" role="radio" aria-checked="true" tabindex="0">
           <div class="flex items-start gap-3 pr-8">
             <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
@@ -607,12 +633,12 @@
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-1">
                 <!-- Card title: SemiBold 600, sm -->
-                <span class="font-sans text-sm font-semibold text-foreground" id="irrigTitle_drip">Капельный полив</span>
+                <span class="text-sm font-semibold text-foreground" id="irrigTitle_drip">Капельный полив</span>
                 <!-- Efficiency badge: Bold 700, 10px — skill label -->
-                <span class="font-sans text-[10px] font-bold px-2 py-0.5 rounded-pill
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
                              bg-success-bg text-[#14532D] whitespace-nowrap" id="irrigBadge_drip">КПД 90%</span>
               </div>
-              <p class="font-sans text-xs font-normal text-muted leading-normal" id="irrigDesc_drip">
+              <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_drip">
                 Адресная подача в прикорневую зону. Экономия воды 40–50%.
               </p>
             </div>
@@ -623,9 +649,8 @@
 
         <!-- 2. Дождевание -->
         <div id="irrigCard_sprinkler"
-             class="bg-surface border border-border rounded-inner shadow-card p-4 cursor-pointer relative
-                    transition-all duration-normal
-                    hover:shadow-card-hover active:scale-[0.99]"
+             class="glass-card-interactive rounded-xl shadow-sm p-4 cursor-pointer relative
+                    active:scale-[0.99]"
              onclick="selectIrrigation('sprinkler')" role="radio" aria-checked="false" tabindex="0">
           <div class="flex items-start gap-3 pr-8">
             <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
@@ -633,11 +658,11 @@
             </div>
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-1">
-                <span class="font-sans text-sm font-semibold text-foreground" id="irrigTitle_sprinkler">Дождевание</span>
-                <span class="font-sans text-[10px] font-bold px-2 py-0.5 rounded-pill
+                <span class="text-sm font-semibold text-foreground" id="irrigTitle_sprinkler">Дождевание</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
                              bg-info-bg text-[#1E3A5F] whitespace-nowrap" id="irrigBadge_sprinkler">КПД 75%</span>
               </div>
-              <p class="font-sans text-xs font-normal text-muted leading-normal" id="irrigDesc_sprinkler">
+              <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_sprinkler">
                 Имитация дождя через форсунки. Равномерное распределение по площади.
               </p>
             </div>
@@ -648,9 +673,8 @@
 
         <!-- 3. Фронтальный -->
         <div id="irrigCard_pivot"
-             class="bg-surface border border-border rounded-inner shadow-card p-4 cursor-pointer relative
-                    transition-all duration-normal
-                    hover:shadow-card-hover active:scale-[0.99]"
+             class="glass-card-interactive rounded-xl shadow-sm p-4 cursor-pointer relative
+                    active:scale-[0.99]"
              onclick="selectIrrigation('pivot')" role="radio" aria-checked="false" tabindex="0">
           <div class="flex items-start gap-3 pr-8">
             <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
@@ -658,11 +682,11 @@
             </div>
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-1">
-                <span class="font-sans text-sm font-semibold text-foreground" id="irrigTitle_pivot">Фронтальный (Pivot)</span>
-                <span class="font-sans text-[10px] font-bold px-2 py-0.5 rounded-pill
+                <span class="text-sm font-semibold text-foreground" id="irrigTitle_pivot">Фронтальный (Pivot)</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
                              bg-info-bg text-[#1E3A5F] whitespace-nowrap" id="irrigBadge_pivot">КПД 80%</span>
               </div>
-              <p class="font-sans text-xs font-normal text-muted leading-normal" id="irrigDesc_pivot">
+              <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_pivot">
                 Круговая дождевальная машина. Оптимален для крупных открытых участков.
               </p>
             </div>
@@ -673,9 +697,8 @@
 
         <!-- 4. Арычный -->
         <div id="irrigCard_furrow"
-             class="bg-surface border border-border rounded-inner shadow-card p-4 cursor-pointer relative
-                    transition-all duration-normal
-                    hover:shadow-card-hover active:scale-[0.99]"
+             class="glass-card-interactive rounded-xl shadow-sm p-4 cursor-pointer relative
+                    active:scale-[0.99]"
              onclick="selectIrrigation('furrow')" role="radio" aria-checked="false" tabindex="0">
           <div class="flex items-start gap-3 pr-8">
             <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
@@ -683,11 +706,11 @@
             </div>
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-1">
-                <span class="font-sans text-sm font-semibold text-foreground" id="irrigTitle_furrow">Арычный полив</span>
-                <span class="font-sans text-[10px] font-bold px-2 py-0.5 rounded-pill
+                <span class="text-sm font-semibold text-foreground" id="irrigTitle_furrow">Арычный полив</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
                              bg-warning-bg text-[#78350F] whitespace-nowrap" id="irrigBadge_furrow">КПД 50%</span>
               </div>
-              <p class="font-sans text-xs font-normal text-muted leading-normal" id="irrigDesc_furrow">
+              <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_furrow">
                 Традиционный самотечный полив. Высокие потери на фильтрацию.
               </p>
             </div>
@@ -698,9 +721,8 @@
 
         <!-- 5. Подпочвенное -->
         <div id="irrigCard_subsurface"
-             class="bg-surface border border-border rounded-inner shadow-card p-4 cursor-pointer relative
-                    transition-all duration-normal
-                    hover:shadow-card-hover active:scale-[0.99]"
+             class="glass-card-interactive rounded-xl shadow-sm p-4 cursor-pointer relative
+                    active:scale-[0.99]"
              onclick="selectIrrigation('subsurface')" role="radio" aria-checked="false" tabindex="0">
           <div class="flex items-start gap-3 pr-8">
             <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0">
@@ -714,11 +736,11 @@
             </div>
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-1">
-                <span class="font-sans text-sm font-semibold text-foreground" id="irrigTitle_subsurface">Подпочвенное</span>
-                <span class="font-sans text-[10px] font-bold px-2 py-0.5 rounded-pill
+                <span class="text-sm font-semibold text-foreground" id="irrigTitle_subsurface">Подпочвенное</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
                              bg-success-bg text-[#14532D] whitespace-nowrap" id="irrigBadge_subsurface">КПД 95%</span>
               </div>
-              <p class="font-sans text-xs font-normal text-muted leading-normal" id="irrigDesc_subsurface">
+              <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_subsurface">
                 Трубки под поверхностью почвы. Минимум испарения, максимум эффективности.
               </p>
             </div>
@@ -731,30 +753,30 @@
     </section>
 
     <!-- ══ SUMMARY ════════════════════════════════════════ -->
-    <div class="bg-surface border border-border rounded-card shadow-card p-6">
+    <div class="glass-panel rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
       <div class="flex items-center justify-between pb-3 border-b border-border mb-4">
         <!-- Summary label: Medium 500, xs, uppercase, tracking-wide — skill label spec -->
-        <span class="font-sans text-xs font-medium uppercase tracking-wide text-muted"
+        <span class="text-xs font-medium uppercase tracking-wide text-muted"
               id="summaryTitle">Сводка параметров</span>
-        <span class="font-sans text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-pill
+        <span class="text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-pill
                      bg-success-bg text-[#14532D]">Готово к расчёту</span>
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <span class="font-sans text-[10px] text-faint block mb-0.5" id="sumLabelCoords">Локация:</span>
-          <span class="font-mono text-xs font-semibold text-accent" id="sumValCoords">Не определены</span>
+          <span class="text-[10px] text-faint block mb-0.5" id="sumLabelCoords">Локация:</span>
+          <span class="text-xs font-semibold text-accent" id="sumValCoords">Не определены</span>
         </div>
         <div>
-          <span class="font-sans text-[10px] text-faint block mb-0.5" id="sumLabelCrop">Культура:</span>
-          <span class="font-sans text-sm font-semibold text-foreground" id="sumValCrop">Хлопок (Мақта)</span>
+          <span class="text-[10px] text-faint block mb-0.5" id="sumLabelCrop">Культура:</span>
+          <span class="text-sm font-semibold text-foreground" id="sumValCrop">Хлопок (Мақта)</span>
         </div>
         <div>
-          <span class="font-sans text-[10px] text-faint block mb-0.5" id="sumLabelArea">Площадь:</span>
-          <span class="font-sans text-sm font-semibold text-foreground" id="sumValArea">10 гектар</span>
+          <span class="text-[10px] text-faint block mb-0.5" id="sumLabelArea">Площадь:</span>
+          <span class="text-sm font-semibold text-foreground" id="sumValArea">10 гектар</span>
         </div>
         <div>
-          <span class="font-sans text-[10px] text-faint block mb-0.5" id="sumLabelIrrig">Технология:</span>
-          <span class="font-sans text-sm font-semibold text-foreground" id="sumValIrrig">Капельный (КПД 90%)</span>
+          <span class="text-[10px] text-faint block mb-0.5" id="sumLabelIrrig">Технология:</span>
+          <span class="text-sm font-semibold text-foreground" id="sumValIrrig">Капельный (КПД 90%)</span>
         </div>
       </div>
     </div>
@@ -763,7 +785,7 @@
     <div class="flex flex-col gap-2">
       <button type="button" id="btnSubmitAll"
               class="w-full h-[60px] flex items-center justify-center gap-3
-                     font-sans text-md font-bold text-white
+                     text-md font-bold text-white
                      bg-primary rounded-card border-none cursor-pointer
                      shadow-submit transition-all duration-fast
                      hover:bg-primary-hover hover:shadow-submit-hover
@@ -777,7 +799,7 @@
         <span id="btnSubmitText">Рассчитать норму полива</span>
       </button>
       <!-- Submit hint: Regular 400, xs — skill body spec -->
-      <p class="font-sans text-xs font-normal text-faint text-center leading-normal"
+      <p class="text-xs font-normal text-faint text-center leading-normal"
          id="submitHint">
         Спутниковый анализ и расчёт по формуле FAO-56 Penman-Monteith
       </p>
@@ -788,7 +810,7 @@
   <!-- ══ TOAST ══════════════════════════════════════════════ -->
   <div id="appToast"
        class="fixed top-4 left-4 right-4 z-50 hidden
-              px-5 py-3 rounded-inner text-sm font-semibold font-sans text-center
+              px-5 py-3 rounded-inner text-sm font-semibold text-center
               border shadow-card-hover toast-enter"
        role="alert" aria-live="assertive"></div>
 

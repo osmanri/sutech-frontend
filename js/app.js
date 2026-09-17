@@ -300,8 +300,8 @@ function updateBlock1StatusPill() {
   const pill = document.getElementById('block1StatusPill');
   if (!pill) return;
 
-  // Tailwind classes — skill: Bold 700, xs, uppercase, tracking-wide labels
-  const baseClasses = 'font-sans text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-pill whitespace-nowrap';
+  // Tailwind classes — Bold 700, xs, uppercase, tracking-wide labels
+  const baseClasses = 'text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-full whitespace-nowrap';
   if (state.latitude !== null && state.longitude !== null) {
     pill.className = `${baseClasses} bg-success-bg text-[#14532D]`;
     pill.textContent = t.block1StatusReady;
@@ -472,8 +472,8 @@ function updateAreaUnitUI() {
   // Toggle buttons — Tailwind classes per skill weight spec
   const btnSotka   = document.getElementById('unitBtn_sotka');
   const btnHectare = document.getElementById('unitBtn_hectare');
-  const activeClass   = 'flex-1 h-10 rounded-inner font-sans text-sm font-semibold cursor-pointer bg-surface text-primary border-none shadow-card transition-all duration-normal';
-  const inactiveClass = 'flex-1 h-10 rounded-inner font-sans text-sm font-medium cursor-pointer text-muted bg-transparent border-none transition-all duration-normal hover:text-foreground';
+  const activeClass   = 'flex-1 h-10 rounded-xl text-sm font-semibold cursor-pointer bg-white/90 text-primary border-none shadow-sm transition-all duration-200';
+  const inactiveClass = 'flex-1 h-10 rounded-xl text-sm font-medium cursor-pointer text-muted bg-transparent border-none transition-all duration-200 hover:text-foreground';
   if (btnSotka)   btnSotka.className   = isHect ? inactiveClass : activeClass;
   if (btnHectare) btnHectare.className = isHect ? activeClass   : inactiveClass;
   btnSotka?.setAttribute('aria-pressed',   String(!isHect));
@@ -542,10 +542,10 @@ function updateSummaryCard() {
   const coordsVal = document.getElementById('sumValCoords');
   if (state.latitude !== null && state.longitude !== null) {
     coordsVal.textContent = `${state.latitude.toFixed(4)}°, ${state.longitude.toFixed(4)}°`;
-    coordsVal.className = 'font-mono text-xs font-semibold text-primary';
+    coordsVal.className = 'text-xs font-semibold text-primary';
   } else {
     coordsVal.textContent = t.noCoordsYet;
-    coordsVal.className = 'font-mono text-xs font-semibold text-accent';
+    coordsVal.className = 'text-xs font-semibold text-accent';
   }
 
   // Crop
@@ -625,7 +625,7 @@ function showToast(message, type = 'info') {
   clearTimeout(_toastTimer);
 
   // Tailwind toast classes per type
-  const baseClass = 'fixed top-4 left-4 right-4 z-50 px-5 py-3 rounded-inner text-sm font-semibold font-sans text-center border shadow-card-hover';
+  const baseClass = 'fixed top-4 left-4 right-4 z-50 px-5 py-3 rounded-xl text-sm font-semibold text-center border shadow-md backdrop-blur-md';
   const typeClasses = {
     success: 'bg-success-bg text-[#14532D] border-[rgba(22,163,74,0.3)]',
     warning: 'bg-warning-bg text-[#78350F] border-[rgba(217,119,6,0.3)]',
@@ -658,9 +658,9 @@ function _setLangBtn(id, isActive) {
   const el = document.getElementById(id);
   if (!el) return;
   if (isActive) {
-    el.className = 'h-8 px-3 rounded-inner font-sans text-xs font-semibold cursor-pointer bg-primary text-white border-none shadow-btn-primary transition-all duration-fast';
+    el.className = 'h-8 px-3 rounded-xl text-xs font-semibold cursor-pointer bg-primary text-white border-none shadow-sm transition-all duration-150';
   } else {
-    el.className = 'h-8 px-3 rounded-inner font-sans text-xs font-semibold cursor-pointer text-muted bg-transparent border-none transition-all duration-fast hover:text-foreground';
+    el.className = 'h-8 px-3 rounded-xl text-xs font-semibold cursor-pointer text-muted bg-transparent border-none transition-all duration-150 hover:text-foreground';
   }
 }
 

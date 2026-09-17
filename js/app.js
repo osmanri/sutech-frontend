@@ -104,7 +104,7 @@ const I18N = {
       cotton:    { name: 'Хлопок',          sub: 'Мақта'            },
       corn:      { name: 'Кукуруза',        sub: 'Жүгері'           },
       alfalfa:   { name: 'Люцерна',         sub: 'Жоңышқа'          },
-      melon:     { name: 'Бахча',           sub: 'Қарбыз/Қауын'     },
+      melon:     { name: 'Бахча',           sub: 'Бақша'            },
       tomato:    { name: 'Томаты',          sub: 'Қызанақ'          },
       potato:    { name: 'Картофель',       sub: 'Картоп'           },
       other:     { name: 'Другая культура', sub: 'Басқа дақыл'      },
@@ -126,9 +126,9 @@ const I18N = {
 
     // Два новых переключателя
     labelFieldType:          'Тип участка:',
-    fieldText_open:          '🌱 Открытый грунт',
+    fieldText_open:          '🌱 Открытое поле',
     fieldText_greenhouse:    '🏡 Теплица',
-    fieldTypeBadge_open:     'Открытый грунт',
+    fieldTypeBadge_open:     'Открытое поле',
     fieldTypeBadge_greenhouse:'Теплица',
 
     labelSalinity:           'Засоленность почвы:',
@@ -191,7 +191,7 @@ const I18N = {
       cotton:    { name: 'Мақта',           sub: 'Хлопок'           },
       corn:      { name: 'Жүгері',          sub: 'Кукуруза'         },
       alfalfa:   { name: 'Жоңышқа',         sub: 'Люцерна'          },
-      melon:     { name: 'Бақша',           sub: 'Қарбыз/Қауын'     },
+      melon:     { name: 'Бақша',           sub: 'Бахча'            },
       tomato:    { name: 'Қызанақ',         sub: 'Томаты'           },
       potato:    { name: 'Картоп',          sub: 'Картофель'        },
       other:     { name: 'Басқа дақыл',     sub: 'Другая культура'  },
@@ -213,9 +213,9 @@ const I18N = {
 
     // Екі жаңа қосқыш
     labelFieldType:          'Алқап түрі:',
-    fieldText_open:          '🌱 Ашық топырақ',
+    fieldText_open:          '🌱 Ашық алқап',
     fieldText_greenhouse:    '🏡 Жылыжай',
-    fieldTypeBadge_open:     'Ашық топырақ',
+    fieldTypeBadge_open:     'Ашық алқап',
     fieldTypeBadge_greenhouse:'Жылыжай',
 
     labelSalinity:           'Топырақтың тұздануы:',

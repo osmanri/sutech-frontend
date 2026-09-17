@@ -152,10 +152,10 @@
     .toast-exit { opacity: 0; transform: translateY(-8px); transition: opacity 0.25s ease, transform 0.25s ease; }
 
     /* ── Crop/irrig card selected ring ── */
-    .card-selected {
+    .card-selected, .is-selected, .active {
       background-color: #DCFCE7 !important;
-      border-color: #1A7A4A !important;
-      box-shadow: 0 0 0 2px #1A7A4A,
+      border-color: #10B981 !important;
+      box-shadow: 0 0 0 2px #10B981,
                   0 4px 8px rgba(28,43,30,0.12),
                   0 12px 28px rgba(28,43,30,0.10) !important;
     }
@@ -319,143 +319,129 @@
         Выберите культуру для учёта биологического коэффициента транспирации (K<sub>c</sub>).
       </p>
 
-      <!-- 8 crops — 4 columns -->
-      <div class="grid grid-cols-4 gap-2" role="radiogroup" aria-label="Выбор культуры"
-           style="grid-template-columns: repeat(4,1fr)">
+      <!-- 8 crops — 2 columns strictly adaptive for mobile -->
+      <div class="grid grid-cols-2 gap-3 w-full max-w-full mx-auto" role="radiogroup" aria-label="Выбор культуры">
 
         <!-- 1. Пшеница -->
         <div id="cropCard_wheat"
-             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+             data-crop="wheat"
+             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
                     cursor-pointer relative transition-all duration-normal
                     hover:shadow-card-hover active:scale-[0.97]"
              onclick="selectCrop('wheat')" role="radio" aria-checked="false" tabindex="0">
-          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
-            <i data-lucide="wheat" class="w-6 h-6 text-[#D97706]"></i>
-          </div>
+          <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-2xl mx-auto mb-2">🌾</div>
           <!-- Card title: SemiBold 600, xs — skill spec -->
           <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_wheat">Пшеница</span>
           <!-- Sub: Regular 400, 2xs — skill body spec -->
           <span class="font-sans text-[10px] text-muted" id="cropSub_wheat">Бидай</span>
           <!-- Data label: Mono — skill spec -->
           <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
-          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
 
         <!-- 2. Хлопок -->
         <div id="cropCard_cotton"
-             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative transition-all duration-normal card-selected
+             data-crop="cotton"
+             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+                    cursor-pointer relative transition-all duration-normal card-selected active border-emerald-500 ring-2 ring-emerald-500
                     hover:shadow-card-hover active:scale-[0.97]"
              onclick="selectCrop('cotton')" role="radio" aria-checked="true" tabindex="0">
-          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
-            <i data-lucide="cloud" class="w-6 h-6 text-[#1A7A4A]"></i>
-          </div>
+          <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-2xl mx-auto mb-2">⚪</div>
           <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_cotton">Хлопок</span>
           <span class="font-sans text-[10px] text-muted" id="cropSub_cotton">Мақта</span>
           <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.15</span>
-          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white flex items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white flex items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
 
         <!-- 3. Кукуруза -->
         <div id="cropCard_corn"
-             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+             data-crop="corn"
+             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
                     cursor-pointer relative transition-all duration-normal
                     hover:shadow-card-hover active:scale-[0.97]"
              onclick="selectCrop('corn')" role="radio" aria-checked="false" tabindex="0">
-          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="#D97706" aria-hidden="true">
-              <path d="M12 3c-.5 0-1 .5-1 1 0 1.5 1 3 1 3s1-1.5 1-3c0-.5-.5-1-1-1z"/>
-              <rect x="9" y="7" width="6" height="11" rx="3"/>
-              <path d="M9 9h6M9 11h6M9 13h6M9 15h6" fill="none" stroke="white" stroke-width="0.8"/>
-              <path d="M12 18v3" fill="none" stroke="#D97706" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-2xl mx-auto mb-2">🌽</div>
           <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_corn">Кукуруза</span>
           <span class="font-sans text-[10px] text-muted" id="cropSub_corn">Жүгері</span>
           <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.20</span>
-          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
 
         <!-- 4. Рис -->
         <div id="cropCard_rice"
-             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+             data-crop="rice"
+             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
                     cursor-pointer relative transition-all duration-normal
                     hover:shadow-card-hover active:scale-[0.97]"
              onclick="selectCrop('rice')" role="radio" aria-checked="false" tabindex="0">
-          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
-            <i data-lucide="sprout" class="w-6 h-6 text-[#1A7A4A]"></i>
-          </div>
+          <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-2xl mx-auto mb-2">🌿</div>
           <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_rice">Рис</span>
           <span class="font-sans text-[10px] text-muted" id="cropSub_rice">Күріш</span>
           <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.25</span>
-          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
 
         <!-- 5. Люцерна -->
         <div id="cropCard_alfalfa"
-             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+             data-crop="alfalfa"
+             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
                     cursor-pointer relative transition-all duration-normal
                     hover:shadow-card-hover active:scale-[0.97]"
              onclick="selectCrop('alfalfa')" role="radio" aria-checked="false" tabindex="0">
-          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
-            <i data-lucide="flower-2" class="w-6 h-6 text-[#1A7A4A]"></i>
-          </div>
+          <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-2xl mx-auto mb-2">🍉</div>
           <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_alfalfa">Люцерна</span>
           <span class="font-sans text-[10px] text-muted" id="cropSub_alfalfa">Жоңышқа</span>
           <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.05</span>
-          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
 
         <!-- 6. Томаты -->
         <div id="cropCard_tomato"
-             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+             data-crop="tomato"
+             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
                     cursor-pointer relative transition-all duration-normal
                     hover:shadow-card-hover active:scale-[0.97]"
              onclick="selectCrop('tomato')" role="radio" aria-checked="false" tabindex="0">
-          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
-            <i data-lucide="circle" class="w-6 h-6 text-[#E53E3E]"></i>
-          </div>
+          <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-2xl mx-auto mb-2">🍅</div>
           <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_tomato">Томаты</span>
           <span class="font-sans text-[10px] text-muted" id="cropSub_tomato">Қызанақ</span>
           <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.15</span>
-          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
 
         <!-- 7. Подсолнечник -->
         <div id="cropCard_sunflower"
-             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+             data-crop="sunflower"
+             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
                     cursor-pointer relative transition-all duration-normal
                     hover:shadow-card-hover active:scale-[0.97]"
              onclick="selectCrop('sunflower')" role="radio" aria-checked="false" tabindex="0">
-          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
-            <i data-lucide="sun" class="w-6 h-6 text-[#D97706]"></i>
-          </div>
+          <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-2xl mx-auto mb-2">⭐</div>
           <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_sunflower">Подсолн.</span>
           <span class="font-sans text-[10px] text-muted" id="cropSub_sunflower">Күнбағыс</span>
           <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.00</span>
-          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
 
         <!-- 8. Картофель -->
         <div id="cropCard_potato"
-             class="bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
+             data-crop="potato"
+             class="crop-card bg-surface border border-border rounded-inner shadow-card p-3 flex flex-col items-center text-center gap-1
                     cursor-pointer relative transition-all duration-normal
                     hover:shadow-card-hover active:scale-[0.97]"
              onclick="selectCrop('potato')" role="radio" aria-checked="false" tabindex="0">
-          <div class="w-10 h-10 rounded-inner bg-background border border-border flex items-center justify-center flex-shrink-0 mb-0.5">
-            <i data-lucide="circle-dashed" class="w-6 h-6 text-[#C8A05A]"></i>
-          </div>
+          <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-2xl mx-auto mb-2">🍎</div>
           <span class="font-sans text-xs font-semibold text-foreground leading-tight" id="cropName_potato">Картофель</span>
           <span class="font-sans text-[10px] text-muted" id="cropSub_potato">Картоп</span>
           <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
-          <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
                 aria-hidden="true">✓</span>
         </div>
 

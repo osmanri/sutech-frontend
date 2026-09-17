@@ -27,6 +27,8 @@ try {
 }
 
 // ─── 2. Состояние приложения ───────────────────────────────────────────────
+let selectedCrop = 'cotton'; // Внутренняя переменная выбранной культуры
+
 const state = {
   latitude:         null,
   longitude:        null,
@@ -399,19 +401,59 @@ function renderCoordinates() {
 const ALL_CROPS = Object.keys(CROPS);
 
 function selectCrop(cropKey) {
-  if (!CROPS[cropKey]) return;
+  if (!cropKey || !CROPS[cropKey]) return;
+  selectedCrop = cropKey;
   state.crop = cropKey;
 
-  for (const key of ALL_CROPS) {
-    const card = document.getElementById(`cropCard_${key}`);
-    if (!card) continue;
-    const isSelected = key === cropKey;
-    card.classList.toggle('is-selected', isSelected);
-    card.setAttribute('aria-checked', String(isSelected));
-  }
+  const cropCards = document.querySelectorAll('.crop-card');
+  cropCards.forEach(card => {
+    const isSelected = (card.dataset.crop === cropKey) || (card.id === `cropCard_${cropKey}`);
+    if (isSelected) {
+      card.classList.add('card-selected', 'active', 'border-emerald-500', 'ring-2', 'ring-emerald-500');
+      card.setAttribute('aria-checked', 'true');
+      const check = card.querySelector('.crop-check');
+      if (check) check.classList.remove('hidden');
+    } else {
+      card.classList.remove('card-selected', 'active', 'border-emerald-500', 'ring-2', 'ring-emerald-500');
+      card.setAttribute('aria-checked', 'false');
+      const check = card.querySelector('.crop-check');
+      if (check) check.classList.add('hidden');
+    }
+  });
 
   updateSummaryCard();
   triggerHaptic('light');
+}
+
+function initCropCards() {
+  const cropCards = document.querySelectorAll('.crop-card');
+  cropCards.forEach(card => {
+    card.addEventListener('click', function () {
+      const crop = this.dataset.crop;
+      if (!crop) return;
+
+      // 1. У всех карточек удаляется класс активности (зеленая рамка)
+      cropCards.forEach(c => {
+        c.classList.remove('card-selected', 'active', 'border-emerald-500', 'ring-2', 'ring-emerald-500');
+        c.setAttribute('aria-checked', 'false');
+        const check = c.querySelector('.crop-check');
+        if (check) check.classList.add('hidden');
+      });
+
+      // 2. Нажатой карточке добавляется класс активности
+      this.classList.add('card-selected', 'active', 'border-emerald-500', 'ring-2', 'ring-emerald-500');
+      this.setAttribute('aria-checked', 'true');
+      const activeCheck = this.querySelector('.crop-check');
+      if (activeCheck) activeCheck.classList.remove('hidden');
+
+      // 3. Внутренняя переменная selectedCrop обновляется на dataset.crop нажатой карточки
+      selectedCrop = crop;
+      state.crop = crop;
+
+      updateSummaryCard();
+      triggerHaptic('light');
+    });
+  });
 }
 
 // ─── 9. Параметры поля (Блок 3) ──────────────────────────────────────────
@@ -482,6 +524,8 @@ function selectIrrigation(type) {
     const card = document.getElementById(`irrigCard_${key}`);
     if (!card) continue;
     const isSelected = key === type;
+    card.classList.toggle('card-selected', isSelected);
+    card.classList.toggle('active', isSelected);
     card.classList.toggle('is-selected', isSelected);
     card.setAttribute('aria-checked', String(isSelected));
   }
@@ -652,6 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
   recalculateAreaEquivalent();
   updateSummaryCard();
   addKeyboardCardSupport();
+  initCropCards();
 
   // Pre-select default state UI
   selectCrop(state.crop);

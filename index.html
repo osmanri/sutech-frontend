@@ -2,487 +2,214 @@
 <html lang="ru" id="htmlRoot">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title id="pageTitle">Su-Tech — Точное земледелие</title>
-  <meta id="pageDesc" name="description" content="Интеллектуальная система управления орошением на базе модели FAO-56 Penman-Monteith" />
-
-  <link rel="icon" type="image/jpeg" href="img/logo.jpg" />
-  <link rel="apple-touch-icon" href="img/logo.jpg" />
-
-  <!-- ══════════════════════════════════════════════════════
-       TYPOGRAPHY — ui-ux-pro-max BM25 Result
-       Primary Font (B2B AgroTech / Enterprise SaaS):
-         "Friendly SaaS" → Plus Jakarta Sans (single-family)
-         fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
-       Mono fallback: Fira Code (data / coords)
-       Source: typography.csv row #13 (Friendly SaaS) + design-system output
-       ══════════════════════════════════════════════════════ -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  />
-
-  <!-- ══ Tailwind CDN ══════════════════════════════════════ -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- ══ Tailwind Config — Brand Palette from Official Logo ══ -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
-            mono: ['"Inter"', '-apple-system', 'sans-serif'],
-          },
-          colors: {
-            /* Official Su-Tech Brand Palette sampled from Logo */
-            primary:   '#29B77D',
-            'primary-hover':  '#229E6B',
-            'primary-active': '#1C855A',
-            secondary: '#2F3C45',
-            accent:    '#D97706',
-            background:'#F4F7F4',
-            surface:   '#FFFFFF',
-            'surface-raised': '#FAFCFA',
-            foreground:'#212C36',
-            muted:     '#4D5E6B',
-            faint:     '#7D8D99',
-            border:    '#D2E4DA',
-            'border-strong': '#98BEA9',
-            success:   '#29B77D',
-            'success-bg': '#E6F8F0',
-            warning:   '#D97706',
-            'warning-bg': '#FEF3C7',
-            error:     '#DC2626',
-            'error-bg': '#FEE2E2',
-            info:      '#1E5FA8',
-            'info-bg': '#DBEAFE',
-          },
-          fontSize: {
-            '2xs': ['0.625rem',  { lineHeight: '1rem'   }],
-            xs:    ['0.75rem',   { lineHeight: '1.125rem'}],
-            sm:    ['0.875rem',  { lineHeight: '1.375rem'}],
-            base:  ['1rem',      { lineHeight: '1.5rem'  }],
-            md:    ['1.125rem',  { lineHeight: '1.5rem'  }],
-            lg:    ['1.25rem',   { lineHeight: '1.75rem' }],
-            xl:    ['1.5rem',    { lineHeight: '2rem'    }],
-            '2xl': ['1.875rem',  { lineHeight: '2.25rem' }],
-            '3xl': ['2.25rem',   { lineHeight: '2.75rem' }],
-          },
-          borderRadius: {
-            card: '12px',
-            inner: '8px',
-            pill: '9999px',
-          },
-          boxShadow: {
-            card:       '0 1px 3px rgba(33,44,54,0.06), 0 4px 12px rgba(33,44,54,0.05)',
-            'card-hover':'0 4px 8px rgba(33,44,54,0.10), 0 12px 28px rgba(33,44,54,0.08)',
-            'btn-primary':'0 1px 2px rgba(41,183,125,0.3)',
-            'btn-hover': '0 4px 12px rgba(41,183,125,0.35)',
-            'ring-primary':'0 0 0 3px rgba(41,183,125,0.3)',
-            submit:     '0 2px 4px rgba(41,183,125,0.3), 0 8px 20px rgba(41,183,125,0.2)',
-            'submit-hover':'0 4px 8px rgba(41,183,125,0.4), 0 12px 28px rgba(41,183,125,0.25)',
-          },
-          transitionDuration: {
-            'fast':   '150ms',
-            'normal': '250ms',
-            'slow':   '400ms',
-          },
-          animation: {
-            'pulse-slow': 'pulse 1.5s ease-in-out infinite',
-            'spin-slow':  'spin 1s linear infinite',
-          },
-        },
-      },
-    };
-  </script>
-
-  <!-- Telegram Mini App SDK -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <style>
-    /* ── Reduced motion (skill: ui-ux-pro-max) ── */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration:        0.01ms !important;
-        animation-iteration-count: 1      !important;
-        transition-duration:       0.01ms !important;
-      }
-    }
-
-    /* ── Base resets & ambient glassmorphic canvas ── */
-    *, *::before, *::after { box-sizing: border-box; }
-    html { -webkit-font-smoothing: antialiased; }
-    body {
-      background:
-        radial-gradient(ellipse at 15% 0%, rgba(230, 248, 240, 0.7) 0%, transparent 45%),
-        radial-gradient(ellipse at 85% 15%, rgba(219, 234, 254, 0.45) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 90%, rgba(244, 247, 244, 0.6) 0%, transparent 50%),
-        #F4F7F4;
-      background-attachment: fixed;
-      min-height: 100vh;
-      color: #212C36;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 1rem;
-      font-weight: 400;
-      line-height: 1.5;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-
-    /* ── Scrollbar minimal ── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #D2E4DA; border-radius: 999px; }
-
-    /* ── GPS Spinner ── */
-    @keyframes spin  { to { transform: rotate(360deg); } }
-    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.55; } }
-    .gps-spin { animation: spin 1s linear infinite; }
-    .gps-pulse { animation: pulse 1.5s ease-in-out infinite; }
-
-    /* ── Toast transition ── */
-    .toast-enter { opacity: 0; transform: translateY(-8px); }
-    .toast-visible { opacity: 1; transform: translateY(0); transition: opacity 0.25s ease, transform 0.25s ease; }
-    .toast-exit { opacity: 0; transform: translateY(-8px); transition: opacity 0.25s ease, transform 0.25s ease; }
-
-    /* ── Glassmorphism Surface Panel (Rounded 3xl & Soft Premium Elevation) ── */
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(226, 232, 240, 0.8);
-      box-shadow: 0 20px 25px -5px rgba(2, 44, 34, 0.05), 0 8px 10px -6px rgba(2, 44, 34, 0.05);
-      border-radius: 1.5rem;
-    }
-    .glass-panel:hover {
-      box-shadow: 0 25px 30px -5px rgba(2, 44, 34, 0.08), 0 10px 12px -6px rgba(2, 44, 34, 0.06);
-    }
-
-    /* ── Glassmorphism Interactive Card (crop & irrig cards) ── */
-    .glass-card-interactive {
-      background: rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(210, 228, 218, 0.75);
-      box-shadow: 0 1px 2px rgba(33, 44, 54, 0.04);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .glass-card-interactive:hover {
-      background: rgba(255, 255, 255, 0.95);
-      border-color: rgba(152, 190, 169, 0.9);
-      box-shadow: 0 4px 14px rgba(33, 44, 54, 0.08);
-      transform: translateY(-1px);
-    }
-
-    /* ── Selected Card Ring (Logo Emerald & Mint Frosted Glass) ── */
-    .card-selected, .is-selected, .active {
-      background: rgba(230, 248, 240, 0.85) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border-color: #29B77D !important;
-      box-shadow: 0 0 0 2px #29B77D,
-                  0 4px 16px rgba(41, 183, 125, 0.2) !important;
-    }
-
-    /* ── Input number hide arrows ── */
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
-    input[type=number] { -moz-appearance: textfield; appearance: textfield; }
-
-    /* ── Focus ring global ── */
-    :focus-visible {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(41, 183, 125, 0.35) !important;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Su-Tech — Smart Irrigation</title>
+  <meta id="pageDesc" name="description" content="Карта поля и точный расчет полива Su-Tech" />
+  <meta name="theme-color" content="#182D3B" />
+  <link rel="icon" href="img/logo.jpg" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="css/app.css?v=4.0.0" />
+  <script defer src="vendor/leaflet/leaflet.js"></script>
+  <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
+  <script defer src="js/app.js?v=4.0.0"></script>
 </head>
-
-<body class="font-sans antialiased bg-gradient-to-b from-slate-50 via-emerald-50/20 to-white min-h-screen">
-
-  <!-- ══════════════════════════════════════════════════════
-       APP SHELL
-       ══════════════════════════════════════════════════════ -->
-  <main class="w-full max-w-[480px] mx-auto px-4 pb-12 flex flex-col gap-5 pt-4">
-
-    <!-- ══ HEADER ════════════════════════════════════════ -->
-    <header class="flex items-center justify-between gap-3">
-
-      <div class="flex items-center gap-3">
-        <!-- Official Su-Tech Brand Logo -->
-        <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-white shadow-sm border border-border overflow-hidden p-0.5">
-          <img src="img/logo.jpg" alt="Su-Tech Logo" class="w-full h-full object-contain rounded-lg" />
-        </div>
-
-        <!-- Header text: Strict minimalism Su-Tech & Smart Irrigation System -->
-        <div class="flex flex-col gap-0.5">
-          <span class="text-lg font-extrabold text-foreground tracking-tight leading-tight">Su-Tech</span>
-          <p class="text-xs font-medium text-muted tracking-wide leading-none" id="headerSubtitle">Smart Irrigation System</p>
-        </div>
-      </div>
-
-      <!-- Language switcher -->
-      <div class="flex items-center p-1 rounded-xl bg-white/70 backdrop-blur-md border border-white/60 shadow-sm gap-0.5"
-           role="group" aria-label="Выбор языка">
-        <button id="langBtnKz"
-                class="h-8 px-3 rounded-inner text-xs font-semibold cursor-pointer
-                       text-muted bg-transparent border-none
-                       transition-all duration-fast hover:text-foreground"
-                onclick="setLanguage('kz')">ҚАЗ</button>
-        <button id="langBtnRu"
-                class="h-8 px-3 rounded-inner text-xs font-semibold cursor-pointer
-                       bg-primary text-white border-none shadow-btn-primary
-                       transition-all duration-fast"
-                onclick="setLanguage('ru')">РУС</button>
-      </div>
-    </header>
-
-    <!-- ══ BLOCK 1: GPS ════════════════════════════════════ -->
-    <section id="block1" class="glass-panel rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-6 flex flex-col gap-4">
-
-      <div class="flex items-center gap-3 pb-3 border-b border-border">
-        <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center
-                     text-xs font-bold flex-shrink-0" aria-hidden="true">1</span>
-        <!-- Section title: SemiBold 600, md size — skill spec -->
-        <h2 class="flex-1 text-md font-semibold text-foreground leading-snug" id="block1Title">
-          Локация участка (GPS)
-        </h2>
-        <!-- Status badge: Bold 700, xs, uppercase, tracking-wide — skill labels spec -->
-        <span class="text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-pill
-                     bg-warning-bg text-[#78350F] whitespace-nowrap" id="block1StatusPill">
-          Ожидает GPS
-        </span>
-      </div>
-
-      <!-- Section desc: Regular 400, sm — skill body spec -->
-      <p class="text-sm font-normal text-muted leading-normal" id="block1Desc">
-        Определите координаты поля для автоматического запроса спутниковой радиации, ветра и влажности почвы по модели FAO-56.
-      </p>
-
-      <!-- GPS button: Massive easy-touch button for farmers -->
-      <button
-        type="button"
-        id="btnGetLocation"
-        class="w-full py-4 px-6 flex items-center justify-center gap-3 text-lg font-bold
-               bg-primary text-white rounded-xl cursor-pointer border-none shadow-btn-primary
-               transition-all duration-fast hover:bg-primary-hover hover:shadow-btn-hover
-               active:bg-primary-active active:scale-[0.98]
-               focus-visible:shadow-ring-primary"
-        onclick="requestGeolocation()"
-        aria-label="Определить GPS координаты поля"
-      >
-        <i data-lucide="map-pin" class="w-6 h-6 flex-shrink-0"></i>
-        <span id="btnLocationText">Определить GPS координаты</span>
-      </button>
-
-      <!-- GPS searching pulse -->
-      <div class="hidden items-center justify-center gap-2 p-3 rounded-inner
-                  bg-info-bg border border-[rgba(30,95,168,0.2)] gps-pulse"
-           id="gpsStatusBlock" role="status" aria-live="polite">
-        <i data-lucide="loader" class="w-4 h-4 text-info gps-spin flex-shrink-0"></i>
-        <span class="text-sm text-info font-medium" id="gpsStatusText">Поиск спутников GPS...</span>
-      </div>
-
-      <!-- Coords card -->
-      <div class="hidden flex-col gap-3 p-4 rounded-xl bg-white/60 backdrop-blur-sm border border-border/80 shadow-sm"
-           id="coordsCard">
-        <div class="flex items-center justify-between pb-2 border-b border-border">
-          <!-- Card title: Medium 500, xs, uppercase — skill label spec -->
-          <span class="text-xs font-medium uppercase tracking-wide text-primary flex items-center gap-1"
-                id="coordsCardTitle">
-            <i data-lucide="check-circle" class="w-3 h-3"></i>
-            Координаты зафиксированы
-          </span>
-          <span class="text-[10px] font-medium px-2 py-0.5 rounded-pill
-                       bg-success-bg text-[#14532D]" id="coordsAccuracy">±8 м</span>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <span class="text-[10px] text-faint block mb-0.5" id="labelLat">Широта (Lat):</span>
-            <span class="text-sm font-semibold text-foreground" id="displayLat">43.238949°</span>
+<body>
+  <header class="app-header">
+    <a class="brand" href="#block1" aria-label="Su-Tech">
+      <span class="brand-logo"><img src="img/logo.jpg" alt="Su-Tech" /></span>
+      <span><strong>Su-Tech<span class="brand-dot">.</span></strong><small id="headerSubtitle">Smart Irrigation</small></span>
+    </a>
+    <nav class="header-nav" aria-label="Навигация"><a href="#block1" data-copy="navMap">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>
+    <div class="language-switch" role="group" aria-label="Выбор языка"><button id="langBtnKz" onclick="setLanguage('kz')">ҚАЗ</button><button id="langBtnRu" onclick="setLanguage('ru')">РУС</button></div>
+  </header>
+  <main class="workspace">
+    <div class="page-intro">
+      <div><p class="eyebrow" data-copy="workspaceLabel">ВАШЕ ПОЛЕ. ВАШИ РЕШЕНИЯ.</p><h1 data-copy="pageHeading">Каждая капля — по делу.</h1><p class="intro-copy" data-copy="pageIntro">Очертите поле. Выберите культуру. Узнайте, сколько воды нужно сегодня.</p></div>
+      <div class="method-note"><span class="method-orbit">↗</span><div><strong>FAO–56</strong><span data-copy="methodNote">Расчет на основе погоды<br>и потребности культуры</span></div></div>
+    </div>
+    <div class="workspace-grid">
+      <div class="map-column">
+        <section id="block1" class="map-panel">
+          <div class="section-heading"><div><p class="eyebrow" data-copy="mapEyebrow">01 / ГРАНИЦЫ УЧАСТКА</p><h2 id="block1Title">Ваше поле на карте</h2></div><span id="block1StatusPill" class="status-pill">Выберите поле</span></div>
+          <p id="block1Desc" class="section-description">Найдите участок и обозначьте его границы.</p>
+          <div class="map-topbar">
+            <div class="basemap-switch"><button id="btnSatellite" aria-pressed="true" onclick="setMapBasemap('satellite')" data-copy="satellite">Спутник</button><button id="btnStreets" aria-pressed="false" onclick="setMapBasemap('streets')" data-copy="streets">Схема</button></div>
+            <button id="btnGetLocation" class="gps-button" onclick="requestGeolocation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z M15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg><span id="btnLocationText">Моя геопозиция</span></button>
           </div>
-          <div>
-            <span class="text-[10px] text-faint block mb-0.5" id="labelLon">Долгота (Lon):</span>
-            <span class="text-sm font-semibold text-foreground" id="displayLon">76.889709°</span>
+          <div class="map-stage"><div id="map" role="region" aria-label="Карта поля" aria-describedby="mapHint"></div>
+            <div class="map-draw-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 5 14-2 3 14-14 4-3-16Z"/></svg><span data-copy="mapDrawLabel">Нажмите, чтобы добавить угол поля</span></div>
+            <div id="mapError" class="map-error hidden" role="status"><strong data-copy="mapErrorTitle">Не удалось загрузить карту</strong><span data-copy="mapErrorBody">Проверьте соединение и повторите загрузку. Площадь можно ввести вручную.</span><button id="btnRetryMap" onclick="retryFieldMap()" data-copy="retryMap">Повторить загрузку</button></div>
           </div>
-        </div>
+          <div class="map-toolbar"><button id="btnUndoPoint" onclick="undoFieldPoint()" disabled>Убрать точку</button><button id="btnResetContour" onclick="resetFieldContour()">Сбросить</button><span class="toolbar-spacer"></span><button id="btnAddCenter" onclick="addMapCenter()">Точка в центре</button><button id="btnUseRadius" aria-pressed="false" onclick="usePointRadius()">По радиусу</button></div>
+          <p id="mapHint" class="map-hint"></p>
+          <div id="radiusControls" class="radius-controls hidden"><label id="radiusLabel" for="fieldRadiusInput">Радиус, м</label><input id="fieldRadiusInput" type="number" min="1" max="10000" step="any" value="100" inputmode="decimal" oninput="updatePointRadius()" /></div>
+          <div class="area-readout" role="status" aria-live="polite"><span class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 5 14-2 3 14-14 4-3-16Z"/></svg></span><div><span id="mapAreaLabel">Площадь участка</span><strong id="mapAreaValue">—</strong><span id="mapAreaStatus"></span></div></div>
+          <div id="gpsStatusBlock" class="gps-status hidden" role="status"><span class="gps-spinner"></span><span id="gpsStatusText"></span></div>
+          <div id="coordsCard" class="coords-card hidden"><span id="coordsCardTitle"></span><span id="coordsAccuracy"></span><div><span id="labelLat">Широта</span> <strong id="displayLat"></strong></div><div><span id="labelLon">Долгота</span> <strong id="displayLon"></strong></div></div>
+        </section>
+        <section class="field-note"><span class="note-index">i</span><div><h3 data-copy="noteTitle">Точность начинается с границ</h3><p data-copy="noteBody">Отмечайте углы по порядку. Минимум три точки — и площадь автоматически появится в расчете. Спутниковая подложка поможет найти границы.</p></div></section>
       </div>
-    </section>
+      <div class="settings-column"><section id="block2" class="flex flex-col gap-4">
 
-    <!-- ══ BLOCK 2: CROP ══════════════════════════════════ -->
-    <section id="block2" class="glass-panel rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-6 flex flex-col gap-4">
-
-      <div class="flex items-center gap-3 pb-3 border-b border-border">
-        <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center
-                     text-xs font-bold flex-shrink-0" aria-hidden="true">2</span>
-        <h2 class="flex-1 text-md font-semibold text-foreground leading-snug" id="block2Title">
+      <div class="flex gap-3">
+        <span class="flex" aria-hidden="true">2</span>
+        <h2 class="" id="block2Title">
           Сельскохозяйственная культура
         </h2>
-        <!-- Mono tag label — skill: Fira Code for data/labels -->
-        <span class="text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D]
-                     font-semibold whitespace-nowrap">Kc</span>
+        <span class="">Kc</span>
       </div>
 
-      <p class="text-sm font-normal text-muted leading-normal" id="block2Desc">
+      <p class="" id="block2Desc">
         Выберите культуру для учёта биологического коэффициента транспирации (K<sub>c</sub>).
       </p>
 
-      <!-- 8 crops — 2 columns strictly adaptive for mobile -->
-      <div class="grid grid-cols-2 gap-3 w-full max-w-full mx-auto" role="radiogroup" aria-label="Выбор культуры">
+      <!-- 9 crops — adaptive for mobile and desktop -->
+      <div class="gap-3" role="radiogroup" aria-label="Выбор культуры">
 
         <!-- 1. Пшеница -->
         <div id="cropCard_wheat"
              data-crop="wheat"
-             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative active:scale-[0.98]"
+             class="crop-card flex flex-col relative"
              onclick="selectCrop('wheat')" role="radio" aria-checked="false" tabindex="0">
-          <div class="text-4xl flex items-center justify-center mx-auto mb-2">🌾</div>
-          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_wheat">Пшеница</span>
-          <span class="text-[10px] text-muted" id="cropSub_wheat">Бидай</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
-          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V4m0 5C6 9 5 6 6 3c4 0 6 2 6 6Zm0 6c6 0 7-3 6-6-4 0-6 2-6 6ZM12 19c-6 0-7-3-6-6 4 0 6 2 6 6Z"/></svg></span>
+          <span class="" id="cropName_wheat">Пшеница</span>
+          <span class="" id="cropSub_wheat">Бидай</span>
+          <span class="">Kc:1.10</span>
+          <span class="crop-check absolute hidden"
                 aria-hidden="true">✓</span>
         </div>
 
-        <!-- 2. Хлопок -->
+        <!-- 2. Хлопок (Selected by default) -->
         <div id="cropCard_cotton"
              data-crop="cotton"
-             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative card-selected active border-emerald-500 ring-2 ring-emerald-500 active:scale-[0.98]"
+             class="crop-card flex flex-col relative card-selected active"
              onclick="selectCrop('cotton')" role="radio" aria-checked="true" tabindex="0">
-          <div class="text-4xl flex items-center justify-center mx-auto mb-2">☁️</div>
-          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_cotton">Хлопок</span>
-          <span class="text-[10px] text-muted" id="cropSub_cotton">Мақта</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.15</span>
-          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white flex items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 15a4 4 0 1 1-1-8 5 5 0 0 1 10 0 4 4 0 1 1-1 8M8 15l4 5 4-5M12 20v-5"/></svg></span>
+          <span class="" id="cropName_cotton">Хлопок</span>
+          <span class="" id="cropSub_cotton">Мақта</span>
+          <span class="">Kc:1.15</span>
+          <span class="crop-check absolute flex"
                 aria-hidden="true">✓</span>
         </div>
 
         <!-- 3. Кукуруза -->
         <div id="cropCard_corn"
              data-crop="corn"
-             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative active:scale-[0.98]"
+             class="crop-card flex flex-col relative"
              onclick="selectCrop('corn')" role="radio" aria-checked="false" tabindex="0">
-          <div class="text-4xl flex items-center justify-center mx-auto mb-2">🌽</div>
-          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_corn">Кукуруза</span>
-          <span class="text-[10px] text-muted" id="cropSub_corn">Жүгері</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.20</span>
-          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16V8a4 4 0 0 1 8 0v8M12 4v14M8 9h8M8 13h8M12 21C5 20 4 15 4 11c5 1 8 4 8 10Zm0 0c7-1 8-6 8-10-5 1-8 4-8 10Z"/></svg></span>
+          <span class="" id="cropName_corn">Кукуруза</span>
+          <span class="" id="cropSub_corn">Жүгері</span>
+          <span class="">Kc:1.20</span>
+          <span class="crop-check absolute hidden"
                 aria-hidden="true">✓</span>
         </div>
 
         <!-- 4. Рис -->
         <div id="cropCard_rice"
              data-crop="rice"
-             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative active:scale-[0.98]"
+             class="crop-card flex flex-col relative"
              onclick="selectCrop('rice')" role="radio" aria-checked="false" tabindex="0">
-          <div class="text-4xl flex items-center justify-center mx-auto mb-2">🍚</div>
-          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_rice">Рис</span>
-          <span class="text-[10px] text-muted" id="cropSub_rice">Күріш</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.25</span>
-          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21 16 3M11 13c-5 0-6-3-5-6 4 0 6 2 5 6Zm2-4c5 1 7-1 7-4-4-1-6 1-7 4Zm-5 9c5 1 7-1 7-4-4-1-6 1-7 4Z"/></svg></span>
+          <span class="" id="cropName_rice">Рис</span>
+          <span class="" id="cropSub_rice">Күріш</span>
+          <span class="">Kc:1.25</span>
+          <span class="crop-check absolute hidden"
                 aria-hidden="true">✓</span>
         </div>
 
         <!-- 5. Люцерна -->
         <div id="cropCard_alfalfa"
              data-crop="alfalfa"
-             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative active:scale-[0.98]"
+             class="crop-card flex flex-col relative"
              onclick="selectCrop('alfalfa')" role="radio" aria-checked="false" tabindex="0">
-          <div class="text-4xl flex items-center justify-center mx-auto mb-2">🌿</div>
-          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_alfalfa">Люцерна</span>
-          <span class="text-[10px] text-muted" id="cropSub_alfalfa">Жоңышқа</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.05</span>
-          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8M12 13C1 15 4 3 10 6c2-6 9-3 7 2 7 2 3 10-5 5Z"/></svg></span>
+          <span class="" id="cropName_alfalfa">Люцерна</span>
+          <span class="" id="cropSub_alfalfa">Жоңышқа</span>
+          <span class="">Kc:1.05</span>
+          <span class="crop-check absolute hidden"
                 aria-hidden="true">✓</span>
         </div>
 
-        <!-- 6. Бахча (Қарбыз/Қауын) -->
+        <!-- 6. Бахча -->
         <div id="cropCard_melon"
              data-crop="melon"
-             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative active:scale-[0.98]"
+             class="crop-card flex flex-col relative"
              onclick="selectCrop('melon')" role="radio" aria-checked="false" tabindex="0">
-          <div class="text-4xl flex items-center justify-center mx-auto mb-2">🍉</div>
-          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_melon">Бахча</span>
-          <span class="text-[10px] text-muted" id="cropSub_melon">Бақша</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.05</span>
-          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10a9 9 0 0 0 18 0H3Zm3 0a6 6 0 0 0 12 0M9 12v1m3 0v1m3-2v1"/></svg></span>
+          <span class="" id="cropName_melon">Бахча</span>
+          <span class="" id="cropSub_melon">Бақша</span>
+          <span class="">Kc:1.05</span>
+          <span class="crop-check absolute hidden"
                 aria-hidden="true">✓</span>
         </div>
 
         <!-- 7. Томаты -->
         <div id="cropCard_tomato"
              data-crop="tomato"
-             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative active:scale-[0.98]"
+             class="crop-card flex flex-col relative"
              onclick="selectCrop('tomato')" role="radio" aria-checked="false" tabindex="0">
-          <div class="text-4xl flex items-center justify-center mx-auto mb-2">🍅</div>
-          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_tomato">Томаты</span>
-          <span class="text-[10px] text-muted" id="cropSub_tomato">Қызанақ</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.15</span>
-          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8c-10-6-13 12 0 12S22 2 12 8Zm0 0V3m0 5 4-3m-4 3L8 5"/></svg></span>
+          <span class="" id="cropName_tomato">Томаты</span>
+          <span class="" id="cropSub_tomato">Қызанақ</span>
+          <span class="">Kc:1.15</span>
+          <span class="crop-check absolute hidden"
                 aria-hidden="true">✓</span>
         </div>
 
         <!-- 8. Картофель -->
         <div id="cropCard_potato"
              data-crop="potato"
-             class="crop-card glass-card-interactive rounded-xl shadow-sm p-4 flex flex-col items-center text-center gap-1
-                    cursor-pointer relative active:scale-[0.98]"
+             class="crop-card flex flex-col relative"
              onclick="selectCrop('potato')" role="radio" aria-checked="false" tabindex="0">
-          <div class="text-4xl flex items-center justify-center mx-auto mb-2">🥔</div>
-          <span class="text-xs font-semibold text-foreground leading-tight" id="cropName_potato">Картофель</span>
-          <span class="text-[10px] text-muted" id="cropSub_potato">Картоп</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-background border border-border text-muted mt-0.5">Kc:1.10</span>
-          <span class="crop-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary text-white hidden items-center justify-center text-[9px] font-bold shadow-btn-primary"
+          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 4c8 3 2 14-5 16C3 23 1 12 7 6c3-3 6-3 10-2Z"/><path d="m8 10 1 1m5-4 1 1m0 7 1 1m-8 0 1 1"/></svg></span>
+          <span class="" id="cropName_potato">Картофель</span>
+          <span class="" id="cropSub_potato">Картоп</span>
+          <span class="">Kc:1.10</span>
+          <span class="crop-check absolute hidden"
+                aria-hidden="true">✓</span>
+        </div>
+
+        <!-- 9. Другая культура (Kc=1.00) -->
+        <div id="cropCard_other"
+             data-crop="other"
+             class="crop-card flex flex-col relative"
+             onclick="selectCrop('other')" role="radio" aria-checked="false" tabindex="0">
+          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V11M12 13C3 14 2 7 3 4c7 0 9 4 9 9Zm0 4c9 1 10-6 9-9-7 0-9 4-9 9Z"/></svg></span>
+          <span class="" id="cropName_other">Другая культура</span>
+          <span class="" id="cropSub_other">Басқа дақыл</span>
+          <span class="">Kc:1.00</span>
+          <span class="crop-check absolute hidden"
                 aria-hidden="true">✓</span>
         </div>
       </div>
     </section>
+<section id="block3" class="flex flex-col gap-4">
 
-    <!-- ══ BLOCK 3: AREA ══════════════════════════════════ -->
-    <section id="block3" class="glass-panel rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-6 flex flex-col gap-4">
-
-      <div class="flex items-center gap-3 pb-3 border-b border-border">
-        <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center
-                     text-xs font-bold flex-shrink-0" aria-hidden="true">3</span>
-        <h2 class="flex-1 text-md font-semibold text-foreground leading-snug" id="block3Title">
+      <div class="flex gap-3">
+        <span class="flex" aria-hidden="true">3</span>
+        <h2 class="" id="block3Title">
           Параметры поля
         </h2>
-        <!-- Section tag: Mono, label spec -->
-        <span class="text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D]
-                     font-semibold whitespace-nowrap" id="currentAreaUnitBadge">гектар</span>
+        <span class="" id="currentAreaUnitBadge">гектар</span>
       </div>
 
       <div class="flex flex-col gap-4">
 
         <!-- Unit toggle -->
         <div class="flex flex-col gap-2">
-          <!-- Form label: Medium 500, xs, uppercase, tracking-wide — skill label spec -->
-          <label class="text-xs font-medium uppercase tracking-wide text-muted" id="labelAreaUnit">
+          <label class="" id="labelAreaUnit">
             Единица измерения:
           </label>
-          <div class="flex gap-1 p-1 bg-background border border-border rounded-[12px]"
+          <div class="flex"
                role="group" aria-label="Единица площади">
             <button type="button" id="unitBtn_sotka"
-                    class="flex-1 h-10 rounded-inner text-sm font-medium cursor-pointer
-                           text-muted bg-transparent border-none
-                           transition-all duration-normal hover:text-foreground"
+                    class=""
                     onclick="setAreaUnit('sotka')" aria-pressed="false">
               <span id="unitText_sotka">Сотки</span>
             </button>
             <button type="button" id="unitBtn_hectare"
-                    class="flex-1 h-10 rounded-inner text-sm font-semibold cursor-pointer
-                           bg-surface text-primary border-none shadow-card
-                           transition-all duration-normal"
+                    class=""
                     onclick="setAreaUnit('hectare')" aria-pressed="true">
               <span id="unitText_hectare">Гектары</span>
             </button>
@@ -491,362 +218,242 @@
 
         <!-- Area input -->
         <div class="flex flex-col gap-2">
-          <label class="text-xs font-medium uppercase tracking-wide text-muted"
+          <label class=""
                  id="labelAreaValue" for="fieldAreaInput">
             Площадь участка:
           </label>
-          <div class="relative flex items-center">
+          <div class="relative flex">
             <input
               type="number"
               id="fieldAreaInput"
-              class="w-full h-11 pl-4 pr-14 bg-surface border-[1.5px] border-border rounded-inner
-                     text-xl font-bold text-foreground outline-none
-                     transition-all duration-fast
-                     hover:border-border-strong
-                     focus:border-primary focus:shadow-ring-primary
-                     placeholder:text-faint"
-              min="0.1" max="50000" step="0.5" value="10" placeholder="10"
+              class=""
+              min="0.000001" max="50000" step="any" value="10" placeholder="10"
               aria-label="Площадь участка"
               oninput="handleAreaChange(this.value)"
             />
-            <!-- Suffix: Medium 500 label -->
-            <span class="absolute right-4 text-sm font-medium text-muted pointer-events-none"
+            <span class="absolute"
                   id="inputUnitSuffix">га</span>
           </div>
         </div>
 
         <!-- Preset chips -->
         <div class="flex flex-col gap-2">
-          <span class="text-xs font-medium uppercase tracking-wide text-muted"
+          <span class=""
                 id="labelQuickPresets">Быстрый выбор:</span>
-          <div class="flex flex-wrap gap-2" role="group" aria-label="Быстрый выбор площади">
+          <div class="flex gap-2" role="group" aria-label="Быстрый выбор площади">
             <button type="button"
-                    class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
-                           text-sm font-medium text-muted cursor-pointer
-                           transition-all duration-fast
-                           hover:bg-success-bg hover:border-primary hover:text-primary
-                           active:scale-95"
+                    class=""
                     onclick="setPresetArea(1)">1</button>
             <button type="button"
-                    class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
-                           text-sm font-medium text-muted cursor-pointer
-                           transition-all duration-fast
-                           hover:bg-success-bg hover:border-primary hover:text-primary
-                           active:scale-95"
+                    class=""
                     onclick="setPresetArea(5)">5</button>
             <button type="button"
-                    class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
-                           text-sm font-medium text-muted cursor-pointer
-                           transition-all duration-fast
-                           hover:bg-success-bg hover:border-primary hover:text-primary
-                           active:scale-95"
+                    class=""
                     onclick="setPresetArea(10)">10</button>
             <button type="button"
-                    class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
-                           text-sm font-medium text-muted cursor-pointer
-                           transition-all duration-fast
-                           hover:bg-success-bg hover:border-primary hover:text-primary
-                           active:scale-95"
+                    class=""
                     onclick="setPresetArea(25)">25</button>
             <button type="button"
-                    class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
-                           text-sm font-medium text-muted cursor-pointer
-                           transition-all duration-fast
-                           hover:bg-success-bg hover:border-primary hover:text-primary
-                           active:scale-95"
+                    class=""
                     onclick="setPresetArea(50)">50</button>
             <button type="button"
-                    class="h-8 px-3 rounded-inner border-[1.5px] border-border bg-surface
-                           text-sm font-medium text-muted cursor-pointer
-                           transition-all duration-fast
-                           hover:bg-success-bg hover:border-primary hover:text-primary
-                           active:scale-95"
+                    class=""
                     onclick="setPresetArea(100)">100</button>
           </div>
         </div>
 
         <!-- Equivalent -->
-        <div class="flex items-center justify-between p-3.5 rounded-xl bg-white/50 backdrop-blur-sm border border-border/70 shadow-sm"
+        <div class="flex"
              aria-live="polite">
-          <span class="text-sm text-muted" id="areaCalcEquivalentLabel">Эквивалент:</span>
-          <span class="text-sm font-bold text-foreground" id="areaInM2">100 000 м² (1 000 соток)</span>
+          <span class="" id="areaCalcEquivalentLabel">Эквивалент:</span>
+          <span class="" id="areaInM2">100 000 м² (1 000 соток)</span>
         </div>
 
         <!-- ══ TWO CRITICAL TOGGLES ══════════════════════════════ -->
 
         <!-- 1. Тип участка (Field Type) -->
-        <div class="flex flex-col gap-2 pt-3 border-t border-border/80">
-          <div class="flex items-center justify-between">
-            <label class="text-xs font-medium uppercase tracking-wide text-muted" id="labelFieldType">
+        <div class="flex flex-col gap-2">
+          <div class="flex">
+            <label class="" id="labelFieldType">
               Тип участка:
             </label>
-            <span class="text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D] font-semibold" id="fieldTypeBadge">
+            <span class="" id="fieldTypeBadge">
               Открытое поле
             </span>
           </div>
-          <div class="flex gap-1 p-1 bg-background border border-border rounded-[12px]"
+          <div class="flex"
                role="group" aria-label="Тип участка">
             <button type="button" id="fieldTypeBtn_open" data-field="open"
-                    class="flex-1 h-10 rounded-inner text-sm font-semibold cursor-pointer
-                           bg-surface text-primary border-none shadow-card
-                           transition-all duration-normal"
+                    class=""
                     onclick="setFieldType('open')" aria-pressed="true">
-              <span id="fieldText_open">☀️ Открытое поле</span>
+              <span id="fieldText_open">Открытое поле</span>
             </button>
             <button type="button" id="fieldTypeBtn_greenhouse" data-field="greenhouse"
-                    class="flex-1 h-10 rounded-inner text-sm font-medium cursor-pointer
-                           text-muted bg-transparent border-none
-                           transition-all duration-normal hover:text-foreground"
+                    class=""
                     onclick="setFieldType('greenhouse')" aria-pressed="false">
-              <span id="fieldText_greenhouse">🏡 Теплица</span>
+              <span id="fieldText_greenhouse">Теплица</span>
             </button>
           </div>
         </div>
 
         <!-- 2. Засоленность почвы (Salinity Leaching) -->
-        <div class="flex flex-col gap-2 pt-2 border-t border-border/80">
-          <div class="flex items-center justify-between">
-            <label class="text-xs font-medium uppercase tracking-wide text-muted" id="labelSalinity">
+        <div class="flex flex-col gap-2">
+          <div class="flex">
+            <label class="" id="labelSalinity">
               Засоленность почвы:
             </label>
-            <span class="text-[10px] px-2 py-0.5 rounded-pill bg-info-bg text-[#1E3A5F] font-semibold" id="salinityBadge">
+            <span class="" id="salinityBadge">
               Обычная почва
             </span>
           </div>
-          <div class="flex gap-1 p-1 bg-background border border-border rounded-[12px]"
+          <div class="flex"
                role="group" aria-label="Засоленность почвы">
             <button type="button" id="salinityBtn_no" data-saline="no"
-                    class="flex-1 h-10 rounded-inner text-sm font-semibold cursor-pointer
-                           bg-surface text-primary border-none shadow-card
-                           transition-all duration-normal"
+                    class=""
                     onclick="setSalinity('no')" aria-pressed="true">
               <span id="salineText_no">Обычная почва</span>
             </button>
             <button type="button" id="salinityBtn_yes" data-saline="yes"
-                    class="flex-1 h-10 rounded-inner text-sm font-medium cursor-pointer
-                           text-muted bg-transparent border-none
-                           transition-all duration-normal hover:text-foreground"
+                    class=""
                     onclick="setSalinity('yes')" aria-pressed="false">
-              <span id="salineText_yes">🧂 Солончак</span>
+              <span id="salineText_yes">Солончак</span>
             </button>
           </div>
         </div>
 
       </div>
     </section>
+<section id="block4" class="flex flex-col gap-4">
 
-    <!-- ══ BLOCK 4: IRRIGATION ════════════════════════════ -->
-    <section id="block4" class="glass-panel rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-6 flex flex-col gap-4">
-
-      <div class="flex items-center gap-3 pb-3 border-b border-border">
-        <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center
-                     text-xs font-bold flex-shrink-0" aria-hidden="true">4</span>
-        <h2 class="flex-1 text-md font-semibold text-foreground leading-snug" id="block4Title">
+      <div class="flex gap-3">
+        <span class="flex" aria-hidden="true">4</span>
+        <h2 class="" id="block4Title">
           Тип оросительной системы
         </h2>
-        <span class="text-[10px] px-2 py-0.5 rounded-pill bg-success-bg text-[#14532D]
-                     font-semibold whitespace-nowrap">КПД (η)</span>
+        <span class="">КПД (η)</span>
       </div>
 
-      <p class="text-sm font-normal text-muted leading-normal" id="block4Desc">
+      <p class="" id="block4Desc">
         Выберите метод полива для корректного расчёта коэффициента эффективности применения воды.
       </p>
 
       <div class="flex flex-col gap-3" role="radiogroup" aria-label="Метод полива">
 
-        <!-- 1. Капельный -->
+        <!-- 1. Капельный (Default Selected) -->
         <div id="irrigCard_drip"
-             class="glass-card-interactive rounded-2xl shadow-sm p-4 cursor-pointer relative
-                    card-selected active active:scale-[0.99]"
+             class="irrig-card relative card-selected active"
              onclick="selectIrrigation('drip')" role="radio" aria-checked="true" tabindex="0">
-          <div class="flex items-start gap-3 pr-8">
-            <div class="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center flex-shrink-0">
-              <i data-lucide="droplets" class="w-6 h-6 text-[#1E5FA8]"></i>
+          <div class="flex gap-3">
+            <div class="flex">
+              <svg data-lucide="droplets" class="irrig-symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3C9 7 5 11 5 15a7 7 0 0 0 14 0c0-4-4-8-7-12Z"/></svg>
             </div>
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-sm font-semibold text-foreground" id="irrigTitle_drip">Капельный полив</span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
-                             bg-success-bg text-[#14532D] whitespace-nowrap" id="irrigBadge_drip">КПД 90%</span>
+            <div class="">
+              <div class="flex gap-2">
+                <span class="" id="irrigTitle_drip">Капельный полив</span>
+                <span class="" id="irrigBadge_drip">КПД 90%</span>
               </div>
-              <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_drip">
+              <p class="" id="irrigDesc_drip">
                 Адресная подача в прикорневую зону. Экономия воды 40–50%.
               </p>
             </div>
           </div>
-          <span class="irrig-check absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center
-                       text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
+          <span class="irrig-check absolute flex" aria-hidden="true">✓</span>
         </div>
 
         <!-- 2. Дождевание -->
         <div id="irrigCard_sprinkler"
-             class="glass-card-interactive rounded-2xl shadow-sm p-4 cursor-pointer relative
-                    active:scale-[0.99]"
+             class="irrig-card relative"
              onclick="selectIrrigation('sprinkler')" role="radio" aria-checked="false" tabindex="0">
-          <div class="flex items-start gap-3 pr-8">
-            <div class="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center flex-shrink-0">
-              <i data-lucide="cloud-rain" class="w-6 h-6 text-[#1E5FA8]"></i>
+          <div class="flex gap-3">
+            <div class="flex">
+              <svg data-lucide="cloud-rain" class="irrig-symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 14a4 4 0 0 1-1-8 6 6 0 0 1 11-1 5 5 0 0 1 2 9M8 17l-1 3m6-3-1 3m6-3-1 3"/></svg>
             </div>
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-sm font-semibold text-foreground" id="irrigTitle_sprinkler">Дождевание</span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
-                             bg-info-bg text-[#1E3A5F] whitespace-nowrap" id="irrigBadge_sprinkler">КПД 75%</span>
+            <div class="">
+              <div class="flex gap-2">
+                <span class="" id="irrigTitle_sprinkler">Дождевание</span>
+                <span class="" id="irrigBadge_sprinkler">КПД 75%</span>
               </div>
-              <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_sprinkler">
+              <p class="" id="irrigDesc_sprinkler">
                 Имитация дождя через форсунки. Равномерное распределение.
               </p>
             </div>
           </div>
-          <span class="irrig-check absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
-                       text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
+          <span class="irrig-check absolute hidden" aria-hidden="true">✓</span>
         </div>
 
         <!-- 3. Фронтальный (Pivot) -->
         <div id="irrigCard_pivot"
-             class="glass-card-interactive rounded-2xl shadow-sm p-4 cursor-pointer relative
-                    active:scale-[0.99]"
+             class="irrig-card relative"
              onclick="selectIrrigation('pivot')" role="radio" aria-checked="false" tabindex="0">
-          <div class="flex items-start gap-3 pr-8">
-            <div class="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center flex-shrink-0">
-              <i data-lucide="rotate-cw" class="w-6 h-6 text-[#1E5FA8]"></i>
+          <div class="flex gap-3">
+            <div class="flex">
+              <svg data-lucide="rotate-cw" class="irrig-symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 10a8 8 0 1 0 0 5M20 3v7h-7"/></svg>
             </div>
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-sm font-semibold text-foreground" id="irrigTitle_pivot">Фронтальный (Pivot)</span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
-                             bg-info-bg text-[#1E3A5F] whitespace-nowrap" id="irrigBadge_pivot">КПД 80%</span>
+            <div class="">
+              <div class="flex gap-2">
+                <span class="" id="irrigTitle_pivot">Фронтальный (Pivot)</span>
+                <span class="" id="irrigBadge_pivot">КПД 80%</span>
               </div>
-              <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_pivot">
+              <p class="" id="irrigDesc_pivot">
                 Круговая дождевальная машина. Оптимален для крупных массивов.
               </p>
             </div>
           </div>
-          <span class="irrig-check absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
-                       text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
+          <span class="irrig-check absolute hidden" aria-hidden="true">✓</span>
         </div>
 
         <!-- 4. Арычный -->
         <div id="irrigCard_furrow"
-             class="glass-card-interactive rounded-2xl shadow-sm p-4 cursor-pointer relative
-                    active:scale-[0.99]"
+             class="irrig-card relative"
              onclick="selectIrrigation('furrow')" role="radio" aria-checked="false" tabindex="0">
-          <div class="flex items-start gap-3 pr-8">
-            <div class="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center flex-shrink-0">
-              <i data-lucide="waves" class="w-6 h-6 text-[#D97706]"></i>
+          <div class="flex gap-3">
+            <div class="flex">
+              <svg data-lucide="waves" class="irrig-symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 6c4-4 6 4 10 0s6 4 10 0M2 12c4-4 6 4 10 0s6 4 10 0M2 18c4-4 6 4 10 0s6 4 10 0"/></svg>
             </div>
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-sm font-semibold text-foreground" id="irrigTitle_furrow">Арычный полив</span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
-                             bg-warning-bg text-[#78350F] whitespace-nowrap" id="irrigBadge_furrow">КПД 50%</span>
+            <div class="">
+              <div class="flex gap-2">
+                <span class="" id="irrigTitle_furrow">Арычный полив</span>
+                <span class="" id="irrigBadge_furrow">КПД 50%</span>
               </div>
-              <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_furrow">
+              <p class="" id="irrigDesc_furrow">
                 Традиционный самотечный полив. Высокие потери на фильтрацию.
               </p>
             </div>
           </div>
-          <span class="irrig-check absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
-                       text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
+          <span class="irrig-check absolute hidden" aria-hidden="true">✓</span>
         </div>
 
         <!-- 5. Подпочвенное -->
         <div id="irrigCard_subsurface"
-             class="glass-card-interactive rounded-2xl shadow-sm p-4 cursor-pointer relative
-                    active:scale-[0.99]"
+             class="irrig-card relative"
              onclick="selectIrrigation('subsurface')" role="radio" aria-checked="false" tabindex="0">
-          <div class="flex items-start gap-3 pr-8">
-            <div class="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center flex-shrink-0">
-              <i data-lucide="layers" class="w-6 h-6 text-[#14532D]"></i>
+          <div class="flex gap-3">
+            <div class="flex">
+              <svg data-lucide="layers" class="irrig-symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8 10-5Zm-10 10 10 5 10-5M2 18l10 5 10-5"/></svg>
             </div>
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-sm font-semibold text-foreground" id="irrigTitle_subsurface">Подпочвенное</span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-pill
-                             bg-success-bg text-[#14532D] whitespace-nowrap" id="irrigBadge_subsurface">КПД 95%</span>
+            <div class="">
+              <div class="flex gap-2">
+                <span class="" id="irrigTitle_subsurface">Подпочвенное</span>
+                <span class="" id="irrigBadge_subsurface">КПД 95%</span>
               </div>
-              <p class="text-xs font-normal text-muted leading-normal" id="irrigDesc_subsurface">
+              <p class="" id="irrigDesc_subsurface">
                 Трубки под поверхностью почвы. Минимальное испарение, максимум эффекта.
               </p>
             </div>
           </div>
-          <span class="irrig-check absolute top-3 right-3 w-5 h-5 rounded-full bg-primary text-white hidden items-center justify-center
-                       text-[10px] font-bold shadow-btn-primary" aria-hidden="true">✓</span>
+          <span class="irrig-check absolute hidden" aria-hidden="true">✓</span>
         </div>
 
       </div>
+    </section></div>
+    </div>
+    <section id="summaryCard" class="summary-card">
+      <div class="summary-heading"><div><p class="eyebrow" data-copy="summaryEyebrow">ГОТОВЫ К СЛЕДУЮЩЕМУ ШАГУ?</p><h2 id="summaryTitle">Ваш расчет полива</h2></div><span id="summaryStatusBadge"></span></div>
+      <dl class="summary-grid"><div><dt id="sumLabelCoords"></dt><dd id="sumValCoords">—</dd></div><div><dt id="sumLabelCrop"></dt><dd id="sumValCrop">—</dd></div><div><dt id="sumLabelArea"></dt><dd id="sumValArea">—</dd></div><div><dt id="sumLabelIrrig"></dt><dd id="sumValIrrig">—</dd></div><div><dt id="sumLabelFieldType"></dt><dd id="sumValFieldType">—</dd></div><div><dt id="sumLabelSaline"></dt><dd id="sumValSaline">—</dd></div></dl>
+      <div class="summary-footer"><p id="submitHint"></p><button id="btnSubmitAll" class="submit-button" onclick="submitFinalCalculation()"><span id="btnSubmitText">Рассчитать полив</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button></div>
     </section>
-
-    <!-- ══ SUMMARY ════════════════════════════════════════ -->
-    <div class="glass-panel rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
-      <div class="flex items-center justify-between pb-3 border-b border-border mb-4">
-        <!-- Summary label: Medium 500, xs, uppercase, tracking-wide — skill label spec -->
-        <span class="text-xs font-medium uppercase tracking-wide text-muted"
-              id="summaryTitle">Сводка параметров</span>
-        <span class="text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-pill
-                     bg-success-bg text-[#14532D]">Готово к расчёту</span>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <span class="text-[10px] text-faint block mb-0.5" id="sumLabelCoords">Локация:</span>
-          <span class="text-xs font-semibold text-accent" id="sumValCoords">Не определены</span>
-        </div>
-        <div>
-          <span class="text-[10px] text-faint block mb-0.5" id="sumLabelCrop">Культура:</span>
-          <span class="text-sm font-semibold text-foreground" id="sumValCrop">Хлопок (Мақта)</span>
-        </div>
-        <div>
-          <span class="text-[10px] text-faint block mb-0.5" id="sumLabelArea">Площадь:</span>
-          <span class="text-sm font-semibold text-foreground" id="sumValArea">10 гектар</span>
-        </div>
-        <div>
-          <span class="text-[10px] text-faint block mb-0.5" id="sumLabelIrrig">Технология:</span>
-          <span class="text-sm font-semibold text-foreground" id="sumValIrrig">Капельный (КПД 90%)</span>
-        </div>
-        <div>
-          <span class="text-[10px] text-faint block mb-0.5" id="sumLabelFieldType">Тип участка:</span>
-          <span class="text-sm font-semibold text-foreground" id="sumValFieldType">Открытый грунт</span>
-        </div>
-        <div>
-          <span class="text-[10px] text-faint block mb-0.5" id="sumLabelSaline">Почва:</span>
-          <span class="text-sm font-semibold text-foreground" id="sumValSaline">Обычная почва</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ SUBMIT ══════════════════════════════════════════ -->
-    <div class="flex flex-col gap-2">
-      <button type="button" id="btnSubmitAll"
-              class="w-full h-[60px] flex items-center justify-center gap-3
-                     text-md font-bold text-white
-                     bg-primary rounded-card border-none cursor-pointer
-                     shadow-submit transition-all duration-fast
-                     hover:bg-primary-hover hover:shadow-submit-hover
-                     active:bg-primary-active active:scale-[0.97]
-                     focus-visible:shadow-ring-primary"
-              onclick="submitFinalCalculation()">
-        <svg class="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14l4 4 5-5"/>
-        </svg>
-        <span id="btnSubmitText">💧 Рассчитать норму полива (FAO-56)</span>
-      </button>
-      <!-- Submit hint: Regular 400, xs — skill body spec -->
-      <p class="text-xs font-normal text-faint text-center leading-normal"
-         id="submitHint">
-        Спутниковый анализ и расчёт по формуле FAO-56 Penman-Monteith
-      </p>
-    </div>
-
+    <footer class="page-footer"><span>Su-Tech · Smart Irrigation</span><span data-copy="footerNote">Вода с заботой о будущем.</span></footer>
   </main>
-
-  <!-- ══ TOAST ══════════════════════════════════════════════ -->
-  <div id="appToast"
-       class="fixed top-4 left-4 right-4 z-50 hidden
-              px-5 py-3 rounded-inner text-sm font-semibold text-center
-              border shadow-card-hover toast-enter"
-       role="alert" aria-live="assertive"></div>
-
-  <script src="js/app.js?v=3.1.0"></script>
+  <div id="appToast" class="toast" role="status" aria-live="polite" style="display:none"></div>
 </body>
 </html>

@@ -1326,7 +1326,33 @@ function addKeyboardCardSupport() {
   });
 }
 
-// ─── 16. DOMContentLoaded — Инициализация ────────────────────────────────
+// ─── 16. Lightweight motion system ─────────────────────────────────────
+// Uses IntersectionObserver instead of a heavy animation dependency so the
+// WebApp stays responsive inside Telegram's mobile WebView.
+function initMotion() {
+  const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const intro = document.querySelector('.page-intro');
+  const cards = document.querySelectorAll('.settings-column > section, .summary-card');
+  intro?.classList.add('motion-intro');
+  cards.forEach(card => card.classList.add('motion-card', 'reveal'));
+  document.body.classList.add('motion-ready');
+
+  if (reduced || !('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries, currentObserver) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      currentObserver.unobserve(entry.target);
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+// ─── 17. DOMContentLoaded — Инициализация ────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   connectTelegram();
   isSubmitting = false;
@@ -1346,6 +1372,7 @@ document.addEventListener('DOMContentLoaded', () => {
   selectCrop(state.crop);
   selectIrrigation(state.irrigation_type);
   setAreaUnit(state.area_unit);
+  initMotion();
 
   if (window.lucide) {
     lucide.createIcons();

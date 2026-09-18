@@ -6,17 +6,17 @@
   <title>Su-Tech — Smart Irrigation</title>
   <meta id="pageDesc" name="description" content="Карта поля и точный расчет полива Su-Tech" />
   <meta name="theme-color" content="#182D3B" />
-  <link rel="icon" href="img/logo.jpg" />
+  <link rel="icon" href="img/logo-mark.png" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=4.0.1" />
+  <link rel="stylesheet" href="css/app.css?v=4.0.2" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
-  <script defer src="js/app.js?v=4.0.1"></script>
+  <script defer src="js/app.js?v=4.0.2"></script>
 </head>
 <body>
   <header class="app-header">
     <a class="brand" href="#block1" aria-label="Su-Tech">
-      <span class="brand-logo"><img src="img/logo.jpg" alt="Su-Tech" /></span>
+      <span class="brand-logo"><img src="img/logo-mark.png" alt="Su-Tech" /></span>
       <span><strong>Su-Tech<span class="brand-dot">.</span></strong><small id="headerSubtitle">Smart Irrigation</small></span>
     </a>
     <nav class="header-nav" aria-label="Навигация"><a href="#block1" data-copy="navMap">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>
@@ -28,16 +28,16 @@
         <section id="block1" class="map-panel">
           <div class="section-heading"><div><h2 id="block1Title">Ваше поле на карте</h2></div><span id="block1StatusPill" class="status-pill">Выберите поле</span></div>
           <div class="map-topbar">
-            <div class="basemap-switch"><button id="btnSatellite" aria-pressed="true" onclick="setMapBasemap('satellite')" data-copy="satellite">Спутник</button><button id="btnStreets" aria-pressed="false" onclick="setMapBasemap('streets')" data-copy="streets">Схема</button></div>
+            <div class="basemap-switch"><button id="btnSatellite" aria-pressed="false" onclick="setMapBasemap('satellite')" data-copy="satellite">Спутник</button><button id="btnStreets" aria-pressed="true" onclick="setMapBasemap('streets')" data-copy="streets">Схема</button></div>
             <button id="btnGetLocation" class="gps-button" onclick="requestGeolocation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z M15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg><span id="btnLocationText">Моя геопозиция</span></button>
           </div>
           <div class="map-stage"><div id="map" role="region" aria-label="Карта поля" aria-describedby="mapHint"></div>
             <div id="mapError" class="map-error hidden" role="status"><strong data-copy="mapErrorTitle">Не удалось загрузить карту</strong><span data-copy="mapErrorBody">Проверьте соединение и повторите загрузку. Площадь можно ввести вручную.</span><button id="btnRetryMap" onclick="retryFieldMap()" data-copy="retryMap">Повторить загрузку</button></div>
           </div>
-          <div class="map-toolbar"><button id="btnUndoPoint" onclick="undoFieldPoint()" disabled>Убрать точку</button><button id="btnResetContour" onclick="resetFieldContour()">Сбросить контур</button></div>
+          <div class="map-toolbar"><button id="btnUndoPoint" onclick="undoFieldPoint()" disabled>Убрать точку</button></div>
           <p id="mapHint" class="map-hint sr-only"></p>
-          <div class="legacy-map-controls" aria-hidden="true"><button id="btnAddCenter" onclick="addMapCenter()" tabindex="-1">Точка в центре</button><button id="btnUseRadius" aria-pressed="false" onclick="usePointRadius()" tabindex="-1">По радиусу</button><div id="radiusControls" class="radius-controls hidden"><label id="radiusLabel" for="fieldRadiusInput">Радиус, м</label><input id="fieldRadiusInput" type="number" min="1" max="10000" step="any" value="100" inputmode="decimal" oninput="updatePointRadius()" /></div></div>
-          <div class="area-readout" role="status" aria-live="polite"><span class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 5 14-2 3 14-14 4-3-16Z"/></svg></span><div><span id="mapAreaLabel">Площадь участка</span><strong id="mapAreaValue">—</strong><span id="mapAreaStatus"></span></div></div>
+          <div class="legacy-map-controls" aria-hidden="true"><button id="btnAddCenter" onclick="addMapCenter()" tabindex="-1">Точка в центре</button><button id="btnUseRadius" aria-pressed="false" onclick="usePointRadius()" tabindex="-1">По радиусу</button><button id="btnResetContour" onclick="resetFieldContour()" tabindex="-1">Сбросить контур</button><div id="radiusControls" class="radius-controls hidden"><label id="radiusLabel" for="fieldRadiusInput">Радиус, м</label><input id="fieldRadiusInput" type="number" min="1" max="10000" step="any" value="100" inputmode="decimal" oninput="updatePointRadius()" /></div></div>
+          <div class="area-readout hidden" role="status" aria-live="polite" aria-hidden="true"><span class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 5 14-2 3 14-14 4-3-16Z"/></svg></span><div><span id="mapAreaLabel">Площадь участка</span><strong id="mapAreaValue">—</strong><span id="mapAreaStatus"></span></div></div>
           <div id="gpsStatusBlock" class="gps-status hidden" role="status"><span class="gps-spinner"></span><span id="gpsStatusText"></span></div>
           <div id="coordsCard" class="coords-card hidden"><span id="coordsCardTitle"></span><span id="coordsAccuracy"></span><div><span id="labelLat">Широта</span> <strong id="displayLat"></strong></div><div><span id="labelLon">Долгота</span> <strong id="displayLon"></strong></div></div>
         </section>
@@ -64,7 +64,7 @@
              data-crop="wheat"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('wheat')" role="radio" aria-checked="false" tabindex="0">
-          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V4m0 5C6 9 5 6 6 3c4 0 6 2 6 6Zm0 6c6 0 7-3 6-6-4 0-6 2-6 6ZM12 19c-6 0-7-3-6-6 4 0 6 2 6 6Z"/></svg></span>
+          <span class="crop-symbol" aria-hidden="true">🌾</span>
           <span class="" id="cropName_wheat">Пшеница</span>
           <span class="" id="cropSub_wheat">Бидай</span>
           <span class="">Kc:1.10</span>
@@ -77,7 +77,7 @@
              data-crop="cotton"
              class="crop-card flex flex-col relative card-selected active"
              onclick="selectCrop('cotton')" role="radio" aria-checked="true" tabindex="0">
-          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 15a4 4 0 1 1-1-8 5 5 0 0 1 10 0 4 4 0 1 1-1 8M8 15l4 5 4-5M12 20v-5"/></svg></span>
+          <span class="crop-symbol" aria-hidden="true">☁️</span>
           <span class="" id="cropName_cotton">Хлопок</span>
           <span class="" id="cropSub_cotton">Мақта</span>
           <span class="">Kc:1.15</span>
@@ -90,7 +90,7 @@
              data-crop="corn"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('corn')" role="radio" aria-checked="false" tabindex="0">
-          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16V8a4 4 0 0 1 8 0v8M12 4v14M8 9h8M8 13h8M12 21C5 20 4 15 4 11c5 1 8 4 8 10Zm0 0c7-1 8-6 8-10-5 1-8 4-8 10Z"/></svg></span>
+          <span class="crop-symbol" aria-hidden="true">🌽</span>
           <span class="" id="cropName_corn">Кукуруза</span>
           <span class="" id="cropSub_corn">Жүгері</span>
           <span class="">Kc:1.20</span>
@@ -103,7 +103,7 @@
              data-crop="rice"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('rice')" role="radio" aria-checked="false" tabindex="0">
-          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21 16 3M11 13c-5 0-6-3-5-6 4 0 6 2 5 6Zm2-4c5 1 7-1 7-4-4-1-6 1-7 4Zm-5 9c5 1 7-1 7-4-4-1-6 1-7 4Z"/></svg></span>
+          <span class="crop-symbol" aria-hidden="true">🍚</span>
           <span class="" id="cropName_rice">Рис</span>
           <span class="" id="cropSub_rice">Күріш</span>
           <span class="">Kc:1.25</span>
@@ -116,7 +116,7 @@
              data-crop="alfalfa"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('alfalfa')" role="radio" aria-checked="false" tabindex="0">
-          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8M12 13C1 15 4 3 10 6c2-6 9-3 7 2 7 2 3 10-5 5Z"/></svg></span>
+          <span class="crop-symbol" aria-hidden="true">🌿</span>
           <span class="" id="cropName_alfalfa">Люцерна</span>
           <span class="" id="cropSub_alfalfa">Жоңышқа</span>
           <span class="">Kc:1.05</span>
@@ -129,7 +129,7 @@
              data-crop="melon"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('melon')" role="radio" aria-checked="false" tabindex="0">
-          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10a9 9 0 0 0 18 0H3Zm3 0a6 6 0 0 0 12 0M9 12v1m3 0v1m3-2v1"/></svg></span>
+          <span class="crop-symbol" aria-hidden="true">🍉</span>
           <span class="" id="cropName_melon">Бахча</span>
           <span class="" id="cropSub_melon">Бақша</span>
           <span class="">Kc:1.05</span>
@@ -142,7 +142,7 @@
              data-crop="tomato"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('tomato')" role="radio" aria-checked="false" tabindex="0">
-          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8c-10-6-13 12 0 12S22 2 12 8Zm0 0V3m0 5 4-3m-4 3L8 5"/></svg></span>
+          <span class="crop-symbol" aria-hidden="true">🍅</span>
           <span class="" id="cropName_tomato">Томаты</span>
           <span class="" id="cropSub_tomato">Қызанақ</span>
           <span class="">Kc:1.15</span>
@@ -155,7 +155,7 @@
              data-crop="potato"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('potato')" role="radio" aria-checked="false" tabindex="0">
-          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 4c8 3 2 14-5 16C3 23 1 12 7 6c3-3 6-3 10-2Z"/><path d="m8 10 1 1m5-4 1 1m0 7 1 1m-8 0 1 1"/></svg></span>
+          <span class="crop-symbol" aria-hidden="true">🥔</span>
           <span class="" id="cropName_potato">Картофель</span>
           <span class="" id="cropSub_potato">Картоп</span>
           <span class="">Kc:1.10</span>
@@ -168,7 +168,7 @@
              data-crop="other"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('other')" role="radio" aria-checked="false" tabindex="0">
-          <span class="crop-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V11M12 13C3 14 2 7 3 4c7 0 9 4 9 9Zm0 4c9 1 10-6 9-9-7 0-9 4-9 9Z"/></svg></span>
+          <span class="crop-symbol" aria-hidden="true">🌱</span>
           <span class="" id="cropName_other">Другая культура</span>
           <span class="" id="cropSub_other">Басқа дақыл</span>
           <span class="">Kc:1.00</span>

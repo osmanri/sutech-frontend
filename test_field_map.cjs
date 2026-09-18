@@ -57,6 +57,7 @@ const northRatio = run('calculatePolygonArea(square.map(p => ({lat:p.lat + 60,ln
 assert.ok(northRatio > 0.50 && northRatio < 0.51);
 
 run('initFieldMap()');
+assert.match(tileRequests[0].url, /World_Street_Map/, 'The default basemap must be the street map');
 // A blocked tile provider must not leave the user with a permanently grey map.
 tileRequests[0].tile.handlers.tileerror();
 assert.ok(tileRequests.length > 1, 'Grey map: failed tile provider has no automatic fallback');

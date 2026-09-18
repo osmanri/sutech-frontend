@@ -48,7 +48,7 @@ let fieldMode = 'manual';
 let mappedAreaM2 = 0;
 let radiusCenter = null;
 let mapTilesFailed = false;
-let mapBasemap = 'satellite';
+let mapBasemap = 'streets';
 let activeTileLayer = null;
 let tileWatchdog = null;
 let tileAttempt = 0;
@@ -244,15 +244,15 @@ const I18N = {
     block2Title:  'Ауыл шаруашылығы дақылы',
     block2Desc:   'Биологиялық транспирация коэффициентін (Kc) ескеру үшін дақылды таңдаңыз.',
     crops: {
-      wheat:     { name: 'Бидай',           sub: '' },
-      cotton:    { name: 'Мақта',           sub: '' },
-      corn:      { name: 'Жүгері',          sub: '' },
-      rice:      { name: 'Күріш',           sub: '' },
-      alfalfa:   { name: 'Жоңышқа',         sub: '' },
-      melon:     { name: 'Бақша',           sub: '' },
-      tomato:    { name: 'Қызанақ',         sub: '' },
-      potato:    { name: 'Картоп',          sub: '' },
-      other:     { name: 'Басқа дақыл',     sub: '' },
+      wheat:     { name: 'Бидай',           sub: 'Пшеница' },
+      cotton:    { name: 'Мақта',           sub: 'Хлопок' },
+      corn:      { name: 'Жүгері',          sub: 'Кукуруза' },
+      rice:      { name: 'Күріш',           sub: 'Рис' },
+      alfalfa:   { name: 'Жоңышқа',         sub: 'Люцерна' },
+      melon:     { name: 'Бақша',           sub: 'Бахча' },
+      tomato:    { name: 'Қызанақ',         sub: 'Томаты' },
+      potato:    { name: 'Картоп',          sub: 'Картофель' },
+      other:     { name: 'Басқа дақыл',     sub: 'Другая культура' },
     },
 
     block3Title:             'Алқап параметрлері',
@@ -660,11 +660,14 @@ function loadMapTiles(attempt = 0) {
     url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     attribution: 'Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, GIS User Community',
   };
+  // Use Esri's hosted street layer for the default schematic map. The public
+  // OSM tile endpoint can return a policy 403 in Telegram WebViews, leaving a
+  // grey "Access blocked" tile in place, so it is intentionally not used.
   const streets = {
-    url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Tiles &copy; Esri — Source: Esri, HERE, Garmin, FAO, NOAA, USGS',
   };
-  const sources = mapBasemap === 'satellite' ? [imagery, streets] : [streets, imagery];
+  const sources = mapBasemap === 'streets' ? [streets, imagery] : [imagery, streets];
   if (attempt >= sources.length) {
     mapTilesFailed = true;
     updateMapUI();

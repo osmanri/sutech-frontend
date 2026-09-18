@@ -843,8 +843,10 @@ function updateMapUI() {
   document.getElementById('btnUndoPoint').disabled = !hasCurrentLocation;
   document.getElementById('btnUseRadius').setAttribute('aria-pressed', String(fieldMode === 'radius'));
   document.getElementById('radiusControls').classList.toggle('hidden', fieldMode !== 'radius');
-  document.getElementById('fieldAreaInput').readOnly = fieldMode !== 'manual';
-  document.querySelectorAll('[onclick^="setPresetArea"]').forEach(btn => { btn.disabled = fieldMode !== 'manual'; });
+  // The mapped value is a convenient default, not a lock. Typing or choosing
+  // a preset switches the user back to manual area entry and clears the contour.
+  document.getElementById('fieldAreaInput').readOnly = false;
+  document.querySelectorAll('[onclick^="setPresetArea"]').forEach(btn => { btn.disabled = false; });
   const fmt = value => value.toLocaleString(state.lang === 'kz' ? 'kk-KZ' : 'ru-RU', { maximumFractionDigits: 4 });
   document.getElementById('mapAreaValue').textContent = mappedAreaM2 > 0
     ? `${fmt(mappedAreaM2 / 10000)} ${t.unitSuffix_hectare} · ${fmt(mappedAreaM2 / 100)} ${t.unitSuffix_sotka}` : '—';
@@ -943,8 +945,18 @@ function updateAreaUnitUI() {
   recalculateAreaEquivalent();
 }
 
+function activateManualAreaInput() {
+  if (fieldMode === 'manual') return;
+  fieldMode = 'manual';
+  fieldPoints = [];
+  radiusCenter = null;
+  mappedAreaM2 = 0;
+  fieldLayers?.clearLayers();
+  updateMapUI();
+}
+
 function handleAreaChange(val) {
-  if (fieldMode !== 'manual') return;
+  activateManualAreaInput();
   const num = parseFloat(val);
   currentArea = (!isNaN(num) && num > 0) ? num : 0;
   window.currentArea = currentArea;
@@ -954,7 +966,7 @@ function handleAreaChange(val) {
 }
 
 function setPresetArea(val) {
-  if (fieldMode !== 'manual') return;
+  activateManualAreaInput();
   currentArea = val;
   window.currentArea = currentArea;
   state.area = val;

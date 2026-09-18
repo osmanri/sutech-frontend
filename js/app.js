@@ -114,7 +114,7 @@ const I18N = {
     mapHint: 'Нажмите на карту: минимум 3 точки. С клавиатуры: стрелки для сдвига, кнопка «Добавить центр карты» для точки.',
     btnResetContour: '🔄 Сбросить контур',
     btnUseRadius: 'Использовать радиус точки',
-    btnUndoPoint: 'Убрать последнюю точку',
+    btnUndoPoint: 'Убрать геопозицию',
     btnAddCenter: 'Добавить центр карты',
     radiusLabel: 'Радиус, м',
     mapAreaLabel: 'Площадь по карте · приблизительно',
@@ -221,7 +221,7 @@ const I18N = {
     mapHint: 'Картада кемінде 3 нүкте белгілеңіз. Пернетақта: жылжыту үшін бағыттауыштар, нүкте үшін «Карта ортасын қосу».',
     btnResetContour: '🔄 Контурды тазарту',
     btnUseRadius: 'Нүкте радиусын пайдалану',
-    btnUndoPoint: 'Соңғы нүктені жою',
+    btnUndoPoint: 'Геопозицияны жою',
     btnAddCenter: 'Карта ортасын қосу',
     radiusLabel: 'Радиус, м',
     mapAreaLabel: 'Карта бойынша аудан · шамамен',
@@ -343,7 +343,7 @@ const UI_COPY = {
 Object.assign(I18N.ru, {
   block1Title: 'Ваше поле на карте', block1Desc: 'Найдите участок и обозначьте его границы.',
   block1StatusWait: 'Выберите поле', block1StatusReady: 'Участок выбран',
-  btnLocationText: 'Моя геопозиция', btnResetContour: 'Сбросить контур', btnUndoPoint: 'Убрать точку', btnAddCenter: 'Точка в центре', btnUseRadius: 'По радиусу', mapAreaLabel: 'Площадь',
+  btnLocationText: 'Моя геопозиция', btnResetContour: 'Сбросить контур', btnUndoPoint: 'Убрать геопозицию', btnAddCenter: 'Точка в центре', btnUseRadius: 'По радиусу', mapAreaLabel: 'Площадь',
   mapHint: 'Минимум 3 точки по границе.',
   mapAreaLabel: 'Площадь', mapReady: 'Добавлено в расчет. Для ручного ввода сбросьте контур.',
   mapRadiusHint: 'Нажмите на карту, чтобы переместить круг. Измените радиус ниже.',
@@ -357,7 +357,7 @@ Object.assign(I18N.ru, {
 Object.assign(I18N.kz, {
   block1Title: 'Картадағы алқабыңыз', block1Desc: 'Алқапты тауып, шекарасын белгілеңіз.',
   block1StatusWait: 'Алқапты таңдаңыз', block1StatusReady: 'Алқап таңдалды',
-  btnLocationText: 'Менің орным', btnResetContour: 'Контурды тазарту', btnUndoPoint: 'Нүктені жою', btnAddCenter: 'Ортадағы нүкте', btnUseRadius: 'Радиус бойынша', mapAreaLabel: 'Аудан',
+  btnLocationText: 'Менің орным', btnResetContour: 'Контурды тазарту', btnUndoPoint: 'Геопозицияны жою', btnAddCenter: 'Ортадағы нүкте', btnUseRadius: 'Радиус бойынша', mapAreaLabel: 'Аудан',
   mapHint: 'Шекарада кемінде 3 нүкте.',
   mapAreaLabel: 'Аудан', mapReady: 'Есепке енгізілді. Қолмен енгізу үшін контурды тазалаңыз.',
   mapRadiusHint: 'Шеңберді жылжыту үшін картаны басыңыз. Радиусты төменде өзгертіңіз.',
@@ -552,6 +552,7 @@ function requestGeolocation() {
       renderCoordinates();
       updateBlock1StatusPill();
       updateSummaryCard();
+      updateMapUI();
       showToast(t.gpsSuccessToast, 'success');
       triggerHaptic('success');
     },
@@ -765,6 +766,33 @@ function undoFieldPoint() {
   else renderFieldContour();
 }
 
+// Remove the current GPS location marker without touching a drawn field.
+// When the map has no contour, also clear the coordinates used by the report.
+function clearCurrentLocation() {
+  if (gpsMarker && fieldMap) {
+    fieldMap.removeLayer(gpsMarker);
+    gpsMarker = null;
+  }
+
+  if (fieldPoints.length) {
+    selectFieldLocation(fieldPoints[0]);
+  } else if (fieldMode === 'radius' && radiusCenter) {
+    selectFieldLocation(radiusCenter);
+  } else {
+    state.latitude = null;
+    state.longitude = null;
+    state.accuracy = null;
+    const card = document.getElementById('coordsCard');
+    card?.classList.add('hidden');
+    card?.classList.remove('flex');
+  }
+
+  updateBlock1StatusPill();
+  updateSummaryCard();
+  updateMapUI();
+  triggerHaptic('light');
+}
+
 function resetFieldContour() {
   fieldPoints = [];
   fieldMode = 'manual';
@@ -811,7 +839,8 @@ function updateMapUI() {
   document.getElementById('mapHint').textContent = !window.L ? t.mapUnavailable : mapTilesFailed ? t.mapTilesUnavailable : fieldMode === 'radius' ? t.mapRadiusHint : t.mapHint;
   document.getElementById('btnUseRadius').disabled = !window.L;
   document.getElementById('btnAddCenter').disabled = !window.L;
-  document.getElementById('btnUndoPoint').disabled = !fieldPoints.length;
+  const hasCurrentLocation = !!gpsMarker || (fieldMode === 'manual' && state.latitude !== null && state.longitude !== null);
+  document.getElementById('btnUndoPoint').disabled = !hasCurrentLocation;
   document.getElementById('btnUseRadius').setAttribute('aria-pressed', String(fieldMode === 'radius'));
   document.getElementById('radiusControls').classList.toggle('hidden', fieldMode !== 'radius');
   document.getElementById('fieldAreaInput').readOnly = fieldMode !== 'manual';

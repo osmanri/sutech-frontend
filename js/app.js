@@ -343,9 +343,9 @@ const UI_COPY = {
 Object.assign(I18N.ru, {
   block1Title: 'Ваше поле на карте', block1Desc: 'Найдите участок и обозначьте его границы.',
   block1StatusWait: 'Выберите поле', block1StatusReady: 'Участок выбран',
-  btnLocationText: 'Моя геопозиция', btnResetContour: 'Сбросить контур', btnUndoPoint: 'Убрать точку', btnAddCenter: 'Точка в центре', btnUseRadius: 'По радиусу',
-  mapHint: 'Минимум 3 точки по границе. Клавиатура: стрелки и кнопка «Точка в центре».',
-  mapAreaLabel: 'Площадь по карте · ориентировочно', mapReady: 'Добавлено в расчет. Для ручного ввода сбросьте контур.',
+  btnLocationText: 'Моя геопозиция', btnResetContour: 'Сбросить контур', btnUndoPoint: 'Убрать точку', btnAddCenter: 'Точка в центре', btnUseRadius: 'По радиусу', mapAreaLabel: 'Площадь',
+  mapHint: 'Минимум 3 точки по границе.',
+  mapAreaLabel: 'Площадь', mapReady: 'Добавлено в расчет. Для ручного ввода сбросьте контур.',
   mapRadiusHint: 'Нажмите на карту, чтобы переместить круг. Измените радиус ниже.',
   block2Title: 'Что выращиваете?', block2Desc: 'Каждой культуре — своя норма воды.',
   block3Title: 'Условия на участке', block4Title: 'Как поливаете?', block4Desc: 'Учтем эффективность вашей системы.',
@@ -357,9 +357,9 @@ Object.assign(I18N.ru, {
 Object.assign(I18N.kz, {
   block1Title: 'Картадағы алқабыңыз', block1Desc: 'Алқапты тауып, шекарасын белгілеңіз.',
   block1StatusWait: 'Алқапты таңдаңыз', block1StatusReady: 'Алқап таңдалды',
-  btnLocationText: 'Менің орным', btnResetContour: 'Контурды тазарту', btnUndoPoint: 'Нүктені жою', btnAddCenter: 'Ортадағы нүкте', btnUseRadius: 'Радиус бойынша',
-  mapHint: 'Шекарада кемінде 3 нүкте. Пернетақта: бағыттауыштар және «Ортадағы нүкте».',
-  mapAreaLabel: 'Картадағы аудан · шамамен', mapReady: 'Есепке енгізілді. Қолмен енгізу үшін контурды тазалаңыз.',
+  btnLocationText: 'Менің орным', btnResetContour: 'Контурды тазарту', btnUndoPoint: 'Нүктені жою', btnAddCenter: 'Ортадағы нүкте', btnUseRadius: 'Радиус бойынша', mapAreaLabel: 'Аудан',
+  mapHint: 'Шекарада кемінде 3 нүкте.',
+  mapAreaLabel: 'Аудан', mapReady: 'Есепке енгізілді. Қолмен енгізу үшін контурды тазалаңыз.',
   mapRadiusHint: 'Шеңберді жылжыту үшін картаны басыңыз. Радиусты төменде өзгертіңіз.',
   block2Title: 'Не өсіресіз?', block2Desc: 'Әр дақылға — өз су мөлшері.',
   block3Title: 'Алқап жағдайы', block4Title: 'Қалай суарасыз?', block4Desc: 'Жүйеңіздің тиімділігін ескереміз.',
@@ -405,7 +405,8 @@ function applyLanguage(lang) {
 
   // Block 1 — GPS
   document.getElementById('block1Title').textContent = t.block1Title;
-  document.getElementById('block1Desc').textContent  = t.block1Desc;
+  const block1Desc = document.getElementById('block1Desc');
+  if (block1Desc) block1Desc.textContent = t.block1Desc;
   document.getElementById('btnLocationText').textContent =
     state.isRequestingGps ? t.btnLocationLoading : t.btnLocationText;
   document.getElementById('coordsCardTitle').textContent = t.coordsCardTitle;
@@ -815,9 +816,10 @@ function updateMapUI() {
   const fmt = value => value.toLocaleString(state.lang === 'kz' ? 'kk-KZ' : 'ru-RU', { maximumFractionDigits: 4 });
   document.getElementById('mapAreaValue').textContent = mappedAreaM2 > 0
     ? `${fmt(mappedAreaM2 / 10000)} ${t.unitSuffix_hectare} · ${fmt(mappedAreaM2 / 100)} ${t.unitSuffix_sotka}` : '—';
-  document.getElementById('mapAreaStatus').textContent = fieldMode === 'manual' ? t.mapManual
-    : currentArea >= 50000 ? t.errInvalidArea : mappedAreaM2 > 0 ? t.mapReady : fieldMode === 'radius' ? t.mapRadiusInvalid
+  const mapStatus = fieldMode === 'manual' || mappedAreaM2 > 0 ? ''
+    : currentArea >= 50000 ? t.errInvalidArea : fieldMode === 'radius' ? t.mapRadiusInvalid
       : fieldPoints.length < 3 ? t.mapIncomplete : t.mapInvalid;
+  document.getElementById('mapAreaStatus').textContent = mapStatus;
 }
 
 // ─── 8. Выбор культуры (Блок 2 — 9 культур) ──────────────────────────────

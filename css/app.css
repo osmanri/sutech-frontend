@@ -25,4 +25,20 @@
   .summary-card{margin-top:14px;padding:20px 16px;border-radius:15px}.summary-heading{align-items:flex-start;flex-direction:column;gap:10px}.summary-card h2{font-size:20px}.summary-grid{grid-template-columns:1fr 1fr;gap:16px 10px;margin:18px 0}.summary-grid dt{font-size:9px}.summary-grid dd{font-size:11px}.summary-footer{flex-direction:column;align-items:stretch;gap:14px}.summary-footer p{font-size:10px;line-height:1.5}.submit-button{width:100%;justify-content:space-between;min-height:52px;padding:13px 16px;font-size:13px;position:sticky;bottom:10px;z-index:20;box-shadow:0 8px 22px #182d3b38}.page-footer{font-size:9px;padding:18px 2px;gap:10px}.page-footer span:last-child{max-width:145px;text-align:right}
 }
 @media(max-width:360px){.workspace{padding-left:9px;padding-right:9px}.page-intro h1{font-size:24px}.map-topbar{padding-left:9px;padding-right:9px}.gps-button{font-size:10px;padding-left:8px;padding-right:8px}.basemap-switch button{padding-left:9px;padding-right:9px}.settings-column .crop-card{min-height:91px}.crop-card>[id^=cropName]{font-size:10px}.summary-grid dd{font-size:10px}}
+
+/* The Telegram WebApp keeps the map focused on the two actions that matter. */
+.legacy-map-controls,.map-draw-label,.field-note{display:none!important}
+.map-hint{display:none!important}
+.map-toolbar{border-top:1px solid var(--line)}
+.map-toolbar button{flex:1;min-width:0}
+.area-readout #mapAreaStatus:empty{display:none}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+
+@media(max-width:760px){
+  .map-toolbar{grid-template-columns:1fr 1fr;gap:7px;padding:8px 10px}
+  .map-toolbar button{min-height:40px;font-size:11px}
+  .area-readout{margin:0 12px 14px;padding:13px 14px}
+  .area-readout strong{font-size:19px}
+  .section-heading{padding-top:18px}
+}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}

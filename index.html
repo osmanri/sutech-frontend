@@ -8,10 +8,10 @@
   <meta name="theme-color" content="#182D3B" />
   <link rel="icon" href="img/logo.jpg" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=4.0.0" />
+  <link rel="stylesheet" href="css/app.css?v=4.0.1" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
-  <script defer src="js/app.js?v=4.0.0"></script>
+  <script defer src="js/app.js?v=4.0.1"></script>
 </head>
 <body>
   <header class="app-header">
@@ -23,31 +23,24 @@
     <div class="language-switch" role="group" aria-label="Выбор языка"><button id="langBtnKz" onclick="setLanguage('kz')">ҚАЗ</button><button id="langBtnRu" onclick="setLanguage('ru')">РУС</button></div>
   </header>
   <main class="workspace">
-    <div class="page-intro">
-      <div><p class="eyebrow" data-copy="workspaceLabel">ВАШЕ ПОЛЕ. ВАШИ РЕШЕНИЯ.</p><h1 data-copy="pageHeading">Каждая капля — по делу.</h1><p class="intro-copy" data-copy="pageIntro">Очертите поле. Выберите культуру. Узнайте, сколько воды нужно сегодня.</p></div>
-      <div class="method-note"><span class="method-orbit">↗</span><div><strong>FAO–56</strong><span data-copy="methodNote">Расчет на основе погоды<br>и потребности культуры</span></div></div>
-    </div>
     <div class="workspace-grid">
       <div class="map-column">
         <section id="block1" class="map-panel">
-          <div class="section-heading"><div><p class="eyebrow" data-copy="mapEyebrow">01 / ГРАНИЦЫ УЧАСТКА</p><h2 id="block1Title">Ваше поле на карте</h2></div><span id="block1StatusPill" class="status-pill">Выберите поле</span></div>
-          <p id="block1Desc" class="section-description">Найдите участок и обозначьте его границы.</p>
+          <div class="section-heading"><div><h2 id="block1Title">Ваше поле на карте</h2></div><span id="block1StatusPill" class="status-pill">Выберите поле</span></div>
           <div class="map-topbar">
             <div class="basemap-switch"><button id="btnSatellite" aria-pressed="true" onclick="setMapBasemap('satellite')" data-copy="satellite">Спутник</button><button id="btnStreets" aria-pressed="false" onclick="setMapBasemap('streets')" data-copy="streets">Схема</button></div>
             <button id="btnGetLocation" class="gps-button" onclick="requestGeolocation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z M15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg><span id="btnLocationText">Моя геопозиция</span></button>
           </div>
           <div class="map-stage"><div id="map" role="region" aria-label="Карта поля" aria-describedby="mapHint"></div>
-            <div class="map-draw-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 5 14-2 3 14-14 4-3-16Z"/></svg><span data-copy="mapDrawLabel">Нажмите, чтобы добавить угол поля</span></div>
             <div id="mapError" class="map-error hidden" role="status"><strong data-copy="mapErrorTitle">Не удалось загрузить карту</strong><span data-copy="mapErrorBody">Проверьте соединение и повторите загрузку. Площадь можно ввести вручную.</span><button id="btnRetryMap" onclick="retryFieldMap()" data-copy="retryMap">Повторить загрузку</button></div>
           </div>
-          <div class="map-toolbar"><button id="btnUndoPoint" onclick="undoFieldPoint()" disabled>Убрать точку</button><button id="btnResetContour" onclick="resetFieldContour()">Сбросить</button><span class="toolbar-spacer"></span><button id="btnAddCenter" onclick="addMapCenter()">Точка в центре</button><button id="btnUseRadius" aria-pressed="false" onclick="usePointRadius()">По радиусу</button></div>
-          <p id="mapHint" class="map-hint"></p>
-          <div id="radiusControls" class="radius-controls hidden"><label id="radiusLabel" for="fieldRadiusInput">Радиус, м</label><input id="fieldRadiusInput" type="number" min="1" max="10000" step="any" value="100" inputmode="decimal" oninput="updatePointRadius()" /></div>
+          <div class="map-toolbar"><button id="btnUndoPoint" onclick="undoFieldPoint()" disabled>Убрать точку</button><button id="btnResetContour" onclick="resetFieldContour()">Сбросить контур</button></div>
+          <p id="mapHint" class="map-hint sr-only"></p>
+          <div class="legacy-map-controls" aria-hidden="true"><button id="btnAddCenter" onclick="addMapCenter()" tabindex="-1">Точка в центре</button><button id="btnUseRadius" aria-pressed="false" onclick="usePointRadius()" tabindex="-1">По радиусу</button><div id="radiusControls" class="radius-controls hidden"><label id="radiusLabel" for="fieldRadiusInput">Радиус, м</label><input id="fieldRadiusInput" type="number" min="1" max="10000" step="any" value="100" inputmode="decimal" oninput="updatePointRadius()" /></div></div>
           <div class="area-readout" role="status" aria-live="polite"><span class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 5 14-2 3 14-14 4-3-16Z"/></svg></span><div><span id="mapAreaLabel">Площадь участка</span><strong id="mapAreaValue">—</strong><span id="mapAreaStatus"></span></div></div>
           <div id="gpsStatusBlock" class="gps-status hidden" role="status"><span class="gps-spinner"></span><span id="gpsStatusText"></span></div>
           <div id="coordsCard" class="coords-card hidden"><span id="coordsCardTitle"></span><span id="coordsAccuracy"></span><div><span id="labelLat">Широта</span> <strong id="displayLat"></strong></div><div><span id="labelLon">Долгота</span> <strong id="displayLon"></strong></div></div>
         </section>
-        <section class="field-note"><span class="note-index">i</span><div><h3 data-copy="noteTitle">Точность начинается с границ</h3><p data-copy="noteBody">Отмечайте углы по порядку. Минимум три точки — и площадь автоматически появится в расчете. Спутниковая подложка поможет найти границы.</p></div></section>
       </div>
       <div class="settings-column"><section id="block2" class="flex flex-col gap-4">
 

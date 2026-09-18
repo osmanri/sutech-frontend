@@ -156,8 +156,8 @@ const I18N = {
     sumLabelFieldType: 'Тип участка:',
     sumLabelSaline:    'Почва:',
     noCoordsYet:       'Не определены (нажмите GPS)',
-    btnSubmitText:     '💧 Рассчитать норму полива (FAO-56)',
     submitHint:        'Спутниковый анализ и расчёт по формуле FAO-56 Penman-Monteith',
+    summaryStatusReady:'ГОТОВО К РАСЧЁТУ',
 
     errNoGpsSupport:    'Ваш браузер не поддерживает геолокацию.',
     errGpsDenied:       'Доступ к GPS отклонён. Разрешите геолокацию или используйте демо-координаты.',
@@ -174,7 +174,7 @@ const I18N = {
     pageDesc:       'FAO-56 Penman-Monteith моделі негізінде суаруды басқарудың зияткерлік жүйесі',
     headerSubtitle: 'Smart Irrigation System',
 
-    block1Title:        'Алаңның орналасуы (GPS)',
+    block1Title:        'Егістік координаттары (GPS)',
     block1StatusWait:   'GPS күтілуде',
     block1StatusReady:  'Координаттар тіркелді',
     block1Desc:         'FAO-56 моделі бойынша күн радиациясы, жел және топырақ ылғалын автоматты түрде сұрау үшін алқап координаттарын анықтаңыз.',
@@ -188,14 +188,14 @@ const I18N = {
     block2Title:  'Ауыл шаруашылығы дақылы',
     block2Desc:   'Биологиялық транспирация коэффициентін (Kc) ескеру үшін дақылды таңдаңыз.',
     crops: {
-      wheat:     { name: 'Бидай',           sub: 'Пшеница'          },
-      cotton:    { name: 'Мақта',           sub: 'Хлопок'           },
-      corn:      { name: 'Жүгері',          sub: 'Кукуруза'         },
-      rice:      { name: 'Күріш',           sub: 'Рис'              },
-      alfalfa:   { name: 'Жоңышқа',         sub: 'Люцерна'          },
-      melon:     { name: 'Бақша',           sub: 'Бахча'            },
-      tomato:    { name: 'Қызанақ',         sub: 'Томаты'           },
-      potato:    { name: 'Картоп',          sub: 'Картофель'        },
+      wheat:     { name: 'Бидай',           sub: '' },
+      cotton:    { name: 'Мақта',           sub: '' },
+      corn:      { name: 'Жүгері',          sub: '' },
+      rice:      { name: 'Күріш',           sub: '' },
+      alfalfa:   { name: 'Жоңышқа',         sub: '' },
+      melon:     { name: 'Бақша',           sub: '' },
+      tomato:    { name: 'Қызанақ',         sub: '' },
+      potato:    { name: 'Картоп',          sub: '' },
     },
 
     block3Title:             'Алқап параметрлері',
@@ -243,8 +243,8 @@ const I18N = {
     sumLabelFieldType: 'Алқап түрі:',
     sumLabelSaline:    'Топырақ:',
     noCoordsYet:       'Анықталмаған (GPS басыңыз)',
-    btnSubmitText:     '💧 Суару нормасын есептеу (FAO-56)',
     submitHint:        'Спутниктік талдау және FAO-56 Penman-Monteith формуласымен есептеу',
+    summaryStatusReady:'ЕСЕПТЕУГЕ ДАЙЫН',
 
     errNoGpsSupport:    'Құрылғыңыз немесе браузер геолокацияны қолдамайды.',
     errGpsDenied:       'GPS рұқсаты берілмеді. Геолокацияны қосыңыз немесе үлгі нүктені таңдаңыз.',
@@ -360,6 +360,8 @@ function applyLanguage(lang) {
   if (sumLabelSaline) sumLabelSaline.textContent = t.sumLabelSaline;
   document.getElementById('btnSubmitText').textContent  = t.btnSubmitText;
   document.getElementById('submitHint').textContent     = t.submitHint;
+  const summaryStatusBadge = document.getElementById('summaryStatusBadge');
+  if (summaryStatusBadge) summaryStatusBadge.textContent = t.summaryStatusReady;
 }
 
 function updateBlock1StatusPill() {

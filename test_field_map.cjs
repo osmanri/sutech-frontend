@@ -91,6 +91,19 @@ run("handleAreaChange('2.5')");
 assert.equal(run('fieldMode'), 'manual', 'Typing area must leave incomplete map mode');
 assert.equal(run('fieldPoints.length'), 0, 'Manual area must clear the stale map contour');
 near(run('state.area'), 2.5);
+for (const unit of ['hectare', 'sotka']) {
+  run(`setAreaUnit('${unit}')`);
+  for (const value of ['6,7', '6.7']) {
+    elements.get('fieldAreaInput').value = value;
+    run(`handleAreaChange('${value}')`);
+    near(run('state.area'), 6.7);
+    sent = undefined;
+    run('isSubmitting = false; submitFinalCalculation()');
+    assert.ok(sent, 'Decimal area must submit');
+    near(sent.area, 6.7);
+    assert.equal(sent.area_unit, unit);
+  }
+}
 run("handleAreaChange('1'); setAreaUnit('hectare')");
 near(run('state.area'), 0.01);
 elements.get('fieldAreaInput').value = '';

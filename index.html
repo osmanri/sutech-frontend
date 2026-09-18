@@ -8,10 +8,10 @@
   <meta name="theme-color" content="#182D3B" />
   <link rel="icon" href="img/logo-mark.png" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=4.0.2" />
+  <link rel="stylesheet" href="css/app.css?v=4.2.0" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
-  <script defer src="js/app.js?v=4.0.2"></script>
+  <script defer src="js/app.js?v=4.2.0"></script>
 </head>
 <body>
   <header class="app-header">
@@ -217,10 +217,10 @@
           </label>
           <div class="relative flex">
             <input
-              type="number"
+              type="text"
               id="fieldAreaInput"
               class=""
-              min="0.000001" max="50000" step="any" value="10" placeholder="10"
+              value="10" placeholder="10" autocomplete="off" spellcheck="false"
               inputmode="decimal"
               aria-label="Площадь участка"
               oninput="handleAreaChange(this.value)"

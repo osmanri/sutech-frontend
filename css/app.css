@@ -43,6 +43,12 @@
 }
 
 .crop-symbol{font-size:25px;line-height:1}
+
+/* An inset map surface keeps the map visually connected to its controls. */
+.map-stage{margin:0 16px 14px;border:1px solid #d1dfe3;border-radius:20px;overflow:hidden;isolation:isolate;box-shadow:0 3px 12px #182d3b0a}
+.map-stage #map{border-radius:inherit}
+.map-panel .map-toolbar{border-top:0;border-bottom:0;padding-top:0}
+@media(max-width:760px){.map-stage{margin:0 10px 12px;border-radius:18px}.map-panel .map-toolbar{padding-bottom:10px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.reveal,.motion-intro,.motion-card{opacity:1!important;transform:none!important}}
 
 /* Motion system: subtle, composited transitions designed for Telegram WebApp touch screens. */
@@ -60,3 +66,39 @@
 @media(hover:hover){.motion-ready .crop-card:hover,.motion-ready .irrig-card:hover{transform:translateY(-2px);box-shadow:0 5px 14px #182d3b0b!important}.motion-ready .gps-button:hover{transform:translateY(-1px)}}
 @keyframes suFadeUp{from{opacity:0;transform:translate3d(0,12px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
 @keyframes mapReveal{from{opacity:.35;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
+
+/* Field studio: warm mineral surfaces, deep ocean controls, generous touch targets. */
+:root{--canvas:#f2f1ec;--ink:#203641;--muted:#586a72;--line:#e2e5df;--pale:#edf4f5}
+body{background:radial-gradient(ellipse at 100% 0,#e4eef0 0,transparent 48%),var(--canvas)}
+.app-header{background:#ffffffed;border-bottom:1px solid #dfe5e3;box-shadow:0 4px 24px #20364105}
+.brand strong{font-weight:750;letter-spacing:-1px}.brand-logo{background:#fff;border:1px solid var(--line);border-radius:13px;padding:4px}
+.language-switch{background:#e9eeec;border:0;padding:4px;border-radius:13px}.language-switch button{border-radius:9px;min-height:38px}
+.language-switch button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 2px 6px #20364112}
+.workspace{max-width:620px;padding:24px 16px 32px}.workspace-grid{display:flex;flex-direction:column;gap:18px}.map-column{position:static;width:100%}.settings-column{width:100%;gap:18px}.header-nav{display:none}
+.app-header{max-width:620px;margin:auto;padding:0 20px;height:76px;gap:12px}
+.map-panel,.settings-column section{border:1px solid #fff;border-radius:24px;box-shadow:0 2px 3px #20364103,0 12px 32px #20364106;background:#fff}
+.section-heading{padding:22px 20px 0}.section-heading h2{font-size:22px;letter-spacing:-.7px;font-weight:700;line-height:1.2}
+#block1StatusPill{font-size:10px;color:var(--muted);font-weight:500;max-width:95px}
+.map-topbar{padding:18px 14px 14px;gap:8px}.basemap-switch{background:#f0f3f2;border:1px solid #e5eae7;border-radius:12px;padding:3px}.basemap-switch button{min-height:40px;border-radius:9px;font-size:11px}
+.gps-button{background:var(--ink);color:#fff;min-height:48px;border-radius:12px;padding:10px 12px;box-shadow:0 3px 8px #20364116}.gps-button:hover{background:#2e4c5a}
+.map-stage{margin:0 12px 12px;border-radius:20px;border:1px solid #d9e3df;box-shadow:0 2px 8px #20364108}#map{height:330px;min-height:280px}
+.leaflet-control-zoom{border-radius:12px!important;overflow:hidden}.leaflet-control-zoom a{width:44px!important;height:44px!important;line-height:44px!important}
+.map-panel .map-toolbar{padding:0 14px 14px;display:flex}.map-toolbar button{border:1px solid #e5eae7;background:#f7f9f8;border-radius:12px;min-height:44px;font-size:11px}.map-toolbar button:disabled{opacity:.55}
+.coords-card{margin:0 20px 18px;font-size:10px}
+.settings-column section{padding:22px 18px}.settings-column h2{font-size:18px;font-weight:700;letter-spacing:-.45px}.settings-column section>div:first-child>span:first-child{width:28px;height:28px;background:#edf3f3;color:#3c6475;border:0;border-radius:9px;font-size:11px;font-weight:700}
+.settings-column section>p{font-size:12px;line-height:1.6;margin:8px 0 18px;color:var(--muted)}
+.settings-column #block2 [role=radiogroup]{gap:8px}.settings-column .crop-card{min-height:104px;border-radius:15px;padding:14px 5px!important;background:#fafbf9;border-color:#e8ece7!important;gap:5px}
+.crop-card[aria-checked=true],.irrig-card[aria-checked=true]{border-color:#247c9c!important;background:#edf5f7!important;box-shadow:inset 0 0 0 1px #247c9c!important}
+.crop-symbol{height:32px;font-size:28px;margin-bottom:4px}.crop-card>[id^=cropName]{font-size:12px}.crop-card>[id^=cropSub]{font-size:10px;color:#596b73}.crop-check{right:9px;top:8px}
+.settings-column label,.settings-column #labelFieldType,.settings-column #labelSalinity{font-size:12px;color:#405760}
+#fieldAreaInput{font-size:32px;letter-spacing:-1px;font-variant-numeric:tabular-nums;background:#f7f9f6;border:1px solid #dce4df;border-radius:15px;padding:16px 65px 16px 18px;transition:border-color 160ms,box-shadow 160ms}
+#fieldAreaInput:focus{border-color:var(--accent);outline:2px solid #247c9c25;outline-offset:2px;background:#fff}
+.settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare{min-height:46px;border-radius:11px;font-size:12px;background:#f7f9f6}
+#block3 button[onclick^="setPresetArea"]{min-height:40px;border-radius:9px;font-size:11px}#labelQuickPresets,#areaCalcEquivalentLabel,#areaInM2{font-size:11px}
+.irrig-card{border-radius:15px;padding:16px!important;background:#fafbf9}.irrig-card [id^=irrigTitle]{font-size:13px}.irrig-card [id^=irrigDesc]{font-size:11px;line-height:1.6}.irrig-card [id^=irrigBadge]{font-size:10px}.irrig-card>div{gap:12px}
+.summary-card{position:relative;overflow:hidden;margin-top:18px;padding:26px 22px;border:1px solid #385564;border-radius:24px;background:radial-gradient(ellipse at 100% 0,#355b69 0,transparent 65%),#203641;box-shadow:0 14px 32px #20364116}
+.summary-heading{align-items:flex-start;flex-direction:column;gap:12px}.summary-card h2{font-size:25px;letter-spacing:-.8px;font-weight:600}.summary-card .eyebrow{letter-spacing:1.6px;font-size:9px}.summary-grid{grid-template-columns:1fr 1fr;gap:0;margin:22px 0}.summary-grid>div{padding:14px 6px 14px 0;border-bottom:1px solid #ffffff14}.summary-grid dt{font-size:11px;color:#b9cbd0}.summary-grid dd{font-size:13px;font-weight:600}.summary-footer{flex-direction:column;align-items:stretch;gap:16px;border-top:0;padding-top:0}.summary-footer p{font-size:11px;line-height:1.6}
+.submit-button{width:100%;min-height:56px;border-radius:14px;justify-content:space-between;background:#e4f0ef;color:#203641;font-size:14px;box-shadow:0 4px 12px #0c202526;position:static}.submit-button:hover{background:#fff}
+.page-footer{padding:24px 6px;font-size:10px}.toast{bottom:calc(20px + env(safe-area-inset-bottom));border-radius:16px}
+@media(max-width:380px){.workspace{padding:16px 10px 24px}.app-header{padding:0 14px;height:68px}.settings-column section{padding:20px 14px}.section-heading{padding:20px 16px 0}.section-heading h2{font-size:20px}.map-topbar{padding-left:12px;padding-right:12px}.basemap-switch button{padding:0 9px}.gps-button{font-size:10px;padding:10px}.crop-card>[id^=cropName]{font-size:11px}.summary-card{padding:24px 18px}}
+@media(prefers-reduced-motion:reduce){.motion-ready #map{animation:none}.motion-ready .crop-card:active,.motion-ready .irrig-card:active,.motion-ready .gps-button:active,.motion-ready .submit-button:active{transform:none}}

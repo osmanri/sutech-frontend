@@ -955,9 +955,14 @@ function activateManualAreaInput() {
   updateMapUI();
 }
 
+function parseAreaInput(value) {
+  const normalized = String(value ?? '').trim().replace(',', '.');
+  return /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(normalized) ? Number(normalized) : NaN;
+}
+
 function handleAreaChange(val) {
   activateManualAreaInput();
-  const num = parseFloat(val);
+  const num = parseAreaInput(val);
   currentArea = (!isNaN(num) && num > 0) ? num : 0;
   window.currentArea = currentArea;
   state.area = currentArea;
@@ -1169,7 +1174,7 @@ function submitFinalCalculation() {
 
   // Площадь (area)
   const areaInput = document.getElementById('fieldAreaInput');
-  currentArea = fieldMode === 'manual' ? Number(areaInput?.value)
+  currentArea = fieldMode === 'manual' ? parseAreaInput(areaInput?.value)
     : mappedAreaM2 / (currentUnit === 'hectare' ? 10000 : 100);
   state.area = currentArea;
   window.currentArea = currentArea;

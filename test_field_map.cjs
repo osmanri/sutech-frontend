@@ -12,6 +12,12 @@ for (const [, id] of html.matchAll(/id="([^"]+)"/g)) {
     focus() {}, closest() { return null; }, addEventListener() {},
   });
 }
+// Model the input defaults used by the real WebApp.
+for (const tag of html.matchAll(/<input\b[^>]*>/g)) {
+  const id = tag[0].match(/id="([^"]+)"/)?.[1];
+  const value = tag[0].match(/value="([^"]*)"/)?.[1];
+  if (id && value !== undefined) elements.get(id).value = value;
+}
 let sent;
 let gpsSuccess;
 let lastFlyTo;
@@ -85,6 +91,9 @@ near(Number(elements.get('fieldAreaInput').value), 100, 0.001);
 run('submitFinalCalculation()');
 near(sent.area, 100, 0.001);
 assert.equal(sent.area_unit, 'sotka');
+assert.equal(sent.pump_power_kw, 22);
+assert.equal(sent.pump_productivity_m3h, 60);
+assert.equal(sent.energy_kwh_m3, undefined);
 assert.equal(sent.latitude, 0);
 assert.equal(sent.balance_version, 2);
 assert.equal(sent.moisture_condition, 'normal');
@@ -174,4 +183,17 @@ elements.get('customKc').value = '1,1';
 elements.get('customP').value = '0,5';
 elements.get('customRoot').value = '0,8';
 near(run('window.SuBalance.payload().custom_root_depth'), .8);
-console.log('PASS: map, decimal input, water-balance payload, calendars, greenhouse and custom crop validation');
+// Pump fields accept local decimals and reject a zero flow before submission.
+elements.get('powerPrice').value = '25,5';
+elements.get('pumpPower').value = '22,5';
+elements.get('pumpProductivity').value = '60,5';
+near(run('window.SuBalance.payload().pump_power_kw'), 22.5);
+near(run('window.SuBalance.payload().pump_productivity_m3h'), 60.5);
+for (const invalid of ['0', '-1', 'NaN', 'Infinity', '6,7,8']) {
+  elements.get('pumpProductivity').value = invalid;
+  assert.equal(run('window.SuBalance.payload()'), null);
+}
+elements.get('pumpProductivity').value = '60';
+elements.get('powerPrice').value = '';
+assert.equal(run('window.SuBalance.payload().power_price'), null, 'Tariff remains optional');
+console.log('PASS: map, decimal input, pump payload, calendars, greenhouse and custom crop validation');

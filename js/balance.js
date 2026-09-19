@@ -19,8 +19,9 @@ window.SuBalance = (() => {
       initial:'Начало, дней', development:'Развитие, дней', middle:'Середина, дней', late:'Созревание, дней',
       customHint:'Введите параметры текущей стадии вашей культуры.', customP:'Доля истощения p (0,1–0,8)', root:'Глубина корней, м',
       greenhouseEt0:'ET₀ теплицы, мм/сутки', greenhouseHint:'Введите ET₀ по микроклимату теплицы. Внешняя погода не заменяет его; осадки внутри считаются нулевыми.',
-      energy:'Стоимость насоса · необязательно', price:'Тариф, ₸/кВт·ч', pump:'Насос, кВт·ч/м³',
-      energyHint:'Расход энергии = мощность насоса (кВт) ÷ подача (м³/ч). В отчёте сравним ИИ-полив с традиционным расходом ETc × 1,35 ÷ 0,5.',
+      energy:'Стоимость насоса · необязательно', price:'Тариф, ₸/кВт·ч',
+      pumpPower:'Мощность насоса (кВт)', pumpProductivity:'Производительность (м³/ч)',
+      energyHint:'Уточните мощность и производительность вашего насоса. Добавьте тариф, чтобы сравнить стоимость полива.',
       error:'Проверьте выделенное поле и введите допустимое число.', soilError:'Выберите тип почвы.',
       season:'День роста превышает календарь. Уточните сроки стадий.',
     },
@@ -35,8 +36,9 @@ window.SuBalance = (() => {
       initial:'Басы, күн', development:'Даму, күн', middle:'Ортасы, күн', late:'Пісу, күн',
       customHint:'Дақылдың ағымдағы кезең параметрлерін енгізіңіз.', customP:'Сарқылу үлесі p (0,1–0,8)', root:'Тамыр тереңдігі, м',
       greenhouseEt0:'Жылыжай ET₀, мм/тәулік', greenhouseHint:'Жылыжай микроклиматының ET₀ мәнін енгізіңіз. Сыртқы ауа райы оны алмастырмайды; ішкі жауын-шашын нөлге тең.',
-      energy:'Сорғы құны · міндетті емес', price:'Тариф, ₸/кВт·сағ', pump:'Сорғы, кВт·сағ/м³',
-      energyHint:'Энергия шығыны = сорғы қуаты (кВт) ÷ өнімділігі (м³/сағ). Есепте ИИ-суару ETc × 1,35 ÷ 0,5 дәстүрлі шығынымен салыстырылады.',
+      energy:'Сорғы құны · міндетті емес', price:'Тариф, ₸/кВт·сағ',
+      pumpPower:'Сорғы қуаты (кВт)', pumpProductivity:'Өнімділігі (м³/сағ)',
+      energyHint:'Сорғыңыздың қуаты мен өнімділігін нақтылаңыз. Суару құнын салыстыру үшін тарифті енгізіңіз.',
       error:'Белгіленген өрісті тексеріп, жарамды сан енгізіңіз.', soilError:'Топырақ түрін таңдаңыз.',
       season:'Өсу күні күнтізбеден асып кетті. Кезең ұзақтығын нақтылаңыз.',
     },
@@ -57,7 +59,9 @@ window.SuBalance = (() => {
     if (!['recent','normal','dry'].includes(moisture)) error('moistureCondition');
     const data = {balance_version:2, soil_type:soil,
       day_of_growth:read('growthDay',0,3650,true), moisture_condition:moisture,
-      power_price:read('powerPrice',0,10000,false,true), energy_kwh_m3:read('pumpEnergy',.000001,100,false,true)};
+      power_price:read('powerPrice',0,10000,false,true),
+      pump_power_kw:read('pumpPower',.000001,100000,false,true),
+      pump_productivity_m3h:read('pumpProductivity',.000001,1000000,false,true)};
     if (calendars[crop]) {
       data.stage_days = stageIds.map(id => read(id,1,730,true));
       if (data.day_of_growth > data.stage_days.reduce((a,b) => a+b,0)) error('growthDay','season');

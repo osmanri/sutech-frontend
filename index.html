@@ -8,10 +8,11 @@
   <meta name="theme-color" content="#182D3B" />
   <link rel="icon" href="img/logo-mark.png" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=4.2.2" />
+  <link rel="stylesheet" href="css/app.css?v=5.0.0" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
-  <script defer src="js/app.js?v=4.2.0"></script>
+  <script defer src="js/balance.js?v=5.0.0"></script>
+  <script defer src="js/app.js?v=5.0.0"></script>
 </head>
 <body>
   <header class="app-header">
@@ -317,10 +318,51 @@
 
       </div>
     </section>
+<section id="balanceBlock" class="balance-form">
+  <div><span aria-hidden="true">4</span><h2 data-balance-copy="title">Запас влаги</h2></div>
+  <p data-balance-copy="intro">Решение по запасу воды у корней и суточному прогнозу Open-Meteo.</p>
+  <div class="balance-fields">
+    <label for="soilType" data-balance-copy="soil">Тип почвы</label>
+    <select id="soilType"><option value="" data-balance-copy="choose">Выберите</option><option value="sand" data-balance-copy="sand">Песок</option><option value="loam" data-balance-copy="loam">Суглинок</option><option value="clay" data-balance-copy="clay">Глина</option></select>
+    <div class="balance-pair">
+      <div><label for="growthDay" data-balance-copy="day">Дней от посадки</label><input id="growthDay" type="text" inputmode="numeric" placeholder="30" autocomplete="off" /></div>
+      <div><label for="yesterdayDeficit" data-balance-copy="deficit">Вчерашний дефицит, мм</label><input id="yesterdayDeficit" type="text" inputmode="decimal" placeholder="0" autocomplete="off" /></div>
+    </div>
+    <p class="balance-help" data-balance-copy="deficitHint">Остаток на конец вчерашнего дня с учётом фактического полива. 0 — только если почва пополнена до влагоёмкости. Повторный анализ сегодня не меняет это число.</p>
+    <p id="riceBalanceNote" class="balance-help hidden" data-balance-copy="rice">Для риса нужен отдельный баланс затопленного чека; обычный расчёт объёма не применяется.</p>
+    <details id="stageCalendar"><summary data-balance-copy="calendar">Календарь роста · уточнить</summary>
+      <p class="balance-help" data-balance-copy="calendarHint">Ориентировочные сроки: измените под сорт и климат. Люцерна — первый цикл; после укоса используйте «Другая культура» с текущими параметрами.</p>
+      <div class="balance-pair">
+        <div><label for="stageInitial" data-balance-copy="initial">Начало, дней</label><input id="stageInitial" type="text" inputmode="numeric" /></div>
+        <div><label for="stageDevelopment" data-balance-copy="development">Развитие, дней</label><input id="stageDevelopment" type="text" inputmode="numeric" /></div>
+        <div><label for="stageMiddle" data-balance-copy="middle">Середина, дней</label><input id="stageMiddle" type="text" inputmode="numeric" /></div>
+        <div><label for="stageLate" data-balance-copy="late">Созревание, дней</label><input id="stageLate" type="text" inputmode="numeric" /></div>
+      </div>
+    </details>
+    <div id="customCropBalance" class="balance-fields hidden">
+      <p class="balance-help" data-balance-copy="customHint">Введите параметры текущей стадии вашей культуры.</p>
+      <label for="customKc">Kc</label><input id="customKc" type="text" inputmode="decimal" />
+      <label for="customP" data-balance-copy="customP">Доля истощения p (0,1–0,8)</label><input id="customP" type="text" inputmode="decimal" />
+      <label for="customRoot" data-balance-copy="root">Глубина корней, м</label><input id="customRoot" type="text" inputmode="decimal" />
+    </div>
+    <div id="greenhouseBalance" class="balance-fields hidden">
+      <label for="greenhouseEt0" data-balance-copy="greenhouseEt0">ET₀ теплицы, мм/сутки</label><input id="greenhouseEt0" type="text" inputmode="decimal" />
+      <p class="balance-help" data-balance-copy="greenhouseHint">Введите ET₀ по микроклимату теплицы. Внешняя погода не заменяет его; осадки внутри считаются нулевыми.</p>
+    </div>
+    <details><summary data-balance-copy="energy">Стоимость насоса · необязательно</summary>
+      <div class="balance-pair">
+        <div><label for="powerPrice" data-balance-copy="price">Тариф, ₸/кВт·ч</label><input id="powerPrice" type="text" inputmode="decimal" /></div>
+        <div><label for="pumpEnergy" data-balance-copy="pump">Насос, кВт·ч/м³</label><input id="pumpEnergy" type="text" inputmode="decimal" /></div>
+      </div>
+      <p class="balance-help" data-balance-copy="energyHint">Расход энергии = мощность насоса (кВт) ÷ подача (м³/ч). Без этих данных стоимость не рассчитывается.</p>
+    </details>
+    <p class="balance-error" id="balanceError" role="alert" hidden></p>
+  </div>
+</section>
 <section id="block4" class="flex flex-col gap-4">
 
       <div class="flex gap-3">
-        <span class="flex" aria-hidden="true">4</span>
+        <span class="flex" aria-hidden="true">5</span>
         <h2 class="" id="block4Title">
           Тип оросительной системы
         </h2>
@@ -386,7 +428,7 @@
             <div class="">
               <div class="flex gap-2">
                 <span class="" id="irrigTitle_pivot">Фронтальный (Pivot)</span>
-                <span class="" id="irrigBadge_pivot">КПД 80%</span>
+                <span class="" id="irrigBadge_pivot">КПД 75%</span>
               </div>
               <p class="" id="irrigDesc_pivot">
                 Круговая дождевальная машина. Оптимален для крупных массивов.
@@ -428,7 +470,7 @@
             <div class="">
               <div class="flex gap-2">
                 <span class="" id="irrigTitle_subsurface">Подпочвенное</span>
-                <span class="" id="irrigBadge_subsurface">КПД 95%</span>
+                <span class="" id="irrigBadge_subsurface">КПД 90%</span>
               </div>
               <p class="" id="irrigDesc_subsurface">
                 Трубки под поверхностью почвы. Минимальное испарение, максимум эффекта.

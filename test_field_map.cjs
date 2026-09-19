@@ -9,6 +9,7 @@ for (const [, id] of html.matchAll(/id="([^"]+)"/g)) {
     value: '', style: {}, textContent: '', classList: { add() {}, remove() {}, toggle() {} },
     attrs: {}, setAttribute(k, v) { this.attrs[k] = v; }, getAttribute(k) { return this.attrs[k]; },
     removeAttribute(k) { delete this.attrs[k]; }, scrollIntoView() {},
+    focus() {}, closest() { return null; }, addEventListener() {},
   });
 }
 let sent;
@@ -37,8 +38,13 @@ const context = vm.createContext({
   navigator: { geolocation: { getCurrentPosition(success) { gpsSuccess = success; } } },
   setTimeout(callback, delay) { if (delay < 10000) callback(); }, clearTimeout() {}, requestAnimationFrame(callback) { callback(); },
 });
+vm.runInContext(fs.readFileSync(`${__dirname}/js/balance.js`, 'utf8'), context);
 vm.runInContext(fs.readFileSync(`${__dirname}/js/app.js`, 'utf8'), context);
 const run = code => vm.runInContext(code, context);
+elements.get('soilType').value = 'loam';
+elements.get('growthDay').value = '60';
+elements.get('yesterdayDeficit').value = '12,5';
+run("window.SuBalance.init('cotton', 'open', 'ru')");
 const near = (actual, expected, tolerance = 1e-5) => assert.ok(Math.abs(actual - expected) < tolerance, `${actual} != ${expected}`);
 
 // Approximately 100 x 100 metres at the equator, independently specified in degrees.
@@ -80,6 +86,10 @@ run('submitFinalCalculation()');
 near(sent.area, 100, 0.001);
 assert.equal(sent.area_unit, 'sotka');
 assert.equal(sent.latitude, 0);
+assert.equal(sent.balance_version, 1);
+assert.equal(sent.yesterday_deficit, 12.5);
+assert.deepEqual(sent.stage_days, [30,50,60,55]);
+assert.equal(sent.kc, undefined, 'Legacy fixed Kc must not override the stage calculation');
 run('undoFieldPoint()');
 near(run('mappedAreaM2'), 5000, 0.1);
 run('resetFieldContour()');
@@ -138,4 +148,22 @@ assert.equal(run('state.latitude'), 0, 'GPS must not relocate a drawn field');
 run('resetFieldContour(); window.L = undefined; updateMapUI()');
 assert.equal(elements.get('btnUseRadius').disabled, true);
 assert.equal(elements.get('fieldAreaInput').readOnly, false);
-console.log('PASS: field geometry, area units, payload, GPS, radius, reset, i18n and CDN fallback');
+// Mandatory inputs fail closed, including empty and malformed decimals.
+elements.get('yesterdayDeficit').value = '';
+assert.equal(run('window.SuBalance.payload()'), null);
+elements.get('yesterdayDeficit').value = '6,7';
+near(run('window.SuBalance.payload().yesterday_deficit'), 6.7);
+elements.get('stageInitial').value = '32';
+run("window.SuBalance.sync('wheat','open','kz'); window.SuBalance.sync('cotton','open','ru')");
+assert.equal(elements.get('stageInitial').value, '32', 'Keep edited calendar when switching crops');
+run("window.SuBalance.sync('cotton','greenhouse','ru')");
+assert.equal(run('window.SuBalance.payload()'), null, 'Greenhouse ET0 must not be invented');
+elements.get('greenhouseEt0').value = '2,5';
+near(run('window.SuBalance.payload().greenhouse_et0'), 2.5);
+run("window.SuBalance.sync('other','open','ru')");
+assert.equal(run('window.SuBalance.payload()'), null);
+elements.get('customKc').value = '1,1';
+elements.get('customP').value = '0,5';
+elements.get('customRoot').value = '0,8';
+near(run('window.SuBalance.payload().custom_root_depth'), .8);
+console.log('PASS: map, decimal input, water-balance payload, calendars, greenhouse and custom crop validation');

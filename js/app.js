@@ -94,9 +94,9 @@ const CROPS = {
 const IRRIGATION_EFFICIENCY = {
   drip:       0.90,
   sprinkler:  0.75,
-  pivot:      0.80,
+  pivot:      0.75,
   furrow:     0.50,
-  subsurface: 0.95,
+  subsurface: 0.90,
 };
 
 // ─── 5. Словарь локализации (i18n: KZ / RU) ──────────────────────────────
@@ -173,16 +173,16 @@ const I18N = {
     salineText_no:           'Обычная почва',
     salineText_yes:          '🧂 Солончак',
     salineBadge_no:          'Обычная почва',
-    salineBadge_yes:         'Солончак (+15%)',
+    salineBadge_yes:         'Солончак · промывка отдельно',
 
     block4Title: 'Тип оросительной системы',
     block4Desc:  'Выберите метод полива для корректного расчёта коэффициента эффективности применения воды.',
     irrig: {
-      drip:       { title: 'Капельный полив',      desc: 'Адресная подача в прикорневую зону. Экономия воды 40–50%.', badge: 'КПД 90%' },
+      drip:       { title: 'Капельный полив',      desc: 'Адресная подача к корням. Технологический порог — 5 мм.', badge: 'КПД 90%' },
       sprinkler:  { title: 'Дождевание',            desc: 'Имитация дождя через форсунки. Равномерное распределение.', badge: 'КПД 75%' },
-      pivot:      { title: 'Фронтальный (Pivot)',   desc: 'Круговая дождевальная машина. Оптимален для крупных массивов.', badge: 'КПД 80%' },
+      pivot:      { title: 'Фронтальный (Pivot)',   desc: 'Круговая дождевальная машина. Оптимален для крупных массивов.', badge: 'КПД 75%' },
       furrow:     { title: 'Арычный полив',         desc: 'Традиционный самотечный полив. Высокие потери на фильтрацию.', badge: 'КПД 50%' },
-      subsurface: { title: 'Подпочвенное',          desc: 'Трубки под поверхностью почвы. Минимальное испарение, максимум эффекта.', badge: 'КПД 95%' },
+      subsurface: { title: 'Подпочвенное',          desc: 'Трубки под поверхностью почвы. Минимальное испарение, максимум эффекта.', badge: 'КПД 90%' },
     },
 
     summaryTitle:      'Сводка параметров',
@@ -280,16 +280,16 @@ const I18N = {
     salineText_no:           'Қалыпты топырақ',
     salineText_yes:          '🧂 Сортаң',
     salineBadge_no:          'Қалыпты топырақ',
-    salineBadge_yes:         'Сортаң (+15%)',
+    salineBadge_yes:         'Сортаң · шаю бөлек',
 
     block4Title: 'Суару жүйесінің түрі',
     block4Desc:  'Су пайдалану тиімділік коэффициентін дұрыс есептеу үшін суару әдісін таңдаңыз.',
     irrig: {
-      drip:       { title: 'Тамшылатып',          desc: 'Тамыр аймағына дәл жеткізу. Суды 40–50% үнемдеу.', badge: 'ПӘК 90%' },
+      drip:       { title: 'Тамшылатып',          desc: 'Суды тамырға дәл жеткізу. Технологиялық шек — 5 мм.', badge: 'ПӘК 90%' },
       sprinkler:  { title: 'Жаңбырлатып',         desc: 'Форсунка арқылы жаңбыр имитациясы. Біркелкі таралу.', badge: 'ПӘК 75%' },
-      pivot:      { title: 'Фронталды (Pivot)',   desc: 'Айналмалы жаңбырлату машинасы. Ірі алқаптар үшін оңтайлы.', badge: 'ПӘК 80%' },
+      pivot:      { title: 'Фронталды (Pivot)',   desc: 'Айналмалы жаңбырлату машинасы. Ірі алқаптар үшін оңтайлы.', badge: 'ПӘК 75%' },
       furrow:     { title: 'Арықпен',             desc: 'Дәстүрлі өздігінен ағатын суару. Сүзілуге жоғары шығын.', badge: 'ПӘК 50%' },
-      subsurface: { title: 'Топырақішілік',       desc: 'Топырақ асты түтіктері. Минималды булану, максималды нәтиже.', badge: 'ПӘК 95%' },
+      subsurface: { title: 'Топырақішілік',       desc: 'Топырақ асты түтіктері. Минималды булану, максималды нәтиже.', badge: 'ПӘК 90%' },
     },
 
     summaryTitle:      'Параметрлер қорытындысы',
@@ -389,6 +389,7 @@ function setLanguage(lang) {
 }
 
 function applyLanguage(lang) {
+  window.SuBalance?.sync(state.crop, state.field_type, lang);
   const t = I18N[lang] || I18N.ru;
   document.querySelectorAll('[data-copy]').forEach(el => {
     el.textContent = UI_COPY[lang]?.[el.dataset.copy] || UI_COPY.ru[el.dataset.copy] || '';
@@ -1096,6 +1097,7 @@ function updateSalinityUI() {
 
 // ─── 11. Сводная карточка ─────────────────────────────────────────────────
 function updateSummaryCard() {
+  window.SuBalance?.sync(state.crop, state.field_type, state.lang);
   const t = I18N[state.lang] || I18N.ru;
 
   // GPS coords
@@ -1139,7 +1141,7 @@ function updateSummaryCard() {
   // Dynamic Ready Badge: 'ЕСЕПТЕУГЕ ДАЙЫН' / 'ГОТОВО К РАСЧЁТУ'
   const summaryStatusBadge = document.getElementById('summaryStatusBadge');
   if (summaryStatusBadge) {
-    const ready = state.latitude !== null && state.longitude !== null && state.area > 0 && state.area < 50000;
+    const ready = state.latitude !== null && state.longitude !== null && state.area > 0 && state.area < 50000 && !!window.SuBalance?.complete();
     summaryStatusBadge.textContent = ready ? t.summaryStatusReady : t.summaryStatusIncomplete;
     summaryStatusBadge.className = 'text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-full '
       + (ready ? 'bg-[#247C9C]/10 text-[#1C6079]' : 'bg-slate-100 text-slate-600');
@@ -1222,8 +1224,14 @@ function submitFinalCalculation() {
   state.is_saline = currentSaline;
   window.currentSaline = currentSaline;
 
+  const balance = window.SuBalance?.payload();
+  if (!balance) {
+    document.getElementById('balanceBlock')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
   // Собираем динамический payload:
   const payload = {
+    ...balance,
     latitude:         Number(state.latitude.toFixed(6)),
     longitude:        Number(state.longitude.toFixed(6)),
     crop:             currentCrop,
@@ -1232,8 +1240,6 @@ function submitFinalCalculation() {
     irrigation_type:  currentIrrigation,
     field_type:       currentFieldType,
     is_saline:        currentSaline,
-    kc:               CROPS[currentCrop]?.kc ?? 1.0,
-    irrigation_eff:   IRRIGATION_EFFICIENCY[currentIrrigation] ?? 0.75,
     lang:             state.lang,
   };
   if (state.accuracy) {
@@ -1360,6 +1366,7 @@ function initMotion() {
 // ─── 17. DOMContentLoaded — Инициализация ────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   connectTelegram();
+  window.SuBalance?.init(state.crop, state.field_type, state.lang);
   isSubmitting = false;
   const btn = document.getElementById('btnSubmitAll') || document.querySelector('button[type="submit"]');
   if (btn) btn.disabled = false;

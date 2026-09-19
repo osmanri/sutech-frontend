@@ -68,6 +68,7 @@
 @keyframes mapReveal{from{opacity:.35;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
 
 /* Field studio: warm mineral surfaces, deep ocean controls, generous touch targets. */
+.balance-fields{display:grid;gap:10px}.balance-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.balance-pair>div{min-width:0;display:grid;gap:7px;align-content:start}.balance-form input,.balance-form select{width:100%;min-height:46px;padding:11px 12px;border:1px solid #dce4df;border-radius:11px;background:#f7f9f6;color:var(--ink);font:inherit;font-size:16px}.balance-form select:focus-visible,.balance-form summary:focus-visible{outline:3px solid #78b5cb;outline-offset:3px}.balance-form label{line-height:1.5}.balance-form .balance-help{font-size:11px;color:var(--muted);line-height:1.65;margin:2px 0 8px}.balance-form details{border-top:1px solid var(--line);padding:12px 0 0}.balance-form summary{cursor:pointer;font-size:12px;font-weight:600;min-height:44px;display:list-item;padding:8px 0}.balance-form [aria-invalid=true]{border-color:#b14d35;outline:2px solid #b14d3520}.balance-error{font-size:12px;color:#a13928;line-height:1.5}
 :root{--canvas:#f2f1ec;--ink:#203641;--muted:#586a72;--line:#e2e5df;--pale:#edf4f5}
 body{background:radial-gradient(ellipse at 100% 0,#e4eef0 0,transparent 48%),var(--canvas)}
 .app-header{position:static;top:auto;z-index:auto;background:#ffffffed;border-bottom:1px solid #dfe5e3;box-shadow:0 4px 24px #20364105}

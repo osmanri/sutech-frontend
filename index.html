@@ -324,13 +324,17 @@
   <div class="balance-fields">
     <label for="soilType" data-balance-copy="soil">Тип почвы</label>
     <select id="soilType"><option value="" data-balance-copy="choose">Выберите</option><option value="sand" data-balance-copy="sand">Песок</option><option value="loam" data-balance-copy="loam">Суглинок</option><option value="clay" data-balance-copy="clay">Глина</option></select>
-    <div class="balance-pair">
-      <div><label for="growthDay" data-balance-copy="day">Дней от посадки</label><input id="growthDay" type="text" inputmode="numeric" placeholder="30" autocomplete="off" /></div>
-      <div><label for="yesterdayDeficit" data-balance-copy="deficit">Вчерашний дефицит, мм</label><input id="yesterdayDeficit" type="text" inputmode="decimal" placeholder="0" autocomplete="off" /></div>
-    </div>
-    <p class="balance-help" data-balance-copy="deficitHint">Остаток на конец вчерашнего дня с учётом фактического полива. 0 — только если почва пополнена до влагоёмкости. Повторный анализ сегодня не меняет это число.</p>
+    <label for="growthDay" data-balance-copy="day">Дней от посадки</label><input id="growthDay" type="text" inputmode="numeric" placeholder="30" autocomplete="off" />
+    <label for="moistureCondition" data-balance-copy="moisture">Состояние почвы</label>
+    <select id="moistureCondition">
+      <option value="" data-balance-copy="chooseMoisture">Выберите состояние</option>
+      <option value="recent" data-balance-copy="moistureRecent">Недавно полито / был дождь</option>
+      <option value="normal" data-balance-copy="moistureNormal">Нормальная влажность</option>
+      <option value="dry" data-balance-copy="moistureDry">Почва сухая</option>
+    </select>
+    <p class="balance-help" data-balance-copy="moistureHint">Выберите понятное состояние — запас влаги в миллиметрах система рассчитает сама.</p>
     <p id="riceBalanceNote" class="balance-help hidden" data-balance-copy="rice">Для риса нужен отдельный баланс затопленного чека; обычный расчёт объёма не применяется.</p>
-    <details id="stageCalendar"><summary data-balance-copy="calendar">Календарь роста · уточнить</summary>
+    <details id="stageCalendar"><summary data-balance-copy="calendar">Расширенные настройки</summary>
       <p class="balance-help" data-balance-copy="calendarHint">Ориентировочные сроки: измените под сорт и климат. Люцерна — первый цикл; после укоса используйте «Другая культура» с текущими параметрами.</p>
       <div class="balance-pair">
         <div><label for="stageInitial" data-balance-copy="initial">Начало, дней</label><input id="stageInitial" type="text" inputmode="numeric" /></div>

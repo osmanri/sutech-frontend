@@ -43,7 +43,7 @@ vm.runInContext(fs.readFileSync(`${__dirname}/js/app.js`, 'utf8'), context);
 const run = code => vm.runInContext(code, context);
 elements.get('soilType').value = 'loam';
 elements.get('growthDay').value = '60';
-elements.get('yesterdayDeficit').value = '12,5';
+elements.get('moistureCondition').value = 'normal';
 run("window.SuBalance.init('cotton', 'open', 'ru')");
 const near = (actual, expected, tolerance = 1e-5) => assert.ok(Math.abs(actual - expected) < tolerance, `${actual} != ${expected}`);
 
@@ -86,8 +86,9 @@ run('submitFinalCalculation()');
 near(sent.area, 100, 0.001);
 assert.equal(sent.area_unit, 'sotka');
 assert.equal(sent.latitude, 0);
-assert.equal(sent.balance_version, 1);
-assert.equal(sent.yesterday_deficit, 12.5);
+assert.equal(sent.balance_version, 2);
+assert.equal(sent.moisture_condition, 'normal');
+assert.equal(sent.yesterday_deficit, undefined);
 assert.deepEqual(sent.stage_days, [30,50,60,55]);
 assert.equal(sent.kc, undefined, 'Legacy fixed Kc must not override the stage calculation');
 run('undoFieldPoint()');
@@ -149,13 +150,20 @@ run('resetFieldContour(); window.L = undefined; updateMapUI()');
 assert.equal(elements.get('btnUseRadius').disabled, true);
 assert.equal(elements.get('fieldAreaInput').readOnly, false);
 // Mandatory inputs fail closed, including empty and malformed decimals.
-elements.get('yesterdayDeficit').value = '';
+elements.get('moistureCondition').value = '';
 assert.equal(run('window.SuBalance.payload()'), null);
-elements.get('yesterdayDeficit').value = '6,7';
-near(run('window.SuBalance.payload().yesterday_deficit'), 6.7);
+elements.get('moistureCondition').value = 'dry';
+assert.equal(run('window.SuBalance.payload().moisture_condition'), 'dry');
 elements.get('stageInitial').value = '32';
 run("window.SuBalance.sync('wheat','open','kz'); window.SuBalance.sync('cotton','open','ru')");
 assert.equal(elements.get('stageInitial').value, '32', 'Keep edited calendar when switching crops');
+run("window.SuBalance.sync('wheat','open','ru')");
+assert.deepEqual(
+  ['stageInitial','stageDevelopment','stageMiddle','stageLate'].map(id => Number(elements.get(id).value)),
+  [20,25,60,30],
+  'Selecting a crop must fill its standard stage calendar'
+);
+run("window.SuBalance.sync('cotton','open','ru')");
 run("window.SuBalance.sync('cotton','greenhouse','ru')");
 assert.equal(run('window.SuBalance.payload()'), null, 'Greenhouse ET0 must not be invented');
 elements.get('greenhouseEt0').value = '2,5';

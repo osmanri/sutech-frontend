@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="css/app.css?v=5.0.0" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
-  <script defer src="js/balance.js?v=5.1.0"></script>
+  <script defer src="js/balance.js?v=5.1.1"></script>
   <script defer src="js/app.js?v=5.0.0"></script>
 </head>
 <body>
@@ -349,10 +349,13 @@
       <label for="customP" data-balance-copy="customP">Доля истощения p (0,1–0,8)</label><input id="customP" type="text" inputmode="decimal" />
       <label for="customRoot" data-balance-copy="root">Глубина корней, м</label><input id="customRoot" type="text" inputmode="decimal" />
     </div>
-    <div id="greenhouseBalance" class="balance-fields hidden">
-      <label for="greenhouseEt0" data-balance-copy="greenhouseEt0">ET₀ теплицы, мм/сутки</label><input id="greenhouseEt0" type="text" inputmode="decimal" />
-      <p class="balance-help" data-balance-copy="greenhouseHint">Введите ET₀ по микроклимату теплицы. Внешняя погода не заменяет его; осадки внутри считаются нулевыми.</p>
-    </div>
+    <details id="greenhouseBalance" class="hidden">
+      <summary data-balance-copy="greenhouseSettings">Микроклимат теплицы · необязательно</summary>
+      <div class="balance-fields">
+        <label for="greenhouseEt0" data-balance-copy="greenhouseEt0">Измеренный ET₀, мм/сутки</label><input id="greenhouseEt0" type="text" inputmode="decimal" />
+        <p class="balance-help" data-balance-copy="greenhouseHint">Оставьте пустым — система автоматически рассчитает ET₀ теплицы по Open-Meteo.</p>
+      </div>
+    </details>
     <details><summary data-balance-copy="energy">Стоимость насоса · необязательно</summary>
       <div class="balance-fields">
         <label for="powerPrice" data-balance-copy="price">Тариф, ₸/кВт·ч</label><input id="powerPrice" type="text" inputmode="decimal" />

@@ -174,7 +174,8 @@ assert.deepEqual(
 );
 run("window.SuBalance.sync('cotton','open','ru')");
 run("window.SuBalance.sync('cotton','greenhouse','ru')");
-assert.equal(run('window.SuBalance.payload()'), null, 'Greenhouse ET0 must not be invented');
+assert.equal(run('window.SuBalance.complete()'), true, 'Greenhouse must work without expert ET0 input');
+assert.equal(run('window.SuBalance.payload().greenhouse_et0'), undefined, 'Empty expert override must stay absent');
 elements.get('greenhouseEt0').value = '2,5';
 near(run('window.SuBalance.payload().greenhouse_et0'), 2.5);
 run("window.SuBalance.sync('other','open','ru')");

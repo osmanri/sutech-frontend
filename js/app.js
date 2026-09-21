@@ -325,7 +325,7 @@ const UI_COPY = {
     pageIntro: 'Очертите поле. Выберите культуру. Узнайте, сколько воды нужно сегодня.',
     methodNote: 'Расчет на основе погоды и потребности культуры', mapEyebrow: '01 / ГРАНИЦЫ УЧАСТКА',
     satellite: 'Спутник', streets: 'Схема', mapDrawLabel: 'Нажмите, чтобы добавить угол поля',
-    selectRegion: '📍 Выбрать регион...', btnUndoPoint: '↩️ Отменить точку',
+    selectRegion: '📍 Выбрать регион...', selectRegionPrompt: '📍 Выберите город / регион...', btnUndoPoint: '↩️ Отменить точку',
     btnResetContour: '🔄 Сбросить', btnClearLocation: 'Убрать маркер',
     mapErrorTitle: 'Не удалось загрузить карту', mapErrorBody: 'Проверьте соединение и повторите загрузку. Площадь можно ввести вручную.',
     retryMap: 'Повторить загрузку', noteTitle: 'Точность начинается с границ',
@@ -338,7 +338,7 @@ const UI_COPY = {
     pageIntro: 'Алқапты белгілеңіз. Дақылды таңдаңыз. Бүгін қанша су қажет екенін біліңіз.',
     methodNote: 'Ауа райы мен дақыл қажеттілігіне негізделген есеп', mapEyebrow: '01 / АЛҚАП ШЕКАРАСЫ',
     satellite: 'Спутник', streets: 'Сызба', mapDrawLabel: 'Алқап бұрышын қосу үшін басыңыз',
-    selectRegion: '📍 Аймақты таңдау...', btnUndoPoint: '↩️ Нүктені жою',
+    selectRegion: '📍 Аймақты таңдау...', selectRegionPrompt: '📍 Өңірді / қаланы таңдаңыз...', btnUndoPoint: '↩️ Нүктені жою',
     btnResetContour: '🔄 Қайтару', btnClearLocation: 'Белгіні жою',
     mapErrorTitle: 'Картаны жүктеу мүмкін болмады', mapErrorBody: 'Байланысты тексеріп, қайта жүктеңіз. Ауданды қолмен енгізуге болады.',
     retryMap: 'Қайта жүктеу', noteTitle: 'Дәлдік шекарадан басталады',
@@ -1278,12 +1278,25 @@ function submitFinalCalculation() {
   if (isSubmitting) return;
   const t = I18N[state.lang] || I18N.ru;
 
-  // 1. Проверка координат (если не выбраны, автоматически подставляем базовый регион Кызылорда)
+  // 1. Проверка координат и выбора региона (требуем явный выбор города/точки)
   if (state.latitude === null || state.longitude === null) {
-    selectRegion('kyzylorda', true);
+    const regSelect = document.getElementById('regionSelect');
+    if (regSelect && regSelect.value && KZ_REGIONS[regSelect.value]) {
+      selectRegion(regSelect.value, true);
+    }
   }
   if (state.latitude === null || state.longitude === null) {
-    showToast(t.errNeedLocation, 'warning');
+    const msg = state.lang === 'kz'
+      ? 'Алдымен өңірді/қаланы таңдаңыз немесе картада алқапты көрсетіңіз!'
+      : 'Пожалуйста, выберите ваш город/регион в списке или укажите поле на карте!';
+    showToast(msg, 'warning');
+    triggerHaptic('warning');
+    const regSelect = document.getElementById('regionSelect');
+    if (regSelect) {
+      regSelect.focus();
+      regSelect.classList.add('select-highlight');
+      setTimeout(() => regSelect.classList.remove('select-highlight'), 2500);
+    }
     document.getElementById('block1')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
@@ -1508,11 +1521,10 @@ document.addEventListener('DOMContentLoaded', () => {
   addKeyboardCardSupport();
 
 
-  // Pre-select default state UI
+  // Pre-select default state UI (region is selected by the user, not pre-forced)
   selectCrop(state.crop);
   selectIrrigation(state.irrigation_type);
   setAreaUnit(state.area_unit);
-  selectRegion('kyzylorda', true);
   initMotion();
 
   if (window.lucide) {

@@ -116,4 +116,6 @@ body{background:radial-gradient(ellipse at 100% 0,#e4eef0 0,transparent 48%),var
 .balance-error[hidden],.balance-error:empty{display:none!important}
 .balance-error:not(:empty):before{content:"⚠️";font-size:14px}
 .map-toolbar button#btnUndoPoint{max-width:260px;margin:0 auto}
+.region-select.select-highlight{border-color:#eab308!important;box-shadow:0 0 0 3px rgba(234,179,8,0.35)!important;animation:pulseSelect .4s ease}
+@keyframes pulseSelect{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
 

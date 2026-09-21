@@ -54,9 +54,9 @@
             <div id="mapError" class="map-error hidden" role="status"><strong data-copy="mapErrorTitle">Не удалось загрузить карту</strong><span data-copy="mapErrorBody">Проверьте соединение и повторите загрузку. Площадь можно ввести вручную.</span><button id="btnRetryMap" onclick="retryFieldMap()" data-copy="retryMap">Повторить загрузку</button></div>
           </div>
           <div class="map-toolbar">
-            <button id="btnUndoPoint" onclick="undoFieldPoint()" disabled data-copy="btnUndoPoint">↩️ Отменить точку</button>
-            <button id="btnResetContour" onclick="resetFieldContour()" disabled data-copy="btnResetContour">🔄 Сбросить</button>
-            <button id="btnClearLocation" onclick="clearCurrentLocation()" disabled data-copy="btnClearLocation">Убрать маркер</button>
+            <button id="btnUndoPoint" onclick="undoFieldPoint()" disabled data-copy="btnUndoPoint">Убрать точку</button>
+            <button id="btnResetContour" onclick="resetFieldContour()" disabled data-copy="btnResetContour" class="hidden" style="display:none;" aria-hidden="true">🔄 Сбросить</button>
+            <button id="btnClearLocation" onclick="clearCurrentLocation()" disabled data-copy="btnClearLocation" class="hidden" style="display:none;" aria-hidden="true">Убрать маркер</button>
           </div>
           <p id="mapHint" class="map-hint sr-only"></p>
           <div class="legacy-map-controls" aria-hidden="true"><button id="btnAddCenter" onclick="addMapCenter()" tabindex="-1">Точка в центре</button><button id="btnUseRadius" aria-pressed="false" onclick="usePointRadius()" tabindex="-1">По радиусу</button><div id="radiusControls" class="radius-controls hidden"><label id="radiusLabel" for="fieldRadiusInput">Радиус, м</label><input id="fieldRadiusInput" type="number" min="1" max="10000" step="any" value="100" inputmode="decimal" oninput="updatePointRadius()" /></div></div>

@@ -30,14 +30,37 @@
           <div class="section-heading"><div><h2 id="block1Title">Ваше поле на карте</h2></div><span id="block1StatusPill" class="status-pill">Выберите поле</span></div>
           <div class="map-topbar">
             <div class="basemap-switch"><button id="btnSatellite" aria-pressed="false" onclick="setMapBasemap('satellite')" data-copy="satellite">Спутник</button><button id="btnStreets" aria-pressed="true" onclick="setMapBasemap('streets')" data-copy="streets">Схема</button></div>
-            <button id="btnGetLocation" class="gps-button" onclick="requestGeolocation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z M15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg><span id="btnLocationText">Моя геопозиция</span></button>
+            <div class="map-location-actions">
+              <select id="regionSelect" class="region-select" onchange="selectRegion(this.value)" aria-label="Быстрый выбор региона">
+                <option value="" data-copy="selectRegion">📍 Выбрать регион...</option>
+                <option value="kyzylorda">Кызылорда (Сырдария)</option>
+                <option value="turkestan">Туркестан</option>
+                <option value="shymkent">Шымкент</option>
+                <option value="zhambyl">Тараз (Жамбыл)</option>
+                <option value="almaty">Алматы</option>
+                <option value="kostanay">Костанай</option>
+                <option value="akmola">Кокшетау (Акмола)</option>
+                <option value="sko">Петропавловск (СКО)</option>
+                <option value="pavlodar">Павлодар</option>
+                <option value="vko">Усть-Каменогорск (ВКО)</option>
+                <option value="karaganda">Караганда</option>
+                <option value="aktobe">Актобе</option>
+                <option value="atyrau">Атырау</option>
+                <option value="zko">Уральск (ЗКО)</option>
+              </select>
+              <button id="btnGetLocation" class="gps-button" onclick="requestGeolocation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z M15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg><span id="btnLocationText">GPS</span></button>
+            </div>
           </div>
           <div class="map-stage"><div id="map" role="region" aria-label="Карта поля" aria-describedby="mapHint"></div>
             <div id="mapError" class="map-error hidden" role="status"><strong data-copy="mapErrorTitle">Не удалось загрузить карту</strong><span data-copy="mapErrorBody">Проверьте соединение и повторите загрузку. Площадь можно ввести вручную.</span><button id="btnRetryMap" onclick="retryFieldMap()" data-copy="retryMap">Повторить загрузку</button></div>
           </div>
-          <div class="map-toolbar"><button id="btnUndoPoint" onclick="clearCurrentLocation()" disabled>Убрать геопозицию</button></div>
+          <div class="map-toolbar">
+            <button id="btnUndoPoint" onclick="undoFieldPoint()" disabled data-copy="btnUndoPoint">↩️ Отменить точку</button>
+            <button id="btnResetContour" onclick="resetFieldContour()" disabled data-copy="btnResetContour">🔄 Сбросить</button>
+            <button id="btnClearLocation" onclick="clearCurrentLocation()" disabled data-copy="btnClearLocation">Убрать маркер</button>
+          </div>
           <p id="mapHint" class="map-hint sr-only"></p>
-          <div class="legacy-map-controls" aria-hidden="true"><button id="btnAddCenter" onclick="addMapCenter()" tabindex="-1">Точка в центре</button><button id="btnUseRadius" aria-pressed="false" onclick="usePointRadius()" tabindex="-1">По радиусу</button><button id="btnResetContour" onclick="resetFieldContour()" tabindex="-1">Сбросить контур</button><div id="radiusControls" class="radius-controls hidden"><label id="radiusLabel" for="fieldRadiusInput">Радиус, м</label><input id="fieldRadiusInput" type="number" min="1" max="10000" step="any" value="100" inputmode="decimal" oninput="updatePointRadius()" /></div></div>
+          <div class="legacy-map-controls" aria-hidden="true"><button id="btnAddCenter" onclick="addMapCenter()" tabindex="-1">Точка в центре</button><button id="btnUseRadius" aria-pressed="false" onclick="usePointRadius()" tabindex="-1">По радиусу</button><div id="radiusControls" class="radius-controls hidden"><label id="radiusLabel" for="fieldRadiusInput">Радиус, м</label><input id="fieldRadiusInput" type="number" min="1" max="10000" step="any" value="100" inputmode="decimal" oninput="updatePointRadius()" /></div></div>
           <div class="area-readout hidden" role="status" aria-live="polite" aria-hidden="true"><span class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 5 14-2 3 14-14 4-3-16Z"/></svg></span><div><span id="mapAreaLabel">Площадь участка</span><strong id="mapAreaValue">—</strong><span id="mapAreaStatus"></span></div></div>
           <div id="gpsStatusBlock" class="gps-status hidden" role="status"><span class="gps-spinner"></span><span id="gpsStatusText"></span></div>
           <div id="coordsCard" class="coords-card hidden"><span id="coordsCardTitle"></span><span id="coordsAccuracy"></span><div><span id="labelLat">Широта</span> <strong id="displayLat"></strong></div><div><span id="labelLon">Долгота</span> <strong id="displayLon"></strong></div></div>
@@ -322,18 +345,39 @@
   <div><span aria-hidden="true">4</span><h2 data-balance-copy="title">Запас влаги</h2></div>
   <p data-balance-copy="intro">Решение по запасу воды у корней и суточному прогнозу Open-Meteo.</p>
   <div class="balance-fields">
-    <label for="soilType" data-balance-copy="soil">Тип почвы</label>
-    <select id="soilType"><option value="" data-balance-copy="choose">Выберите</option><option value="sand" data-balance-copy="sand">Песок</option><option value="loam" data-balance-copy="loam">Суглинок</option><option value="clay" data-balance-copy="clay">Глина</option></select>
-    <label for="growthDay" data-balance-copy="day">Дней от посадки</label><input id="growthDay" type="text" inputmode="numeric" placeholder="30" autocomplete="off" />
-    <label for="moistureCondition" data-balance-copy="moisture">Состояние почвы</label>
-    <select id="moistureCondition">
-      <option value="" data-balance-copy="chooseMoisture">Выберите состояние</option>
-      <option value="recent" data-balance-copy="moistureRecent">Недавно полито / был дождь</option>
-      <option value="normal" data-balance-copy="moistureNormal">Нормальная влажность</option>
-      <option value="dry" data-balance-copy="moistureDry">Почва сухая</option>
-    </select>
+    <label data-balance-copy="soil">Тип почвы</label>
+    <div id="soilChips" class="segmented-chips" role="radiogroup" aria-label="Тип почвы">
+      <button type="button" class="chip-btn" data-soil="sand" onclick="setSoilType('sand')" role="radio" aria-checked="false">
+        <span>🏜️</span> <span data-balance-copy="sand">Песок</span>
+      </button>
+      <button type="button" class="chip-btn chip-active" data-soil="loam" onclick="setSoilType('loam')" role="radio" aria-checked="true">
+        <span>🌱</span> <span data-balance-copy="loam">Суглинок</span>
+      </button>
+      <button type="button" class="chip-btn" data-soil="clay" onclick="setSoilType('clay')" role="radio" aria-checked="false">
+        <span>🧱</span> <span data-balance-copy="clay">Глина</span>
+      </button>
+    </div>
+    <input type="hidden" id="soilType" value="loam" />
+
+    <label for="growthDay" data-balance-copy="day">Дней от посадки</label>
+    <input id="growthDay" type="text" inputmode="numeric" value="30" placeholder="30" autocomplete="off" />
+
+    <label data-balance-copy="moisture">Состояние почвы</label>
+    <div id="moistureChips" class="segmented-chips" role="radiogroup" aria-label="Состояние почвы">
+      <button type="button" class="chip-btn" data-moisture="recent" onclick="setMoistureCondition('recent')" role="radio" aria-checked="false">
+        <span>💧</span> <span data-balance-copy="moistureRecent">Недавно полито</span>
+      </button>
+      <button type="button" class="chip-btn chip-active" data-moisture="normal" onclick="setMoistureCondition('normal')" role="radio" aria-checked="true">
+        <span>🌿</span> <span data-balance-copy="moistureNormal">В норме</span>
+      </button>
+      <button type="button" class="chip-btn" data-moisture="dry" onclick="setMoistureCondition('dry')" role="radio" aria-checked="false">
+        <span>☀️</span> <span data-balance-copy="moistureDry">Сухая</span>
+      </button>
+    </div>
+    <input type="hidden" id="moistureCondition" value="normal" />
+
     <p class="balance-help" data-balance-copy="moistureHint">Выберите понятное состояние — запас влаги в миллиметрах система рассчитает сама.</p>
-    <p id="riceBalanceNote" class="balance-help hidden" data-balance-copy="rice">Для риса нужен отдельный баланс затопленного чека; обычный расчёт объёма не применяется.</p>
+    <p id="riceBalanceNote" class="balance-help hidden" data-balance-copy="rice">Для риса рассчитывается норма затопления чека (слой 10–15 см + фильтрация в грунт).</p>
     <details id="stageCalendar"><summary data-balance-copy="calendar">Расширенные настройки</summary>
       <p class="balance-help" data-balance-copy="calendarHint">Ориентировочные сроки: измените под сорт и климат. Люцерна — первый цикл; после укоса используйте «Другая культура» с текущими параметрами.</p>
       <div class="balance-pair">
@@ -345,9 +389,9 @@
     </details>
     <div id="customCropBalance" class="balance-fields hidden">
       <p class="balance-help" data-balance-copy="customHint">Введите параметры текущей стадии вашей культуры.</p>
-      <label for="customKc">Kc</label><input id="customKc" type="text" inputmode="decimal" />
-      <label for="customP" data-balance-copy="customP">Доля истощения p (0,1–0,8)</label><input id="customP" type="text" inputmode="decimal" />
-      <label for="customRoot" data-balance-copy="root">Глубина корней, м</label><input id="customRoot" type="text" inputmode="decimal" />
+      <label for="customKc">Kc</label><input id="customKc" type="text" inputmode="decimal" placeholder="1.0" />
+      <label for="customP" data-balance-copy="customP">Доля истощения p (0,1–0,8)</label><input id="customP" type="text" inputmode="decimal" placeholder="0.5" />
+      <label for="customRoot" data-balance-copy="root">Глубина корней, м</label><input id="customRoot" type="text" inputmode="decimal" placeholder="0.6" />
     </div>
     <details id="greenhouseBalance" class="hidden">
       <summary data-balance-copy="greenhouseSettings">Микроклимат теплицы · необязательно</summary>

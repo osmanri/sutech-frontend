@@ -64,9 +64,9 @@ window.currentFieldType = currentFieldType;
 window.currentSaline = currentSaline;
 
 const state = {
-  latitude:         null,
-  longitude:        null,
-  accuracy:         null,
+  latitude:         47.1167,
+  longitude:        51.8833,
+  accuracy:         5000,
   crop:             currentCrop,
   area:             currentArea,
   area_unit:        currentUnit,
@@ -727,6 +727,7 @@ function retryFieldMap() {
 }
 
 const KZ_REGIONS = {
+  atyrau:    { name: 'Атырау',   nameKz: 'Атырау',   lat: 47.1167, lon: 51.8833 },
   kyzylorda: { name: 'Кызылорда', nameKz: 'Қызылорда', lat: 44.85, lon: 65.50 },
   turkestan: { name: 'Туркестан', nameKz: 'Түркістан', lat: 43.30, lon: 68.27 },
   shymkent:  { name: 'Шымкент',  nameKz: 'Шымкент',  lat: 42.32, lon: 69.60 },
@@ -739,8 +740,7 @@ const KZ_REGIONS = {
   vko:       { name: 'Усть-Каменогорск (ВКО)', nameKz: 'Өскемен (ШҚО)', lat: 49.95, lon: 82.61 },
   karaganda: { name: 'Караганда', nameKz: 'Қарағанды', lat: 49.80, lon: 73.10 },
   aktobe:    { name: 'Актобе',   nameKz: 'Ақтөбе',   lat: 50.28, lon: 57.17 },
-  atyrau:    { name: 'Атырау',   nameKz: 'Атырау',   lat: 47.11, lon: 51.92 },
-  zko:       { name: 'Уральск (ЗКО)', nameKz: 'Орал (БҚО)', lat: 51.23, lon: 51.37 },
+  zko:       { name: 'Атырау (Прикаспий)', nameKz: 'Атырау (Каспий маңы)', lat: 47.1167, lon: 51.8833 },
 };
 
 function selectRegion(regionKey, silent = false) {

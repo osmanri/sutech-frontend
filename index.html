@@ -32,7 +32,7 @@
             <div class="basemap-switch"><button id="btnSatellite" aria-pressed="false" onclick="setMapBasemap('satellite')" data-copy="satellite">Спутник</button><button id="btnStreets" aria-pressed="true" onclick="setMapBasemap('streets')" data-copy="streets">Схема</button></div>
             <div class="map-location-actions">
               <select id="regionSelect" class="region-select" onchange="selectRegion(this.value)" aria-label="Быстрый выбор региона">
-                <option value="" disabled selected data-copy="selectRegionPrompt">📍 Выберите город / регион...</option>
+                <option value="atyrau" selected data-copy="selectRegionPrompt">📍 Атырау (47.1167° N, 51.8833° E)</option>
                 <option value="kyzylorda">Кызылорда (Сырдария)</option>
                 <option value="turkestan">Туркестан</option>
                 <option value="shymkent">Шымкент</option>
@@ -45,8 +45,6 @@
                 <option value="vko">Усть-Каменогорск (ВКО)</option>
                 <option value="karaganda">Караганда</option>
                 <option value="aktobe">Актобе</option>
-                <option value="atyrau">Атырау</option>
-                <option value="zko">Уральск (ЗКО)</option>
               </select>
               <button id="btnGetLocation" class="gps-button" onclick="requestGeolocation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z M15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg><span id="btnLocationText">GPS</span></button>
             </div>

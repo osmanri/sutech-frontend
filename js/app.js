@@ -743,25 +743,33 @@ const KZ_REGIONS = {
   zko:       { name: 'Уральск (ЗКО)', nameKz: 'Орал (БҚО)', lat: 51.23, lon: 51.37 },
 };
 
-function selectRegion(regionKey) {
+function selectRegion(regionKey, silent = false) {
   if (!regionKey || !KZ_REGIONS[regionKey]) return;
   const reg = KZ_REGIONS[regionKey];
   state.latitude = reg.lat;
   state.longitude = reg.lon;
   state.accuracy = 5000;
+  const regSelect = document.getElementById('regionSelect');
+  if (regSelect && regSelect.value !== regionKey) {
+    regSelect.value = regionKey;
+  }
   if (fieldMap) {
     const loc = [reg.lat, reg.lon];
     if (gpsMarker) gpsMarker.setLatLng(loc);
-    else gpsMarker = L.marker(loc).addTo(fieldMap);
-    fieldMap.flyTo(loc, 11, { animate: !window.matchMedia('(prefers-reduced-motion: reduce)').matches });
+    else if (window.L) gpsMarker = L.marker(loc).addTo(fieldMap);
+    if (!silent) {
+      fieldMap.flyTo(loc, 11, { animate: !window.matchMedia('(prefers-reduced-motion: reduce)').matches });
+    }
   }
   renderCoordinates();
   updateBlock1StatusPill();
   updateSummaryCard();
   updateMapUI();
-  const regionName = state.lang === 'kz' ? reg.nameKz : reg.name;
-  showToast(state.lang === 'kz' ? `${regionName} аймағы таңдалды` : `Выбран регион: ${regionName}`, 'info');
-  triggerHaptic('light');
+  if (!silent) {
+    const regionName = state.lang === 'kz' ? reg.nameKz : reg.name;
+    showToast(state.lang === 'kz' ? `${regionName} аймағы таңдалды` : `Выбран регион: ${regionName}`, 'info');
+    triggerHaptic('light');
+  }
 }
 
 function selectFieldLocation(point) {
@@ -1270,7 +1278,10 @@ function submitFinalCalculation() {
   if (isSubmitting) return;
   const t = I18N[state.lang] || I18N.ru;
 
-  // 1. Проверка координат
+  // 1. Проверка координат (если не выбраны, автоматически подставляем базовый регион Кызылорда)
+  if (state.latitude === null || state.longitude === null) {
+    selectRegion('kyzylorda', true);
+  }
   if (state.latitude === null || state.longitude === null) {
     showToast(t.errNeedLocation, 'warning');
     document.getElementById('block1')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1501,6 +1512,7 @@ document.addEventListener('DOMContentLoaded', () => {
   selectCrop(state.crop);
   selectIrrigation(state.irrigation_type);
   setAreaUnit(state.area_unit);
+  selectRegion('kyzylorda', true);
   initMotion();
 
   if (window.lucide) {

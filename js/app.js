@@ -112,9 +112,10 @@ const I18N = {
     block1Desc:         'Найдите поле по GPS и отметьте его углы по порядку. Площадь рассчитается автоматически.',
     mapLabel: 'Карта поля',
     mapHint: 'Нажмите на карту: минимум 3 точки. С клавиатуры: стрелки для сдвига, кнопка «Добавить центр карты» для точки.',
-    btnResetContour: '🔄 Сбросить контур',
+    btnResetContour: 'Сбросить контур',
     btnUseRadius: 'Использовать радиус точки',
     btnUndoPoint: 'Убрать геопозицию',
+    btnClearLocation: 'Убрать маркер',
     btnAddCenter: 'Добавить центр карты',
     radiusLabel: 'Радиус, м',
     mapAreaLabel: 'Площадь по карте · приблизительно',
@@ -219,9 +220,10 @@ const I18N = {
     block1Desc:         'Алқапты GPS арқылы тауып, бұрыштарын ретімен белгілеңіз. Ауданы автоматты есептеледі.',
     mapLabel: 'Алқап картасы',
     mapHint: 'Картада кемінде 3 нүкте белгілеңіз. Пернетақта: жылжыту үшін бағыттауыштар, нүкте үшін «Карта ортасын қосу».',
-    btnResetContour: '🔄 Контурды тазарту',
+    btnResetContour: 'Контурды тазарту',
     btnUseRadius: 'Нүкте радиусын пайдалану',
     btnUndoPoint: 'Геопозицияны жою',
+    btnClearLocation: 'Маркерді өшіру',
     btnAddCenter: 'Карта ортасын қосу',
     radiusLabel: 'Радиус, м',
     mapAreaLabel: 'Карта бойынша аудан · шамамен',
@@ -323,6 +325,8 @@ const UI_COPY = {
     pageIntro: 'Очертите поле. Выберите культуру. Узнайте, сколько воды нужно сегодня.',
     methodNote: 'Расчет на основе погоды и потребности культуры', mapEyebrow: '01 / ГРАНИЦЫ УЧАСТКА',
     satellite: 'Спутник', streets: 'Схема', mapDrawLabel: 'Нажмите, чтобы добавить угол поля',
+    selectRegion: '📍 Выбрать регион...', btnUndoPoint: '↩️ Отменить точку',
+    btnResetContour: '🔄 Сбросить', btnClearLocation: 'Убрать маркер',
     mapErrorTitle: 'Не удалось загрузить карту', mapErrorBody: 'Проверьте соединение и повторите загрузку. Площадь можно ввести вручную.',
     retryMap: 'Повторить загрузку', noteTitle: 'Точность начинается с границ',
     noteBody: 'Отмечайте углы по порядку. Минимум три точки — и площадь автоматически появится в расчете. Спутниковая подложка поможет найти границы.',
@@ -334,6 +338,8 @@ const UI_COPY = {
     pageIntro: 'Алқапты белгілеңіз. Дақылды таңдаңыз. Бүгін қанша су қажет екенін біліңіз.',
     methodNote: 'Ауа райы мен дақыл қажеттілігіне негізделген есеп', mapEyebrow: '01 / АЛҚАП ШЕКАРАСЫ',
     satellite: 'Спутник', streets: 'Сызба', mapDrawLabel: 'Алқап бұрышын қосу үшін басыңыз',
+    selectRegion: '📍 Аймақты таңдау...', btnUndoPoint: '↩️ Нүктені жою',
+    btnResetContour: '🔄 Қайтару', btnClearLocation: 'Белгіні жою',
     mapErrorTitle: 'Картаны жүктеу мүмкін болмады', mapErrorBody: 'Байланысты тексеріп, қайта жүктеңіз. Ауданды қолмен енгізуге болады.',
     retryMap: 'Қайта жүктеу', noteTitle: 'Дәлдік шекарадан басталады',
     noteBody: 'Бұрыштарды ретімен белгілеңіз. Кемінде үш нүкте — аудан есепке автоматты енгізіледі. Спутниктік карта шекараны табуға көмектеседі.',
@@ -343,7 +349,8 @@ const UI_COPY = {
 Object.assign(I18N.ru, {
   block1Title: 'Ваше поле на карте', block1Desc: 'Найдите участок и обозначьте его границы.',
   block1StatusWait: 'Выберите поле', block1StatusReady: 'Участок выбран',
-  btnLocationText: 'Моя геопозиция', btnResetContour: 'Сбросить контур', btnUndoPoint: 'Убрать геопозицию', btnAddCenter: 'Точка в центре', btnUseRadius: 'По радиусу', mapAreaLabel: 'Площадь',
+  btnLocationText: 'GPS', btnResetContour: 'Сбросить контур', btnUndoPoint: '↩️ Отменить точку', btnClearLocation: 'Убрать маркер',
+  btnAddCenter: 'Точка в центре', btnUseRadius: 'По радиусу', mapAreaLabel: 'Площадь',
   mapHint: 'Минимум 3 точки по границе.',
   mapAreaLabel: 'Площадь', mapReady: 'Добавлено в расчет. Для ручного ввода сбросьте контур.',
   mapRadiusHint: 'Нажмите на карту, чтобы переместить круг. Измените радиус ниже.',
@@ -352,12 +359,13 @@ Object.assign(I18N.ru, {
   fieldText_open: 'Открытое поле', fieldText_greenhouse: 'Теплица', salineText_yes: 'Солончак',
   summaryTitle: 'Ваш расчет полива', btnSubmitText: 'Рассчитать полив',
   submitHint: 'Метеоданные и расчет FAO–56 придут коротким отчетом в Telegram.',
-  noCoordsYet: 'Выберите поле на карте',
+  noCoordsYet: 'Выберите поле на карте или регион',
 });
 Object.assign(I18N.kz, {
   block1Title: 'Картадағы алқабыңыз', block1Desc: 'Алқапты тауып, шекарасын белгілеңіз.',
   block1StatusWait: 'Алқапты таңдаңыз', block1StatusReady: 'Алқап таңдалды',
-  btnLocationText: 'Менің орным', btnResetContour: 'Контурды тазарту', btnUndoPoint: 'Геопозицияны жою', btnAddCenter: 'Ортадағы нүкте', btnUseRadius: 'Радиус бойынша', mapAreaLabel: 'Аудан',
+  btnLocationText: 'GPS', btnResetContour: 'Контурды тазарту', btnUndoPoint: '↩️ Нүктені жою', btnClearLocation: 'Белгіні жою',
+  btnAddCenter: 'Ортадағы нүкте', btnUseRadius: 'Радиус бойынша', mapAreaLabel: 'Аудан',
   mapHint: 'Шекарада кемінде 3 нүкте.',
   mapAreaLabel: 'Аудан', mapReady: 'Есепке енгізілді. Қолмен енгізу үшін контурды тазалаңыз.',
   mapRadiusHint: 'Шеңберді жылжыту үшін картаны басыңыз. Радиусты төменде өзгертіңіз.',
@@ -366,7 +374,7 @@ Object.assign(I18N.kz, {
   fieldText_open: 'Ашық алқап', fieldText_greenhouse: 'Жылыжай', salineText_yes: 'Сортаң',
   summaryTitle: 'Суару есебіңіз', btnSubmitText: 'Суаруды есептеу',
   submitHint: 'Ауа райы мен FAO–56 есебі Telegram-ға қысқа хабарламамен келеді.',
-  noCoordsYet: 'Картадан алқапты таңдаңыз',
+  noCoordsYet: 'Картадан алқапты не аймақты таңдаңыз',
 });
 
 // ─── 6. Языковое управление ───────────────────────────────────────────────
@@ -413,6 +421,14 @@ function applyLanguage(lang) {
   document.getElementById('coordsCardTitle').textContent = t.coordsCardTitle;
   document.getElementById('labelLat').textContent    = t.labelLat;
   document.getElementById('labelLon').textContent    = t.labelLon;
+  const regSelect = document.getElementById('regionSelect');
+  if (regSelect) {
+    Array.from(regSelect.options).forEach(opt => {
+      if (opt.value && KZ_REGIONS[opt.value]) {
+        opt.textContent = lang === 'kz' ? KZ_REGIONS[opt.value].nameKz : KZ_REGIONS[opt.value].name;
+      }
+    });
+  }
   updateBlock1StatusPill();
   updateMapUI();
   renderCoordinates();
@@ -710,6 +726,44 @@ function retryFieldMap() {
   else { fieldMap.invalidateSize({ pan: false }); loadMapTiles(0); }
 }
 
+const KZ_REGIONS = {
+  kyzylorda: { name: 'Кызылорда', nameKz: 'Қызылорда', lat: 44.85, lon: 65.50 },
+  turkestan: { name: 'Туркестан', nameKz: 'Түркістан', lat: 43.30, lon: 68.27 },
+  shymkent:  { name: 'Шымкент',  nameKz: 'Шымкент',  lat: 42.32, lon: 69.60 },
+  zhambyl:   { name: 'Тараз (Жамбыл)', nameKz: 'Тараз (Жамбыл)', lat: 42.90, lon: 71.37 },
+  almaty:    { name: 'Алматы',   nameKz: 'Алматы',   lat: 43.24, lon: 76.91 },
+  kostanay:  { name: 'Костанай', nameKz: 'Қостанай', lat: 53.22, lon: 63.63 },
+  akmola:    { name: 'Кокшетау (Акмола)', nameKz: 'Көкшетау (Ақмола)', lat: 53.28, lon: 69.38 },
+  sko:       { name: 'Петропавловск (СКО)', nameKz: 'Петропавл (СҚО)', lat: 54.87, lon: 69.15 },
+  pavlodar:  { name: 'Павлодар', nameKz: 'Павлодар', lat: 52.29, lon: 76.95 },
+  vko:       { name: 'Усть-Каменогорск (ВКО)', nameKz: 'Өскемен (ШҚО)', lat: 49.95, lon: 82.61 },
+  karaganda: { name: 'Караганда', nameKz: 'Қарағанды', lat: 49.80, lon: 73.10 },
+  aktobe:    { name: 'Актобе',   nameKz: 'Ақтөбе',   lat: 50.28, lon: 57.17 },
+  atyrau:    { name: 'Атырау',   nameKz: 'Атырау',   lat: 47.11, lon: 51.92 },
+  zko:       { name: 'Уральск (ЗКО)', nameKz: 'Орал (БҚО)', lat: 51.23, lon: 51.37 },
+};
+
+function selectRegion(regionKey) {
+  if (!regionKey || !KZ_REGIONS[regionKey]) return;
+  const reg = KZ_REGIONS[regionKey];
+  state.latitude = reg.lat;
+  state.longitude = reg.lon;
+  state.accuracy = 5000;
+  if (fieldMap) {
+    const loc = [reg.lat, reg.lon];
+    if (gpsMarker) gpsMarker.setLatLng(loc);
+    else gpsMarker = L.marker(loc).addTo(fieldMap);
+    fieldMap.flyTo(loc, 11, { animate: !window.matchMedia('(prefers-reduced-motion: reduce)').matches });
+  }
+  renderCoordinates();
+  updateBlock1StatusPill();
+  updateSummaryCard();
+  updateMapUI();
+  const regionName = state.lang === 'kz' ? reg.nameKz : reg.name;
+  showToast(state.lang === 'kz' ? `${regionName} аймағы таңдалды` : `Выбран регион: ${regionName}`, 'info');
+  triggerHaptic('light');
+}
+
 function selectFieldLocation(point) {
   state.latitude = point.lat;
   state.longitude = ((point.lng + 540) % 360) - 180;
@@ -728,7 +782,6 @@ function addFieldPoint(point) {
     return;
   }
   if (fieldPoints.some(p => Math.abs(p.lat - point.lat) < 1e-8 && Math.abs(p.lng - point.lng) < 1e-8)) return;
-  fieldMode = 'polygon';
   fieldPoints.push(point);
   selectFieldLocation(fieldPoints[0]);
   renderFieldContour();
@@ -753,18 +806,39 @@ function renderFieldContour() {
   const valid = isSimpleFieldPolygon(fieldPoints);
   const color = valid || fieldPoints.length < 3 ? '#247C9C' : '#b91c1c';
   if (fieldLayers) {
-    if (fieldPoints.length >= 3) L.polygon(fieldPoints, { color, fillColor: '#247C9C', fillOpacity: valid ? 0.25 : 0.06, weight: 3, interactive: false }).addTo(fieldLayers);
-    else if (fieldPoints.length === 2) L.polyline(fieldPoints, { color, weight: 3, interactive: false }).addTo(fieldLayers);
-    fieldPoints.forEach(p => L.circleMarker(p, { radius: 5, color, fillColor: '#fff', fillOpacity: 1, weight: 2, interactive: false }).addTo(fieldLayers));
+    if (fieldPoints.length >= 3) {
+      L.polygon(fieldPoints, { color, fillColor: '#247C9C', fillOpacity: valid ? 0.25 : 0.06, weight: 3, interactive: false }).addTo(fieldLayers);
+    } else if (fieldPoints.length === 2) {
+      L.polyline(fieldPoints, { color, weight: 3, interactive: false }).addTo(fieldLayers);
+    }
+    fieldPoints.forEach(p => L.circleMarker(p, { radius: 6, color, fillColor: '#fff', fillOpacity: 1, weight: 2, interactive: false }).addTo(fieldLayers));
   }
-  setMappedArea(valid ? calculatePolygonArea(fieldPoints) : 0);
+
+  // CRITICAL FIX: Only switch to mapped polygon area when user has completed a valid polygon (>= 3 points).
+  // Single/double points do NOT wipe out user's manually entered area!
+  if (fieldPoints.length >= 3 && valid) {
+    fieldMode = 'polygon';
+    setMappedArea(calculatePolygonArea(fieldPoints));
+  } else {
+    fieldMode = 'manual';
+    mappedAreaM2 = 0;
+    updateMapUI();
+  }
 }
 
 function undoFieldPoint() {
-  if (fieldMode !== 'polygon') return;
+  if (fieldPoints.length === 0) {
+    const hasCurrentLoc = !!gpsMarker || (fieldMode === 'manual' && state.latitude !== null && state.longitude !== null);
+    if (hasCurrentLoc) {
+      clearCurrentLocation();
+    }
+    return;
+  }
   fieldPoints.pop();
   if (!fieldPoints.length) resetFieldContour();
   else renderFieldContour();
+  updateMapUI();
+  triggerHaptic('light');
 }
 
 // Remove the current GPS location marker without touching a drawn field.
@@ -786,6 +860,8 @@ function clearCurrentLocation() {
     const card = document.getElementById('coordsCard');
     card?.classList.add('hidden');
     card?.classList.remove('flex');
+    const regSelect = document.getElementById('regionSelect');
+    if (regSelect) regSelect.value = '';
   }
 
   updateBlock1StatusPill();
@@ -800,6 +876,8 @@ function resetFieldContour() {
   radiusCenter = null;
   fieldLayers?.clearLayers();
   setMappedArea(0);
+  updateMapUI();
+  triggerHaptic('light');
 }
 
 function usePointRadius() {
@@ -833,19 +911,32 @@ function updateMapUI() {
   const displayedStyle = tileAttempt === 1 ? (mapBasemap === 'satellite' ? 'streets' : 'satellite') : mapBasemap;
   document.getElementById('btnSatellite')?.setAttribute('aria-pressed', String(displayedStyle === 'satellite'));
   document.getElementById('btnStreets')?.setAttribute('aria-pressed', String(displayedStyle === 'streets'));
-  for (const id of ['btnResetContour', 'btnUseRadius', 'btnUndoPoint', 'btnAddCenter', 'radiusLabel', 'mapAreaLabel']) {
-    document.getElementById(id).textContent = t[id];
+  for (const id of ['btnResetContour', 'btnUndoPoint', 'btnClearLocation', 'radiusLabel', 'mapAreaLabel']) {
+    const el = document.getElementById(id);
+    if (el && t[id]) el.textContent = t[id];
   }
   document.getElementById('map').setAttribute('aria-label', t.mapLabel);
   document.getElementById('mapHint').textContent = !window.L ? t.mapUnavailable : mapTilesFailed ? t.mapTilesUnavailable : fieldMode === 'radius' ? t.mapRadiusHint : t.mapHint;
-  document.getElementById('btnUseRadius').disabled = !window.L;
-  document.getElementById('btnAddCenter').disabled = !window.L;
+  
   const hasCurrentLocation = !!gpsMarker || (fieldMode === 'manual' && state.latitude !== null && state.longitude !== null);
-  document.getElementById('btnUndoPoint').disabled = !hasCurrentLocation;
-  document.getElementById('btnUseRadius').setAttribute('aria-pressed', String(fieldMode === 'radius'));
-  document.getElementById('radiusControls').classList.toggle('hidden', fieldMode !== 'radius');
-  // The mapped value is a convenient default, not a lock. Typing or choosing
-  // a preset switches the user back to manual area entry and clears the contour.
+  const btnUndo = document.getElementById('btnUndoPoint');
+  if (btnUndo) btnUndo.disabled = !(fieldPoints.length > 0 || hasCurrentLocation);
+
+  const btnReset = document.getElementById('btnResetContour');
+  if (btnReset) btnReset.disabled = fieldPoints.length === 0 && mappedAreaM2 === 0 && fieldMode === 'manual';
+
+  const btnClear = document.getElementById('btnClearLocation');
+  if (btnClear) btnClear.disabled = !hasCurrentLocation && fieldPoints.length === 0;
+
+  const btnUseRadius = document.getElementById('btnUseRadius');
+  if (btnUseRadius) {
+    btnUseRadius.disabled = !window.L;
+    btnUseRadius.setAttribute('aria-pressed', String(fieldMode === 'radius'));
+  }
+  const btnAddCenter = document.getElementById('btnAddCenter');
+  if (btnAddCenter) btnAddCenter.disabled = !window.L;
+  document.getElementById('radiusControls')?.classList.toggle('hidden', fieldMode !== 'radius');
+  
   document.getElementById('fieldAreaInput').readOnly = false;
   document.querySelectorAll('[onclick^="setPresetArea"]').forEach(btn => { btn.disabled = false; });
   const fmt = value => value.toLocaleString(state.lang === 'kz' ? 'kk-KZ' : 'ru-RU', { maximumFractionDigits: 4 });
@@ -947,7 +1038,7 @@ function updateAreaUnitUI() {
 }
 
 function activateManualAreaInput() {
-  if (fieldMode === 'manual') return;
+  if (fieldMode === 'manual' && fieldPoints.length === 0 && radiusCenter === null) return;
   fieldMode = 'manual';
   fieldPoints = [];
   radiusCenter = null;
@@ -957,8 +1048,34 @@ function activateManualAreaInput() {
 }
 
 function parseAreaInput(value) {
-  const normalized = String(value ?? '').trim().replace(',', '.');
+  const normalized = String(value ?? '').trim().replace(/\s+/g, '').replace(',', '.');
   return /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(normalized) ? Number(normalized) : NaN;
+}
+
+function setSoilType(soil) {
+  if (!['sand', 'loam', 'clay'].includes(soil)) return;
+  const input = document.getElementById('soilType');
+  if (input) input.value = soil;
+  document.querySelectorAll('#soilChips .chip-btn').forEach(btn => {
+    const isSelected = btn.dataset.soil === soil;
+    btn.classList.toggle('chip-active', isSelected);
+    btn.setAttribute('aria-checked', String(isSelected));
+  });
+  updateSummaryCard();
+  triggerHaptic('light');
+}
+
+function setMoistureCondition(cond) {
+  if (!['recent', 'normal', 'dry'].includes(cond)) return;
+  const input = document.getElementById('moistureCondition');
+  if (input) input.value = cond;
+  document.querySelectorAll('#moistureChips .chip-btn').forEach(btn => {
+    const isSelected = btn.dataset.moisture === cond;
+    btn.classList.toggle('chip-active', isSelected);
+    btn.setAttribute('aria-checked', String(isSelected));
+  });
+  updateSummaryCard();
+  triggerHaptic('light');
 }
 
 function handleAreaChange(val) {

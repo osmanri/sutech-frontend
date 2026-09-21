@@ -14,7 +14,7 @@ window.SuBalance = (() => {
       day:'Дней от посадки', moisture:'Состояние почвы', chooseMoisture:'Выберите состояние',
       moistureRecent:'Недавно полито / был дождь', moistureNormal:'Нормальная влажность', moistureDry:'Почва сухая',
       moistureHint:'Выберите понятное состояние — запас влаги в миллиметрах система рассчитает сама.',
-      rice:'Для риса нужен отдельный баланс затопленного чека; обычный расчёт объёма не применяется.',
+      rice:'Для риса рассчитывается норма затопления чека (слой 10–15 см + фильтрация в грунт).',
       calendar:'Расширенные настройки', calendarHint:'Сроки стадий заполнены автоматически для выбранной культуры. При необходимости измените их под сорт и климат. Люцерна — первый цикл.',
       initial:'Начало, дней', development:'Развитие, дней', middle:'Середина, дней', late:'Созревание, дней',
       customHint:'Введите параметры текущей стадии вашей культуры.', customP:'Доля истощения p (0,1–0,8)', root:'Глубина корней, м',
@@ -31,7 +31,7 @@ window.SuBalance = (() => {
       day:'Отырғызудан кейінгі күн', moisture:'Топырақ күйі', chooseMoisture:'Топырақ күйін таңдаңыз',
       moistureRecent:'Жақында суарылды / Жаңбыр', moistureNormal:'Қалыпты ылғалдылық', moistureDry:'Топырақ құрғақ',
       moistureHint:'Түсінікті күйді таңдаңыз — жүйе ылғал қорын миллиметрмен өзі есептейді.',
-      rice:'Күрішке су басқан атыздың жеке балансы қажет; кәдімгі көлем есебі қолданылмайды.',
+      rice:'Күрішке атызды басу нормасы есептеледі (10–15 см қабат + топыраққа сүзілу).',
       calendar:'Кеңейтілген баптаулар', calendarHint:'Кезең мерзімдері таңдалған дақылға автоматты толтырылды. Қажет болса, сорт пен климатқа сай өзгертіңіз. Жоңышқа — алғашқы цикл.',
       initial:'Басы, күн', development:'Даму, күн', middle:'Ортасы, күн', late:'Пісу, күн',
       customHint:'Дақылдың ағымдағы кезең параметрлерін енгізіңіз.', customP:'Сарқылу үлесі p (0,1–0,8)', root:'Тамыр тереңдігі, м',
@@ -97,8 +97,14 @@ window.SuBalance = (() => {
       input?.setAttribute('aria-invalid','true');
       const details = input?.closest('details');
       if (details) details.open = true;
-      el('balanceError').textContent = copy[lang][err.message] || copy[lang].error;
+      if (err.message === 'season') {
+        const sc = el('stageCalendar');
+        if (sc) sc.open = true;
+      }
+      const errMsg = copy[lang][err.message] || copy[lang].error;
+      el('balanceError').textContent = errMsg;
       el('balanceError').hidden = false;
+      if (window.showToast) window.showToast(errMsg, 'warning');
       input?.focus();
       return null;
     }

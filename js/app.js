@@ -457,6 +457,7 @@ function initLanguage() {
   const langParam = urlParams.get('lang')?.toLowerCase();
   state.lang = ['ru', 'kz', 'en'].includes(langParam) ? langParam : 'ru';
   applyLanguage(state.lang);
+  window.addEventListener('resize', () => positionLanguageIndicator(state.lang));
 }
 
 function setLanguage(lang) {
@@ -487,11 +488,11 @@ function applyLanguage(lang) {
   document.getElementById('pageDesc').setAttribute('content', t.pageDesc);
   document.getElementById('headerSubtitle').textContent = t.headerSubtitle;
 
-  // Move one shared highlight beneath the selected language.
-  document.querySelector('.language-switch').dataset.active = lang;
+  // One shared highlight travels to the selected button.
   _setLangBtn('langBtnKz', lang === 'kz');
   _setLangBtn('langBtnRu', lang === 'ru');
   _setLangBtn('langBtnEn', lang === 'en');
+  positionLanguageIndicator(lang);
 
   // Block 1 — GPS
   document.getElementById('block1Title').textContent = t.block1Title;
@@ -1538,6 +1539,19 @@ function _setLangBtn(id, isActive) {
   const el = document.getElementById(id);
   if (!el) return;
   el.setAttribute('aria-pressed', String(isActive));
+}
+
+function positionLanguageIndicator(lang) {
+  const switcher = document.querySelector('.language-switch');
+  const indicator = switcher?.querySelector('.language-switch__indicator');
+  const buttonId = { ru: 'langBtnRu', kz: 'langBtnKz', en: 'langBtnEn' }[lang];
+  const button = document.getElementById(buttonId);
+  if (!indicator || !button) return;
+  indicator.style.width = `${button.offsetWidth}px`;
+  indicator.style.transform = `translate3d(${button.offsetLeft}px, 0, 0)`;
+  if (!switcher.classList.contains('is-ready')) {
+    requestAnimationFrame(() => switcher.classList.add('is-ready'));
+  }
 }
 
 function triggerHaptic(type) {

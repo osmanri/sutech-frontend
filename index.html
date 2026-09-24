@@ -11,11 +11,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.9.10" />
+  <link rel="stylesheet" href="css/app.css?v=5.10.0" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/balance.js?v=5.8.0"></script>
-  <script defer src="js/app.js?v=5.9.9"></script>
+  <script defer src="js/app.js?v=5.10.0"></script>
 </head>
 <body>
   <div class="signal-strip" aria-hidden="true">
@@ -52,7 +52,7 @@
         <section id="block1" class="map-panel">
           <div class="section-heading"><span class="section-index" aria-hidden="true">01</span><div><h2 id="block1Title">Ваше поле на карте</h2></div><span id="block1StatusPill" class="status-pill">Выберите поле</span></div>
           <div class="map-topbar">
-            <div class="basemap-switch"><button id="btnSatellite" aria-pressed="true" onclick="setMapBasemap('satellite')" data-copy="satellite">Спутник</button><button id="btnStreets" aria-pressed="false" onclick="setMapBasemap('streets')" data-copy="streets">Схема</button></div>
+            <div class="basemap-switch segmented-toggle"><span class="segmented-toggle__indicator" aria-hidden="true"></span><button id="btnSatellite" aria-pressed="true" onclick="setMapBasemap('satellite')" data-copy="satellite">Спутник</button><button id="btnStreets" aria-pressed="false" onclick="setMapBasemap('streets')" data-copy="streets">Схема</button></div>
             <div class="map-location-actions">
               <select id="regionSelect" class="region-select" onchange="selectRegion(this.value)" aria-label="Быстрый выбор региона">
                 <option value="atyrau" selected data-copy="selectRegionPrompt">📍 Атырау (47.1167° N, 51.8833° E)</option>
@@ -236,8 +236,9 @@
           <label class="" id="labelAreaUnit">
             Единица измерения:
           </label>
-          <div class="flex"
+          <div class="flex segmented-toggle" id="areaUnitSwitch"
                role="group" aria-label="Единица площади">
+            <span class="segmented-toggle__indicator" aria-hidden="true"></span>
             <button type="button" id="unitBtn_sotka"
                     class=""
                     onclick="setAreaUnit('sotka')" aria-pressed="false">
@@ -317,8 +318,9 @@
               Открытое поле
             </span>
           </div>
-          <div class="flex"
+          <div class="flex segmented-toggle" id="fieldTypeSwitch"
                role="group" aria-label="Тип участка">
+            <span class="segmented-toggle__indicator" aria-hidden="true"></span>
             <button type="button" id="fieldTypeBtn_open" data-field="open"
                     class=""
                     onclick="setFieldType('open')" aria-pressed="true">
@@ -342,8 +344,9 @@
               Обычная почва
             </span>
           </div>
-          <div class="flex"
+          <div class="flex segmented-toggle" id="salinitySwitch"
                role="group" aria-label="Засоленность почвы">
+            <span class="segmented-toggle__indicator" aria-hidden="true"></span>
             <button type="button" id="salinityBtn_no" data-saline="no"
                     class=""
                     onclick="setSalinity('no')" aria-pressed="true">

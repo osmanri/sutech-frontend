@@ -580,3 +580,115 @@ h1,h2,h3,.brand strong,.hero-cta,.submit-button{font-family:Manrope,Inter,-apple
   .eco-hero .hero-actions{margin-top:24px}
 }
 
+/* Shared sliding selection for the map and two-choice field controls. */
+.basemap-switch.segmented-toggle,
+#block3 [role=group].segmented-toggle{
+  position:relative;
+  display:flex;
+  align-items:stretch;
+  gap:3px;
+  padding:3px;
+  border:1px solid #cfdfef;
+  border-radius:14px;
+  background:#eef5fc;
+  isolation:isolate;
+}
+.segmented-toggle__indicator{
+  position:absolute;
+  top:3px;
+  bottom:3px;
+  left:0;
+  width:0;
+  border-radius:11px;
+  background:#087fe0;
+  box-shadow:0 3px 9px rgba(8,127,224,.16);
+  pointer-events:none;
+}
+.segmented-toggle.is-ready .segmented-toggle__indicator{
+  transition:transform .46s cubic-bezier(.22,1,.36,1),width .46s cubic-bezier(.22,1,.36,1);
+}
+.basemap-switch.segmented-toggle button,
+#block3 .segmented-toggle button{
+  position:relative;
+  z-index:1;
+  border:1px solid transparent!important;
+  border-radius:11px;
+  background:transparent!important;
+  color:#506982!important;
+  box-shadow:none!important;
+  animation:none!important;
+  transform:none!important;
+  transition:color .26s ease,opacity .26s ease!important;
+}
+.basemap-switch.segmented-toggle button[aria-pressed=true],
+#block3 .segmented-toggle button[aria-pressed=true]{color:#fff!important}
+.basemap-switch.segmented-toggle button:active,
+#block3 .segmented-toggle button:active{opacity:.8}
+
+/* Cards reveal a fine blue line; small controls fill gently across their surface. */
+.crop-card::after,.irrig-card::after{
+  content:"";
+  position:absolute;
+  right:14px;
+  bottom:6px;
+  left:14px;
+  height:2px;
+  border-radius:2px;
+  background:#087fe0;
+  transform:scaleX(0);
+  transform-origin:center;
+  transition:transform .38s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;
+}
+.crop-card[aria-checked=true]::after,.irrig-card[aria-checked=true]::after{transform:scaleX(1)}
+.crop-card .crop-symbol,.irrig-card .irrig-symbol,#balanceBlock .chip-icon{
+  transition:transform .36s cubic-bezier(.22,1,.36,1),color .3s ease;
+}
+.map-toolbar button:not(:disabled),
+#block3 button[onclick^="setPresetArea"],
+.growth-stepper>button:not(:disabled),
+#btnRetryMap{
+  background-image:linear-gradient(90deg,rgba(8,127,224,.14),rgba(67,183,244,.1));
+  background-repeat:no-repeat;
+  background-position:left center;
+  background-size:0 100%;
+  transition:background-size .38s cubic-bezier(.22,1,.36,1),transform .35s cubic-bezier(.22,1,.36,1),border-color .3s ease,color .3s ease!important;
+}
+.gps-button{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+.gps-button::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:0;
+  background:#075ca9;
+  transform:translate3d(0,102%,0);
+  transition:transform .44s cubic-bezier(.2,.8,.2,1);
+  pointer-events:none;
+}
+.gps-button>svg,.gps-button>span{position:relative;z-index:1}
+@media(hover:hover){
+  .crop-card:hover::after,.irrig-card:hover::after,
+  .crop-card:focus-visible::after,.irrig-card:focus-visible::after{transform:scaleX(1)}
+  .crop-card:hover .crop-symbol,.irrig-card:hover .irrig-symbol,
+  #balanceBlock .chip-btn:hover .chip-icon{transform:translate3d(0,-2px,0)}
+  .map-toolbar button:not(:disabled):hover,
+  #block3 button[onclick^="setPresetArea"]:hover,
+  .growth-stepper>button:not(:disabled):hover,
+  #btnRetryMap:hover{background-size:100% 100%}
+  .gps-button:hover::before,.gps-button:focus-visible::before{transform:translate3d(0,0,0)}
+  .leaflet-control-zoom a:hover{background:#eaf5ff!important;color:#075ca9!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .segmented-toggle.is-ready .segmented-toggle__indicator,
+  .crop-card::after,.irrig-card::after,.crop-card .crop-symbol,
+  .irrig-card .irrig-symbol,#balanceBlock .chip-icon,
+  .gps-button::before,.map-toolbar button,#block3 button[onclick^="setPresetArea"],
+  .growth-stepper>button,#btnRetryMap{transition:none!important}
+  .crop-card:hover,.irrig-card:hover,.gps-button:hover,
+  .map-toolbar button:hover,.growth-stepper>button:hover{transform:none!important}
+}
+

@@ -457,7 +457,10 @@ function initLanguage() {
   const langParam = urlParams.get('lang')?.toLowerCase();
   state.lang = ['ru', 'kz', 'en'].includes(langParam) ? langParam : 'ru';
   applyLanguage(state.lang);
-  window.addEventListener('resize', () => positionLanguageIndicator(state.lang));
+  window.addEventListener('resize', () => {
+    positionLanguageIndicator(state.lang);
+    document.querySelectorAll('.segmented-toggle').forEach(positionSegmentIndicator);
+  });
 }
 
 function setLanguage(lang) {
@@ -999,6 +1002,7 @@ function updateMapUI() {
   const displayedStyle = tileAttempt === 1 ? (mapBasemap === 'satellite' ? 'streets' : 'satellite') : mapBasemap;
   document.getElementById('btnSatellite')?.setAttribute('aria-pressed', String(displayedStyle === 'satellite'));
   document.getElementById('btnStreets')?.setAttribute('aria-pressed', String(displayedStyle === 'streets'));
+  positionSegmentIndicator(document.querySelector('.basemap-switch'));
   for (const id of ['btnResetContour', 'btnUndoPoint', 'btnClearLocation', 'radiusLabel', 'mapAreaLabel']) {
     const el = document.getElementById(id);
     if (el && t[id]) el.textContent = t[id];
@@ -1113,6 +1117,7 @@ function updateAreaUnitUI() {
   if (btnHectare) btnHectare.className = isHect ? activeClass   : inactiveClass;
   btnSotka?.setAttribute('aria-pressed',   String(!isHect));
   btnHectare?.setAttribute('aria-pressed', String(isHect));
+  positionSegmentIndicator(document.getElementById('areaUnitSwitch'));
 
   const badge = document.getElementById('currentAreaUnitBadge');
   if (badge) {
@@ -1268,6 +1273,7 @@ function updateFieldTypeUI() {
   if (btnGh)   btnGh.className   = isOpen ? inactiveClass : activeClass;
   btnOpen?.setAttribute('aria-pressed', String(isOpen));
   btnGh?.setAttribute('aria-pressed', String(!isOpen));
+  positionSegmentIndicator(document.getElementById('fieldTypeSwitch'));
 
   const badge = document.getElementById('fieldTypeBadge');
   if (badge) {
@@ -1300,6 +1306,7 @@ function updateSalinityUI() {
   if (btnYes) btnYes.className = isNormal ? inactiveClass : activeClass;
   btnNo?.setAttribute('aria-pressed', String(isNormal));
   btnYes?.setAttribute('aria-pressed', String(!isNormal));
+  positionSegmentIndicator(document.getElementById('salinitySwitch'));
 
   const badge = document.getElementById('salinityBadge');
   if (badge) {
@@ -1551,6 +1558,18 @@ function positionLanguageIndicator(lang) {
   indicator.style.transform = `translate3d(${button.offsetLeft}px, 0, 0)`;
   if (!switcher.classList.contains('is-ready')) {
     requestAnimationFrame(() => switcher.classList.add('is-ready'));
+  }
+}
+
+function positionSegmentIndicator(container) {
+  if (typeof container?.querySelector !== 'function') return;
+  const indicator = container?.querySelector('.segmented-toggle__indicator');
+  const selected = container?.querySelector('button[aria-pressed="true"]');
+  if (!indicator || !selected) return;
+  indicator.style.width = `${selected.offsetWidth}px`;
+  indicator.style.transform = `translate3d(${selected.offsetLeft}px, 0, 0)`;
+  if (!container.classList.contains('is-ready')) {
+    requestAnimationFrame(() => container.classList.add('is-ready'));
   }
 }
 

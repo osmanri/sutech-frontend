@@ -1537,36 +1537,6 @@ function initScrollProgress() {
   window.addEventListener('resize', schedule, { passive: true });
 }
 
-function initPointerGlow() {
-  const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  const finePointer = window.matchMedia?.('(hover: hover) and (pointer: fine)').matches;
-  if (reduced || !finePointer) return;
-
-  document.querySelectorAll('.eco-hero, .settings-column > section, .summary-card').forEach(surface => {
-    const glow = document.createElement('span');
-    glow.className = 'follow-glow';
-    glow.setAttribute('aria-hidden', 'true');
-    surface.classList.add('spot-surface');
-    surface.append(glow);
-
-    let pointerX = 0;
-    let pointerY = 0;
-    let frame = 0;
-    const paint = () => {
-      glow.style.transform = `translate3d(${pointerX - 130}px, ${pointerY - 130}px, 0)`;
-      frame = 0;
-    };
-    surface.addEventListener('pointerenter', () => surface.classList.add('spot-active'));
-    surface.addEventListener('pointermove', event => {
-      const rect = surface.getBoundingClientRect();
-      pointerX = event.clientX - rect.left;
-      pointerY = event.clientY - rect.top;
-      if (!frame) frame = window.requestAnimationFrame(paint);
-    });
-    surface.addEventListener('pointerleave', () => surface.classList.remove('spot-active'));
-  });
-}
-
 // ─── 17. DOMContentLoaded — Инициализация ────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   connectTelegram();
@@ -1590,7 +1560,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setAreaUnit(state.area_unit);
   initMotion();
   initScrollProgress();
-  initPointerGlow();
 
   if (window.lucide) {
     lucide.createIcons();

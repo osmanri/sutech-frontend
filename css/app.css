@@ -165,3 +165,19 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 @media(max-width:360px){.eco-hero{width:calc(100% - 20px);padding:24px 18px}.eco-hero h1{font-size:35px}.hero-orbit{right:-92px}.hero-cta{width:100%;justify-content:space-between}}
 @media(prefers-reduced-motion:reduce){.hero-live-dot,.hero-ambient,.orbit-ring{animation:none!important}.signal-track{animation:none!important}.hero-cta,.hero-cta svg,.crop-card,.irrig-card{transition-duration:.01ms!important}}
 
+/* Water reserve controls: tactile, monochrome and compact on mobile. */
+:root{--ticker-speed:42s}
+.language-switch button{padding-left:9px;padding-right:9px}
+#balanceBlock .segmented-chips{gap:9px;margin:2px 0 12px}
+#balanceBlock .chip-btn{min-height:78px;padding:11px 6px;border:1px solid #dce4e3!important;border-radius:16px;background:rgba(249,251,250,.9)!important;color:#52656d;flex-direction:column;gap:7px;font-size:10px;line-height:1.25;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.9);transition:transform .24s var(--ease-out),border-color .2s ease,background .2s ease,box-shadow .24s var(--ease-out)!important;will-change:transform}
+#balanceBlock .chip-icon{width:23px;height:23px;color:#71838a;transition:transform .24s var(--ease-out),color .2s ease;will-change:transform}
+#balanceBlock .chip-btn.chip-active,#balanceBlock .chip-btn[aria-checked=true]{border-color:#789faf!important;background:#edf4f5!important;color:var(--ink)!important;box-shadow:inset 0 0 0 1px rgba(36,124,156,.26)!important}
+#balanceBlock .chip-btn.chip-active .chip-icon,#balanceBlock .chip-btn[aria-checked=true] .chip-icon{color:var(--accent)}
+@media(hover:hover){#balanceBlock .chip-btn:hover{transform:translate3d(0,-2px,0);border-color:#aebfc5!important;background:#fff!important;box-shadow:0 8px 18px rgba(32,54,65,.075)!important}#balanceBlock .chip-btn:hover .chip-icon{transform:translate3d(0,-1px,0)}}
+.growth-stepper{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;min-height:52px;overflow:hidden;border:1px solid #dce4df;border-radius:16px;background:#f7f9f6;box-shadow:inset 0 1px 0 #fff}
+.growth-stepper>button{display:grid;place-items:center;min-height:52px;padding:0;background:#eef2ef;color:var(--ink);border-radius:0;transition:background .18s ease,transform .16s var(--ease-out)}
+.growth-stepper>button:first-child{border-right:1px solid #dce4df}.growth-stepper>button:last-child{border-left:1px solid #dce4df}.growth-stepper>button:hover{background:#e4ebea}.growth-stepper>button:active{transform:scale(.94)}.growth-stepper>button svg{width:18px;height:18px}
+.growth-value{display:flex;align-items:center;justify-content:center;gap:6px;min-width:0}.balance-form .growth-value input{width:72px;min-height:50px;padding:0;border:0;border-radius:0;background:transparent;color:var(--ink);font-size:20px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;box-shadow:none;outline:0}.growth-value span{color:var(--muted);font-size:11px;font-weight:600}
+.balance-info{display:flex;align-items:flex-start;gap:9px;margin:0!important;padding:11px 12px;border:1px solid #dfe7e5;border-radius:14px;background:rgba(242,246,244,.82);color:#5d7077!important}.balance-info svg{width:17px;height:17px;flex:0 0 17px;margin-top:1px;color:#67808a}.balance-info span{font-size:10.5px;line-height:1.55}
+@media(max-width:380px){#balanceBlock .chip-btn{min-height:75px;padding-left:3px;padding-right:3px;font-size:9px}.language-switch button{padding-left:7px;padding-right:7px}.growth-stepper{grid-template-columns:46px minmax(0,1fr) 46px}}
+

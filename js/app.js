@@ -387,11 +387,81 @@ Object.assign(I18N.kz, {
   noCoordsYet: 'Картадан алқапты не аймақты таңдаңыз',
 });
 
+I18N.en = {
+  ...I18N.ru,
+  pageTitle: 'Su-Tech — Smart Irrigation',
+  pageDesc: 'FAO-56 smart irrigation planning with live weather and field inputs',
+  headerSubtitle: 'Smart Irrigation',
+  heroKicker: 'Virtual agronomist is online',
+  heroTitleTop: 'Precise irrigation.',
+  heroTitleAccent: 'Healthier crops.',
+  heroDescription: 'Weather, FAO-56 and pump economics in one clear decision for the farmer.',
+  heroCta: 'Set up the field',
+  block1Title: 'Your field on the map', block1Desc: 'Find the plot and mark its boundaries.',
+  block1StatusWait: 'Select a field', block1StatusReady: 'Field selected',
+  btnLocationText: 'GPS', btnLocationLoading: 'Locating…', gpsSearching: 'Getting precise satellite coordinates…',
+  coordsCardTitle: 'Coordinates saved', labelLat: 'Latitude:', labelLon: 'Longitude:', mapPoint: 'Point on map',
+  btnResetContour: 'Clear boundary', btnUndoPoint: 'Remove point', btnClearLocation: 'Remove marker',
+  btnAddCenter: 'Centre point', btnUseRadius: 'Use radius', radiusLabel: 'Radius, m',
+  mapAreaLabel: 'Area', mapHint: 'Mark at least 3 boundary points.', mapIncomplete: 'Mark at least 3 field corners.',
+  mapInvalid: 'Lines intersect or the area is zero. Remove the last point.',
+  mapReady: 'Added to the calculation. Clear the boundary for manual input.',
+  mapUnavailable: 'The map did not load. GPS and manual area input are still available.',
+  mapTilesUnavailable: 'Map tiles are unavailable. Check the connection and reload the page.',
+  block2Title: 'What are you growing?', block2Desc: 'Each crop has its own water requirement.',
+  crops: {
+    wheat:{name:'Wheat',sub:'Бидай'}, cotton:{name:'Cotton',sub:'Мақта'}, corn:{name:'Maize',sub:'Жүгері'},
+    rice:{name:'Rice',sub:'Күріш'}, alfalfa:{name:'Alfalfa',sub:'Жоңышқа'}, melon:{name:'Melons',sub:'Бақша'},
+    tomato:{name:'Tomatoes',sub:'Қызанақ'}, potato:{name:'Potatoes',sub:'Картоп'}, other:{name:'Other crop',sub:'Басқа дақыл'},
+  },
+  block3Title: 'Field conditions', labelAreaUnit: 'Area unit:', unitText_sotka: 'Sotkas', unitText_hectare: 'Hectares',
+  labelAreaValue: 'Field area:', unitBadge_sotka: 'sotkas', unitBadge_hectare: 'hectares', unitSuffix_sotka: 'sot.', unitSuffix_hectare: 'ha',
+  labelQuickPresets: 'Quick select:', areaCalcEquivalentLabel: 'Equivalent:',
+  equivFormat: (m2, sotka) => `${m2.toLocaleString('en-US')} m² (${sotka.toLocaleString('en-US')} sotkas)`,
+  labelFieldType: 'Field type:', fieldText_open: 'Open field', fieldText_greenhouse: 'Greenhouse', fieldTypeBadge_open: 'Open field', fieldTypeBadge_greenhouse: 'Greenhouse',
+  labelSalinity: 'Soil salinity:', salineText_no: 'Normal soil', salineText_yes: 'Saline soil', salineBadge_no: 'Normal soil', salineBadge_yes: 'Saline soil · leaching calculated separately',
+  block4Title: 'How do you irrigate?', block4Desc: 'We account for your system efficiency.',
+  irrig: {
+    drip:{title:'Drip irrigation',desc:'Targeted root-zone delivery. Technology threshold: 5 mm.',badge:'90% efficiency'},
+    sprinkler:{title:'Sprinkler',desc:'Rainfall simulation through nozzles and even distribution.',badge:'75% efficiency'},
+    pivot:{title:'Centre pivot',desc:'Rotating sprinkler system for large fields.',badge:'75% efficiency'},
+    furrow:{title:'Furrow irrigation',desc:'Traditional surface irrigation with high conveyance losses.',badge:'50% efficiency'},
+    subsurface:{title:'Subsurface drip',desc:'Buried lines reduce evaporation and deliver water to roots.',badge:'90% efficiency'},
+  },
+  summaryTitle: 'Your irrigation calculation', sumLabelCoords: 'Location:', sumLabelCrop: 'Crop:', sumLabelArea: 'Area:',
+  sumLabelIrrig: 'Technology:', sumLabelFieldType: 'Field type:', sumLabelSaline: 'Soil:',
+  noCoordsYet: 'Select a field on the map or choose a region', btnSubmitText: 'Calculate irrigation',
+  submitHint: 'Weather and FAO-56 results will arrive as a short Telegram report.',
+  summaryStatusReady: 'READY TO CALCULATE', summaryStatusIncomplete: 'COMPLETE THE INPUTS',
+  errNoGpsSupport: 'Your browser does not support geolocation.',
+  errGpsDenied: 'Location access was denied. Enable GPS or select the field on the map.',
+  errGpsTimeout: 'GPS timed out. Try again or select the field on the map.',
+  errGpsUnknown: 'Could not determine the location. Please try again.',
+  gpsSuccessToast: 'Field coordinates saved.', errNeedLocation: 'Select a field location first.',
+  errInvalidArea: 'Enter an area greater than 0 and below 50,000.',
+  successPayloadSent: 'Data sent to the bot. Running the FAO-56 calculation…',
+};
+
+UI_COPY.en = {
+  ...UI_COPY.ru,
+  navMap:'Field map', navSettings:'Inputs', navCalculation:'Calculation',
+  satellite:'Satellite', streets:'Map', selectRegion:'Select a region', selectRegionPrompt:'Select a city / region',
+  btnUndoPoint:'Remove point', btnResetContour:'Clear boundary', btnClearLocation:'Remove marker',
+  mapErrorTitle:'Could not load the map', mapErrorBody:'Check the connection and retry. You can enter the area manually.',
+  retryMap:'Retry', summaryEyebrow:'READY FOR THE NEXT STEP?', footerNote:'Saving water for the future.',
+};
+
+const TICKER_COPY = {
+  ru: ['Расчёт водного баланса корней FAO-56', 'Точный метеопрогноз Open-Meteo', 'Экономия воды до 40%', 'Защита растений от водного стресса'],
+  kz: ['FAO-56 бойынша су балансын дәл есептеу', 'Open-Meteo ауа райы болжамы', 'Суды 40%-ға дейін үнемдеу', 'Өсімдікті кебуден қорғау'],
+  en: ['FAO-56 Root Zone Water Balance', 'Live Open-Meteo Weather', 'Up to 40% Water Savings', 'Crop Stress Prevention'],
+};
+
 // ─── 6. Языковое управление ───────────────────────────────────────────────
 function initLanguage() {
   const urlParams = new URLSearchParams(window.location.search);
   const langParam = urlParams.get('lang')?.toLowerCase();
-  state.lang = (langParam === 'kz' || langParam === 'ru') ? langParam : 'ru';
+  state.lang = ['ru', 'kz', 'en'].includes(langParam) ? langParam : 'ru';
   applyLanguage(state.lang);
 }
 
@@ -413,6 +483,10 @@ function applyLanguage(lang) {
     const key = el.dataset.copy;
     el.textContent = UI_COPY[lang]?.[key] || I18N[lang]?.[key] || UI_COPY.ru[key] || I18N.ru[key] || '';
   });
+  const ticker = TICKER_COPY[lang] || TICKER_COPY.ru;
+  document.querySelectorAll('[data-ticker-index]').forEach(el => {
+    el.textContent = ticker[Number(el.dataset.tickerIndex)] || '';
+  });
 
   document.getElementById('htmlRoot').setAttribute('lang', lang);
   document.title = t.pageTitle;
@@ -422,6 +496,7 @@ function applyLanguage(lang) {
   // Lang buttons — Su-Tech active style
   _setLangBtn('langBtnKz', lang === 'kz');
   _setLangBtn('langBtnRu', lang === 'ru');
+  _setLangBtn('langBtnEn', lang === 'en');
 
   // Block 1 — GPS
   document.getElementById('block1Title').textContent = t.block1Title;
@@ -1094,6 +1169,16 @@ function setMoistureCondition(cond) {
     btn.setAttribute('aria-checked', String(isSelected));
   });
   updateSummaryCard();
+  triggerHaptic('light');
+}
+
+function changeGrowthDay(delta) {
+  const input = document.getElementById('growthDay');
+  if (!input || !Number.isInteger(delta)) return;
+  const current = Number.parseInt(String(input.value).replace(/\D/g, ''), 10);
+  const next = Math.min(3650, Math.max(0, (Number.isFinite(current) ? current : 0) + delta));
+  input.value = String(next);
+  input.dispatchEvent(new Event('input', { bubbles: true }));
   triggerHaptic('light');
 }
 

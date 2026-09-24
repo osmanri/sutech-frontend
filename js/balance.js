@@ -14,6 +14,7 @@ window.SuBalance = (() => {
       day:'Дней от посадки', moisture:'Состояние почвы', chooseMoisture:'Выберите состояние',
       moistureRecent:'Недавно полито / был дождь', moistureNormal:'Нормальная влажность', moistureDry:'Почва сухая',
       moistureHint:'Выберите понятное состояние — запас влаги в миллиметрах система рассчитает сама.',
+      daySuffix:'дн.', decreaseDay:'Уменьшить число дней', increaseDay:'Увеличить число дней',
       rice:'Для риса рассчитывается норма затопления чека (слой 10–15 см + фильтрация в грунт).',
       calendar:'Расширенные настройки', calendarHint:'Сроки стадий заполнены автоматически для выбранной культуры. При необходимости измените их под сорт и климат. Люцерна — первый цикл.',
       initial:'Начало, дней', development:'Развитие, дней', middle:'Середина, дней', late:'Созревание, дней',
@@ -31,6 +32,7 @@ window.SuBalance = (() => {
       day:'Отырғызудан кейінгі күн', moisture:'Топырақ күйі', chooseMoisture:'Топырақ күйін таңдаңыз',
       moistureRecent:'Жақында суарылды / Жаңбыр', moistureNormal:'Қалыпты ылғалдылық', moistureDry:'Топырақ құрғақ',
       moistureHint:'Түсінікті күйді таңдаңыз — жүйе ылғал қорын миллиметрмен өзі есептейді.',
+      daySuffix:'күн', decreaseDay:'Күн санын азайту', increaseDay:'Күн санын көбейту',
       rice:'Күрішке атызды басу нормасы есептеледі (10–15 см қабат + топыраққа сүзілу).',
       calendar:'Кеңейтілген баптаулар', calendarHint:'Кезең мерзімдері таңдалған дақылға автоматты толтырылды. Қажет болса, сорт пен климатқа сай өзгертіңіз. Жоңышқа — алғашқы цикл.',
       initial:'Басы, күн', development:'Даму, күн', middle:'Ортасы, күн', late:'Пісу, күн',
@@ -41,6 +43,24 @@ window.SuBalance = (() => {
       energyHint:'Сорғыңыздың қуаты мен өнімділігін нақтылаңыз. Суару құнын салыстыру үшін тарифті енгізіңіз.',
       error:'Белгіленген өрісті тексеріп, жарамды сан енгізіңіз.', soilError:'Топырақ түрін таңдаңыз.',
       season:'Өсу күні күнтізбеден асып кетті. Кезең ұзақтығын нақтылаңыз.',
+    },
+    en: {
+      title:'Water reserve', intro:'A root-zone water balance decision based on the daily Open-Meteo forecast.',
+      soil:'Soil type', choose:'Select', sand:'Sand', loam:'Loam', clay:'Clay',
+      day:'Days after planting', daySuffix:'days', decreaseDay:'Decrease days', increaseDay:'Increase days',
+      moisture:'Soil condition', chooseMoisture:'Select condition',
+      moistureRecent:'Recently irrigated / rain', moistureNormal:'Normal moisture', moistureDry:'Dry soil',
+      moistureHint:'Choose the visible soil condition — the system calculates the hidden millimetre deficit automatically.',
+      rice:'Rice uses a flooded-paddy requirement (10–15 cm water layer plus soil seepage).',
+      calendar:'Advanced settings', calendarHint:'Stage lengths are filled automatically. Adjust them for the variety and local climate when needed. Alfalfa uses the first cycle.',
+      initial:'Initial, days', development:'Development, days', middle:'Mid-season, days', late:'Late season, days',
+      customHint:'Enter the current-stage parameters for your crop.', customP:'Depletion fraction p (0.1–0.8)', root:'Root depth, m',
+      greenhouseSettings:'Greenhouse microclimate · optional', greenhouseEt0:'Measured ET₀, mm/day',
+      greenhouseHint:'Leave empty to estimate greenhouse ET₀ from Open-Meteo FAO-56 ET₀ with 70% cover transmission. Enter a value only when measured or supplied by an agronomist; outdoor rain is zero indoors.',
+      energy:'Pump cost · optional', price:'Tariff, ₸/kWh', pumpPower:'Pump power (kW)', pumpProductivity:'Flow rate (m³/h)',
+      energyHint:'Check pump power and flow rate. Add the tariff to compare irrigation costs.',
+      error:'Check the highlighted field and enter a valid number.', soilError:'Select a soil type.',
+      season:'Growth day exceeds the stage calendar. Adjust the stage lengths.',
     },
   };
   const el = id => document.getElementById(id);
@@ -83,7 +103,9 @@ window.SuBalance = (() => {
       crop = nextCrop;
       (edits[crop] || calendars[crop] || []).forEach((v,i) => { el(stageIds[i]).value = v; });
     }
-    document.querySelectorAll('[data-balance-copy]').forEach(node => { node.textContent = copy[lang][node.dataset.balanceCopy]; });
+    const currentCopy = copy[lang] || copy.ru;
+    document.querySelectorAll('[data-balance-copy]').forEach(node => { node.textContent = currentCopy[node.dataset.balanceCopy] || ''; });
+    document.querySelectorAll('[data-balance-aria]').forEach(node => { node.setAttribute('aria-label', currentCopy[node.dataset.balanceAria] || ''); });
     el('stageCalendar').classList.toggle('hidden', !calendars[crop]);
     el('customCropBalance').classList.toggle('hidden', crop !== 'other');
     el('riceBalanceNote').classList.toggle('hidden', crop !== 'rice');
@@ -101,7 +123,8 @@ window.SuBalance = (() => {
         const sc = el('stageCalendar');
         if (sc) sc.open = true;
       }
-      const errMsg = copy[lang][err.message] || copy[lang].error;
+      const currentCopy = copy[lang] || copy.ru;
+      const errMsg = currentCopy[err.message] || currentCopy.error;
       el('balanceError').textContent = errMsg;
       el('balanceError').hidden = false;
       if (window.showToast) window.showToast(errMsg, 'warning');

@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.9.3" />
+  <link rel="stylesheet" href="css/app.css?v=5.9.4" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/balance.js?v=5.8.0"></script>
@@ -41,11 +41,13 @@
         <a class="hero-cta" href="#block1"><span data-copy="heroCta">Настроить поле</span><span class="motion-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></span></a>
       </div>
     </div>
-    <div class="hero-orbit agro-radar" aria-hidden="true">
-      <span class="radar-ring radar-ring-one"></span><span class="radar-ring radar-ring-two"></span><span class="radar-ring radar-ring-three"></span>
-      <span class="radar-wave radar-wave-one"></span><span class="radar-wave radar-wave-two"></span><span class="radar-wave radar-wave-three"></span>
-      <span class="radar-sensor radar-sensor-one"></span><span class="radar-sensor radar-sensor-two"></span><span class="radar-sensor radar-sensor-three"></span>
-      <span class="radar-core">🛰️</span>
+    <div class="hero-orbit satellite-visual" aria-hidden="true">
+      <img class="satellite-image" src="img/satellite.png" alt="" />
+      <svg class="satellite-signal" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round">
+        <path class="signal-arc signal-arc-one" d="M8 32C22 32 32 22 32 8" />
+        <path class="signal-arc signal-arc-two" d="M8 57C35 57 57 35 57 8" />
+        <path class="signal-arc signal-arc-three" d="M8 85C50 85 85 50 85 8" />
+      </svg>
     </div>
   </section>
   <nav class="section-nav" aria-label="Разделы Su-Tech"><a href="#block1" data-copy="navMap" aria-current="location">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>

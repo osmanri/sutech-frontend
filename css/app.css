@@ -421,32 +421,19 @@ h1,h2,h3,.brand strong,.hero-cta,.submit-button{font-family:Manrope,Inter,-apple
 .motion-ready .summary-card.reveal.is-visible .summary-footer{animation:sectionContentRise .68s .24s var(--ease-out) both}
 @keyframes sectionContentRise{from{opacity:0;transform:translate3d(0,15px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
 
-/* Transparent orbit radar with the native satellite emoji as its focal point. */
+/* The supplied transparent satellite PNG emits three fading signal arcs. */
 .eco-hero{min-height:270px}
 .hero-copy{align-self:center}
 .hero-actions{margin-top:25px}
-.agro-radar{
-  top:28px;right:30px;width:210px;height:210px;opacity:1;
-  border:0;background:transparent;box-shadow:none;transform:none;
-}
-.agro-radar::before{display:none}
-.radar-ring{border-color:rgba(192,230,255,.37);box-shadow:none}
-.radar-ring-one{inset:12px}.radar-ring-two{inset:39px}.radar-ring-three{inset:68px}
-.radar-sweep{display:none}
-.radar-wave{position:absolute;z-index:1;top:50%;left:50%;width:48px;height:48px;margin:-24px;border:1px solid rgba(225,246,255,.55);border-radius:50%;box-shadow:none;opacity:0;animation:satellite-wave 5.4s ease-out infinite;will-change:transform,opacity}
-.radar-wave-two{animation-delay:1.8s}.radar-wave-three{animation-delay:3.6s}
-.radar-core{
-  z-index:4;inset:auto;top:50%;left:50%;width:88px;height:88px;
-  transform:translate(-50%,-50%);border:0;background:transparent;
-  color:#f1faff;box-shadow:none;font-size:64px;line-height:1;
-  font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;
-}
-.radar-core::before{display:none}
-.radar-sensor{width:5px;height:5px;border-color:#e4f8ff;background:#addfff;box-shadow:0 0 0 3px rgba(151,216,255,.13);animation:none}
-@keyframes satellite-wave{0%{opacity:0;transform:scale(.8)}15%{opacity:.55}78%,100%{opacity:0;transform:scale(4.2)}}
-@media(max-width:520px){.eco-hero{min-height:298px}.agro-radar{top:97px;right:-27px;width:160px;height:160px;opacity:.92}.radar-ring-one{inset:10px}.radar-ring-two{inset:32px}.radar-ring-three{inset:55px}.radar-core{width:70px;height:70px;font-size:52px}}
-@media(max-width:360px){.agro-radar{right:-37px}}
-@media(prefers-reduced-motion:reduce){.radar-wave{animation:none}}
+.satellite-visual{top:28px;right:14px;width:250px;height:175px;opacity:1;overflow:visible;pointer-events:none}
+.satellite-image{display:block;width:100%;height:100%;object-fit:contain;filter:brightness(1.14) drop-shadow(0 8px 12px rgba(0,14,44,.2))}
+.satellite-signal{position:absolute;top:40%;right:-6%;width:110px;height:110px;overflow:visible;color:#d2efff}
+.signal-arc{opacity:0;transform-origin:8px 8px;animation:satelliteSignal 3.6s ease-out infinite;will-change:transform,opacity}
+.signal-arc-two{animation-delay:.6s}.signal-arc-three{animation-delay:1.2s}
+@keyframes satelliteSignal{0%,12%{opacity:0;transform:translate3d(-5px,5px,0) scale(.9)}30%{opacity:.85}68%,100%{opacity:0;transform:translate3d(5px,-5px,0) scale(1.08)}}
+@media(max-width:520px){.eco-hero{min-height:298px}.satellite-visual{top:105px;right:-27px;width:196px;height:145px;opacity:.95}.satellite-signal{top:39%;right:-3%;width:82px;height:82px}}
+@media(max-width:360px){.satellite-visual{right:-38px}}
+@media(prefers-reduced-motion:reduce){.signal-arc{animation:none;opacity:.58}}
 
 /* A solid selected state is readable even without hover or animation. */
 .settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare{

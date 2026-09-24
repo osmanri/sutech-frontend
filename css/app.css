@@ -522,3 +522,43 @@ h1,h2,h3,.brand strong,.hero-cta,.submit-button{font-family:Manrope,Inter,-apple
 }
 @media(prefers-reduced-motion:reduce){.motion-ready .motion-card.reveal,.motion-ready .motion-card.reveal.is-visible{opacity:1;transform:none;transition:none;will-change:auto}.motion-ready .map-panel.reveal.is-visible .section-heading,.motion-ready .settings-column section.reveal.is-visible>div:first-child,.motion-ready .summary-card.reveal.is-visible .summary-heading,.motion-ready .map-panel.reveal.is-visible .map-topbar,.motion-ready .settings-column section.reveal.is-visible>p,.motion-ready .summary-card.reveal.is-visible .summary-grid,.motion-ready .map-panel.reveal.is-visible .map-stage,.motion-ready .settings-column section.reveal.is-visible>[role=radiogroup],.motion-ready .settings-column section.reveal.is-visible>.balance-fields,.motion-ready .summary-card.reveal.is-visible .summary-footer{animation:none!important}}
 
+/* One blue indicator slides between the three language choices. */
+.language-switch{
+  --lang-offset:0%;
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:0;
+  isolation:isolate;
+}
+.language-switch[data-active="kz"]{--lang-offset:100%}
+.language-switch[data-active="en"]{--lang-offset:200%}
+.language-switch::before{
+  content:"";
+  position:absolute;
+  top:4px;
+  bottom:4px;
+  left:4px;
+  width:calc((100% - 8px)/3);
+  border-radius:9px;
+  background:var(--accent);
+  box-shadow:0 3px 10px rgba(8,127,224,.18);
+  transform:translate3d(var(--lang-offset),0,0);
+  transition:transform .38s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;
+}
+.language-switch button,
+.language-switch button[aria-pressed=true]{
+  position:relative;
+  z-index:1;
+  min-width:0;
+  padding:0 10px;
+  background:transparent;
+  box-shadow:none;
+  transform:none;
+}
+.language-switch button[aria-pressed=true]{color:#fff}
+.language-switch button:active{transform:none!important}
+@media(hover:hover){.language-switch button:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){.language-switch::before{transition:none}}
+

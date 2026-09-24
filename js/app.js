@@ -487,7 +487,8 @@ function applyLanguage(lang) {
   document.getElementById('pageDesc').setAttribute('content', t.pageDesc);
   document.getElementById('headerSubtitle').textContent = t.headerSubtitle;
 
-  // Lang buttons — Su-Tech active style
+  // Move one shared highlight beneath the selected language.
+  document.querySelector('.language-switch').dataset.active = lang;
   _setLangBtn('langBtnKz', lang === 'kz');
   _setLangBtn('langBtnRu', lang === 'ru');
   _setLangBtn('langBtnEn', lang === 'en');
@@ -1537,11 +1538,6 @@ function _setLangBtn(id, isActive) {
   const el = document.getElementById(id);
   if (!el) return;
   el.setAttribute('aria-pressed', String(isActive));
-  if (isActive) {
-    el.className = 'h-8 px-3 rounded-xl text-xs font-semibold cursor-pointer bg-[#247C9C] text-white border-none shadow-sm transition-all duration-150';
-  } else {
-    el.className = 'h-8 px-3 rounded-xl text-xs font-semibold cursor-pointer text-slate-600 bg-transparent border-none transition-all duration-150 hover:text-slate-900';
-  }
 }
 
 function triggerHaptic(type) {

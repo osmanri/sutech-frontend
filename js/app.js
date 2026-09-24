@@ -48,7 +48,7 @@ let fieldMode = 'manual';
 let mappedAreaM2 = 0;
 let radiusCenter = null;
 let mapTilesFailed = false;
-let mapBasemap = 'streets';
+let mapBasemap = 'satellite';
 let activeTileLayer = null;
 let tileWatchdog = null;
 let tileAttempt = 0;
@@ -105,10 +105,8 @@ const I18N = {
     pageTitle:      'Su-Tech — Smart Irrigation',
     pageDesc:       'Интеллектуальная система управления орошением на базе модели FAO-56 Penman-Monteith',
     headerSubtitle: 'Smart Irrigation',
-    heroKicker: 'Виртуальный агроном работает',
     heroTitleTop: 'Точный полив.',
     heroTitleAccent: 'Живое поле.',
-    heroDescription: 'Погода, FAO‑56 и экономика насоса — в одном понятном решении для фермера.',
     heroCta: 'Настроить поле',
 
     block1Title:        'Карта вашего поля',
@@ -218,10 +216,8 @@ const I18N = {
     pageTitle:      'Su-Tech — Smart Irrigation',
     pageDesc:       'FAO-56 Penman-Monteith моделі негізінде суаруды басқарудың зияткерлік жүйесі',
     headerSubtitle: 'Smart Irrigation',
-    heroKicker: 'Виртуалды агроном жұмыс істеп тұр',
     heroTitleTop: 'Дәл суару.',
     heroTitleAccent: 'Өнімді алқап.',
-    heroDescription: 'Ауа райы, FAO‑56 және сорғы экономикасы — фермерге түсінікті бір шешімде.',
     heroCta: 'Алқапты баптау',
 
     block1Title:        'Алқап картасы',
@@ -392,10 +388,8 @@ I18N.en = {
   pageTitle: 'Su-Tech — Smart Irrigation',
   pageDesc: 'FAO-56 smart irrigation planning with live weather and field inputs',
   headerSubtitle: 'Smart Irrigation',
-  heroKicker: 'Virtual agronomist is online',
   heroTitleTop: 'Precise irrigation.',
   heroTitleAccent: 'Healthier crops.',
-  heroDescription: 'Weather, FAO-56 and pump economics in one clear decision for the farmer.',
   heroCta: 'Set up the field',
   block1Title: 'Your field on the map', block1Desc: 'Find the plot and mark its boundaries.',
   block1StatusWait: 'Select a field', block1StatusReady: 'Field selected',
@@ -521,7 +515,6 @@ function applyLanguage(lang) {
 
   // Block 2 — Crop
   document.getElementById('block2Title').textContent = t.block2Title;
-  document.getElementById('block2Desc').textContent  = t.block2Desc;
   for (const cropKey of Object.keys(CROPS)) {
     const el = document.getElementById(`cropName_${cropKey}`);
     const sub = document.getElementById(`cropSub_${cropKey}`);
@@ -563,7 +556,6 @@ function applyLanguage(lang) {
 
   // Block 4 — Irrigation
   document.getElementById('block4Title').textContent = t.block4Title;
-  document.getElementById('block4Desc').textContent  = t.block4Desc;
   for (const key of Object.keys(IRRIGATION_EFFICIENCY)) {
     const titleEl = document.getElementById(`irrigTitle_${key}`);
     const descEl  = document.getElementById(`irrigDesc_${key}`);
@@ -599,7 +591,7 @@ function updateBlock1StatusPill() {
     pill.className = `${baseClasses} bg-[#247C9C]/10 text-[#1C6079]`;
     pill.textContent = t.block1StatusReady;
   } else {
-    pill.className = `${baseClasses} bg-amber-100 text-amber-800`;
+    pill.className = `${baseClasses} bg-[#EAF5FF] text-[#075CA9]`;
     pill.textContent = t.block1StatusWait;
   }
 }
@@ -764,7 +756,7 @@ function loadMapTiles(attempt = 0) {
     url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     attribution: 'Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, GIS User Community',
   };
-  // Use Esri's hosted street layer for the default schematic map. The public
+  // Use Esri's hosted street layer as the schematic fallback. The public
   // OSM tile endpoint can return a policy 403 in Telegram WebViews, leaving a
   // grey "Access blocked" tile in place, so it is intentionally not used.
   const streets = {
@@ -1280,7 +1272,7 @@ function updateFieldTypeUI() {
     badge.textContent = isOpen ? t.fieldTypeBadge_open : t.fieldTypeBadge_greenhouse;
     badge.className = isOpen ?
       'text-[10px] px-2.5 py-0.5 rounded-full bg-[#247C9C]/10 text-[#1C6079] font-bold' :
-      'text-[10px] px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold';
+      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#EAF5FF] text-[#075CA9] font-bold';
   }
 }
 
@@ -1312,7 +1304,7 @@ function updateSalinityUI() {
     badge.textContent = isNormal ? t.salineBadge_no : t.salineBadge_yes;
     badge.className = isNormal ?
       'text-[10px] px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold' :
-      'text-[10px] px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold';
+      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#EAF5FF] text-[#075CA9] font-bold';
   }
 }
 
@@ -1328,7 +1320,7 @@ function updateSummaryCard() {
     coordsVal.className = 'text-xs font-semibold text-[#247C9C]';
   } else {
     coordsVal.textContent = t.noCoordsYet;
-    coordsVal.className = 'text-xs font-semibold text-amber-600';
+    coordsVal.className = 'text-xs font-semibold text-[#75A7D3]';
   }
 
   // Crop (no empty brackets in KZ)
@@ -1520,7 +1512,7 @@ function showToast(message, type = 'info') {
   const baseClass = 'toast';
   const typeClasses = {
     success: 'bg-[#F5F3EF] text-[#1C6079] border-[#247C9C]/40 shadow-[#247C9C]/10',
-    warning: 'bg-amber-50 text-amber-800 border-amber-300',
+    warning: 'bg-[#F0F8FF] text-[#075CA9] border-[#BDDDF4]',
     error:   'bg-red-50 text-red-800 border-red-300',
     info:    'bg-slate-50 text-slate-800 border-slate-300',
   };
@@ -1580,7 +1572,7 @@ function addKeyboardCardSupport() {
 function initMotion() {
   const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   const intro = document.querySelector('.page-intro');
-  const cards = document.querySelectorAll('.settings-column > section, .summary-card');
+  const cards = document.querySelectorAll('.map-panel, .settings-column > section, .summary-card');
   intro?.classList.add('motion-intro');
   cards.forEach(card => card.classList.add('motion-card', 'reveal'));
   document.body.classList.add('motion-ready');

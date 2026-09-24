@@ -288,3 +288,187 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 @media(max-width:520px){.eco-hero{min-height:352px}.hero-orbit{opacity:.44}.hero-description{max-width:270px}.section-nav{width:calc(100% - 24px)}.section-nav a{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.eco-hero::before,.motion-ready .eco-hero,.motion-ready .section-nav,.settings-column section.is-visible>div:first-child>span:first-child{animation:none!important}.motion-arrow svg,.section-nav a::after{transition:none!important}}
 
+/* Hero cleanup: ticker first, in-flow sticky header, and a quiet scanning radar. */
+body{padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:84px}
+#block1,#block2,#block3,#balanceBlock,#block4,#summaryCard{scroll-margin-top:8px}
+.signal-strip{position:relative;margin-top:0;padding-bottom:7px;background:linear-gradient(90deg,#09274c,#0d487e 52%,#09274c);border:0}
+.signal-strip::after{content:"";position:absolute;inset:auto 0 0;height:14px;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(243,247,253,.78))}
+.app-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  width:calc(100% - 24px);
+  max-width:620px;
+  margin:0 auto;
+  border:1px solid rgba(0,0,0,.05);
+  border-bottom:1px solid rgba(0,0,0,.05);
+  border-radius:0 0 20px 20px;
+  background:rgba(255,255,255,.85);
+  box-shadow:0 8px 26px rgba(16,54,106,.08);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+.eco-hero{margin-top:16px}
+.hero-actions{margin-top:26px}
+.hero-cta:hover .motion-arrow,.submit-button:hover .motion-arrow{transform:none}
+.agro-radar{
+  position:absolute;
+  z-index:1;
+  top:55px;
+  right:22px;
+  width:190px;
+  height:190px;
+  opacity:1;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:50%;
+  background:radial-gradient(circle at 45% 38%,rgba(246,253,255,.96),rgba(223,245,255,.88) 60%,rgba(191,230,248,.7));
+  box-shadow:0 10px 30px rgba(0,32,81,.13),inset 0 1px 0 rgba(255,255,255,.95);
+  pointer-events:none;
+  contain:layout paint;
+}
+.radar-ring{position:absolute;border:1px solid rgba(14,116,144,.15);border-radius:50%;pointer-events:none}
+.radar-ring-one{inset:12px}.radar-ring-two{inset:38px}.radar-ring-three{inset:65px}
+.radar-sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from -90deg,transparent 0deg,transparent 304deg,rgba(30,157,213,.07) 331deg,rgba(14,151,209,.34) 360deg);transform-origin:center;animation:radar-sweep 5.2s linear infinite;will-change:transform}
+.radar-sensor{position:absolute;z-index:2;width:7px;height:7px;border:1px solid #dff8ff;border-radius:50%;background:#137eac;box-shadow:0 0 0 3px rgba(19,126,172,.13);animation:radar-ping 5.2s ease-in-out infinite;will-change:transform,opacity}
+.radar-sensor-one{top:16px;left:50%;animation-delay:.3s}.radar-sensor-two{top:49%;right:15px;animation-delay:1.7s}.radar-sensor-three{left:22px;bottom:35px;animation-delay:3.3s}
+.radar-core{position:absolute;z-index:3;inset:68px;display:grid;place-items:center;border:1px solid rgba(14,116,144,.22);border-radius:50%;background:#f9fdff;color:#0e7490;box-shadow:0 2px 10px rgba(14,116,144,.13)}
+.radar-core::before{content:"";position:absolute;z-index:-1;inset:-14px;border-radius:50%;background:radial-gradient(circle,rgba(39,177,205,.24),transparent 70%);animation:bio-breathe 4.2s ease-in-out infinite;will-change:transform,opacity}
+.radar-core svg{width:29px;height:29px}
+@keyframes radar-sweep{to{transform:rotate(360deg)}}
+@keyframes radar-ping{0%,7%,24%,100%{opacity:.65;transform:scale(1)}13%{opacity:1;transform:scale(1.55)}}
+@keyframes bio-breathe{0%,100%{opacity:.5;transform:scale(.85)}50%{opacity:1;transform:scale(1.12)}}
+@media(max-width:520px){
+  .eco-hero{min-height:342px}
+  .agro-radar{top:148px;right:-26px;width:164px;height:164px}
+  .radar-ring-one{inset:10px}.radar-ring-two{inset:32px}.radar-ring-three{inset:56px}
+  .radar-core{inset:58px}.radar-core svg{width:25px;height:25px}
+  .radar-sensor-one{top:14px}.radar-sensor-two{right:13px}.radar-sensor-three{left:18px;bottom:29px}
+  .hero-description{max-width:205px}
+}
+@media(max-width:360px){.agro-radar{right:-40px;opacity:.8}.hero-cta{width:auto}}
+@media(prefers-reduced-motion:reduce){.radar-sweep,.radar-sensor,.radar-core::before{animation:none!important}.radar-sweep{transform:none}.radar-sensor{opacity:1}}
+
+/* Keep the day number on the true centre line of the stepper. */
+.growth-value{position:relative;display:grid;place-items:center;gap:0}
+.balance-form .growth-value input{width:100%;padding:0 40px;text-align:center}
+.growth-value span{position:absolute;right:16px;top:50%;transform:translateY(-50%);pointer-events:none}
+
+/* Transparent radar rings sit quietly behind the hero copy. */
+.agro-radar{border:0;background:transparent;box-shadow:none;opacity:.65}
+.radar-ring{border-color:rgba(165,219,248,.24)}
+.radar-sweep{background:conic-gradient(from -90deg,transparent 0deg,transparent 315deg,rgba(125,209,249,.015) 338deg,rgba(125,209,249,.09) 360deg)}
+.radar-sensor{border-color:rgba(179,231,255,.7);background:#94d7f7;box-shadow:0 0 0 3px rgba(115,203,244,.08)}
+.radar-core{border:0;background:transparent;color:#a8def9;box-shadow:none}
+.radar-core::before{background:radial-gradient(circle,rgba(83,182,232,.08),transparent 72%)}
+
+/* Editorial section indexes: the reference uses small monospaced numbers and a hairline. */
+:root{--copper:var(--accent)}
+.section-heading{justify-content:flex-start;gap:11px}
+.section-heading::before{content:none}
+.section-heading>div{flex:1;min-width:0}
+.section-heading .section-index,
+.settings-column section>div:first-child>span:first-child{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+  flex:0 0 auto;
+  width:auto;
+  min-width:33px;
+  height:22px;
+  padding:0 0 0 9px;
+  border:0;
+  border-left:2px solid var(--accent);
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  color:var(--accent-dark);
+  font:700 12px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.09em;
+  transition:color .25s ease,transform .35s var(--ease-out);
+}
+.map-panel:hover .section-index,.settings-column section:hover>div:first-child>span:first-child{transform:translate3d(2px,0,0);background:transparent}
+#balanceBlock>div:first-child>span:first-child{border-left-color:var(--accent);color:var(--accent-dark)}
+.summary-card .eyebrow{color:#a8dfff}
+.toast-warning{border-color:#bdddf4;background:#f0f8ff}
+.region-select.select-highlight{border-color:var(--accent)!important;box-shadow:0 0 0 3px rgba(8,127,224,.18)!important}
+
+/* HackAlem's typography pairing: Inter for reading, Manrope for titles, mono for data. */
+:root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+h1,h2,h3,.brand strong,.hero-cta,.submit-button{font-family:Manrope,Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.signal-track,.section-index,.hero-kicker,.summary-card .eyebrow{font-family:"JetBrains Mono",Consolas,ui-monospace,monospace}
+.section-heading .section-index,.settings-column section>div:first-child>span:first-child{font-family:"JetBrains Mono",Consolas,ui-monospace,monospace}
+.signal-strip{padding-bottom:0;border-bottom:1px solid #273b58;background:#0b1424;mask-image:none;-webkit-mask-image:none}
+.signal-strip::after{display:none}
+.signal-loop{padding:9px 0}
+.signal-loop span{padding:0 18px;font-size:10.5px;font-weight:600;line-height:1.25;letter-spacing:.09em}
+.signal-loop i{padding:0 10px;color:#5fc4f4;font-family:"JetBrains Mono",Consolas,ui-monospace,monospace;font-size:10px}
+@media(max-width:520px){.signal-loop span{font-size:9px;letter-spacing:.07em}.signal-loop i{padding:0 8px}}
+
+/* Sections move into place as they enter the viewport, then their contents follow. */
+.motion-ready .motion-card.reveal{opacity:0;transform:translate3d(0,24px,0) scale(.985);animation:none;transition:none;will-change:opacity,transform}
+.motion-ready .motion-card.reveal.is-visible{opacity:1;transform:translate3d(0,0,0) scale(1);animation:none;transition:opacity .68s cubic-bezier(.22,.61,.36,1),transform .68s cubic-bezier(.22,.61,.36,1)}
+.motion-ready .map-panel.reveal.is-visible .section-heading,
+.motion-ready .settings-column section.reveal.is-visible>div:first-child,
+.motion-ready .summary-card.reveal.is-visible .summary-heading{animation:sectionContentRise .62s .08s var(--ease-out) both}
+.motion-ready .map-panel.reveal.is-visible .map-topbar,
+.motion-ready .settings-column section.reveal.is-visible>p,
+.motion-ready .summary-card.reveal.is-visible .summary-grid{animation:sectionContentRise .64s .17s var(--ease-out) both}
+.motion-ready .map-panel.reveal.is-visible .map-stage,
+.motion-ready .settings-column section.reveal.is-visible>[role=radiogroup],
+.motion-ready .settings-column section.reveal.is-visible>.balance-fields,
+.motion-ready .summary-card.reveal.is-visible .summary-footer{animation:sectionContentRise .68s .24s var(--ease-out) both}
+@keyframes sectionContentRise{from{opacity:0;transform:translate3d(0,15px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+
+/* Compact hero: a dimensional satellite scan on the navy surface. */
+.eco-hero{min-height:270px}
+.hero-copy{align-self:center}
+.hero-actions{margin-top:25px}
+.agro-radar{
+  top:28px;right:30px;width:210px;height:210px;opacity:1;
+  border:1px solid rgba(204,236,255,.35);
+  background:radial-gradient(circle at 40% 32%,rgba(111,194,244,.28),rgba(11,52,110,.32) 48%,rgba(5,23,58,.74) 78%);
+  box-shadow:inset 2px 3px 7px rgba(255,255,255,.17),inset -13px -16px 28px rgba(0,9,40,.52),0 20px 30px rgba(0,10,46,.25);
+  transform:perspective(600px) rotateX(15deg) rotateY(-12deg);
+}
+.agro-radar::before{content:"";position:absolute;inset:7px;border:1px solid rgba(220,244,255,.3);border-radius:50%;box-shadow:inset 0 0 18px rgba(151,216,255,.1)}
+.radar-ring{border-color:rgba(192,230,255,.27);box-shadow:0 1px 0 rgba(255,255,255,.13),inset 0 2px 6px rgba(0,18,55,.12)}
+.radar-ring-one{inset:22px}.radar-ring-two{inset:48px}.radar-ring-three{inset:76px}
+.radar-sweep{display:none}
+.radar-wave{position:absolute;z-index:1;top:50%;left:50%;width:48px;height:48px;margin:-24px;border:1px solid rgba(225,246,255,.8);border-radius:50%;box-shadow:0 0 9px rgba(166,222,255,.28);opacity:0;animation:satellite-wave 5.4s ease-out infinite;will-change:transform,opacity}
+.radar-wave-two{animation-delay:1.8s}.radar-wave-three{animation-delay:3.6s}
+.radar-core{
+  z-index:4;top:50%;left:50%;inset:auto;width:60px;height:60px;
+  transform:translate(-50%,-50%);border:1px solid rgba(218,244,255,.58);
+  background:linear-gradient(145deg,rgba(146,210,247,.45),rgba(16,83,155,.76) 46%,rgba(5,35,85,.96));
+  color:#f1faff;box-shadow:inset 1px 2px 2px rgba(255,255,255,.22),0 9px 16px rgba(0,19,55,.4);
+}
+.radar-core::before{display:none}
+.radar-core svg{width:40px;height:40px}
+.radar-sensor{width:5px;height:5px;border-color:#e4f8ff;background:#addfff;box-shadow:0 0 0 3px rgba(151,216,255,.13);animation:none}
+@keyframes satellite-wave{0%{opacity:0;transform:scale(.8)}15%{opacity:.7}78%,100%{opacity:0;transform:scale(4.2)}}
+@media(max-width:520px){.eco-hero{min-height:298px}.agro-radar{top:97px;right:-27px;width:160px;height:160px;opacity:.88}.radar-ring-one{inset:17px}.radar-ring-two{inset:38px}.radar-ring-three{inset:59px}.radar-core{width:48px;height:48px}.radar-core svg{width:32px;height:32px}}
+@media(max-width:360px){.agro-radar{right:-37px}}
+@media(prefers-reduced-motion:reduce){.radar-wave{animation:none}}
+
+/* A solid selected state is readable even without hover or animation. */
+.settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:43px;background:#fff!important;border:1px solid #cbdcee!important;
+  color:#4c6480!important;font-weight:650;transition:background .18s,border-color .18s,color .18s,transform .18s;
+}
+.settings-column [data-field][aria-pressed=true],.settings-column [data-saline][aria-pressed=true],#unitBtn_sotka[aria-pressed=true],#unitBtn_hectare[aria-pressed=true]{
+  border-color:#075ca9!important;background:#087fe0!important;color:#fff!important;box-shadow:0 3px 10px rgba(8,127,224,.18)!important;
+}
+.settings-column [data-field][aria-pressed=true]::before,.settings-column [data-saline][aria-pressed=true]::before,#unitBtn_sotka[aria-pressed=true]::before,#unitBtn_hectare[aria-pressed=true]::before{content:"✓";display:grid;place-items:center;width:16px;height:16px;flex:0 0 16px;border-radius:50%;background:#fff;color:#075ca9;font-size:11px;font-weight:800}
+.settings-column [data-field][aria-pressed=false]:hover,.settings-column [data-saline][aria-pressed=false]:hover,#unitBtn_sotka[aria-pressed=false]:hover,#unitBtn_hectare[aria-pressed=false]:hover{background:#eff7ff!important;border-color:#87bfea!important}
+.crop-card[aria-checked=true],.irrig-card[aria-checked=true],.chip-btn[aria-checked=true],.chip-btn.chip-active,#balanceBlock .chip-btn[aria-checked=true],#balanceBlock .chip-btn.chip-active{border:2px solid #087fe0!important;background:#deefff!important;box-shadow:0 4px 12px rgba(8,127,224,.12)!important;color:#075ca9!important}
+.basemap-switch button[aria-pressed=true]{background:#087fe0;color:#fff;box-shadow:0 2px 8px rgba(8,127,224,.2)}
+.toast-error{border-color:#d7a6ad;background:#fff5f6}
+
+/* Block numbers stay still while the section content enters the viewport. */
+.section-index,.settings-column section>div:first-child>span:first-child,.map-panel:hover .section-index,.settings-column section:hover>div:first-child>span:first-child{animation:none!important;transition:none!important;transform:none!important}
+.motion-ready .map-panel.reveal.is-visible .section-heading,.motion-ready .settings-column section.reveal.is-visible>div:first-child{animation:none}
+@media(prefers-reduced-motion:reduce){.motion-ready .motion-card.reveal,.motion-ready .motion-card.reveal.is-visible{opacity:1;transform:none;transition:none;will-change:auto}.motion-ready .map-panel.reveal.is-visible .section-heading,.motion-ready .settings-column section.reveal.is-visible>div:first-child,.motion-ready .summary-card.reveal.is-visible .summary-heading,.motion-ready .map-panel.reveal.is-visible .map-topbar,.motion-ready .settings-column section.reveal.is-visible>p,.motion-ready .summary-card.reveal.is-visible .summary-grid,.motion-ready .map-panel.reveal.is-visible .map-stage,.motion-ready .settings-column section.reveal.is-visible>[role=radiogroup],.motion-ready .settings-column section.reveal.is-visible>.balance-fields,.motion-ready .summary-card.reveal.is-visible .summary-footer{animation:none!important}}
+

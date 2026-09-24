@@ -69,11 +69,12 @@ const northRatio = run('calculatePolygonArea(square.map(p => ({lat:p.lat + 60,ln
 assert.ok(northRatio > 0.50 && northRatio < 0.51);
 
 run('initFieldMap()');
-assert.match(tileRequests[0].url, /World_Street_Map/, 'The default basemap must be the street map');
+assert.match(tileRequests[0].url, /World_Imagery/, 'The default basemap must be satellite imagery');
 // A blocked tile provider must not leave the user with a permanently grey map.
 tileRequests[0].tile.handlers.tileerror();
 assert.ok(tileRequests.length > 1, 'Grey map: failed tile provider has no automatic fallback');
 assert.notEqual(tileRequests[0].url, tileRequests[1].url);
+assert.match(tileRequests[1].url, /World_Street_Map/, 'Street map must remain available as a fallback');
 tileRequests[1].tile.handlers.tileerror();
 assert.equal(run('mapTilesFailed'), true, 'Both sources failing must show a recovery state');
 const failedCount = tileRequests.length;

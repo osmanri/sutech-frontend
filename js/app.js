@@ -107,6 +107,7 @@ const I18N = {
     headerSubtitle: 'Smart Irrigation',
     heroTitleTop: 'Точный полив.',
     heroTitleAccent: 'Живое поле.',
+    heroDescription: 'Погода и данные поля подскажут, когда и сколько поливать.',
     heroCta: 'Настроить поле',
 
     block1Title:        'Карта вашего поля',
@@ -218,6 +219,7 @@ const I18N = {
     headerSubtitle: 'Smart Irrigation',
     heroTitleTop: 'Дәл суару.',
     heroTitleAccent: 'Өнімді алқап.',
+    heroDescription: 'Ауа райы мен алқап деректері қашан және қанша суару керегін көрсетеді.',
     heroCta: 'Алқапты баптау',
 
     block1Title:        'Алқап картасы',
@@ -390,6 +392,7 @@ I18N.en = {
   headerSubtitle: 'Smart Irrigation',
   heroTitleTop: 'Precise irrigation.',
   heroTitleAccent: 'Healthier crops.',
+  heroDescription: 'Weather and field data show when and how much to irrigate.',
   heroCta: 'Set up the field',
   block1Title: 'Your field on the map', block1Desc: 'Find the plot and mark its boundaries.',
   block1StatusWait: 'Select a field', block1StatusReady: 'Field selected',

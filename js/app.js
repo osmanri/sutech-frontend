@@ -1,8 +1,8 @@
 /**
  * Su-Tech — Интеллектуальная система точного земледелия (Telegram WebApp)
  * Расчёт норм полива по модели FAO-56 Penman-Monteith
- * Design System: Su-Tech / marine blue, ink and warm stone
- * Palette: marine #247C9C, ink #182D3B, stone #F5F3EF, copper #B9764D
+ * Design System: Su-Tech / deep blue, bright blue and clear white
+ * Palette: blue #087FE0, ink #112448, canvas #F3F7FD
  * v4.0.0 — локальные стили и Leaflet, резервная подложка, адаптивная карта
  */
 
@@ -898,10 +898,10 @@ function setMappedArea(areaM2) {
 function renderFieldContour() {
   fieldLayers?.clearLayers();
   const valid = isSimpleFieldPolygon(fieldPoints);
-  const color = valid || fieldPoints.length < 3 ? '#247C9C' : '#b91c1c';
+  const color = valid || fieldPoints.length < 3 ? '#087FE0' : '#b91c1c';
   if (fieldLayers) {
     if (fieldPoints.length >= 3) {
-      L.polygon(fieldPoints, { color, fillColor: '#247C9C', fillOpacity: valid ? 0.25 : 0.06, weight: 3, interactive: false }).addTo(fieldLayers);
+      L.polygon(fieldPoints, { color, fillColor: '#087FE0', fillOpacity: valid ? 0.25 : 0.06, weight: 3, interactive: false }).addTo(fieldLayers);
     } else if (fieldPoints.length === 2) {
       L.polyline(fieldPoints, { color, weight: 3, interactive: false }).addTo(fieldLayers);
     }
@@ -993,8 +993,8 @@ function updatePointRadius() {
   const valid = Number.isFinite(radius) && radius >= 1 && radius <= 10000;
   document.getElementById('fieldRadiusInput').setAttribute('aria-invalid', String(!valid));
   if (valid && fieldLayers) {
-    L.circle(radiusCenter, { radius, color: '#247C9C', fillColor: '#247C9C', fillOpacity: 0.25, weight: 3, interactive: false }).addTo(fieldLayers);
-    L.circleMarker(radiusCenter, { radius: 4, color: '#1C6079', interactive: false }).addTo(fieldLayers);
+    L.circle(radiusCenter, { radius, color: '#087FE0', fillColor: '#087FE0', fillOpacity: 0.25, weight: 3, interactive: false }).addTo(fieldLayers);
+    L.circleMarker(radiusCenter, { radius: 4, color: '#075CA9', interactive: false }).addTo(fieldLayers);
   }
   setMappedArea(valid ? Math.PI * radius ** 2 : 0);
 }
@@ -1622,6 +1622,34 @@ function initScrollProgress() {
   window.addEventListener('resize', schedule, { passive: true });
 }
 
+// The small section menu borrows the reference site's animated underline.
+// Update only its state on scroll; the browser handles the anchor navigation.
+function initSectionNav() {
+  const links = [...document.querySelectorAll('.section-nav a')];
+  if (!links.length) return;
+  const sections = links.map(link => document.getElementById(link.hash.slice(1)));
+  let scheduled = false;
+  const update = () => {
+    let active = 0;
+    sections.forEach((section, index) => {
+      if (section && section.getBoundingClientRect().top <= window.innerHeight * 0.42) active = index;
+    });
+    links.forEach((link, index) => {
+      if (index === active) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+    scheduled = false;
+  };
+  const schedule = () => {
+    if (scheduled) return;
+    scheduled = true;
+    window.requestAnimationFrame(update);
+  };
+  update();
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule, { passive: true });
+}
+
 // ─── 17. DOMContentLoaded — Инициализация ────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   connectTelegram();
@@ -1645,6 +1673,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setAreaUnit(state.area_unit);
   initMotion();
   initScrollProgress();
+  initSectionNav();
 
   if (window.lucide) {
     lucide.createIcons();

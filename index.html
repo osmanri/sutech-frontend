@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Su-Tech — Smart Irrigation</title>
   <meta id="pageDesc" name="description" content="Карта поля и точный расчет полива Su-Tech" />
-  <meta name="theme-color" content="#F5F3EF" />
+  <meta name="theme-color" content="#F3F7FD" />
   <link rel="icon" href="img/logo-mark.png" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.6.0" />
+  <link rel="stylesheet" href="css/app.css?v=5.7.0" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
-  <script defer src="js/balance.js?v=5.6.0"></script>
-  <script defer src="js/app.js?v=5.6.0"></script>
+  <script defer src="js/balance.js?v=5.7.0"></script>
+  <script defer src="js/app.js?v=5.7.0"></script>
 </head>
 <body>
   <header class="app-header">
@@ -37,12 +37,13 @@
       <h1 id="heroTitle"><span data-copy="heroTitleTop">Точный полив.</span> <em data-copy="heroTitleAccent">Живое поле.</em></h1>
       <p class="hero-description" data-copy="heroDescription">Погода, FAO‑56 и экономика насоса — в одном понятном решении для фермера.</p>
       <div class="hero-actions">
-        <a class="hero-cta" href="#block1"><span data-copy="heroCta">Настроить поле</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+        <a class="hero-cta" href="#block1"><span data-copy="heroCta">Настроить поле</span><span class="motion-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></span></a>
         <div class="hero-proof" aria-label="Технологии"><span>FAO‑56</span><span>Open‑Meteo</span><span>GPS</span></div>
       </div>
     </div>
     <div class="hero-orbit" aria-hidden="true"><span class="orbit-ring orbit-ring-one"></span><span class="orbit-ring orbit-ring-two"></span><span class="orbit-core"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M38 8C23 9 13 17 12 32c8 1 16-1 21-7 4-5 5-11 5-17Z"/><path d="M10 39c4-9 11-16 22-23M24 24c0 7 2 12 7 16"/></svg></span><i></i><i></i><i></i></div>
   </section>
+  <nav class="section-nav" aria-label="Разделы Su-Tech"><a href="#block1" data-copy="navMap" aria-current="location">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>
   <main class="workspace">
     <div class="workspace-grid">
       <div class="map-column">
@@ -562,7 +563,7 @@
     <section id="summaryCard" class="summary-card">
       <div class="summary-heading"><div><p class="eyebrow" data-copy="summaryEyebrow">ГОТОВЫ К СЛЕДУЮЩЕМУ ШАГУ?</p><h2 id="summaryTitle">Ваш расчет полива</h2></div><span id="summaryStatusBadge"></span></div>
       <dl class="summary-grid"><div><dt id="sumLabelCoords"></dt><dd id="sumValCoords">—</dd></div><div><dt id="sumLabelCrop"></dt><dd id="sumValCrop">—</dd></div><div><dt id="sumLabelArea"></dt><dd id="sumValArea">—</dd></div><div><dt id="sumLabelIrrig"></dt><dd id="sumValIrrig">—</dd></div><div><dt id="sumLabelFieldType"></dt><dd id="sumValFieldType">—</dd></div><div><dt id="sumLabelSaline"></dt><dd id="sumValSaline">—</dd></div></dl>
-      <div class="summary-footer"><p id="submitHint"></p><button id="btnSubmitAll" class="submit-button" onclick="submitFinalCalculation()"><span id="btnSubmitText">Рассчитать полив</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button></div>
+      <div class="summary-footer"><p id="submitHint"></p><button id="btnSubmitAll" class="submit-button" onclick="submitFinalCalculation()"><span id="btnSubmitText">Рассчитать полив</span><span class="motion-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-6-6 6 6-6 6"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></button></div>
     </section>
     <footer class="page-footer"><span>Su-Tech · Smart Irrigation</span><span data-copy="footerNote">Вода с заботой о будущем.</span></footer>
   </main>

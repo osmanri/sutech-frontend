@@ -84,7 +84,7 @@ assert.equal(run('mapTilesFailed'), false, 'Successful retry must clear the erro
 run('square.forEach(addFieldPoint)');
 assert.equal(elements.get('fieldAreaInput').readOnly, false, 'Map selection must not lock manual area input');
 near(Number(elements.get('fieldAreaInput').value), 1, 0.00001);
-assert.equal(layers[0].options.fillColor, '#247C9C');
+assert.equal(layers[0].options.fillColor, '#087FE0');
 assert.equal(layers[0].options.fillOpacity, 0.25);
 run("setAreaUnit('sotka')");
 near(Number(elements.get('fieldAreaInput').value), 100, 0.001);

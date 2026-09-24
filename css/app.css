@@ -421,30 +421,28 @@ h1,h2,h3,.brand strong,.hero-cta,.submit-button{font-family:Manrope,Inter,-apple
 .motion-ready .summary-card.reveal.is-visible .summary-footer{animation:sectionContentRise .68s .24s var(--ease-out) both}
 @keyframes sectionContentRise{from{opacity:0;transform:translate3d(0,15px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
 
-/* The supplied transparent satellite PNG emits three fading signal arcs. */
+/* The supplied satellite image reacts gently when the pointer reaches it. */
 .eco-hero{min-height:270px}
 .hero-copy{align-self:center}
 .hero-actions{margin-top:25px}
-.satellite-visual{top:28px;right:14px;width:250px;height:175px;opacity:1;overflow:visible;pointer-events:none}
-.satellite-image{display:block;width:100%;height:100%;object-fit:contain;filter:brightness(1.14) drop-shadow(0 8px 12px rgba(0,14,44,.2))}
-.satellite-signal{position:absolute;top:40%;right:-6%;width:110px;height:110px;overflow:visible;color:#d2efff}
-.signal-arc{opacity:0;transform-origin:8px 8px;animation:satelliteSignal 3.6s ease-out infinite;will-change:transform,opacity}
-.signal-arc-two{animation-delay:.6s}.signal-arc-three{animation-delay:1.2s}
-@keyframes satelliteSignal{0%,12%{opacity:0;transform:translate3d(-5px,5px,0) scale(.9)}30%{opacity:.85}68%,100%{opacity:0;transform:translate3d(5px,-5px,0) scale(1.08)}}
-@media(max-width:520px){.eco-hero{min-height:298px}.satellite-visual{top:105px;right:-27px;width:196px;height:145px;opacity:.95}.satellite-signal{top:39%;right:-3%;width:82px;height:82px}}
+.satellite-visual{top:28px;right:14px;width:250px;height:175px;opacity:1;overflow:visible;pointer-events:auto}
+.satellite-image{display:block;width:100%;height:100%;object-fit:contain;filter:brightness(1.14) drop-shadow(0 8px 12px rgba(0,14,44,.2));user-select:none;transition:filter .4s ease;transform-origin:52% 52%}
+@media(hover:hover){.satellite-visual:hover .satellite-image{animation:satelliteHover .95s cubic-bezier(.2,.8,.2,1);filter:brightness(1.23) drop-shadow(0 12px 16px rgba(0,14,44,.28))}}
+@keyframes satelliteHover{0%,100%{transform:translate3d(0,0,0) rotate(0)}22%{transform:translate3d(0,-4px,0) rotate(-1.4deg)}45%{transform:translate3d(1px,-3px,0) rotate(1deg)}68%{transform:translate3d(-1px,-3px,0) rotate(-.6deg)}84%{transform:translate3d(0,-1px,0) rotate(.3deg)}}
+@media(max-width:520px){.eco-hero{min-height:298px}.satellite-visual{top:105px;right:-27px;width:196px;height:145px;opacity:.95}}
 @media(max-width:360px){.satellite-visual{right:-38px}}
-@media(prefers-reduced-motion:reduce){.signal-arc{animation:none;opacity:.58}}
+@media(prefers-reduced-motion:reduce){.satellite-visual:hover .satellite-image{animation:none}}
 
 /* A solid selected state is readable even without hover or animation. */
 .settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare{
   display:inline-flex;align-items:center;justify-content:center;gap:6px;
-  min-height:43px;background:#fff!important;border:1px solid #cbdcee!important;
+  min-height:43px;background:#fff!important;border:2px solid #dce8f4!important;
   color:#4c6480!important;font-weight:650;transition:background .18s,border-color .18s,color .18s,transform .18s;
 }
 .settings-column [data-field][aria-pressed=true],.settings-column [data-saline][aria-pressed=true],#unitBtn_sotka[aria-pressed=true],#unitBtn_hectare[aria-pressed=true]{
-  border-color:#075ca9!important;background:#087fe0!important;color:#fff!important;box-shadow:0 3px 10px rgba(8,127,224,.18)!important;
+  border-color:#087fe0!important;background:#deefff!important;color:#075ca9!important;box-shadow:0 4px 12px rgba(8,127,224,.12)!important;
 }
-.settings-column [data-field][aria-pressed=true]::before,.settings-column [data-saline][aria-pressed=true]::before,#unitBtn_sotka[aria-pressed=true]::before,#unitBtn_hectare[aria-pressed=true]::before{content:"✓";display:grid;place-items:center;width:16px;height:16px;flex:0 0 16px;border-radius:50%;background:#fff;color:#075ca9;font-size:11px;font-weight:800}
+.crop-check,.irrig-check{display:none!important}
 .settings-column [data-field][aria-pressed=false]:hover,.settings-column [data-saline][aria-pressed=false]:hover,#unitBtn_sotka[aria-pressed=false]:hover,#unitBtn_hectare[aria-pressed=false]:hover{background:#eff7ff!important;border-color:#87bfea!important}
 .crop-card[aria-checked=true],.irrig-card[aria-checked=true],.chip-btn[aria-checked=true],.chip-btn.chip-active,#balanceBlock .chip-btn[aria-checked=true],#balanceBlock .chip-btn.chip-active{border:2px solid #087fe0!important;background:#deefff!important;box-shadow:0 4px 12px rgba(8,127,224,.12)!important;color:#075ca9!important}
 .basemap-switch button[aria-pressed=true]{background:#087fe0;color:#fff;box-shadow:0 2px 8px rgba(8,127,224,.2)}

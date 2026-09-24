@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.9.4" />
+  <link rel="stylesheet" href="css/app.css?v=5.9.5" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/balance.js?v=5.8.0"></script>
@@ -42,12 +42,7 @@
       </div>
     </div>
     <div class="hero-orbit satellite-visual" aria-hidden="true">
-      <img class="satellite-image" src="img/satellite.png" alt="" />
-      <svg class="satellite-signal" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round">
-        <path class="signal-arc signal-arc-one" d="M8 32C22 32 32 22 32 8" />
-        <path class="signal-arc signal-arc-two" d="M8 57C35 57 57 35 57 8" />
-        <path class="signal-arc signal-arc-three" d="M8 85C50 85 85 50 85 8" />
-      </svg>
+      <img class="satellite-image" src="img/satellite.png" alt="" draggable="false" />
     </div>
   </section>
   <nav class="section-nav" aria-label="Разделы Su-Tech"><a href="#block1" data-copy="navMap" aria-current="location">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>

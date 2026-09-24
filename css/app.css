@@ -568,3 +568,15 @@ h1,h2,h3,.brand strong,.hero-cta,.submit-button{font-family:Manrope,Inter,-apple
 @media(max-width:560px){.language-switch button,.language-switch button[aria-pressed=true]{padding:5px 8px;font-size:11px}}
 @media(prefers-reduced-motion:reduce){.language-switch.is-ready .language-switch__indicator{transition:none}}
 
+/* Place the mobile call to action near the bottom of the hero, below the satellite. */
+@media(max-width:520px){
+  .eco-hero .hero-copy{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:space-between;
+    min-height:242px;
+  }
+  .eco-hero .hero-actions{margin-top:24px}
+}
+

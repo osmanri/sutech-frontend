@@ -105,6 +105,11 @@ const I18N = {
     pageTitle:      'Su-Tech — Smart Irrigation',
     pageDesc:       'Интеллектуальная система управления орошением на базе модели FAO-56 Penman-Monteith',
     headerSubtitle: 'Smart Irrigation',
+    heroKicker: 'Виртуальный агроном работает',
+    heroTitleTop: 'Точный полив.',
+    heroTitleAccent: 'Живое поле.',
+    heroDescription: 'Погода, FAO‑56 и экономика насоса — в одном понятном решении для фермера.',
+    heroCta: 'Настроить поле',
 
     block1Title:        'Карта вашего поля',
     block1StatusWait:   'Ожидает GPS',
@@ -213,6 +218,11 @@ const I18N = {
     pageTitle:      'Su-Tech — Smart Irrigation',
     pageDesc:       'FAO-56 Penman-Monteith моделі негізінде суаруды басқарудың зияткерлік жүйесі',
     headerSubtitle: 'Smart Irrigation',
+    heroKicker: 'Виртуалды агроном жұмыс істеп тұр',
+    heroTitleTop: 'Дәл суару.',
+    heroTitleAccent: 'Өнімді алқап.',
+    heroDescription: 'Ауа райы, FAO‑56 және сорғы экономикасы — фермерге түсінікті бір шешімде.',
+    heroCta: 'Алқапты баптау',
 
     block1Title:        'Алқап картасы',
     block1StatusWait:   'GPS күтілуде',
@@ -400,7 +410,8 @@ function applyLanguage(lang) {
   window.SuBalance?.sync(state.crop, state.field_type, lang);
   const t = I18N[lang] || I18N.ru;
   document.querySelectorAll('[data-copy]').forEach(el => {
-    el.textContent = UI_COPY[lang]?.[el.dataset.copy] || UI_COPY.ru[el.dataset.copy] || '';
+    const key = el.dataset.copy;
+    el.textContent = UI_COPY[lang]?.[key] || I18N[lang]?.[key] || UI_COPY.ru[key] || I18N.ru[key] || '';
   });
 
   document.getElementById('htmlRoot').setAttribute('lang', lang);
@@ -1526,6 +1537,36 @@ function initScrollProgress() {
   window.addEventListener('resize', schedule, { passive: true });
 }
 
+function initPointerGlow() {
+  const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia?.('(hover: hover) and (pointer: fine)').matches;
+  if (reduced || !finePointer) return;
+
+  document.querySelectorAll('.eco-hero, .settings-column > section, .summary-card').forEach(surface => {
+    const glow = document.createElement('span');
+    glow.className = 'follow-glow';
+    glow.setAttribute('aria-hidden', 'true');
+    surface.classList.add('spot-surface');
+    surface.append(glow);
+
+    let pointerX = 0;
+    let pointerY = 0;
+    let frame = 0;
+    const paint = () => {
+      glow.style.transform = `translate3d(${pointerX - 130}px, ${pointerY - 130}px, 0)`;
+      frame = 0;
+    };
+    surface.addEventListener('pointerenter', () => surface.classList.add('spot-active'));
+    surface.addEventListener('pointermove', event => {
+      const rect = surface.getBoundingClientRect();
+      pointerX = event.clientX - rect.left;
+      pointerY = event.clientY - rect.top;
+      if (!frame) frame = window.requestAnimationFrame(paint);
+    });
+    surface.addEventListener('pointerleave', () => surface.classList.remove('spot-active'));
+  });
+}
+
 // ─── 17. DOMContentLoaded — Инициализация ────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   connectTelegram();
@@ -1549,6 +1590,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setAreaUnit(state.area_unit);
   initMotion();
   initScrollProgress();
+  initPointerGlow();
 
   if (window.lucide) {
     lucide.createIcons();

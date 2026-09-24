@@ -439,7 +439,7 @@ h1,h2,h3,.brand strong,.hero-cta,.submit-button{font-family:Manrope,Inter,-apple
 .radar-wave{position:absolute;z-index:1;top:50%;left:50%;width:48px;height:48px;margin:-24px;border:1px solid rgba(225,246,255,.8);border-radius:50%;box-shadow:0 0 9px rgba(166,222,255,.28);opacity:0;animation:satellite-wave 5.4s ease-out infinite;will-change:transform,opacity}
 .radar-wave-two{animation-delay:1.8s}.radar-wave-three{animation-delay:3.6s}
 .radar-core{
-  z-index:4;top:50%;left:50%;inset:auto;width:60px;height:60px;
+  z-index:4;inset:auto;top:50%;left:50%;width:60px;height:60px;
   transform:translate(-50%,-50%);border:1px solid rgba(218,244,255,.58);
   background:linear-gradient(145deg,rgba(146,210,247,.45),rgba(16,83,155,.76) 46%,rgba(5,35,85,.96));
   color:#f1faff;box-shadow:inset 1px 2px 2px rgba(255,255,255,.22),0 9px 16px rgba(0,19,55,.4);

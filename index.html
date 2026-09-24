@@ -8,11 +8,11 @@
   <meta name="theme-color" content="#182D3B" />
   <link rel="icon" href="img/logo-mark.png" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.3.0" />
+  <link rel="stylesheet" href="css/app.css?v=5.4.0" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
-  <script defer src="js/balance.js?v=5.3.0"></script>
-  <script defer src="js/app.js?v=5.3.0"></script>
+  <script defer src="js/balance.js?v=5.4.0"></script>
+  <script defer src="js/app.js?v=5.4.0"></script>
 </head>
 <body>
   <header class="app-header">
@@ -23,6 +23,13 @@
     <nav class="header-nav" aria-label="Навигация"><a href="#block1" data-copy="navMap">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>
     <div class="language-switch" role="group" aria-label="Выбор языка"><button id="langBtnKz" onclick="setLanguage('kz')">ҚАЗ</button><button id="langBtnRu" onclick="setLanguage('ru')">РУС</button></div>
   </header>
+  <div class="scroll-progress" aria-hidden="true"><span id="scrollProgressBar"></span></div>
+  <div class="signal-strip" aria-hidden="true">
+    <div class="signal-track">
+      <span>FAO‑56 <b>✦</b> OPEN‑METEO <b>✦</b> FIELD WATER BALANCE <b>✦</b> TELEGRAM MINI APP <b>✦</b></span>
+      <span>FAO‑56 <b>✦</b> OPEN‑METEO <b>✦</b> FIELD WATER BALANCE <b>✦</b> TELEGRAM MINI APP <b>✦</b></span>
+    </div>
+  </div>
   <main class="workspace">
     <div class="workspace-grid">
       <div class="map-column">

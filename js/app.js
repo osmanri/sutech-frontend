@@ -1504,6 +1504,28 @@ function initMotion() {
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 }
 
+function initScrollProgress() {
+  const bar = document.getElementById('scrollProgressBar');
+  if (!bar) return;
+
+  let scheduled = false;
+  const update = () => {
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+    bar.style.transform = `scaleX(${progress})`;
+    scheduled = false;
+  };
+  const schedule = () => {
+    if (scheduled) return;
+    scheduled = true;
+    window.requestAnimationFrame(update);
+  };
+
+  update();
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule, { passive: true });
+}
+
 // ─── 17. DOMContentLoaded — Инициализация ────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   connectTelegram();
@@ -1526,6 +1548,7 @@ document.addEventListener('DOMContentLoaded', () => {
   selectIrrigation(state.irrigation_type);
   setAreaUnit(state.area_unit);
   initMotion();
+  initScrollProgress();
 
   if (window.lucide) {
     lucide.createIcons();

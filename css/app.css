@@ -119,3 +119,23 @@ body{background:radial-gradient(ellipse at 100% 0,#e4eef0 0,transparent 48%),var
 .region-select.select-highlight{border-color:#eab308!important;box-shadow:0 0 0 3px rgba(234,179,8,0.35)!important;animation:pulseSelect .4s ease}
 @keyframes pulseSelect{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
 
+/* HackAlem-inspired motion accents, adapted to the existing Su-Tech palette. */
+.scroll-progress{position:fixed;inset:0 0 auto;height:3px;z-index:1200;pointer-events:none;background:transparent}
+.scroll-progress span{display:block;width:100%;height:100%;transform:scaleX(0);transform-origin:left center;background:linear-gradient(90deg,#78b5cb,var(--accent),#203641);box-shadow:0 0 10px #247c9c45;will-change:transform}
+.signal-strip{width:100%;overflow:hidden;border-bottom:1px solid #dfe5e3;background:#203641;color:#eef6f6;isolation:isolate}
+.signal-track{display:flex;width:max-content;white-space:nowrap;animation:signalMarquee 28s linear infinite;will-change:transform}
+.signal-track span{display:block;padding:8px 24px 7px 0;font-size:9px;font-weight:700;line-height:1;letter-spacing:1.65px}
+.signal-track b{padding:0 13px;color:#78b5cb;font-size:8px}
+.map-stage::after{content:"";position:absolute;z-index:450;left:10%;right:10%;top:0;height:1px;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,#78b5cb 25%,#fff 50%,#78b5cb 75%,transparent);box-shadow:0 0 12px #78b5cb}
+.map-panel.map-live .map-stage::after{animation:mapSignal 4.8s ease-in-out infinite}
+.summary-card::before{content:"";position:absolute;z-index:0;inset:-80% -45%;pointer-events:none;background:linear-gradient(105deg,transparent 38%,#ffffff14 48%,#78b5cb20 52%,transparent 62%);transform:translate3d(-35%,0,0) rotate(4deg);animation:summarySweep 8s cubic-bezier(.22,1,.36,1) infinite}
+.summary-card>*{position:relative;z-index:1}
+.submit-button svg{transition:transform .42s cubic-bezier(.22,1,.36,1)}
+.submit-button:active svg{transform:translateX(6px)}
+@media(hover:hover){.submit-button:hover svg{transform:translateX(6px)}.signal-strip:hover .signal-track{animation-play-state:paused}}
+@keyframes signalMarquee{to{transform:translate3d(-50%,0,0)}}
+@keyframes mapSignal{0%,12%{top:0;opacity:0}25%{opacity:.65}75%{opacity:.32}88%,100%{top:100%;opacity:0}}
+@keyframes summarySweep{0%,62%{transform:translate3d(-42%,0,0) rotate(4deg);opacity:0}70%{opacity:1}88%,100%{transform:translate3d(42%,0,0) rotate(4deg);opacity:0}}
+@media(max-width:620px){.signal-track span{padding-top:7px;padding-bottom:6px;font-size:8px;letter-spacing:1.35px}.signal-track b{padding:0 10px}}
+@media(prefers-reduced-motion:reduce){.signal-track,.map-panel.map-live .map-stage::after,.summary-card::before{animation:none!important}.signal-track{transform:none}.map-stage::after{display:none}}
+

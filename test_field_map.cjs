@@ -20,6 +20,8 @@ for (const tag of html.matchAll(/<input\b[^>]*>/g)) {
 }
 let sent;
 let apiRequest;
+let apiResult = { ok: true, bot_replied: true };
+let closed = 0;
 let gpsSuccess;
 let lastFlyTo;
 const layers = [];
@@ -37,7 +39,7 @@ const L = {
   polygon: (points, options) => { layers.push({ points, options }); return layer(); },
   polyline: layer, circleMarker: layer, circle: layer,
 };
-const tg = { initData: 'test-launch', ready() {}, expand() {}, close() {}, sendData(value) { sent = JSON.parse(value); } };
+const tg = { initData: 'test-launch', ready() {}, expand() {}, close() { closed++; }, sendData(value) { sent = JSON.parse(value); } };
 const context = vm.createContext({
   console: { log() {}, warn() {}, error() {} }, L,
   window: { L, Telegram: { WebApp: tg }, location: { href: '' }, matchMedia: () => ({ matches: true }), addEventListener() {} },
@@ -46,7 +48,7 @@ const context = vm.createContext({
   AbortController,
   fetch: async (_url, options) => {
     apiRequest = JSON.parse(options.body);
-    return { ok: true, json: async () => ({ ok: true }) };
+    return { ok: true, json: async () => apiResult };
   },
   setTimeout(callback, delay) { if (delay < 10000) callback(); }, clearTimeout() {}, requestAnimationFrame(callback) { callback(); },
 });
@@ -260,5 +262,10 @@ tg.initData = 'test-launch';
     }
   }
   assert.equal(sent, undefined, 'Inline/menu Mini Apps must use the signed backend route');
+  apiResult = { ok: false, bot_replied: true };
+  const beforeCorrection = closed;
+  run("selectCrop('corn'); isSubmitting = false");
+  await run('submitFinalCalculation()');
+  assert.equal(closed, beforeCorrection + 1, 'A correction reply must return the farmer to the bot');
   console.log('PASS: map, input validation, crop delivery, calendars and greenhouse');
 })().catch(error => { console.error(error); process.exitCode = 1; });

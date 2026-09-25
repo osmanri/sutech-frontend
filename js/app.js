@@ -216,6 +216,7 @@ const I18N = {
     errNeedLocation:    'Сначала определите GPS или выберите точку поля на карте.',
     errInvalidArea:     'Введите площадь поля больше 0 и менее 50 000.',
     successPayloadSent: 'Данные отправлены в бот! Расчёт по модели FAO-56...',
+    botNeedsCorrection: 'Бот ответил в Telegram. Проверьте сообщение и исправьте данные.',
     openBotText: 'Открыть бота для расчёта',
     errTelegramOnly: 'Чтобы получить расчёт, откройте Su-Tech через бота в Telegram.',
     errSendFailed: 'Не удалось отправить данные боту. Повторите попытку в Telegram.',
@@ -331,6 +332,7 @@ const I18N = {
     errNeedLocation:    'Алдымен GPS арқылы немесе картадан алқап нүктесін таңдаңыз.',
     errInvalidArea:     '0-ден үлкен және 50 000-нан кем алқап ауданын енгізіңіз.',
     successPayloadSent: 'Деректер ботқа жіберілді! FAO-56 моделі бойынша есептеу жүргізілуде...',
+    botNeedsCorrection: 'Бот Telegram-да жауап берді. Хабарламаны тексеріп, деректерді түзетіңіз.',
     openBotText: 'Есептеу үшін ботты ашу',
     errTelegramOnly: 'Есеп алу үшін Su-Tech-ті Telegram ботынан ашыңыз.',
     errSendFailed: 'Деректер ботқа жіберілмеді. Telegram-да қайталап көріңіз.',
@@ -451,6 +453,7 @@ I18N.en = {
   gpsSuccessToast: 'Field coordinates saved.', errNeedLocation: 'Select a field location first.',
   errInvalidArea: 'Enter an area greater than 0 and below 50,000.',
   successPayloadSent: 'Data sent to the bot. Running the FAO-56 calculation…',
+  botNeedsCorrection: 'The bot replied in Telegram. Check its message and correct the input.',
   openBotText: 'Open bot to calculate',
   errTelegramOnly: 'Open Su-Tech from its Telegram bot to receive the calculation.',
   errSendFailed: 'Could not send the field data. Please try again in Telegram.',
@@ -1568,7 +1571,12 @@ function submitFinalCalculation() {
     signal: controller.signal,
   }).then(async response => {
     const result = await response.json();
-    if (!response.ok || !result.ok) throw new Error('analysis not delivered');
+    if (!response.ok || !result.bot_replied) throw new Error('analysis not delivered');
+    if (!result.ok) {
+      showToast(t.botNeedsCorrection, 'warning');
+      try { tg.close(); } catch (_) {}
+      return;
+    }
     showToast(t.successPayloadSent, 'success');
     triggerHaptic('success');
     try { tg.close(); } catch (_) {}

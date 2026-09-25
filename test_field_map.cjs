@@ -55,6 +55,38 @@ const context = vm.createContext({
 vm.runInContext(fs.readFileSync(`${__dirname}/js/balance.js`, 'utf8'), context);
 vm.runInContext(fs.readFileSync(`${__dirname}/js/app.js`, 'utf8'), context);
 const run = code => vm.runInContext(code, context);
+const englishLeaks = run(`({
+  labels: Object.entries(I18N.en).filter(([, value]) =>
+    typeof value === 'string' && /[\\u0400-\\u04FF]/.test(value)).map(([key]) => key),
+  interface: Object.entries(UI_COPY.en).filter(([, value]) =>
+    typeof value === 'string' && /[\\u0400-\\u04FF]/.test(value)).map(([key]) => key),
+  crops: Object.entries(I18N.en.crops).filter(([, value]) =>
+    /[\\u0400-\\u04FF]/.test(value.name + value.sub)).map(([key]) => key),
+})`);
+assert.deepEqual([...englishLeaks.labels, ...englishLeaks.interface, ...englishLeaks.crops], [],
+  'English interface must not fall back to Russian or Kazakh text');
+elements.get('regionSelect').options = [];
+const ariaNodes = ['navAria', 'languageAria', 'sectionAria'].map(key => ({
+  dataset: { copyAria: key },
+  setAttribute(name, value) { this[name] = value; },
+}));
+context.document.querySelectorAll = selector => selector === '[data-copy-aria]' ? ariaNodes : [];
+for (const [language, placeholder] of [
+  ['ru', 'Например, 10'], ['kz', 'Мысалы, 10'], ['en', 'e.g. 10'],
+]) {
+  run(`applyLanguage('${language}')`);
+  assert.equal(elements.get('fieldAreaInput').placeholder, placeholder,
+    `Field area example must follow ${language}`);
+}
+assert.equal(elements.get('cropSub_corn').textContent, '',
+  'English crop cards must not show a Kazakh subtitle');
+assert.equal(elements.get('cropSub_corn').style.display, 'none');
+assert.deepEqual(ariaNodes.map(node => node['aria-label']),
+  ['Navigation', 'Choose language', 'Su-Tech sections']);
+run("applyLanguage('ru')");
+assert.equal(elements.get('cropSub_corn').textContent, 'Жүгері',
+  'Switching back to Russian must restore the crop subtitle');
+context.document.querySelectorAll = () => [];
 elements.get('soilType').value = 'loam';
 elements.get('growthDay').value = '60';
 elements.get('moistureCondition').value = 'normal';

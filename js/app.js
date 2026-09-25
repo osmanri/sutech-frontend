@@ -163,6 +163,7 @@ const I18N = {
     unitText_sotka:          'Сотки',
     unitText_hectare:        'Гектары',
     labelAreaValue:          'Площадь участка:',
+    areaPlaceholder:         'Например, 10',
     unitBadge_sotka:         'соток',
     unitBadge_hectare:       'гектар',
     unitSuffix_sotka:        'сот.',
@@ -279,6 +280,7 @@ const I18N = {
     unitText_sotka:          'Соттық',
     unitText_hectare:        'Гектар',
     labelAreaValue:          'Учаске ауданы:',
+    areaPlaceholder:         'Мысалы, 10',
     unitBadge_sotka:         'соттық',
     unitBadge_hectare:       'гектар',
     unitSuffix_sotka:        'сот.',
@@ -342,6 +344,7 @@ const I18N = {
 const UI_COPY = {
   ru: {
     navMap: 'Карта поля', navSettings: 'Параметры', navCalculation: 'Расчет',
+    navAria: 'Навигация', languageAria: 'Выбор языка', sectionAria: 'Разделы Su-Tech',
     workspaceLabel: 'ВАШЕ ПОЛЕ. ВАШИ РЕШЕНИЯ.', pageHeading: 'Каждая капля — по делу.',
     pageIntro: 'Очертите поле. Выберите культуру. Узнайте, сколько воды нужно сегодня.',
     methodNote: 'Расчет на основе погоды и потребности культуры', mapEyebrow: '01 / ГРАНИЦЫ УЧАСТКА',
@@ -355,10 +358,11 @@ const UI_COPY = {
   },
   kz: {
     navMap: 'Алқап картасы', navSettings: 'Параметрлер', navCalculation: 'Есептеу',
+    navAria: 'Сайт мәзірі', languageAria: 'Тілді таңдау', sectionAria: 'Su-Tech бөлімдері',
     workspaceLabel: 'СІЗДІҢ АЛҚАП. СІЗДІҢ ШЕШІМ.', pageHeading: 'Әр тамшы — өз орнымен.',
     pageIntro: 'Алқапты белгілеңіз. Дақылды таңдаңыз. Бүгін қанша су қажет екенін біліңіз.',
     methodNote: 'Ауа райы мен дақыл қажеттілігіне негізделген есеп', mapEyebrow: '01 / АЛҚАП ШЕКАРАСЫ',
-    satellite: 'Спутник', streets: 'Сызба', mapDrawLabel: 'Алқап бұрышын қосу үшін басыңыз',
+    satellite: 'Жерсерік', streets: 'Сызба', mapDrawLabel: 'Алқап бұрышын қосу үшін басыңыз',
     selectRegion: '📍 Аймақты таңдау...', selectRegionPrompt: '📍 Өңірді / қаланы таңдаңыз...', btnUndoPoint: '↩️ Нүктені жою',
     btnResetContour: '🔄 Қайтару', btnClearLocation: 'Белгіні жою',
     mapErrorTitle: 'Картаны жүктеу мүмкін болмады', mapErrorBody: 'Байланысты тексеріп, қайта жүктеңіз. Ауданды қолмен енгізуге болады.',
@@ -422,14 +426,17 @@ I18N.en = {
   mapReady: 'Added to the calculation. Clear the boundary for manual input.',
   mapUnavailable: 'The map did not load. GPS and manual area input are still available.',
   mapTilesUnavailable: 'Map tiles are unavailable. Check the connection and reload the page.',
+  mapManual: 'You can enter the area manually in step 3.',
+  mapRadiusHint: 'Tap the map to move the circle. Adjust the radius below.',
+  mapRadiusInvalid: 'Enter a radius from 1 to 10,000 m.',
   block2Title: 'What are you growing?', block2Desc: 'Each crop has its own water requirement.',
   crops: {
-    wheat:{name:'Wheat',sub:'Бидай'}, cotton:{name:'Cotton',sub:'Мақта'}, corn:{name:'Maize',sub:'Жүгері'},
-    rice:{name:'Rice',sub:'Күріш'}, alfalfa:{name:'Alfalfa',sub:'Жоңышқа'}, melon:{name:'Melons',sub:'Бақша'},
-    tomato:{name:'Tomatoes',sub:'Қызанақ'}, potato:{name:'Potatoes',sub:'Картоп'}, other:{name:'Other crop',sub:'Басқа дақыл'},
+    wheat:{name:'Wheat',sub:''}, cotton:{name:'Cotton',sub:''}, corn:{name:'Maize',sub:''},
+    rice:{name:'Rice',sub:''}, alfalfa:{name:'Alfalfa',sub:''}, melon:{name:'Melons',sub:''},
+    tomato:{name:'Tomatoes',sub:''}, potato:{name:'Potatoes',sub:''}, other:{name:'Other crop',sub:''},
   },
   block3Title: 'Field conditions', labelAreaUnit: 'Area unit:', unitText_sotka: 'Sotkas', unitText_hectare: 'Hectares',
-  labelAreaValue: 'Field area:', unitBadge_sotka: 'sotkas', unitBadge_hectare: 'hectares', unitSuffix_sotka: 'sot.', unitSuffix_hectare: 'ha',
+  labelAreaValue: 'Field area:', areaPlaceholder: 'e.g. 10', unitBadge_sotka: 'sotkas', unitBadge_hectare: 'hectares', unitSuffix_sotka: 'sot.', unitSuffix_hectare: 'ha',
   labelQuickPresets: 'Quick select:', areaCalcEquivalentLabel: 'Equivalent:',
   equivFormat: (m2, sotka) => `${m2.toLocaleString('en-US')} m² (${sotka.toLocaleString('en-US')} sotkas)`,
   labelFieldType: 'Field type:', fieldText_open: 'Open field', fieldText_greenhouse: 'Greenhouse', fieldTypeBadge_open: 'Open field', fieldTypeBadge_greenhouse: 'Greenhouse',
@@ -463,10 +470,17 @@ I18N.en = {
 UI_COPY.en = {
   ...UI_COPY.ru,
   navMap:'Field map', navSettings:'Inputs', navCalculation:'Calculation',
+  navAria:'Navigation', languageAria:'Choose language', sectionAria:'Su-Tech sections',
+  workspaceLabel:'YOUR FIELD. YOUR DECISIONS.', pageHeading:'Make every drop count.',
+  pageIntro:'Mark your field. Choose a crop. Find out how much water it needs today.',
+  methodNote:'Calculated from the weather and crop water needs', mapEyebrow:'01 / FIELD BOUNDARY',
   satellite:'Satellite', streets:'Map', selectRegion:'Select a region', selectRegionPrompt:'Select a city / region',
+  mapDrawLabel:'Tap to add a field corner',
   btnUndoPoint:'Remove point', btnResetContour:'Clear boundary', btnClearLocation:'Remove marker',
   mapErrorTitle:'Could not load the map', mapErrorBody:'Check the connection and retry. You can enter the area manually.',
-  retryMap:'Retry', summaryEyebrow:'READY FOR THE NEXT STEP?', footerNote:'Saving water for the future.',
+  retryMap:'Retry', noteTitle:'Accuracy starts with the boundary',
+  noteBody:'Mark the corners in order. With at least three points, the area appears in your calculation. Satellite imagery helps you find the boundary.',
+  summaryEyebrow:'READY FOR THE NEXT STEP?', footerNote:'Saving water for the future.',
 };
 
 const TICKER_COPY = {
@@ -514,6 +528,9 @@ function applyLanguage(lang, animateIndicator = false) {
   document.querySelectorAll('[data-copy]').forEach(el => {
     const key = el.dataset.copy;
     el.textContent = UI_COPY[lang]?.[key] || I18N[lang]?.[key] || UI_COPY.ru[key] || I18N.ru[key] || '';
+  });
+  document.querySelectorAll('[data-copy-aria]').forEach(el => {
+    el.setAttribute('aria-label', UI_COPY[lang]?.[el.dataset.copyAria] || '');
   });
   const ticker = TICKER_COPY[lang] || TICKER_COPY.ru;
   document.querySelectorAll('[data-ticker-index]').forEach(el => {
@@ -572,6 +589,7 @@ function applyLanguage(lang, animateIndicator = false) {
   document.getElementById('unitText_sotka').textContent       = t.unitText_sotka;
   document.getElementById('unitText_hectare').textContent     = t.unitText_hectare;
   document.getElementById('labelAreaValue').textContent       = t.labelAreaValue;
+  document.getElementById('fieldAreaInput').placeholder         = t.areaPlaceholder;
   document.getElementById('labelQuickPresets').textContent    = t.labelQuickPresets;
   document.getElementById('areaCalcEquivalentLabel').textContent = t.areaCalcEquivalentLabel;
   updateAreaUnitUI();
@@ -1078,7 +1096,7 @@ function updateMapUI() {
   
   document.getElementById('fieldAreaInput').readOnly = false;
   document.querySelectorAll('[onclick^="setPresetArea"]').forEach(btn => { btn.disabled = false; });
-  const fmt = value => value.toLocaleString(state.lang === 'kz' ? 'kk-KZ' : 'ru-RU', { maximumFractionDigits: 4 });
+  const fmt = value => value.toLocaleString({ kz: 'kk-KZ', en: 'en-US' }[state.lang] || 'ru-RU', { maximumFractionDigits: 4 });
   document.getElementById('mapAreaValue').textContent = mappedAreaM2 > 0
     ? `${fmt(mappedAreaM2 / 10000)} ${t.unitSuffix_hectare} · ${fmt(mappedAreaM2 / 100)} ${t.unitSuffix_sotka}` : '—';
   const mapStatus = fieldMode === 'manual' || mappedAreaM2 > 0 ? ''

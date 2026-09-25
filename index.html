@@ -15,7 +15,7 @@
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/balance.js?v=5.10.3"></script>
-  <script defer src="js/app.js?v=5.10.11"></script>
+  <script defer src="js/app.js?v=5.10.12"></script>
 </head>
 <body>
   <div class="signal-strip" aria-hidden="true">
@@ -29,8 +29,8 @@
       <span class="brand-logo"><img src="img/sutech-mark-blue.png?v=5.10.3" alt="Su-Tech" /></span>
       <span><strong>Su-Tech<span class="brand-dot">.</span></strong><small id="headerSubtitle">Smart Irrigation</small></span>
     </a>
-    <nav class="header-nav" aria-label="Навигация"><a href="#block1" data-copy="navMap">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>
-    <div class="language-switch" role="group" aria-label="Выбор языка"><span class="language-switch__indicator" aria-hidden="true"></span><button type="button" id="langBtnRu" onclick="setLanguage('ru')">RU</button><button type="button" id="langBtnKz" onclick="setLanguage('kz')">ҚАЗ</button><button type="button" id="langBtnEn" onclick="setLanguage('en')">EN</button></div>
+    <nav class="header-nav" aria-label="Навигация" data-copy-aria="navAria"><a href="#block1" data-copy="navMap">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>
+    <div class="language-switch" role="group" aria-label="Выбор языка" data-copy-aria="languageAria"><span class="language-switch__indicator" aria-hidden="true"></span><button type="button" id="langBtnRu" onclick="setLanguage('ru')">RU</button><button type="button" id="langBtnKz" onclick="setLanguage('kz')">ҚАЗ</button><button type="button" id="langBtnEn" onclick="setLanguage('en')">EN</button></div>
   </header>
   <div class="scroll-progress" aria-hidden="true"><span id="scrollProgressBar"></span></div>
   <section class="eco-hero" aria-labelledby="heroTitle">
@@ -46,7 +46,7 @@
       <img class="satellite-image" src="img/satellite.png" alt="" draggable="false" />
     </div>
   </section>
-  <nav class="section-nav" aria-label="Разделы Su-Tech"><a href="#block1" data-copy="navMap" aria-current="location">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>
+  <nav class="section-nav" aria-label="Разделы Su-Tech" data-copy-aria="sectionAria"><a href="#block1" data-copy="navMap" aria-current="location">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>
   <main class="workspace">
     <div class="workspace-grid">
       <div class="map-column">

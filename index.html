@@ -383,9 +383,14 @@
     <label for="growthDay" data-balance-copy="day">Дней от посадки</label>
     <div class="growth-stepper">
       <button type="button" onclick="changeGrowthDay(-1)" data-balance-aria="decreaseDay" aria-label="Уменьшить число дней"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
-      <div class="growth-value"><input id="growthDay" type="text" inputmode="numeric" value="30" placeholder="30" autocomplete="off"/><span data-balance-copy="daySuffix">дн.</span></div>
+      <div class="growth-value"><input id="growthDay" type="text" inputmode="numeric" placeholder="—" autocomplete="off"/><span data-balance-copy="daySuffix">дн.</span></div>
       <button type="button" onclick="changeGrowthDay(1)" data-balance-aria="increaseDay" aria-label="Увеличить число дней"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
     </div>
+    <p class="balance-help" data-balance-copy="dayHint">Укажите возраст культуры или выберите дату посева ниже.</p>
+    <details id="plantingDateDetails"><summary data-balance-copy="dateOption">Знаю дату посева, но не число дней</summary>
+      <label for="plantingDate" data-balance-copy="dateLabel">Дата посева или посадки</label>
+      <input id="plantingDate" type="date" autocomplete="off" />
+    </details>
 
     <label id="moistureLabel" data-balance-copy="moisture">Состояние почвы</label>
     <div id="moistureChips" class="segmented-chips" role="radiogroup" aria-labelledby="moistureLabel">

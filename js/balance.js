@@ -11,7 +11,9 @@ window.SuBalance = (() => {
     ru: {
       title:'Запас влаги', intro:'Решение по запасу воды у корней и суточному прогнозу Open-Meteo.',
       soil:'Тип почвы', choose:'Выберите', sand:'Песок', loam:'Суглинок', clay:'Глина',
-      day:'Дней от посадки', moisture:'Состояние почвы', chooseMoisture:'Выберите состояние',
+      day:'Дней от посадки', dayHint:'Укажите возраст культуры или выберите дату посева ниже.',
+      dateOption:'Знаю дату посева, но не число дней', dateLabel:'Дата посева или посадки',
+      moisture:'Состояние почвы', chooseMoisture:'Выберите состояние',
       moistureRecent:'Недавно полито / был дождь', moistureNormal:'Нормальная влажность', moistureDry:'Почва сухая',
       moistureHint:'Песок рассыпается, суглинок сжимается в непрочный комок, глина липкая. Выберите состояние после последнего полива; миллиметры система рассчитает сама.',
       daySuffix:'дн.', decreaseDay:'Уменьшить число дней', increaseDay:'Увеличить число дней',
@@ -29,7 +31,9 @@ window.SuBalance = (() => {
     kz: {
       title:'Ылғал қоры', intro:'Шешім тамырдағы су қоры мен Open-Meteo тәуліктік болжамына негізделеді.',
       soil:'Топырақ түрі', choose:'Таңдаңыз', sand:'Құм', loam:'Саздақ', clay:'Саз',
-      day:'Отырғызудан кейінгі күн', moisture:'Топырақ күйі', chooseMoisture:'Топырақ күйін таңдаңыз',
+      day:'Отырғызудан кейінгі күн', dayHint:'Дақыл жасын енгізіңіз немесе төменнен егу күнін таңдаңыз.',
+      dateOption:'Егу күнін білемін, бірақ күн санын білмеймін', dateLabel:'Егу немесе отырғызу күні',
+      moisture:'Топырақ күйі', chooseMoisture:'Топырақ күйін таңдаңыз',
       moistureRecent:'Жақында суарылды / Жаңбыр', moistureNormal:'Қалыпты ылғалдылық', moistureDry:'Топырақ құрғақ',
       moistureHint:'Құм үгітіледі, саздақ әлсіз түйірге жиналады, саз жабысқақ. Соңғы суарудан кейінгі күйді таңдаңыз; миллиметрді жүйе өзі есептейді.',
       daySuffix:'күн', decreaseDay:'Күн санын азайту', increaseDay:'Күн санын көбейту',
@@ -47,7 +51,9 @@ window.SuBalance = (() => {
     en: {
       title:'Water reserve', intro:'A root-zone water balance decision based on the daily Open-Meteo forecast.',
       soil:'Soil type', choose:'Select', sand:'Sand', loam:'Loam', clay:'Clay',
-      day:'Days after planting', daySuffix:'days', decreaseDay:'Decrease days', increaseDay:'Increase days',
+      day:'Days after planting', dayHint:'Enter the crop age or choose the planting date below.',
+      dateOption:'I know the planting date, not the day count', dateLabel:'Sowing or planting date',
+      daySuffix:'days', decreaseDay:'Decrease days', increaseDay:'Increase days',
       moisture:'Soil condition', chooseMoisture:'Select condition',
       moistureRecent:'Recently irrigated / rain', moistureNormal:'Normal moisture', moistureDry:'Dry soil',
       moistureHint:'Sand crumbles, loam forms a weak ball, and clay feels sticky. Choose the condition since the last irrigation; the system estimates the deficit.',
@@ -65,6 +71,20 @@ window.SuBalance = (() => {
   };
   const el = id => document.getElementById(id);
   function error(id, message = 'error') { throw {id, message}; }
+  function localToday() {
+    const now = new Date();
+    return [now.getFullYear(), String(now.getMonth()+1).padStart(2,'0'), String(now.getDate()).padStart(2,'0')].join('-');
+  }
+  function daysSince(dateValue) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) error('plantingDate');
+    const [year, month, day] = dateValue.split('-').map(Number);
+    const planted = Date.UTC(year, month-1, day);
+    const today = localToday().split('-').map(Number);
+    const current = Date.UTC(today[0], today[1]-1, today[2]);
+    const elapsed = Math.round((current-planted)/86400000);
+    if (new Date(planted).toISOString().slice(0,10) !== dateValue || elapsed < 0 || elapsed > 3650) error('plantingDate');
+    return elapsed;
+  }
   function read(id, min, max, integer = false, optional = false) {
     const raw = String(el(id)?.value ?? '').trim().replace(',', '.');
     if (!raw && optional) return null;
@@ -77,14 +97,15 @@ window.SuBalance = (() => {
     if (!['sand','loam','clay'].includes(soil)) error('soilType','soilError');
     const moisture = el('moistureCondition').value;
     if (!['recent','normal','dry'].includes(moisture)) error('moistureCondition');
+    const plantingDate = el('plantingDate').value;
     const data = {balance_version:2, soil_type:soil,
-      day_of_growth:read('growthDay',0,3650,true), moisture_condition:moisture,
+      day_of_growth:plantingDate ? daysSince(plantingDate) : read('growthDay',0,3650,true), moisture_condition:moisture,
       power_price:read('powerPrice',0,10000,false,true),
       pump_power_kw:read('pumpPower',.000001,100000,false,true),
       pump_productivity_m3h:read('pumpProductivity',.000001,1000000,false,true)};
     if (calendars[crop]) {
       data.stage_days = stageIds.map(id => read(id,1,730,true));
-      if (data.day_of_growth > data.stage_days.reduce((a,b) => a+b,0)) error('growthDay','season');
+      if (data.day_of_growth > data.stage_days.reduce((a,b) => a+b,0)) error(plantingDate ? 'plantingDate' : 'growthDay','season');
     } else if (crop === 'other') {
       data.custom_kc = read('customKc',.05,2);
       data.custom_p = read('customP',.1,.8);
@@ -135,6 +156,26 @@ window.SuBalance = (() => {
   function complete() { try { collect(); return true; } catch (_) { return false; } }
   function init(c, f, l) {
     sync(c,f,l);
+    const plantingDate = el('plantingDate');
+    const growthDay = el('growthDay');
+    let updatingFromDate = false;
+    plantingDate.max = localToday();
+    plantingDate.addEventListener('change', () => {
+      if (!plantingDate.value) return;
+      updatingFromDate = true;
+      try {
+        growthDay.value = String(daysSince(plantingDate.value));
+        growthDay.dispatchEvent(new Event('input', {bubbles:true}));
+      } catch (_) {
+        growthDay.value = '';
+        growthDay.dispatchEvent(new Event('input', {bubbles:true}));
+      } finally {
+        updatingFromDate = false;
+      }
+    });
+    growthDay.addEventListener('input', () => {
+      if (!updatingFromDate) plantingDate.value = '';
+    });
     el('balanceBlock').addEventListener('input', () => window.updateSummaryCard?.());
     el('balanceBlock').addEventListener('change', () => window.updateSummaryCard?.());
   }

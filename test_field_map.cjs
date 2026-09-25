@@ -9,7 +9,9 @@ for (const [, id] of html.matchAll(/id="([^"]+)"/g)) {
     value: '', style: {}, textContent: '', classList: { add() {}, remove() {}, toggle() {} },
     attrs: {}, setAttribute(k, v) { this.attrs[k] = v; }, getAttribute(k) { return this.attrs[k]; },
     removeAttribute(k) { delete this.attrs[k]; }, scrollIntoView() {},
-    focus() {}, closest() { return null; }, addEventListener() {},
+    focus() {}, closest() { return null; }, listeners: {},
+    addEventListener(name, callback) { (this.listeners[name] ||= []).push(callback); },
+    dispatchEvent(event) { for (const callback of this.listeners[event.type] || []) callback(event); },
   });
 }
 // Model the input defaults used by the real WebApp.
@@ -46,6 +48,7 @@ const context = vm.createContext({
   document: { getElementById: id => elements.get(id), querySelectorAll: () => [], querySelector: () => null, addEventListener() {} },
   navigator: { geolocation: { getCurrentPosition(success) { gpsSuccess = success; } } },
   AbortController,
+  Event,
   fetch: async (_url, options) => {
     apiRequest = JSON.parse(options.body);
     return { ok: true, json: async () => apiResult };
@@ -88,9 +91,23 @@ assert.equal(elements.get('cropSub_corn').textContent, 'Жүгері',
   'Switching back to Russian must restore the crop subtitle');
 context.document.querySelectorAll = () => [];
 elements.get('soilType').value = 'loam';
+assert.equal(elements.get('growthDay').value, '', 'A new farmer must not inherit an invented 30-day crop age');
 elements.get('growthDay').value = '60';
 elements.get('moistureCondition').value = 'normal';
 run("window.SuBalance.init('cotton', 'open', 'ru')");
+elements.get('growthDay').value = '';
+assert.equal(run('window.SuBalance.complete()'), false, 'A missing crop age must not count as a complete calculation');
+const weekAgo = new Date();
+weekAgo.setDate(weekAgo.getDate() - 7);
+elements.get('plantingDate').value = [weekAgo.getFullYear(), String(weekAgo.getMonth() + 1).padStart(2, '0'), String(weekAgo.getDate()).padStart(2, '0')].join('-');
+elements.get('plantingDate').dispatchEvent(new Event('change'));
+assert.equal(elements.get('growthDay').value, '7', 'Planting date must fill the crop age');
+assert.equal(run('window.SuBalance.complete()'), true);
+assert.equal(run('window.SuBalance.payload().day_of_growth'), 7,
+  'The bot payload must use the selected planting date');
+elements.get('growthDay').value = '60';
+elements.get('growthDay').dispatchEvent(new Event('input'));
+assert.equal(elements.get('plantingDate').value, '', 'Manually changing the day must override the previous date');
 const near = (actual, expected, tolerance = 1e-5) => assert.ok(Math.abs(actual - expected) < tolerance, `${actual} != ${expected}`);
 assert.equal(run('state.latitude'), null, 'A new farmer must not inherit Atyrau as their field');
 assert.equal(run('state.longitude'), null);

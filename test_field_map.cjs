@@ -19,6 +19,7 @@ for (const tag of html.matchAll(/<input\b[^>]*>/g)) {
   if (id && value !== undefined) elements.get(id).value = value;
 }
 let sent;
+let apiRequest;
 let gpsSuccess;
 let lastFlyTo;
 const layers = [];
@@ -39,9 +40,14 @@ const L = {
 const tg = { initData: 'test-launch', ready() {}, expand() {}, close() {}, sendData(value) { sent = JSON.parse(value); } };
 const context = vm.createContext({
   console: { log() {}, warn() {}, error() {} }, L,
-  window: { L, Telegram: { WebApp: tg }, matchMedia: () => ({ matches: true }), addEventListener() {} },
+  window: { L, Telegram: { WebApp: tg }, location: { href: '' }, matchMedia: () => ({ matches: true }), addEventListener() {} },
   document: { getElementById: id => elements.get(id), querySelectorAll: () => [], querySelector: () => null, addEventListener() {} },
   navigator: { geolocation: { getCurrentPosition(success) { gpsSuccess = success; } } },
+  AbortController,
+  fetch: async (_url, options) => {
+    apiRequest = JSON.parse(options.body);
+    return { ok: true, json: async () => ({ ok: true }) };
+  },
   setTimeout(callback, delay) { if (delay < 10000) callback(); }, clearTimeout() {}, requestAnimationFrame(callback) { callback(); },
 });
 vm.runInContext(fs.readFileSync(`${__dirname}/js/balance.js`, 'utf8'), context);
@@ -112,17 +118,17 @@ assert.equal(layers[0].options.fillOpacity, 0.25);
 run("setAreaUnit('sotka')");
 near(Number(elements.get('fieldAreaInput').value), 100, 0.001);
 run('submitFinalCalculation()');
-near(sent.area, 100, 0.001);
-assert.equal(sent.area_unit, 'sotka');
-assert.equal(sent.pump_power_kw, 22);
-assert.equal(sent.pump_productivity_m3h, 60);
-assert.equal(sent.energy_kwh_m3, undefined);
-assert.equal(sent.latitude, 0);
-assert.equal(sent.balance_version, 2);
-assert.equal(sent.moisture_condition, 'normal');
-assert.equal(sent.yesterday_deficit, undefined);
-assert.deepEqual(sent.stage_days, [30,50,60,55]);
-assert.equal(sent.kc, undefined, 'Legacy fixed Kc must not override the stage calculation');
+near(apiRequest.payload.area, 100, 0.001);
+assert.equal(apiRequest.payload.area_unit, 'sotka');
+assert.equal(apiRequest.payload.pump_power_kw, 22);
+assert.equal(apiRequest.payload.pump_productivity_m3h, 60);
+assert.equal(apiRequest.payload.energy_kwh_m3, undefined);
+assert.equal(apiRequest.payload.latitude, 0);
+assert.equal(apiRequest.payload.balance_version, 2);
+assert.equal(apiRequest.payload.moisture_condition, 'normal');
+assert.equal(apiRequest.payload.yesterday_deficit, undefined);
+assert.deepEqual(apiRequest.payload.stage_days, [30,50,60,55]);
+assert.equal(apiRequest.payload.kc, undefined, 'Legacy fixed Kc must not override the stage calculation');
 run('undoFieldPoint()');
 near(run('mappedAreaM2'), 5000, 0.1);
 run('resetFieldContour()');
@@ -140,11 +146,11 @@ for (const unit of ['hectare', 'sotka']) {
     elements.get('fieldAreaInput').value = value;
     run(`handleAreaChange('${value}')`);
     near(run('state.area'), 6.7);
-    sent = undefined;
+    apiRequest = undefined;
     run('isSubmitting = false; submitFinalCalculation()');
-    assert.ok(sent, 'Decimal area must submit');
-    near(sent.area, 6.7);
-    assert.equal(sent.area_unit, unit);
+    assert.ok(apiRequest, 'Decimal area must submit');
+    near(apiRequest.payload.area, 6.7);
+    assert.equal(apiRequest.payload.area_unit, unit);
   }
 }
 run("handleAreaChange('1'); setAreaUnit('hectare')");
@@ -230,5 +236,29 @@ tg.initData = '';
 sent = undefined;
 run('submitFinalCalculation()');
 assert.equal(sent, undefined, 'Outside Telegram there is no real sendData delivery');
+assert.equal(context.window.location.href, 'https://t.me/Su_Tech_bot?start=app');
 tg.initData = 'test-launch';
-console.log('PASS: map, decimal input, pump payload, calendars, greenhouse and custom crop validation');
+// The actual selected crop must survive the complete Mini App delivery path.
+(async () => {
+  elements.get('fieldAreaInput').value = '1';
+  run("handleAreaChange('1')");
+  for (const lang of ['ru', 'kz', 'en']) {
+    for (const crop of ['wheat', 'cotton', 'corn', 'rice', 'alfalfa', 'melon', 'tomato', 'potato', 'other']) {
+      run(`state.lang = '${lang}'; selectCrop('${crop}'); isSubmitting = false`);
+      apiRequest = undefined;
+      await run('submitFinalCalculation()');
+      assert.equal(apiRequest.payload.crop, crop, `${lang}: ${crop} changed during delivery`);
+      assert.equal(apiRequest.payload.lang, lang);
+      assert.equal(apiRequest.init_data, 'test-launch');
+      assert.equal(apiRequest.payload.soil_type, elements.get('soilType').value);
+      assert.equal(apiRequest.payload.day_of_growth, Number(elements.get('growthDay').value));
+      assert.equal(apiRequest.payload.moisture_condition, elements.get('moistureCondition').value);
+      assert.equal(apiRequest.payload.irrigation_type, run('state.irrigation_type'));
+      assert.equal(apiRequest.payload.field_type, run('state.field_type'));
+      assert.equal(apiRequest.payload.is_saline, run('state.is_saline'));
+      if (crop === 'corn') assert.deepEqual(apiRequest.payload.stage_days, [20, 35, 40, 30]);
+    }
+  }
+  assert.equal(sent, undefined, 'Inline/menu Mini Apps must use the signed backend route');
+  console.log('PASS: map, input validation, crop delivery, calendars and greenhouse');
+})().catch(error => { console.error(error); process.exitCode = 1; });

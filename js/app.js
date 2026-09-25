@@ -21,6 +21,7 @@ let tg = window.Telegram?.WebApp || {
 function connectTelegram() {
   if (!window.Telegram?.WebApp) return;
   tg = window.Telegram.WebApp;
+  updateSubmitMode();
   try {
     tg.ready();
     tg.expand();
@@ -215,6 +216,7 @@ const I18N = {
     errNeedLocation:    'Сначала определите GPS или выберите точку поля на карте.',
     errInvalidArea:     'Введите площадь поля больше 0 и менее 50 000.',
     successPayloadSent: 'Данные отправлены в бот! Расчёт по модели FAO-56...',
+    openBotText: 'Открыть бота для расчёта',
     errTelegramOnly: 'Чтобы получить расчёт, откройте Su-Tech через бота в Telegram.',
     errSendFailed: 'Не удалось отправить данные боту. Повторите попытку в Telegram.',
   },
@@ -329,6 +331,7 @@ const I18N = {
     errNeedLocation:    'Алдымен GPS арқылы немесе картадан алқап нүктесін таңдаңыз.',
     errInvalidArea:     '0-ден үлкен және 50 000-нан кем алқап ауданын енгізіңіз.',
     successPayloadSent: 'Деректер ботқа жіберілді! FAO-56 моделі бойынша есептеу жүргізілуде...',
+    openBotText: 'Есептеу үшін ботты ашу',
     errTelegramOnly: 'Есеп алу үшін Su-Tech-ті Telegram ботынан ашыңыз.',
     errSendFailed: 'Деректер ботқа жіберілмеді. Telegram-да қайталап көріңіз.',
   },
@@ -448,6 +451,7 @@ I18N.en = {
   gpsSuccessToast: 'Field coordinates saved.', errNeedLocation: 'Select a field location first.',
   errInvalidArea: 'Enter an area greater than 0 and below 50,000.',
   successPayloadSent: 'Data sent to the bot. Running the FAO-56 calculation…',
+  openBotText: 'Open bot to calculate',
   errTelegramOnly: 'Open Su-Tech from its Telegram bot to receive the calculation.',
   errSendFailed: 'Could not send the field data. Please try again in Telegram.',
 };
@@ -606,7 +610,7 @@ function applyLanguage(lang, animateIndicator = false) {
   if (sumLabelFieldType) sumLabelFieldType.textContent = t.sumLabelFieldType;
   const sumLabelSaline = document.getElementById('sumLabelSaline');
   if (sumLabelSaline) sumLabelSaline.textContent = t.sumLabelSaline;
-  document.getElementById('btnSubmitText').textContent  = t.btnSubmitText;
+  document.getElementById('btnSubmitText').textContent  = isTelegramMiniApp() ? t.btnSubmitText : t.openBotText;
   document.getElementById('submitHint').textContent     = t.submitHint;
   const summaryStatusBadge = document.getElementById('summaryStatusBadge');
   if (summaryStatusBadge) summaryStatusBadge.textContent = t.summaryStatusReady;
@@ -1401,9 +1405,28 @@ function updateSummaryCard() {
 }
 
 // ─── 12. Финальная отправка ───────────────────────────────────────────────
+function isTelegramMiniApp() {
+  return !!(window.Telegram?.WebApp &&
+    (tg.initData || (tg.platform && tg.platform !== 'unknown')));
+}
+
+function updateSubmitMode() {
+  const label = document.getElementById('btnSubmitText');
+  if (!label) return;
+  const t = I18N[state.lang] || I18N.ru;
+  label.textContent = isTelegramMiniApp() ? t.btnSubmitText : t.openBotText;
+}
+
 function submitFinalCalculation() {
   if (isSubmitting) return;
   const t = I18N[state.lang] || I18N.ru;
+
+  // A regular browser has no Telegram user identity. Open the bot before
+  // collecting field inputs so the farmer does not lose a completed form.
+  if (!isTelegramMiniApp()) {
+    window.location.href = 'https://t.me/Su_Tech_bot?start=app';
+    return;
+  }
 
   // 1. Проверка координат и выбора региона (требуем явный выбор города/точки)
   if (state.latitude === null || state.longitude === null) {
@@ -1430,13 +1453,9 @@ function submitFinalCalculation() {
 
   // 2. ДИНАМИЧЕСКИЙ сбор данных с экрана (Real-time State Inspection)
 
-  // Культура (crop)
-  const activeCropCard = document.querySelector('.crop-card.card-selected, .crop-card.active, .crop-card[aria-checked="true"]');
-  if (activeCropCard && activeCropCard.dataset.crop) {
-    currentCrop = activeCropCard.dataset.crop;
-  } else if (!currentCrop) {
-    currentCrop = state.crop || 'cotton';
-  }
+  // The selection handler is the source of truth. Reading a leftover default
+  // CSS class here could silently turn a chosen corn field back into cotton.
+  currentCrop = state.crop;
   selectedCrop = currentCrop;
   state.crop = currentCrop;
   window.currentCrop = currentCrop;
@@ -1514,10 +1533,6 @@ function submitFinalCalculation() {
     payload.accuracy = state.accuracy;
   }
 
-  if (!tg.initData || typeof tg.sendData !== 'function') {
-    showToast(t.errTelegramOnly, 'warning');
-    return;
-  }
   const payloadString = JSON.stringify(payload);
 
   isSubmitting = true;
@@ -1528,22 +1543,43 @@ function submitFinalCalculation() {
     setTimeout(() => { btn.style.transform = ''; }, 180);
   }
 
-  setTimeout(() => {
+  if (!tg.initData) {
+    // Only reply-keyboard Mini Apps support sendData; menu/inline Mini Apps
+    // have signed initData and use the server route below.
     try {
       tg.sendData(payloadString);
       showToast(t.successPayloadSent, 'success');
-      triggerHaptic('success');
-      try { tg.close(); } catch (_) {}
     } catch (err) {
       console.error('[Su-Tech] sendData error:', err);
       showToast(t.errSendFailed, 'error');
     } finally {
-      setTimeout(() => {
-        isSubmitting = false;
-        if (btn) btn.disabled = false;
-      }, 1000);
+      isSubmitting = false;
+      if (btn) btn.disabled = false;
     }
-  }, 420);
+    return;
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 65000);
+  return fetch('https://sutech-core.onrender.com/api/analyze', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ init_data: tg.initData, payload }),
+    signal: controller.signal,
+  }).then(async response => {
+    const result = await response.json();
+    if (!response.ok || !result.ok) throw new Error('analysis not delivered');
+    showToast(t.successPayloadSent, 'success');
+    triggerHaptic('success');
+    try { tg.close(); } catch (_) {}
+  }).catch(err => {
+    console.error('[Su-Tech] analysis delivery error:', err);
+    showToast(t.errSendFailed, 'error');
+  }).finally(() => {
+    clearTimeout(timeout);
+    isSubmitting = false;
+    if (btn) btn.disabled = false;
+  });
 }
 
 // ─── 13. Toast-уведомления ───────────────────────────────────────────────

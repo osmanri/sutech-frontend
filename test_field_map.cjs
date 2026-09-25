@@ -65,6 +65,9 @@ assert.equal(run('state.longitude'), null);
 assert.equal(run('state.area'), 0, 'The sample 10 ha must not count as entered data');
 assert.match(html, /<option value="" selected data-copy="selectRegionPrompt">/);
 assert.match(html, /id="fieldAreaInput"[\s\S]*?value="" placeholder=/);
+run("setAreaUnit('hectare')");
+assert.equal(elements.get('fieldAreaInput').value, '',
+  'A new farmer should see the example placeholder, not a prefilled zero');
 run('submitFinalCalculation()');
 assert.equal(sent, undefined, 'No location or area must never send a calculation');
 
@@ -262,6 +265,14 @@ tg.initData = 'test-launch';
     }
   }
   assert.equal(sent, undefined, 'Inline/menu Mini Apps must use the signed backend route');
+  run("state.lang = 'en'; state.area = 6.7; updateSummaryCard()");
+  assert.equal(elements.get('sumValArea').textContent, '6.7 hectares',
+    'English summary must show the same decimal notation as the bot report');
+  run("selectRegion('kyzylorda')");
+  assert.equal(run("KZ_REGIONS.kyzylorda.nameEn"), 'Kyzylorda');
+  assert.match(elements.get('appToast').textContent, /Region selected: Kyzylorda/,
+    'English users must not get a Russian region confirmation');
+  assert.equal(elements.get('coordsAccuracy').textContent, '±5000 m');
   apiResult = { ok: false, bot_replied: true };
   const beforeCorrection = closed;
   run("selectCrop('corn'); isSubmitting = false");

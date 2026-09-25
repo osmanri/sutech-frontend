@@ -15,7 +15,7 @@
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/balance.js?v=5.10.3"></script>
-  <script defer src="js/app.js?v=5.10.5"></script>
+  <script defer src="js/app.js?v=5.10.11"></script>
 </head>
 <body>
   <div class="signal-strip" aria-hidden="true">
@@ -101,7 +101,7 @@
 
 
       <!-- 9 crops — adaptive for mobile and desktop -->
-      <div class="gap-3" role="radiogroup" aria-label="Выбор культуры">
+      <div class="gap-3" role="radiogroup" aria-labelledby="block2Title">
 
         <!-- 1. Пшеница -->
         <div id="cropCard_wheat"
@@ -239,7 +239,7 @@
             Единица измерения:
           </label>
           <div class="flex segmented-toggle" id="areaUnitSwitch"
-               role="group" aria-label="Единица площади">
+               role="group" aria-labelledby="labelAreaUnit">
             <span class="segmented-toggle__indicator" aria-hidden="true"></span>
             <button type="button" id="unitBtn_sotka"
                     class=""
@@ -267,7 +267,6 @@
               class=""
               value="" placeholder="Например, 10" autocomplete="off" spellcheck="false"
               inputmode="decimal"
-              aria-label="Площадь участка"
               oninput="handleAreaChange(this.value)"
             />
             <span class="absolute"
@@ -279,7 +278,7 @@
         <div class="flex flex-col gap-2">
           <span class=""
                 id="labelQuickPresets">Быстрый выбор:</span>
-          <div class="flex gap-2" role="group" aria-label="Быстрый выбор площади">
+          <div class="flex gap-2" role="group" aria-labelledby="labelQuickPresets">
             <button type="button"
                     class=""
                     onclick="setPresetArea(1)">1</button>
@@ -321,7 +320,7 @@
             </span>
           </div>
           <div class="flex segmented-toggle" id="fieldTypeSwitch"
-               role="group" aria-label="Тип участка">
+               role="group" aria-labelledby="labelFieldType">
             <span class="segmented-toggle__indicator" aria-hidden="true"></span>
             <button type="button" id="fieldTypeBtn_open" data-field="open"
                     class=""
@@ -347,7 +346,7 @@
             </span>
           </div>
           <div class="flex segmented-toggle" id="salinitySwitch"
-               role="group" aria-label="Засоленность почвы">
+               role="group" aria-labelledby="labelSalinity">
             <span class="segmented-toggle__indicator" aria-hidden="true"></span>
             <button type="button" id="salinityBtn_no" data-saline="no"
                     class=""
@@ -367,8 +366,8 @@
 <section id="balanceBlock" class="balance-form">
   <div><span class="section-index" aria-hidden="true">04</span><h2 data-balance-copy="title">Запас влаги</h2></div>
   <div class="balance-fields">
-    <label data-balance-copy="soil">Тип почвы</label>
-    <div id="soilChips" class="segmented-chips" role="radiogroup" aria-label="Тип почвы">
+    <label id="soilTypeLabel" data-balance-copy="soil">Тип почвы</label>
+    <div id="soilChips" class="segmented-chips" role="radiogroup" aria-labelledby="soilTypeLabel">
       <button type="button" class="chip-btn" data-soil="sand" onclick="setSoilType('sand')" role="radio" aria-checked="false">
         <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17c3-2 5-2 8 0s5 2 8 0M5 12c2-1.5 4-1.5 6 0s4 1.5 8 0M8 7h8"/></svg><span data-balance-copy="sand">Песок</span>
       </button>
@@ -384,12 +383,12 @@
     <label for="growthDay" data-balance-copy="day">Дней от посадки</label>
     <div class="growth-stepper">
       <button type="button" onclick="changeGrowthDay(-1)" data-balance-aria="decreaseDay" aria-label="Уменьшить число дней"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
-      <div class="growth-value"><input id="growthDay" type="text" inputmode="numeric" value="30" placeholder="30" autocomplete="off" aria-label="Дней от посадки"/><span data-balance-copy="daySuffix">дн.</span></div>
+      <div class="growth-value"><input id="growthDay" type="text" inputmode="numeric" value="30" placeholder="30" autocomplete="off"/><span data-balance-copy="daySuffix">дн.</span></div>
       <button type="button" onclick="changeGrowthDay(1)" data-balance-aria="increaseDay" aria-label="Увеличить число дней"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
     </div>
 
-    <label data-balance-copy="moisture">Состояние почвы</label>
-    <div id="moistureChips" class="segmented-chips" role="radiogroup" aria-label="Состояние почвы">
+    <label id="moistureLabel" data-balance-copy="moisture">Состояние почвы</label>
+    <div id="moistureChips" class="segmented-chips" role="radiogroup" aria-labelledby="moistureLabel">
       <button type="button" class="chip-btn" data-moisture="recent" onclick="setMoistureCondition('recent')" role="radio" aria-checked="false">
         <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.3 6 11a6 6 0 0 1-12 0c0-4.7 6-11 6-11Z"/><path d="M9.5 15.5c.7 1 1.5 1.5 2.5 1.5"/></svg><span data-balance-copy="moistureRecent">Недавно полито</span>
       </button>
@@ -446,11 +445,11 @@
         <h2 class="" id="block4Title">
           Тип оросительной системы
         </h2>
-        <span class="">КПД (η)</span>
+        <span class="" id="irrigEfficiencyLabel">КПД (η)</span>
       </div>
 
 
-      <div class="flex flex-col gap-3" role="radiogroup" aria-label="Метод полива">
+      <div class="flex flex-col gap-3" role="radiogroup" aria-labelledby="block4Title">
 
         <!-- 1. Капельный (Default Selected) -->
         <div id="irrigCard_drip"

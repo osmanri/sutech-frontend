@@ -414,6 +414,7 @@ I18N.en = {
   block1StatusRegion: 'Region · approximate',
   btnLocationText: 'GPS', btnLocationLoading: 'Locating…', gpsSearching: 'Getting precise satellite coordinates…',
   coordsCardTitle: 'Coordinates saved', labelLat: 'Latitude:', labelLon: 'Longitude:', mapPoint: 'Point on map',
+  mapLabel: 'Field map',
   btnResetContour: 'Clear boundary', btnUndoPoint: 'Remove point', btnClearLocation: 'Remove marker',
   btnAddCenter: 'Centre point', btnUseRadius: 'Use radius', radiusLabel: 'Radius, m',
   mapAreaLabel: 'Area', mapHint: 'Mark at least 3 boundary points.', mapIncomplete: 'Mark at least 3 field corners.',
@@ -541,9 +542,10 @@ function applyLanguage(lang, animateIndicator = false) {
   document.getElementById('labelLon').textContent    = t.labelLon;
   const regSelect = document.getElementById('regionSelect');
   if (regSelect) {
+    regSelect.setAttribute('aria-label', UI_COPY[lang]?.selectRegion || UI_COPY.ru.selectRegion);
     Array.from(regSelect.options).forEach(opt => {
       if (opt.value && KZ_REGIONS[opt.value]) {
-        opt.textContent = lang === 'kz' ? KZ_REGIONS[opt.value].nameKz : KZ_REGIONS[opt.value].name;
+        opt.textContent = regionName(KZ_REGIONS[opt.value], lang);
       }
     });
   }
@@ -594,6 +596,8 @@ function applyLanguage(lang, animateIndicator = false) {
 
   // Block 4 — Irrigation
   document.getElementById('block4Title').textContent = t.block4Title;
+  document.getElementById('irrigEfficiencyLabel').textContent =
+    lang === 'en' ? 'Efficiency (η)' : lang === 'kz' ? 'ПӘК (η)' : 'КПД (η)';
   for (const key of Object.keys(IRRIGATION_EFFICIENCY)) {
     const titleEl = document.getElementById(`irrigTitle_${key}`);
     const descEl  = document.getElementById(`irrigDesc_${key}`);
@@ -718,7 +722,7 @@ function renderCoordinates() {
   document.getElementById('displayLat').textContent   = `${state.latitude.toFixed(6)}°`;
   document.getElementById('displayLon').textContent   = `${state.longitude.toFixed(6)}°`;
   document.getElementById('coordsAccuracy').textContent = Number.isFinite(state.accuracy)
-    ? `±${state.accuracy} м` : I18N[state.lang].mapPoint;
+    ? `±${state.accuracy} ${state.lang === 'en' ? 'm' : 'м'}` : I18N[state.lang].mapPoint;
 }
 
 // Project WGS84 coordinates to a local tangent plane in metres before Shoelace.
@@ -844,21 +848,25 @@ function retryFieldMap() {
 }
 
 const KZ_REGIONS = {
-  atyrau:    { name: 'Атырау',   nameKz: 'Атырау',   lat: 47.1167, lon: 51.8833 },
-  kyzylorda: { name: 'Кызылорда', nameKz: 'Қызылорда', lat: 44.85, lon: 65.50 },
-  turkestan: { name: 'Туркестан', nameKz: 'Түркістан', lat: 43.30, lon: 68.27 },
-  shymkent:  { name: 'Шымкент',  nameKz: 'Шымкент',  lat: 42.32, lon: 69.60 },
-  zhambyl:   { name: 'Тараз (Жамбыл)', nameKz: 'Тараз (Жамбыл)', lat: 42.90, lon: 71.37 },
-  almaty:    { name: 'Алматы',   nameKz: 'Алматы',   lat: 43.24, lon: 76.91 },
-  kostanay:  { name: 'Костанай', nameKz: 'Қостанай', lat: 53.22, lon: 63.63 },
-  akmola:    { name: 'Кокшетау (Акмола)', nameKz: 'Көкшетау (Ақмола)', lat: 53.28, lon: 69.38 },
-  sko:       { name: 'Петропавловск (СКО)', nameKz: 'Петропавл (СҚО)', lat: 54.87, lon: 69.15 },
-  pavlodar:  { name: 'Павлодар', nameKz: 'Павлодар', lat: 52.29, lon: 76.95 },
-  vko:       { name: 'Усть-Каменогорск (ВКО)', nameKz: 'Өскемен (ШҚО)', lat: 49.95, lon: 82.61 },
-  karaganda: { name: 'Караганда', nameKz: 'Қарағанды', lat: 49.80, lon: 73.10 },
-  aktobe:    { name: 'Актобе',   nameKz: 'Ақтөбе',   lat: 50.28, lon: 57.17 },
-  zko:       { name: 'Атырау (Прикаспий)', nameKz: 'Атырау (Каспий маңы)', lat: 47.1167, lon: 51.8833 },
+  atyrau:    { name: 'Атырау',   nameKz: 'Атырау', nameEn: 'Atyrau', lat: 47.1167, lon: 51.8833 },
+  kyzylorda: { name: 'Кызылорда', nameKz: 'Қызылорда', nameEn: 'Kyzylorda', lat: 44.85, lon: 65.50 },
+  turkestan: { name: 'Туркестан', nameKz: 'Түркістан', nameEn: 'Turkestan', lat: 43.30, lon: 68.27 },
+  shymkent:  { name: 'Шымкент', nameKz: 'Шымкент', nameEn: 'Shymkent', lat: 42.32, lon: 69.60 },
+  zhambyl:   { name: 'Тараз (Жамбыл)', nameKz: 'Тараз (Жамбыл)', nameEn: 'Taraz (Zhambyl)', lat: 42.90, lon: 71.37 },
+  almaty:    { name: 'Алматы', nameKz: 'Алматы', nameEn: 'Almaty', lat: 43.24, lon: 76.91 },
+  kostanay:  { name: 'Костанай', nameKz: 'Қостанай', nameEn: 'Kostanay', lat: 53.22, lon: 63.63 },
+  akmola:    { name: 'Кокшетау (Акмола)', nameKz: 'Көкшетау (Ақмола)', nameEn: 'Kokshetau (Akmola)', lat: 53.28, lon: 69.38 },
+  sko:       { name: 'Петропавловск (СКО)', nameKz: 'Петропавл (СҚО)', nameEn: 'Petropavl (North Kazakhstan)', lat: 54.87, lon: 69.15 },
+  pavlodar:  { name: 'Павлодар', nameKz: 'Павлодар', nameEn: 'Pavlodar', lat: 52.29, lon: 76.95 },
+  vko:       { name: 'Усть-Каменогорск (ВКО)', nameKz: 'Өскемен (ШҚО)', nameEn: 'Oskemen (East Kazakhstan)', lat: 49.95, lon: 82.61 },
+  karaganda: { name: 'Караганда', nameKz: 'Қарағанды', nameEn: 'Karaganda', lat: 49.80, lon: 73.10 },
+  aktobe:    { name: 'Актобе', nameKz: 'Ақтөбе', nameEn: 'Aktobe', lat: 50.28, lon: 57.17 },
+  zko:       { name: 'Атырау (Прикаспий)', nameKz: 'Атырау (Каспий маңы)', nameEn: 'Atyrau (Caspian)', lat: 47.1167, lon: 51.8833 },
 };
+
+function regionName(region, lang) {
+  return lang === 'kz' ? region.nameKz : lang === 'en' ? region.nameEn : region.name;
+}
 
 function selectRegion(regionKey, silent = false) {
   if (!regionKey || !KZ_REGIONS[regionKey]) return;
@@ -884,8 +892,10 @@ function selectRegion(regionKey, silent = false) {
   updateSummaryCard();
   updateMapUI();
   if (!silent) {
-    const regionName = state.lang === 'kz' ? reg.nameKz : reg.name;
-    showToast(state.lang === 'kz' ? `${regionName} аймағы таңдалды` : `Выбран регион: ${regionName}`, 'info');
+    const selectedName = regionName(reg, state.lang);
+    const message = state.lang === 'kz' ? `${selectedName} аймағы таңдалды`
+      : state.lang === 'en' ? `Region selected: ${selectedName}` : `Выбран регион: ${selectedName}`;
+    showToast(message, 'info');
     triggerHaptic('light');
   }
 }
@@ -922,7 +932,7 @@ function setMappedArea(areaM2) {
   mappedAreaM2 = areaM2;
   currentArea = areaM2 / (currentUnit === 'hectare' ? 10000 : 100);
   state.area = window.currentArea = currentArea;
-  document.getElementById('fieldAreaInput').value = Number(currentArea.toFixed(6));
+  document.getElementById('fieldAreaInput').value = currentArea > 0 ? Number(currentArea.toFixed(6)) : '';
   recalculateAreaEquivalent();
   updateSummaryCard();
   updateMapUI();
@@ -1134,7 +1144,7 @@ function setAreaUnit(unit) {
   state.area_unit = unit;
   currentArea = areaM2 / (unit === 'hectare' ? 10000 : 100);
   state.area = window.currentArea = currentArea;
-  document.getElementById('fieldAreaInput').value = Number(currentArea.toFixed(6));
+  document.getElementById('fieldAreaInput').value = currentArea > 0 ? Number(currentArea.toFixed(6)) : '';
   updateAreaUnitUI();
   updateSummaryCard();
   updateMapUI();
@@ -1378,7 +1388,7 @@ function updateSummaryCard() {
   const unitLabel = state.area_unit === 'hectare' ?
     t.unitBadge_hectare : t.unitBadge_sotka;
   document.getElementById('sumValArea').textContent =
-    `${state.area.toLocaleString(state.lang === 'kz' ? 'kk-KZ' : 'ru-RU', { maximumFractionDigits: 6 })} ${unitLabel}`;
+    `${state.area.toLocaleString({ kz: 'kk-KZ', en: 'en-US' }[state.lang] || 'ru-RU', { maximumFractionDigits: 6 })} ${unitLabel}`;
 
   // Irrigation
   const irrigInfo = t.irrig[state.irrigation_type] || { title: state.irrigation_type, badge: '' };

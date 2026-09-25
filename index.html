@@ -6,16 +6,16 @@
   <title>Su-Tech — Smart Irrigation</title>
   <meta id="pageDesc" name="description" content="Карта поля и точный расчет полива Su-Tech" />
   <meta name="theme-color" content="#F3F7FD" />
-  <link rel="icon" href="img/logo-mark.png" />
+  <link rel="icon" href="img/sutech-mark-blue.png?v=5.10.3" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.10.1" />
+  <link rel="stylesheet" href="css/app.css?v=5.10.3" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
-  <script defer src="js/balance.js?v=5.8.0"></script>
-  <script defer src="js/app.js?v=5.10.1"></script>
+  <script defer src="js/balance.js?v=5.10.3"></script>
+  <script defer src="js/app.js?v=5.10.3"></script>
 </head>
 <body>
   <div class="signal-strip" aria-hidden="true">
@@ -26,7 +26,7 @@
   </div>
   <header class="app-header">
     <a class="brand" href="#block1" aria-label="Su-Tech">
-      <span class="brand-logo"><img src="img/logo-mark.png" alt="Su-Tech" /></span>
+      <span class="brand-logo"><img src="img/sutech-mark-blue.png?v=5.10.3" alt="Su-Tech" /></span>
       <span><strong>Su-Tech<span class="brand-dot">.</span></strong><small id="headerSubtitle">Smart Irrigation</small></span>
     </a>
     <nav class="header-nav" aria-label="Навигация"><a href="#block1" data-copy="navMap">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>
@@ -56,7 +56,8 @@
             <div class="basemap-switch segmented-toggle"><span class="segmented-toggle__indicator" aria-hidden="true"></span><button id="btnSatellite" aria-pressed="true" onclick="setMapBasemap('satellite')" data-copy="satellite">Спутник</button><button id="btnStreets" aria-pressed="false" onclick="setMapBasemap('streets')" data-copy="streets">Схема</button></div>
             <div class="map-location-actions">
               <select id="regionSelect" class="region-select" onchange="selectRegion(this.value)" aria-label="Быстрый выбор региона">
-                <option value="atyrau" selected data-copy="selectRegionPrompt">📍 Атырау (47.1167° N, 51.8833° E)</option>
+                <option value="" selected data-copy="selectRegionPrompt">Выберите город или регион…</option>
+                <option value="atyrau">Атырау</option>
                 <option value="kyzylorda">Кызылорда (Сырдария)</option>
                 <option value="turkestan">Туркестан</option>
                 <option value="shymkent">Шымкент</option>
@@ -264,7 +265,7 @@
               type="text"
               id="fieldAreaInput"
               class=""
-              value="10" placeholder="10" autocomplete="off" spellcheck="false"
+              value="" placeholder="Например, 10" autocomplete="off" spellcheck="false"
               inputmode="decimal"
               aria-label="Площадь участка"
               oninput="handleAreaChange(this.value)"

@@ -24,7 +24,10 @@ function connectTelegram() {
   try {
     tg.ready();
     tg.expand();
-    tg.onEvent?.('viewportChanged', () => fieldMap?.invalidateSize({ pan: false }));
+    tg.onEvent?.('viewportChanged', () => {
+      fieldMap?.invalidateSize({ pan: false });
+      positionLanguageIndicator(state.lang);
+    });
   } catch (err) {
     console.warn('[Su-Tech] Telegram initialization:', err);
   }
@@ -34,7 +37,7 @@ window.addEventListener('telegram-ready', connectTelegram);
 // ─── 2. Состояние приложения ───────────────────────────────────────────────
 let currentCrop = 'cotton';
 let selectedCrop = currentCrop; // Псевдоним для совместимости
-let currentArea = 10.0;
+let currentArea = 0;
 let currentUnit = 'hectare';
 let currentIrrigation = 'drip';
 let currentFieldType = 'open';
@@ -64,9 +67,10 @@ window.currentFieldType = currentFieldType;
 window.currentSaline = currentSaline;
 
 const state = {
-  latitude:         47.1167,
-  longitude:        51.8833,
-  accuracy:         5000,
+  latitude:         null,
+  longitude:        null,
+  accuracy:         null,
+  locationSource:   null,
   crop:             currentCrop,
   area:             currentArea,
   area_unit:        currentUnit,
@@ -211,6 +215,8 @@ const I18N = {
     errNeedLocation:    'Сначала определите GPS или выберите точку поля на карте.',
     errInvalidArea:     'Введите площадь поля больше 0 и менее 50 000.',
     successPayloadSent: 'Данные отправлены в бот! Расчёт по модели FAO-56...',
+    errTelegramOnly: 'Чтобы получить расчёт, откройте Su-Tech через бота в Telegram.',
+    errSendFailed: 'Не удалось отправить данные боту. Повторите попытку в Telegram.',
   },
 
   kz: {
@@ -323,6 +329,8 @@ const I18N = {
     errNeedLocation:    'Алдымен GPS арқылы немесе картадан алқап нүктесін таңдаңыз.',
     errInvalidArea:     '0-ден үлкен және 50 000-нан кем алқап ауданын енгізіңіз.',
     successPayloadSent: 'Деректер ботқа жіберілді! FAO-56 моделі бойынша есептеу жүргізілуде...',
+    errTelegramOnly: 'Есеп алу үшін Su-Tech-ті Telegram ботынан ашыңыз.',
+    errSendFailed: 'Деректер ботқа жіберілмеді. Telegram-да қайталап көріңіз.',
   },
 };
 
@@ -357,6 +365,7 @@ const UI_COPY = {
 Object.assign(I18N.ru, {
   block1Title: 'Ваше поле на карте', block1Desc: 'Найдите участок и обозначьте его границы.',
   block1StatusWait: 'Выберите поле', block1StatusReady: 'Участок выбран',
+  block1StatusRegion: 'Регион · приблизительно',
   btnLocationText: 'GPS', btnResetContour: 'Сбросить контур', btnUndoPoint: 'Убрать точку', btnClearLocation: 'Убрать маркер',
   btnAddCenter: 'Точка в центре', btnUseRadius: 'По радиусу', mapAreaLabel: 'Площадь',
   mapHint: 'Минимум 3 точки по границе.',
@@ -366,12 +375,13 @@ Object.assign(I18N.ru, {
   block3Title: 'Условия на участке', block4Title: 'Как поливаете?', block4Desc: 'Учтем эффективность вашей системы.',
   fieldText_open: 'Открытое поле', fieldText_greenhouse: 'Теплица', salineText_yes: 'Солончак',
   summaryTitle: 'Ваш расчет полива', btnSubmitText: 'Рассчитать полив',
-  submitHint: 'Метеоданные и расчет FAO–56 придут коротким отчетом в Telegram.',
+  submitHint: 'Проверьте культуру, площадь, почву и дни от посадки. Расчёт придёт в Telegram.',
   noCoordsYet: 'Выберите поле на карте или регион',
 });
 Object.assign(I18N.kz, {
   block1Title: 'Картадағы алқабыңыз', block1Desc: 'Алқапты тауып, шекарасын белгілеңіз.',
   block1StatusWait: 'Алқапты таңдаңыз', block1StatusReady: 'Алқап таңдалды',
+  block1StatusRegion: 'Өңір · шамамен',
   btnLocationText: 'GPS', btnResetContour: 'Контурды тазарту', btnUndoPoint: 'Нүктені жою', btnClearLocation: 'Белгіні жою',
   btnAddCenter: 'Ортадағы нүкте', btnUseRadius: 'Радиус бойынша', mapAreaLabel: 'Аудан',
   mapHint: 'Шекарада кемінде 3 нүкте.',
@@ -381,7 +391,7 @@ Object.assign(I18N.kz, {
   block3Title: 'Алқап жағдайы', block4Title: 'Қалай суарасыз?', block4Desc: 'Жүйеңіздің тиімділігін ескереміз.',
   fieldText_open: 'Ашық алқап', fieldText_greenhouse: 'Жылыжай', salineText_yes: 'Сортаң',
   summaryTitle: 'Суару есебіңіз', btnSubmitText: 'Суаруды есептеу',
-  submitHint: 'Ауа райы мен FAO–56 есебі Telegram-ға қысқа хабарламамен келеді.',
+  submitHint: 'Дақылды, ауданды, топырақты және отырғызудан кейінгі күнді тексеріңіз. Есеп Telegram-ға келеді.',
   noCoordsYet: 'Картадан алқапты не аймақты таңдаңыз',
 });
 
@@ -396,6 +406,7 @@ I18N.en = {
   heroCta: 'Set up the field',
   block1Title: 'Your field on the map', block1Desc: 'Find the plot and mark its boundaries.',
   block1StatusWait: 'Select a field', block1StatusReady: 'Field selected',
+  block1StatusRegion: 'Region · approximate',
   btnLocationText: 'GPS', btnLocationLoading: 'Locating…', gpsSearching: 'Getting precise satellite coordinates…',
   coordsCardTitle: 'Coordinates saved', labelLat: 'Latitude:', labelLon: 'Longitude:', mapPoint: 'Point on map',
   btnResetContour: 'Clear boundary', btnUndoPoint: 'Remove point', btnClearLocation: 'Remove marker',
@@ -428,7 +439,7 @@ I18N.en = {
   summaryTitle: 'Your irrigation calculation', sumLabelCoords: 'Location:', sumLabelCrop: 'Crop:', sumLabelArea: 'Area:',
   sumLabelIrrig: 'Technology:', sumLabelFieldType: 'Field type:', sumLabelSaline: 'Soil:',
   noCoordsYet: 'Select a field on the map or choose a region', btnSubmitText: 'Calculate irrigation',
-  submitHint: 'Weather and FAO-56 results will arrive as a short Telegram report.',
+  submitHint: 'Check the crop, area, soil and days since planting. The estimate will arrive in Telegram.',
   summaryStatusReady: 'READY TO CALCULATE', summaryStatusIncomplete: 'COMPLETE THE INPUTS',
   errNoGpsSupport: 'Your browser does not support geolocation.',
   errGpsDenied: 'Location access was denied. Enable GPS or select the field on the map.',
@@ -437,6 +448,8 @@ I18N.en = {
   gpsSuccessToast: 'Field coordinates saved.', errNeedLocation: 'Select a field location first.',
   errInvalidArea: 'Enter an area greater than 0 and below 50,000.',
   successPayloadSent: 'Data sent to the bot. Running the FAO-56 calculation…',
+  errTelegramOnly: 'Open Su-Tech from its Telegram bot to receive the calculation.',
+  errSendFailed: 'Could not send the field data. Please try again in Telegram.',
 };
 
 UI_COPY.en = {
@@ -464,6 +477,16 @@ function initLanguage() {
     positionLanguageIndicator(state.lang);
     document.querySelectorAll('.segmented-toggle').forEach(positionSegmentIndicator);
   });
+  // Telegram changes the viewport after the first paint; web fonts can also
+  // change the width of ҚАЗ. Keep the pill fitted to its actual button.
+  const switcher = document.querySelector('.language-switch');
+  if (switcher && window.ResizeObserver) {
+    const observer = new ResizeObserver(() => positionLanguageIndicator(state.lang));
+    observer.observe(switcher);
+    switcher.querySelectorAll('button').forEach(button => observer.observe(button));
+  }
+  document.fonts?.ready.then(() => positionLanguageIndicator(state.lang));
+  window.addEventListener('pageshow', () => positionLanguageIndicator(state.lang));
 }
 
 function setLanguage(lang) {
@@ -472,12 +495,12 @@ function setLanguage(lang) {
   const url = new URL(window.location);
   url.searchParams.set('lang', lang);
   window.history.replaceState({}, '', url);
-  applyLanguage(lang);
+  applyLanguage(lang, true);
   updateSummaryCard();
   triggerHaptic('light');
 }
 
-function applyLanguage(lang) {
+function applyLanguage(lang, animateIndicator = false) {
   window.SuBalance?.sync(state.crop, state.field_type, lang);
   const t = I18N[lang] || I18N.ru;
   document.querySelectorAll('[data-copy]').forEach(el => {
@@ -498,7 +521,7 @@ function applyLanguage(lang) {
   _setLangBtn('langBtnKz', lang === 'kz');
   _setLangBtn('langBtnRu', lang === 'ru');
   _setLangBtn('langBtnEn', lang === 'en');
-  positionLanguageIndicator(lang);
+  positionLanguageIndicator(lang, animateIndicator);
 
   // Block 1 — GPS
   document.getElementById('block1Title').textContent = t.block1Title;
@@ -597,7 +620,7 @@ function updateBlock1StatusPill() {
   const baseClasses = 'text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-full whitespace-nowrap';
   if (state.latitude !== null && state.longitude !== null) {
     pill.className = `${baseClasses} bg-[#247C9C]/10 text-[#1C6079]`;
-    pill.textContent = t.block1StatusReady;
+    pill.textContent = state.locationSource === 'region' ? t.block1StatusRegion : t.block1StatusReady;
   } else {
     pill.className = `${baseClasses} bg-[#EAF5FF] text-[#075CA9]`;
     pill.textContent = t.block1StatusWait;
@@ -645,6 +668,7 @@ function requestGeolocation() {
         state.latitude = location[0];
         state.longitude = location[1];
         state.accuracy = Math.round(position.coords.accuracy);
+        state.locationSource = 'gps';
       }
       if (fieldMap) {
         if (gpsMarker) gpsMarker.setLatLng(location);
@@ -835,6 +859,7 @@ function selectRegion(regionKey, silent = false) {
   state.latitude = reg.lat;
   state.longitude = reg.lon;
   state.accuracy = 5000;
+  state.locationSource = 'region';
   const regSelect = document.getElementById('regionSelect');
   if (regSelect && regSelect.value !== regionKey) {
     regSelect.value = regionKey;
@@ -862,6 +887,7 @@ function selectFieldLocation(point) {
   state.latitude = point.lat;
   state.longitude = ((point.lng + 540) % 360) - 180;
   state.accuracy = null;
+  state.locationSource = 'map';
   renderCoordinates();
   updateBlock1StatusPill();
 }
@@ -951,6 +977,7 @@ function clearCurrentLocation() {
     state.latitude = null;
     state.longitude = null;
     state.accuracy = null;
+    state.locationSource = null;
     const card = document.getElementById('coordsCard');
     card?.classList.add('hidden');
     card?.classList.remove('flex');
@@ -1328,7 +1355,7 @@ function updateSummaryCard() {
   // GPS coords
   const coordsVal = document.getElementById('sumValCoords');
   if (state.latitude !== null && state.longitude !== null) {
-    coordsVal.textContent = `${state.latitude.toFixed(4)}°, ${state.longitude.toFixed(4)}°`;
+    coordsVal.textContent = `${state.locationSource === 'region' ? '≈ ' : ''}${state.latitude.toFixed(4)}°, ${state.longitude.toFixed(4)}°`;
     coordsVal.className = 'text-xs font-semibold text-[#247C9C]';
   } else {
     coordsVal.textContent = t.noCoordsYet;
@@ -1487,11 +1514,11 @@ function submitFinalCalculation() {
     payload.accuracy = state.accuracy;
   }
 
+  if (!tg.initData || typeof tg.sendData !== 'function') {
+    showToast(t.errTelegramOnly, 'warning');
+    return;
+  }
   const payloadString = JSON.stringify(payload);
-  console.log('[Su-Tech] sendData payload:', payloadString);
-
-  showToast(t.successPayloadSent, 'success');
-  triggerHaptic('success');
 
   isSubmitting = true;
   const btn = document.getElementById('btnSubmitAll');
@@ -1502,13 +1529,20 @@ function submitFinalCalculation() {
   }
 
   setTimeout(() => {
-    try { tg.sendData(payloadString); } catch (err) { console.error('[Su-Tech] sendData error:', err); }
-    try { tg.close(); } catch (_) {}
-    
-    setTimeout(() => {
-      isSubmitting = false;
-      if (btn) btn.disabled = false;
-    }, 1000);
+    try {
+      tg.sendData(payloadString);
+      showToast(t.successPayloadSent, 'success');
+      triggerHaptic('success');
+      try { tg.close(); } catch (_) {}
+    } catch (err) {
+      console.error('[Su-Tech] sendData error:', err);
+      showToast(t.errSendFailed, 'error');
+    } finally {
+      setTimeout(() => {
+        isSubmitting = false;
+        if (btn) btn.disabled = false;
+      }, 1000);
+    }
   }, 420);
 }
 
@@ -1551,15 +1585,22 @@ function _setLangBtn(id, isActive) {
   el.setAttribute('aria-pressed', String(isActive));
 }
 
-function positionLanguageIndicator(lang) {
+function positionLanguageIndicator(lang, animate = false) {
   const switcher = document.querySelector('.language-switch');
   const indicator = switcher?.querySelector('.language-switch__indicator');
   const buttonId = { ru: 'langBtnRu', kz: 'langBtnKz', en: 'langBtnEn' }[lang];
   const button = document.getElementById(buttonId);
   if (!indicator || !button) return;
-  indicator.style.width = `${button.offsetWidth}px`;
-  indicator.style.transform = `translate3d(${button.offsetLeft}px, 0, 0)`;
-  if (!switcher.classList.contains('is-ready')) {
+  const switchRect = switcher.getBoundingClientRect();
+  const buttonRect = button.getBoundingClientRect();
+  if (!switchRect.width || !buttonRect.width) return;
+  // First paint, font loading and Telegram viewport resizes must snap into
+  // place; only a deliberate language change should travel between labels.
+  if (animate) switcher.classList.add('is-ready');
+  else switcher.classList.remove?.('is-ready');
+  indicator.style.width = `${buttonRect.width}px`;
+  indicator.style.transform = `translate3d(${buttonRect.left - switchRect.left}px, 0, 0)`;
+  if (!animate) {
     requestAnimationFrame(() => switcher.classList.add('is-ready'));
   }
 }

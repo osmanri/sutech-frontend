@@ -36,7 +36,7 @@ const L = {
   polygon: (points, options) => { layers.push({ points, options }); return layer(); },
   polyline: layer, circleMarker: layer, circle: layer,
 };
-const tg = { ready() {}, expand() {}, close() {}, sendData(value) { sent = JSON.parse(value); } };
+const tg = { initData: 'test-launch', ready() {}, expand() {}, close() {}, sendData(value) { sent = JSON.parse(value); } };
 const context = vm.createContext({
   console: { log() {}, warn() {}, error() {} }, L,
   window: { L, Telegram: { WebApp: tg }, matchMedia: () => ({ matches: true }), addEventListener() {} },
@@ -52,6 +52,28 @@ elements.get('growthDay').value = '60';
 elements.get('moistureCondition').value = 'normal';
 run("window.SuBalance.init('cotton', 'open', 'ru')");
 const near = (actual, expected, tolerance = 1e-5) => assert.ok(Math.abs(actual - expected) < tolerance, `${actual} != ${expected}`);
+assert.equal(run('state.latitude'), null, 'A new farmer must not inherit Atyrau as their field');
+assert.equal(run('state.longitude'), null);
+assert.equal(run('state.area'), 0, 'The sample 10 ha must not count as entered data');
+assert.match(html, /<option value="" selected data-copy="selectRegionPrompt">/);
+assert.match(html, /id="fieldAreaInput"[\s\S]*?value="" placeholder=/);
+run('submitFinalCalculation()');
+assert.equal(sent, undefined, 'No location or area must never send a calculation');
+
+// First-paint mobile slider uses rendered rectangles, not offsets from another ancestor.
+const indicator = { style: {} };
+const switcher = {
+  getBoundingClientRect: () => ({ left: 100, width: 180 }),
+  querySelector: () => indicator,
+  classList: { contains: () => false, add() {} },
+};
+elements.get('langBtnRu').getBoundingClientRect = () => ({ left: 103, width: 48 });
+const originalQuerySelector = context.document.querySelector;
+context.document.querySelector = selector => selector === '.language-switch' ? switcher : null;
+run("positionLanguageIndicator('ru')");
+assert.equal(indicator.style.width, '48px');
+assert.equal(indicator.style.transform, 'translate3d(3px, 0, 0)');
+context.document.querySelector = originalQuerySelector;
 
 // Approximately 100 x 100 metres at the equator, independently specified in degrees.
 const square = [{ lat: 0, lng: 0 }, { lat: 0, lng: 0.00089831528412 },
@@ -198,4 +220,15 @@ for (const invalid of ['0', '-1', 'NaN', 'Infinity', '6,7,8']) {
 elements.get('pumpProductivity').value = '60';
 elements.get('powerPrice').value = '';
 assert.equal(run('window.SuBalance.payload().power_price'), null, 'Tariff remains optional');
+// A regular browser must not claim that a Telegram calculation was sent.
+run("window.SuBalance.sync('wheat','open','ru')");
+elements.get('moistureCondition').value = 'normal';
+elements.get('fieldAreaInput').value = '1';
+run("handleAreaChange('1')");
+run('state.latitude = 44; state.longitude = 65; isSubmitting = false');
+tg.initData = '';
+sent = undefined;
+run('submitFinalCalculation()');
+assert.equal(sent, undefined, 'Outside Telegram there is no real sendData delivery');
+tg.initData = 'test-launch';
 console.log('PASS: map, decimal input, pump payload, calendars, greenhouse and custom crop validation');

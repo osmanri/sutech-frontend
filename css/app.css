@@ -724,3 +724,59 @@ h1,h2,h3,.brand strong,.hero-cta,.submit-button{font-family:Manrope,Inter,-apple
 #unitBtn_sotka[aria-pressed=true],#unitBtn_hectare[aria-pressed=true]{background-color:#d9eafa!important}
 .map-toolbar button,#block3 button[onclick^="setPresetArea"]{background-color:#f0f6fc}
 
+/* The first screen keeps Su-Tech's navy identity; the page eases into white below it. */
+body{
+  background:linear-gradient(180deg,
+    #061329 0,
+    #0a2850 500px,
+    #164475 680px,
+    #6fa7d4 880px,
+    #dceefe 1110px,
+    #fff 1320px,
+    #fff 100%);
+  background-attachment:scroll;
+}
+.eco-hero{
+  background:
+    radial-gradient(circle at 78% 34%,rgba(86,190,255,.37),transparent 39%),
+    radial-gradient(circle at 5% 110%,rgba(38,135,226,.22),transparent 55%),
+    linear-gradient(145deg,#0a2349 0%,#134577 62%,#0d63a3 100%);
+}
+.eco-hero .hero-actions{margin-top:65px}
+@media(max-width:520px){.eco-hero .hero-actions{margin-top:auto}}
+
+/* A restrained blue system: ice for calls to action, azure for tools, navy for decisions. */
+.language-switch__indicator,
+.segmented-toggle__indicator{background:linear-gradient(110deg,#075ca9,#0d8ce6 72%,#25b1f3)}
+.gps-button{background:linear-gradient(115deg,#066abd,#0a9aeb);box-shadow:0 8px 18px rgba(3,110,202,.21)}
+.gps-button::before{background:#075ca9}
+.hero-cta,.submit-button{background:linear-gradient(125deg,#f4f9ff,#dceeff);border-color:#dceeff}
+.motion-arrow{background:linear-gradient(135deg,#07162e,#123e75)}
+.crop-card[aria-checked=true]{background-image:linear-gradient(145deg,#e7f4ff,#cde8ff)!important;border-color:#1688db!important;color:#07518f!important;box-shadow:inset 0 0 0 1px rgba(8,127,224,.25),0 6px 16px rgba(8,127,224,.1)!important}
+.irrig-card[aria-checked=true]{background:linear-gradient(120deg,#0c3568,#0a65a8)!important;border-color:#0a65a8!important;color:#fff!important;box-shadow:0 8px 20px rgba(8,65,121,.17)!important}
+.irrig-card[aria-checked=true] [id^=irrigTitle],
+.irrig-card[aria-checked=true] [id^=irrigBadge],
+.irrig-card[aria-checked=true] [id^=irrigDesc],
+.irrig-card[aria-checked=true] .irrig-symbol{color:#fff!important}
+.irrig-card[aria-checked=true] .irrig-check{color:#c9ecff!important}
+#balanceBlock .chip-btn.chip-active,
+#balanceBlock .chip-btn[aria-checked=true]{background:linear-gradient(120deg,#0b3e77,#0879c9)!important;border-color:#0879c9!important;color:#fff!important;box-shadow:0 6px 16px rgba(8,92,169,.15)!important}
+#balanceBlock .chip-btn.chip-active .chip-icon,
+#balanceBlock .chip-btn[aria-checked=true] .chip-icon{color:#fff!important}
+.settings-column [data-field][aria-pressed=true],
+.settings-column [data-saline][aria-pressed=true],
+#unitBtn_sotka[aria-pressed=true],
+#unitBtn_hectare[aria-pressed=true]{background:linear-gradient(110deg,#0b4c90,#087fe0)!important;border-color:#087fe0!important;color:#fff!important;box-shadow:0 5px 14px rgba(8,104,190,.17)!important}
+@media(max-width:899px){
+  .eco-hero h1{max-width:390px;font-size:clamp(33px,6.8vw,50px)}
+}
+@media(min-width:900px){
+  .app-header,.eco-hero,.section-nav{width:calc(100% - 56px);max-width:1300px}
+  .app-header{padding-right:36px;padding-left:36px}
+  .eco-hero{display:flex;align-items:center;min-height:470px;padding:52px clamp(48px,5vw,76px)}
+  .hero-copy{max-width:600px}
+  .eco-hero h1{max-width:600px;font-size:clamp(58px,5.3vw,82px);line-height:1.01}
+  .eco-hero .hero-description{max-width:430px;font-size:16px}
+  .section-nav a{min-height:55px;font-size:13px}
+}
+

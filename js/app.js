@@ -2,7 +2,7 @@
  * Su-Tech — Интеллектуальная система точного земледелия (Telegram WebApp)
  * Расчёт норм полива по модели FAO-56 Penman-Monteith
  * Design System: Su-Tech / deep blue, bright blue and clear white
- * Palette: forest #329664, ink #1e3d2d, ivory #f9fcf8
+ * Palette: blue #087FE0, ink #112448, canvas #F3F7FD
  * v4.0.0 — локальные стили и Leaflet, резервная подложка, адаптивная карта
  */
 
@@ -648,10 +648,10 @@ function updateBlock1StatusPill() {
 
   const baseClasses = 'text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-full whitespace-nowrap';
   if (state.latitude !== null && state.longitude !== null) {
-    pill.className = `${baseClasses} bg-[#376e53]/10 text-[#32664c]`;
+    pill.className = `${baseClasses} bg-[#247C9C]/10 text-[#1C6079]`;
     pill.textContent = state.locationSource === 'region' ? t.block1StatusRegion : t.block1StatusReady;
   } else {
-    pill.className = `${baseClasses} bg-[#f3f9f6] text-[#2d865a]`;
+    pill.className = `${baseClasses} bg-[#EAF5FF] text-[#075CA9]`;
     pill.textContent = t.block1StatusWait;
   }
 }
@@ -959,10 +959,10 @@ function setMappedArea(areaM2) {
 function renderFieldContour() {
   fieldLayers?.clearLayers();
   const valid = isSimpleFieldPolygon(fieldPoints);
-  const color = valid || fieldPoints.length < 3 ? '#329664' : '#b91c1c';
+  const color = valid || fieldPoints.length < 3 ? '#087FE0' : '#b91c1c';
   if (fieldLayers) {
     if (fieldPoints.length >= 3) {
-      L.polygon(fieldPoints, { color, fillColor: '#329664', fillOpacity: valid ? 0.25 : 0.06, weight: 3, interactive: false }).addTo(fieldLayers);
+      L.polygon(fieldPoints, { color, fillColor: '#087FE0', fillOpacity: valid ? 0.25 : 0.06, weight: 3, interactive: false }).addTo(fieldLayers);
     } else if (fieldPoints.length === 2) {
       L.polyline(fieldPoints, { color, weight: 3, interactive: false }).addTo(fieldLayers);
     }
@@ -1055,8 +1055,8 @@ function updatePointRadius() {
   const valid = Number.isFinite(radius) && radius >= 1 && radius <= 10000;
   document.getElementById('fieldRadiusInput').setAttribute('aria-invalid', String(!valid));
   if (valid && fieldLayers) {
-    L.circle(radiusCenter, { radius, color: '#329664', fillColor: '#329664', fillOpacity: 0.25, weight: 3, interactive: false }).addTo(fieldLayers);
-    L.circleMarker(radiusCenter, { radius: 4, color: '#2d865a', interactive: false }).addTo(fieldLayers);
+    L.circle(radiusCenter, { radius, color: '#087FE0', fillColor: '#087FE0', fillOpacity: 0.25, weight: 3, interactive: false }).addTo(fieldLayers);
+    L.circleMarker(radiusCenter, { radius: 4, color: '#075CA9', interactive: false }).addTo(fieldLayers);
   }
   setMappedArea(valid ? Math.PI * radius ** 2 : 0);
 }
@@ -1187,7 +1187,7 @@ function updateAreaUnitUI() {
   const badge = document.getElementById('currentAreaUnitBadge');
   if (badge) {
     badge.textContent = isHect ? t.unitBadge_hectare : t.unitBadge_sotka;
-    badge.className = 'text-[10px] px-2.5 py-0.5 rounded-full bg-[#376e53]/10 text-[#32664c] font-bold whitespace-nowrap';
+    badge.className = 'text-[10px] px-2.5 py-0.5 rounded-full bg-[#247C9C]/10 text-[#1C6079] font-bold whitespace-nowrap';
   }
   document.getElementById('inputUnitSuffix').textContent =
     isHect ? t.unitSuffix_hectare : t.unitSuffix_sotka;
@@ -1344,8 +1344,8 @@ function updateFieldTypeUI() {
   if (badge) {
     badge.textContent = isOpen ? t.fieldTypeBadge_open : t.fieldTypeBadge_greenhouse;
     badge.className = isOpen ?
-      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#376e53]/10 text-[#32664c] font-bold' :
-      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#f3f9f6] text-[#2d865a] font-bold';
+      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#247C9C]/10 text-[#1C6079] font-bold' :
+      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#EAF5FF] text-[#075CA9] font-bold';
   }
 }
 
@@ -1378,7 +1378,7 @@ function updateSalinityUI() {
     badge.textContent = isNormal ? t.salineBadge_no : t.salineBadge_yes;
     badge.className = isNormal ?
       'text-[10px] px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold' :
-      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#f3f9f6] text-[#2d865a] font-bold';
+      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#EAF5FF] text-[#075CA9] font-bold';
   }
 }
 
@@ -1391,10 +1391,10 @@ function updateSummaryCard() {
   const coordsVal = document.getElementById('sumValCoords');
   if (state.latitude !== null && state.longitude !== null) {
     coordsVal.textContent = `${state.locationSource === 'region' ? '≈ ' : ''}${state.latitude.toFixed(4)}°, ${state.longitude.toFixed(4)}°`;
-    coordsVal.className = 'text-xs font-semibold text-[#376e53]';
+    coordsVal.className = 'text-xs font-semibold text-[#247C9C]';
   } else {
     coordsVal.textContent = t.noCoordsYet;
-    coordsVal.className = 'text-xs font-semibold text-[#6dad8d]';
+    coordsVal.className = 'text-xs font-semibold text-[#75A7D3]';
   }
 
   // Crop (no empty brackets in KZ)
@@ -1431,7 +1431,7 @@ function updateSummaryCard() {
     const ready = state.latitude !== null && state.longitude !== null && state.area > 0 && state.area < 50000 && !!window.SuBalance?.complete();
     summaryStatusBadge.textContent = ready ? t.summaryStatusReady : t.summaryStatusIncomplete;
     summaryStatusBadge.className = 'text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-full '
-      + (ready ? 'bg-[#376e53]/10 text-[#32664c]' : 'bg-slate-100 text-slate-600');
+      + (ready ? 'bg-[#247C9C]/10 text-[#1C6079]' : 'bg-slate-100 text-slate-600');
   }
 }
 
@@ -1629,8 +1629,8 @@ function showToast(message, type = 'info') {
 
   const baseClass = 'toast';
   const typeClasses = {
-    success: 'bg-[#F5F3EF] text-[#32664c] border-[#376e53]/40 shadow-[#376e53]/10',
-    warning: 'bg-[#f7fbf9] text-[#2d865a] border-[#d0e4da]',
+    success: 'bg-[#F5F3EF] text-[#1C6079] border-[#247C9C]/40 shadow-[#247C9C]/10',
+    warning: 'bg-[#F0F8FF] text-[#075CA9] border-[#BDDDF4]',
     error:   'bg-red-50 text-red-800 border-red-300',
     info:    'bg-slate-50 text-slate-800 border-slate-300',
   };

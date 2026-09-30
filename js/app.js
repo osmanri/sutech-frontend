@@ -484,9 +484,9 @@ UI_COPY.en = {
 };
 
 const TICKER_COPY = {
-  ru: ['Расчёт водного баланса корней FAO-56', 'Точный метеопрогноз Open-Meteo', 'Экономия воды до 40%', 'Защита растений от водного стресса'],
-  kz: ['FAO-56 бойынша су балансын дәл есептеу', 'Open-Meteo ауа райы болжамы', 'Суды 40%-ға дейін үнемдеу', 'Өсімдікті кебуден қорғау'],
-  en: ['FAO-56 Root Zone Water Balance', 'Live Open-Meteo Weather', 'Up to 40% Water Savings', 'Crop Stress Prevention'],
+  ru: ['Расчёт водного баланса корней FAO-56', 'Точный метеопрогноз Open-Meteo', 'Рекомендации с объяснением расчёта', 'Защита растений от водного стресса'],
+  kz: ['FAO-56 бойынша су балансын дәл есептеу', 'Open-Meteo ауа райы болжамы', 'Есептеу түсіндірмесі бар ұсыныстар', 'Өсімдікті кебуден қорғау'],
+  en: ['FAO-56 Root Zone Water Balance', 'Live Open-Meteo Weather', 'Recommendations with calculation details', 'Crop Stress Prevention'],
 };
 
 // ─── 6. Языковое управление ───────────────────────────────────────────────

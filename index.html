@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.10.37" />
+  <link rel="stylesheet" href="css/app.css?v=5.10.38" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/balance.js?v=5.10.13"></script>
@@ -42,33 +42,8 @@
         <a class="hero-cta" href="#block1"><span data-copy="heroCta">Настроить поле</span><span class="motion-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></span></a>
       </div>
     </div>
-    <div class="hero-plant" aria-hidden="true">
-      <svg class="plant-illustration" viewBox="0 0 320 380" fill="none" focusable="false">
-        <defs>
-          <linearGradient id="plantLeaf" x1="70" y1="90" x2="250" y2="330" gradientUnits="userSpaceOnUse"><stop stop-color="#a1d64c"/><stop offset=".48" stop-color="#519c31"/><stop offset="1" stop-color="#006139"/></linearGradient>
-          <linearGradient id="plantLeafBack" x1="220" y1="120" x2="110" y2="320" gradientUnits="userSpaceOnUse"><stop stop-color="#b9d879"/><stop offset="1" stop-color="#52824c"/></linearGradient>
-          <linearGradient id="plantSoil" x1="160" y1="334" x2="160" y2="380" gradientUnits="userSpaceOnUse"><stop stop-color="#86a85d"/><stop offset="1" stop-color="#dcebc9"/></linearGradient>
-        </defs>
-        <g class="plant-stem plant-stem-back">
-          <path d="M172 361C205 296 223 236 218 171" stroke="#719453" stroke-width="4" stroke-linecap="round"/>
-          <path d="M217 207C202 187 194 145 215 117C242 145 240 178 217 207Z" fill="url(#plantLeafBack)"/>
-          <path d="M211 253C219 224 249 207 283 211C278 244 246 263 211 253Z" fill="url(#plantLeafBack)"/>
-          <path d="M190 301C170 286 162 263 162 243C194 251 208 276 190 301Z" fill="#89b45c"/>
-          <path d="M216 195L215 138M219 249L263 221" stroke="#e9f1cd" stroke-opacity=".45" stroke-width="1.5" stroke-linecap="round"/>
-        </g>
-        <g class="plant-stem plant-stem-main">
-          <path d="M161 364C159 294 147 220 163 106" stroke="#346c39" stroke-width="6" stroke-linecap="round"/>
-          <path d="M162 142C134 111 140 63 177 36C196 78 188 118 162 142Z" fill="url(#plantLeaf)"/>
-          <path d="M153 209C115 204 76 168 73 124C124 128 152 157 153 209Z" fill="url(#plantLeaf)"/>
-          <path d="M154 250C157 203 196 166 248 162C240 216 204 250 154 250Z" fill="url(#plantLeaf)"/>
-          <path d="M158 304C115 306 70 278 65 239C115 228 152 253 158 304Z" fill="url(#plantLeaf)"/>
-          <path d="M163 324C179 291 211 273 248 278C234 315 204 333 163 324Z" fill="#2b863c"/>
-          <path d="M165 129C173 105 177 80 177 57M147 198C124 172 105 151 88 139M163 239C187 210 211 190 232 176M149 297C121 275 96 260 78 251M174 317L231 286" stroke="#e2efaf" stroke-opacity=".55" stroke-width="2" stroke-linecap="round"/>
-          <path d="M121 171L122 151M124 175L103 172M191 207L192 186M193 207L217 207M111 273L113 251" stroke="#d5e7a4" stroke-opacity=".35" stroke-width="1.2" stroke-linecap="round"/>
-        </g>
-        <path d="M5 380C32 350 97 339 158 347C223 330 286 350 319 380H5Z" fill="url(#plantSoil)"/>
-        <path d="M102 352C124 349 144 350 160 353M179 350L193 348M217 352L227 354" stroke="#557d42" stroke-opacity=".4" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+    <div class="hero-field" aria-hidden="true">
+      <img src="img/irrigation-field.svg?v=5.10.38" width="360" height="300" alt="" />
     </div>
   </section>
   <nav class="section-nav" aria-label="Разделы Su-Tech" data-copy-aria="sectionAria"><a href="#block1" data-copy="navMap" aria-current="location">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>

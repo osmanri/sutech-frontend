@@ -781,36 +781,35 @@ body{
 }
 
 
-/* Match the white, fresh green and lime agriculture presentation. */
-:root{--ink:#173c24;--muted:#566c58;--accent:#447616;--accent-dark:#075624;--soft-accent:#a9df55;--pale:#f1f9e8;--canvas:#fff;--line:#dceacd;--copper:#447616;--lime:#a4dd39}
-body{background-image:linear-gradient(rgba(75,130,23,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(75,130,23,.045) 1px,transparent 1px),linear-gradient(180deg,#f2fae8 0,#fff 820px,#fff 100%);background-size:40px 40px,40px 40px,100% 100%}
-.eco-hero{background:radial-gradient(ellipse at 100% 100%,rgba(164,221,57,.24),transparent 58%),linear-gradient(145deg,#fff 0%,#f5fbe9 65%,#eaf6d6 100%);border-color:#d4e8b8;box-shadow:0 18px 42px rgba(69,112,30,.09),inset 0 1px 0 #fff}
-.eco-hero::before{background-image:linear-gradient(rgba(75,130,23,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(75,130,23,.065) 1px,transparent 1px);background-size:36px 36px;opacity:1}
-.eco-hero h1{color:#075624;text-shadow:none}
-.eco-hero h1 em{color:#447616;text-shadow:none}
-.eco-hero .hero-description{color:#405c43}
+/* White surfaces with forest and leaf-green accents from the supplied logo. */
+:root{--ink:#123f2e;--muted:#526d5c;--accent:#2b863c;--accent-dark:#004b35;--soft-accent:#a4d36e;--pale:#f1f9e8;--canvas:#fff;--line:#dceacd;--copper:#2b863c;--lime:#80c343}
+body{background-image:linear-gradient(rgba(40,119,67,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(40,119,67,.045) 1px,transparent 1px),linear-gradient(180deg,#f2fae8 0,#fff 820px,#fff 100%);background-size:40px 40px,40px 40px,100% 100%}
+.eco-hero{background:radial-gradient(ellipse at 100% 100%,rgba(110,173,57,.18),transparent 58%),linear-gradient(145deg,#fff 0%,#f5fbe9 65%,#eaf6d6 100%);border-color:#d4e8b8;box-shadow:0 18px 42px rgba(69,112,30,.09),inset 0 1px 0 #fff}
+.eco-hero::before{background-image:linear-gradient(rgba(40,119,67,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(40,119,67,.065) 1px,transparent 1px);background-size:36px 36px;opacity:1}
+.eco-hero h1{color:#004b35;text-shadow:none}
+.eco-hero h1 em{color:#2b863c;text-shadow:none}
+.eco-hero .hero-description{color:#3f604b}
 .hero-ambient{opacity:.06}
 .language-switch,.basemap-switch.segmented-toggle,#block3 .segmented-toggle{background:#f2f9e9;border-color:#dceacd}
-.language-switch__indicator,.segmented-toggle__indicator,.gps-button{background:linear-gradient(115deg,#b4e95b,#a4dd39)}
-.language-switch button[aria-pressed=true],.language-switch button[aria-pressed=true]:hover,.basemap-switch.segmented-toggle button[aria-pressed=true],#block3 .segmented-toggle button[aria-pressed=true],.gps-button{color:#075624!important}
-.gps-button::before{background:#c4ef7c}
-.hero-cta,.submit-button{background:#fff;border-color:#cfe0b2;color:#075624}
-.hero-cta::before,.submit-button::before{background:linear-gradient(125deg,#b4e95b,#a4dd39)}
+.language-switch__indicator,.segmented-toggle__indicator,.gps-button{background:linear-gradient(115deg,#98ce60,#80c343)}
+.language-switch button[aria-pressed=true],.language-switch button[aria-pressed=true]:hover,.basemap-switch.segmented-toggle button[aria-pressed=true],#block3 .segmented-toggle button[aria-pressed=true],.gps-button{color:#004b35!important}
+.gps-button::before{background:#afd97f}
+.hero-cta,.submit-button{background:#fff;border-color:#cfe0b2;color:#004b35}
+.hero-cta::before,.submit-button::before{background:linear-gradient(125deg,#98ce60,#80c343)}
 .motion-arrow{background:#111815;color:#fff;box-shadow:none}
-.brand-logo img{filter:hue-rotate(-95deg) saturate(.8) brightness(.9)}
 .crop-card,.irrig-card,#balanceBlock .chip-btn,.settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare{background-color:#f7fbf1!important}
-.crop-card[aria-checked=true]{background-image:linear-gradient(145deg,#f0f9e4,#e5f4cd)!important;border-color:#75ab30!important;color:#075624!important}
-.irrig-card[aria-checked=true],#balanceBlock .chip-btn[aria-checked=true],#balanceBlock .chip-btn.chip-active,.settings-column [data-field][aria-pressed=true],.settings-column [data-saline][aria-pressed=true],#unitBtn_sotka[aria-pressed=true],#unitBtn_hectare[aria-pressed=true]{background:linear-gradient(120deg,#c5ed8c,#b4e95b)!important;border-color:#87ba40!important;color:#075624!important}
-.irrig-card[aria-checked=true] [id^=irrigTitle],.irrig-card[aria-checked=true] [id^=irrigBadge],.irrig-card[aria-checked=true] [id^=irrigDesc],.irrig-card[aria-checked=true] .irrig-symbol,.irrig-card[aria-checked=true] .irrig-check,#balanceBlock .chip-btn.chip-active .chip-icon,#balanceBlock .chip-btn[aria-checked=true] .chip-icon{color:#075624!important}
-.summary-card{background-image:linear-gradient(rgba(75,130,23,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(75,130,23,.045) 1px,transparent 1px),linear-gradient(145deg,#fff,#f2fae5);background-size:36px 36px,36px 36px,100% 100%;border-color:#d4e8b8;color:#173c24;box-shadow:0 16px 38px rgba(69,112,30,.08)}
-.summary-card h2,.summary-grid dd{color:#173c24}
-.summary-card .eyebrow,.summary-grid dt,.summary-footer p{color:#48644b}
-.summary-card #summaryStatusBadge{border-color:#b4d58d;color:#075624}
+.crop-card[aria-checked=true]{background-image:linear-gradient(145deg,#f0f9e4,#e5f4cd)!important;border-color:#65a53e!important;color:#004b35!important}
+.irrig-card[aria-checked=true],#balanceBlock .chip-btn[aria-checked=true],#balanceBlock .chip-btn.chip-active,.settings-column [data-field][aria-pressed=true],.settings-column [data-saline][aria-pressed=true],#unitBtn_sotka[aria-pressed=true],#unitBtn_hectare[aria-pressed=true]{background:linear-gradient(120deg,#afd97f,#98ce60)!important;border-color:#75ae46!important;color:#004b35!important}
+.irrig-card[aria-checked=true] [id^=irrigTitle],.irrig-card[aria-checked=true] [id^=irrigBadge],.irrig-card[aria-checked=true] [id^=irrigDesc],.irrig-card[aria-checked=true] .irrig-symbol,.irrig-card[aria-checked=true] .irrig-check,#balanceBlock .chip-btn.chip-active .chip-icon,#balanceBlock .chip-btn[aria-checked=true] .chip-icon{color:#004b35!important}
+.summary-card{background-image:linear-gradient(rgba(40,119,67,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(40,119,67,.045) 1px,transparent 1px),linear-gradient(145deg,#fff,#f2fae5);background-size:36px 36px,36px 36px,100% 100%;border-color:#d4e8b8;color:#123f2e;box-shadow:0 16px 38px rgba(69,112,30,.08)}
+.summary-card h2,.summary-grid dd{color:#123f2e}
+.summary-card .eyebrow,.summary-grid dt,.summary-footer p{color:#48694f}
+.summary-card #summaryStatusBadge{border-color:#b4d58d;color:#004b35}
 .summary-grid>div,.summary-footer{border-color:#dceacd}
-.hero-cta:is(:hover,:focus-visible),.submit-button:is(:hover,:focus-visible){color:#075624!important;border-color:#9dd52f}
-.hero-cta>span:first-child,.submit-button>span:first-child,.hero-cta:is(:hover,:focus-visible)>span:first-child,.submit-button:is(:hover,:focus-visible)>span:first-child{color:#075624!important}
+.hero-cta:is(:hover,:focus-visible),.submit-button:is(:hover,:focus-visible){color:#004b35!important;border-color:#75ae46}
+.hero-cta>span:first-child,.submit-button>span:first-child,.hero-cta:is(:hover,:focus-visible)>span:first-child,.submit-button:is(:hover,:focus-visible)>span:first-child{color:#004b35!important}
 .hero-cta .motion-arrow,.submit-button .motion-arrow{background:#111815;color:#fff}
-.hero-cta:is(:hover,:focus-visible) .motion-arrow,.submit-button:is(:hover,:focus-visible) .motion-arrow{background:#075624;color:#fff}
+.hero-cta:is(:hover,:focus-visible) .motion-arrow,.submit-button:is(:hover,:focus-visible) .motion-arrow{background:#004b35;color:#fff}
 
 /* A rooted plant: only the stems move; the ground remains still. */
 .hero-plant{position:absolute;z-index:2;right:8px;bottom:-2px;width:218px;pointer-events:none;user-select:none}

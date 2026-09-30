@@ -63,7 +63,7 @@
 .motion-ready .submit-button:active{transform:translateY(1px) scale(.985);box-shadow:0 4px 12px #24362722}
 .motion-ready .gps-button:active,.motion-ready .map-toolbar button:active,.motion-ready .crop-card:active,.motion-ready .irrig-card:active{transform:scale(.985)}
 .motion-ready .gps-button,.motion-ready .map-toolbar button,.motion-ready .crop-card,.motion-ready .irrig-card{transition:transform var(--motion-fast) var(--ease-out),background var(--motion-fast) ease,border-color var(--motion-fast) ease,box-shadow var(--motion-fast) ease}
-@media(hover:hover){.motion-ready .crop-card:hover,.motion-ready .irrig-card:hover{transform:translateY(-2px);box-shadow:0 5px 14px #2436270b!important}.motion-ready .gps-button:hover{transform:translateY(-1px)}}
+@media(hover:hover){.motion-ready .crop-card:hover,.motion-ready .irrig-card:hover{transform:translateY(-2px);box-shadow:0 5px 14px #2436270b!important}}
 @keyframes suFadeUp{from{opacity:0;transform:translate3d(0,12px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
 @keyframes mapReveal{from{opacity:.35;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
 
@@ -496,7 +496,7 @@ h1,h2,h3,.brand strong,.hero-cta,.submit-button{font-family:Manrope,Inter,-apple
 @media(hover:hover){
   .settings-column [data-field]:hover,.settings-column [data-saline]:hover,
   #unitBtn_sotka:hover,#unitBtn_hectare:hover,
-  .basemap-switch button:hover,.map-toolbar button:hover,.gps-button:hover,
+  .basemap-switch button:hover,.map-toolbar button:hover,
   .growth-stepper>button:hover,.language-switch button:hover,
   #block3 button[onclick^="setPresetArea"]:hover,.settings-column summary:hover{
     transform:translate3d(0,-2px,0);

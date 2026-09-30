@@ -781,18 +781,31 @@ body{
 }
 
 
-/* Agriculture presentation palette: cream, olive and deep forest green. */
-:root{--ink:#243627;--muted:#67725b;--accent:#49642c;--accent-dark:#1e4628;--pale:#f2f3e4;--canvas:#fffcef;--line:#dde2cf;--copper:#8b7854}
-body{background:linear-gradient(180deg,#f3f2e5 0,#fffcef 780px,#fffcef 100%)}
-.eco-hero{background:linear-gradient(145deg,#1e4628 0%,#304d27 65%,#49642c 100%);border-color:#65764b}
-.eco-hero::before{background-image:linear-gradient(rgba(255,252,239,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,252,239,.055) 1px,transparent 1px);background-size:36px 36px;opacity:1}
-.eco-hero h1 em{color:#e3e9bf}
-.eco-hero .hero-description{color:#e0e7d1}
-.hero-ambient{opacity:.12}
-.language-switch__indicator,.segmented-toggle__indicator,.gps-button{background:linear-gradient(115deg,#1e4628,#49642c)}
-.gps-button::before{background:#1e4628}
-.hero-cta,.submit-button{background:linear-gradient(125deg,#fffcef,#eff1dd);border-color:#e3e9cf;color:#243627}
-.motion-arrow{background:linear-gradient(135deg,#1e4628,#49642c)}
-.brand-logo img{filter:hue-rotate(-100deg) saturate(.55) brightness(.85)}
-.crop-card[aria-checked=true]{background-image:linear-gradient(145deg,#f4f5e8,#e3e9d2)!important;border-color:#49642c!important;color:#1e4628!important}
-.irrig-card[aria-checked=true],#balanceBlock .chip-btn[aria-checked=true],#balanceBlock .chip-btn.chip-active,.settings-column [aria-pressed=true]{background:linear-gradient(120deg,#1e4628,#49642c)!important;border-color:#49642c!important;color:#fffcef!important}
+/* Match the white, fresh green and lime agriculture presentation. */
+:root{--ink:#173c24;--muted:#566c58;--accent:#447616;--accent-dark:#075624;--soft-accent:#a9df55;--pale:#f1f9e8;--canvas:#fff;--line:#dceacd;--copper:#447616;--lime:#a4dd39}
+body{background-image:linear-gradient(rgba(75,130,23,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(75,130,23,.045) 1px,transparent 1px),linear-gradient(180deg,#f2fae8 0,#fff 820px,#fff 100%);background-size:40px 40px,40px 40px,100% 100%}
+.eco-hero{background:radial-gradient(ellipse at 100% 100%,rgba(164,221,57,.24),transparent 58%),linear-gradient(145deg,#fff 0%,#f5fbe9 65%,#eaf6d6 100%);border-color:#d4e8b8;box-shadow:0 18px 42px rgba(69,112,30,.09),inset 0 1px 0 #fff}
+.eco-hero::before{background-image:linear-gradient(rgba(75,130,23,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(75,130,23,.065) 1px,transparent 1px);background-size:36px 36px;opacity:1}
+.eco-hero h1{color:#075624;text-shadow:none}
+.eco-hero h1 em{color:#447616;text-shadow:none}
+.eco-hero .hero-description{color:#405c43}
+.hero-ambient{opacity:.06}
+.language-switch,.basemap-switch.segmented-toggle,#block3 .segmented-toggle{background:#f2f9e9;border-color:#dceacd}
+.language-switch__indicator,.segmented-toggle__indicator,.gps-button{background:linear-gradient(115deg,#b4e95b,#a4dd39)}
+.language-switch button[aria-pressed=true],.language-switch button[aria-pressed=true]:hover,.basemap-switch.segmented-toggle button[aria-pressed=true],#block3 .segmented-toggle button[aria-pressed=true],.gps-button{color:#075624!important}
+.gps-button::before{background:#c4ef7c}
+.hero-cta,.submit-button{background:linear-gradient(125deg,#b4e95b,#a4dd39);border-color:#9dd52f;color:#075624}
+.hero-cta::before,.submit-button::before{background:#c4ef7c}
+.motion-arrow{background:#075624;color:#fff}
+.brand-logo img{filter:hue-rotate(-95deg) saturate(.8) brightness(.9)}
+.crop-card,.irrig-card,#balanceBlock .chip-btn,.settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare{background-color:#f7fbf1!important}
+.crop-card[aria-checked=true]{background-image:linear-gradient(145deg,#f0f9e4,#e5f4cd)!important;border-color:#75ab30!important;color:#075624!important}
+.irrig-card[aria-checked=true],#balanceBlock .chip-btn[aria-checked=true],#balanceBlock .chip-btn.chip-active,.settings-column [data-field][aria-pressed=true],.settings-column [data-saline][aria-pressed=true],#unitBtn_sotka[aria-pressed=true],#unitBtn_hectare[aria-pressed=true]{background:linear-gradient(120deg,#c5ed8c,#b4e95b)!important;border-color:#87ba40!important;color:#075624!important}
+.irrig-card[aria-checked=true] [id^=irrigTitle],.irrig-card[aria-checked=true] [id^=irrigBadge],.irrig-card[aria-checked=true] [id^=irrigDesc],.irrig-card[aria-checked=true] .irrig-symbol,.irrig-card[aria-checked=true] .irrig-check,#balanceBlock .chip-btn.chip-active .chip-icon,#balanceBlock .chip-btn[aria-checked=true] .chip-icon{color:#075624!important}
+.summary-card{background-image:linear-gradient(rgba(75,130,23,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(75,130,23,.045) 1px,transparent 1px),linear-gradient(145deg,#fff,#f2fae5);background-size:36px 36px,36px 36px,100% 100%;border-color:#d4e8b8;color:#173c24;box-shadow:0 16px 38px rgba(69,112,30,.08)}
+.summary-card h2,.summary-grid dd{color:#173c24}
+.summary-card .eyebrow,.summary-grid dt,.summary-footer p{color:#48644b}
+.summary-card #summaryStatusBadge{border-color:#b4d58d;color:#075624}
+.summary-grid>div,.summary-footer{border-color:#dceacd}
+.hero-cta:is(:hover,:focus-visible),.submit-button:is(:hover,:focus-visible){color:#111!important}
+.hero-cta:is(:hover,:focus-visible)>span:first-child,.submit-button:is(:hover,:focus-visible)>span:first-child{color:#111!important}

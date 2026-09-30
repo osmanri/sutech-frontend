@@ -811,3 +811,23 @@ body{background-image:linear-gradient(rgba(75,130,23,.045) 1px,transparent 1px),
 .hero-cta>span:first-child,.submit-button>span:first-child,.hero-cta:is(:hover,:focus-visible)>span:first-child,.submit-button:is(:hover,:focus-visible)>span:first-child{color:#075624!important}
 .hero-cta .motion-arrow,.submit-button .motion-arrow{background:#111815;color:#fff}
 .hero-cta:is(:hover,:focus-visible) .motion-arrow,.submit-button:is(:hover,:focus-visible) .motion-arrow{background:#075624;color:#fff}
+
+/* A rooted plant: only the stems move; the ground remains still. */
+.hero-plant{position:absolute;z-index:2;right:8px;bottom:-2px;width:218px;pointer-events:none;user-select:none}
+.plant-illustration{display:block;width:100%;height:auto;overflow:visible}
+.plant-stem{transform-box:view-box;transform-origin:51% 95%;animation:plantBreeze 6.8s ease-in-out infinite}
+.plant-stem-back{transform-origin:54% 95%;animation-duration:8.2s;animation-delay:-2.5s}
+@keyframes plantBreeze{0%,100%{transform:rotate(-1.8deg)}50%{transform:rotate(1.8deg)}}
+@media(max-width:520px){
+  .hero-plant{right:1px;width:125px}
+  .eco-hero .hero-description{max-width:calc(100% - 76px)}
+}
+@media(max-width:360px){
+  .hero-plant{right:-3px;width:98px}
+  .eco-hero .hero-description{max-width:calc(100% - 46px)}
+}
+@media(min-width:900px){
+  .hero-plant{right:38px;width:clamp(260px,29vw,370px)}
+  .eco-hero .hero-copy{max-width:58%}
+}
+@media(prefers-reduced-motion:reduce){.plant-stem{animation:none}}

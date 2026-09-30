@@ -794,9 +794,9 @@ body{background-image:linear-gradient(rgba(75,130,23,.045) 1px,transparent 1px),
 .language-switch__indicator,.segmented-toggle__indicator,.gps-button{background:linear-gradient(115deg,#b4e95b,#a4dd39)}
 .language-switch button[aria-pressed=true],.language-switch button[aria-pressed=true]:hover,.basemap-switch.segmented-toggle button[aria-pressed=true],#block3 .segmented-toggle button[aria-pressed=true],.gps-button{color:#075624!important}
 .gps-button::before{background:#c4ef7c}
-.hero-cta,.submit-button{background:linear-gradient(125deg,#b4e95b,#a4dd39);border-color:#9dd52f;color:#075624}
-.hero-cta::before,.submit-button::before{background:#c4ef7c}
-.motion-arrow{background:#075624;color:#fff}
+.hero-cta,.submit-button{background:#fff;border-color:#cfe0b2;color:#075624}
+.hero-cta::before,.submit-button::before{background:linear-gradient(125deg,#b4e95b,#a4dd39)}
+.motion-arrow{background:var(--lime);color:#075624;box-shadow:inset 0 0 0 1px rgba(7,86,36,.16)}
 .brand-logo img{filter:hue-rotate(-95deg) saturate(.8) brightness(.9)}
 .crop-card,.irrig-card,#balanceBlock .chip-btn,.settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare{background-color:#f7fbf1!important}
 .crop-card[aria-checked=true]{background-image:linear-gradient(145deg,#f0f9e4,#e5f4cd)!important;border-color:#75ab30!important;color:#075624!important}
@@ -807,5 +807,6 @@ body{background-image:linear-gradient(rgba(75,130,23,.045) 1px,transparent 1px),
 .summary-card .eyebrow,.summary-grid dt,.summary-footer p{color:#48644b}
 .summary-card #summaryStatusBadge{border-color:#b4d58d;color:#075624}
 .summary-grid>div,.summary-footer{border-color:#dceacd}
-.hero-cta:is(:hover,:focus-visible),.submit-button:is(:hover,:focus-visible){color:#111!important}
-.hero-cta:is(:hover,:focus-visible)>span:first-child,.submit-button:is(:hover,:focus-visible)>span:first-child{color:#111!important}
+.hero-cta:is(:hover,:focus-visible),.submit-button:is(:hover,:focus-visible){color:#075624!important;border-color:#9dd52f}
+.hero-cta>span:first-child,.submit-button>span:first-child,.hero-cta:is(:hover,:focus-visible)>span:first-child,.submit-button:is(:hover,:focus-visible)>span:first-child{color:#075624!important}
+.hero-cta .motion-arrow,.submit-button .motion-arrow,.hero-cta:is(:hover,:focus-visible) .motion-arrow,.submit-button:is(:hover,:focus-visible) .motion-arrow{background:var(--lime);color:#075624}

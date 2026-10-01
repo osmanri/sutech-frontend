@@ -607,7 +607,8 @@ function applyLanguage(lang, animateIndicator = false) {
     const sub = document.getElementById(`cropSub_${cropKey}`);
     if (el) el.textContent = t.crops[cropKey]?.name ?? cropKey;
     if (sub) {
-      const subText = t.crops[cropKey]?.sub ?? '';
+      // Use one language for crop names throughout the form and summary.
+      const subText = '';
       sub.textContent = subText;
       sub.style.display = subText ? 'block' : 'none';
     }
@@ -1430,7 +1431,7 @@ function updateSummaryCard() {
   // Crop (no empty brackets in KZ)
   const cropInfo = t.crops[state.crop] || { name: state.crop, sub: '' };
   document.getElementById('sumValCrop').textContent =
-    cropInfo.sub ? `${cropInfo.name} (${cropInfo.sub})` : cropInfo.name;
+    cropInfo.name;
 
   // Area
   const unitLabel = state.area_unit === 'hectare' ?

@@ -96,8 +96,13 @@ assert.equal(elements.get('cropSub_corn').style.display, 'none');
 assert.deepEqual(ariaNodes.map(node => node['aria-label']),
   ['Navigation', 'Choose language', 'Su-Tech sections']);
 run("applyLanguage('ru')");
-assert.equal(elements.get('cropSub_corn').textContent, 'Жүгері',
-  'Switching back to Russian must restore the crop subtitle');
+assert.equal(elements.get('cropSub_corn').textContent, '',
+  'Russian crop cards must not mix in Kazakh names');
+run("applyLanguage('kz')");
+assert.equal(elements.get('cropName_corn').textContent, 'Жүгері');
+assert.equal(elements.get('cropSub_corn').textContent, '',
+  'Kazakh crop cards must not mix in Russian names');
+run("applyLanguage('ru')");
 context.document.querySelectorAll = () => [];
 elements.get('soilType').value = 'loam';
 assert.equal(elements.get('growthDay').value, '', 'A new farmer must not inherit an invented 30-day crop age');

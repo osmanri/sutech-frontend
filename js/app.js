@@ -40,7 +40,8 @@ function connectTelegram() {
 window.addEventListener('telegram-ready', connectTelegram);
 
 function openAgronomistChat(event) {
-  const url = 'https://t.me/Su_Tech_bot?start=ai';
+  const url = agronomistChatUrl(state.lang);
+  if (event?.currentTarget) event.currentTarget.href = url;
   if (!tg.initData || typeof tg.openTelegramLink !== 'function') return;
   try {
     tg.openTelegramLink(url);
@@ -49,6 +50,11 @@ function openAgronomistChat(event) {
   } catch (_) {
     // The ordinary Telegram link still works in browsers and older clients.
   }
+}
+
+function agronomistChatUrl(lang) {
+  const language = ['ru', 'kz', 'en'].includes(lang) ? lang : 'ru';
+  return `https://t.me/Su_Tech_bot?start=ai_${language}`;
 }
 
 // ─── 2. Состояние приложения ───────────────────────────────────────────────
@@ -545,6 +551,8 @@ function setLanguage(lang) {
 }
 
 function applyLanguage(lang, animateIndicator = false) {
+  const aiLink = document.getElementById('aiEntryLink');
+  if (aiLink) aiLink.setAttribute('href', agronomistChatUrl(lang));
   window.SuBalance?.sync(state.crop, state.field_type, lang);
   const t = I18N[lang] || I18N.ru;
   document.querySelectorAll('[data-copy]').forEach(el => {
@@ -1477,7 +1485,7 @@ function submitFinalCalculation() {
   // A regular browser has no Telegram user identity. Open the bot before
   // collecting field inputs so the farmer does not lose a completed form.
   if (!isTelegramMiniApp()) {
-    window.location.href = 'https://t.me/Su_Tech_bot?start=app';
+    window.location.href = `https://t.me/Su_Tech_bot?start=app_${state.lang}`;
     return;
   }
 
@@ -1491,6 +1499,7 @@ function submitFinalCalculation() {
   if (state.latitude === null || state.longitude === null) {
     const msg = state.lang === 'kz'
       ? 'Алдымен өңірді/қаланы таңдаңыз немесе картада алқапты көрсетіңіз!'
+      : state.lang === 'en' ? 'Select your region or mark your field on the map first.'
       : 'Пожалуйста, выберите ваш город/регион в списке или укажите поле на карте!';
     showToast(msg, 'warning');
     triggerHaptic('warning');

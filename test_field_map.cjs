@@ -80,6 +80,15 @@ for (const [language, placeholder] of [
   run(`applyLanguage('${language}')`);
   assert.equal(elements.get('fieldAreaInput').placeholder, placeholder,
     `Field area example must follow ${language}`);
+  assert.equal(elements.get('aiEntryLink').getAttribute('href'),
+    `https://t.me/Su_Tech_bot?start=ai_${language}`,
+    `AI chat deep link must preserve ${language}`);
+}
+for (const lang of ['ru', 'kz', 'en']) {
+  let opened;
+  tg.openTelegramLink = url => { opened = url; };
+  run(`state.lang = '${lang}'; openAgronomistChat({preventDefault(){}})`);
+  assert.equal(opened, `https://t.me/Su_Tech_bot?start=ai_${lang}`);
 }
 assert.equal(elements.get('cropSub_corn').textContent, '',
   'English crop cards must not show a Kazakh subtitle');
@@ -290,7 +299,7 @@ tg.initData = '';
 sent = undefined;
 run('submitFinalCalculation()');
 assert.equal(sent, undefined, 'Outside Telegram there is no real sendData delivery');
-assert.equal(context.window.location.href, 'https://t.me/Su_Tech_bot?start=app');
+assert.equal(context.window.location.href, `https://t.me/Su_Tech_bot?start=app_${run('state.lang')}`);
 tg.initData = 'test-launch';
 // The actual selected crop must survive the complete Mini App delivery path.
 (async () => {
@@ -327,5 +336,27 @@ tg.initData = 'test-launch';
   run("selectCrop('corn'); isSubmitting = false");
   await run('submitFinalCalculation()');
   assert.equal(closed, beforeCorrection + 1, 'A correction reply must return the farmer to the bot');
+  // A failed request must allow retry; repeated taps must not submit twice.
+  const originalFetch = context.fetch;
+  let requests = 0;
+  let failRequest;
+  context.fetch = () => {
+    requests++;
+    return new Promise((resolve, reject) => { failRequest = reject; });
+  };
+  run('isSubmitting = false');
+  const pending = run('submitFinalCalculation()');
+  run('submitFinalCalculation()');
+  assert.equal(requests, 1, 'Repeated taps must share one submission');
+  assert.equal(elements.get('btnSubmitAll').disabled, true);
+  const beforeFailure = closed;
+  failRequest(new Error('simulated network outage'));
+  await pending;
+  assert.equal(elements.get('btnSubmitAll').disabled, false, 'Network failure must allow retry');
+  assert.equal(closed, beforeFailure, 'A failed request must leave the form available');
+  context.fetch = originalFetch;
+  apiResult = { ok: true, bot_replied: true };
+  await run('submitFinalCalculation()');
+  assert.equal(closed, beforeFailure + 1, 'Retry must deliver the selected crop');
   console.log('PASS: map, input validation, crop delivery, calendars and greenhouse');
 })().catch(error => { console.error(error); process.exitCode = 1; });

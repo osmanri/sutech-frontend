@@ -1,8 +1,8 @@
 /**
  * Su-Tech — Интеллектуальная система точного земледелия (Telegram WebApp)
  * Расчёт норм полива по модели FAO-56 Penman-Monteith
- * Design System: Su-Tech / forest green, olive and warm ivory
- * Palette: olive #49642C, ink #243627, canvas #FFFCEF
+ * Design System: Su-Tech / white, forest green and lime
+ * Palette: forest #015219, grass #4C9908, lime #BAEE2A
  * v4.0.0 — локальные стили и Leaflet, резервная подложка, адаптивная карта
  */
 
@@ -25,6 +25,10 @@ function connectTelegram() {
   try {
     tg.ready();
     tg.expand();
+    if (tg.initData && tg.isVersionAtLeast?.('6.1')) {
+      tg.setHeaderColor?.('#ffffff');
+      tg.setBackgroundColor?.('#ffffff');
+    }
     tg.onEvent?.('viewportChanged', () => {
       fieldMap?.invalidateSize({ pan: false });
       positionLanguageIndicator(state.lang);
@@ -34,6 +38,18 @@ function connectTelegram() {
   }
 }
 window.addEventListener('telegram-ready', connectTelegram);
+
+function openAgronomistChat(event) {
+  const url = 'https://t.me/Su_Tech_bot?start=ai';
+  if (!tg.initData || typeof tg.openTelegramLink !== 'function') return;
+  try {
+    tg.openTelegramLink(url);
+    event.preventDefault();
+    tg.close();
+  } catch (_) {
+    // The ordinary Telegram link still works in browsers and older clients.
+  }
+}
 
 // ─── 2. Состояние приложения ───────────────────────────────────────────────
 let currentCrop = 'cotton';
@@ -344,6 +360,8 @@ const I18N = {
 const UI_COPY = {
   ru: {
     navMap: 'Карта поля', navSettings: 'Параметры', navCalculation: 'Расчет',
+    aiEyebrow:'ФОТО · ПОЛИВ · УХОД', aiTitle:'Вопрос о растении? Спросите ИИ-агронома.',
+    aiDescription:'Пришлите фото в бот и разберите возможные причины симптомов.', aiButton:'Открыть ИИ-агронома',
     navAria: 'Навигация', languageAria: 'Выбор языка', sectionAria: 'Разделы Su-Tech',
     workspaceLabel: 'ВАШЕ ПОЛЕ. ВАШИ РЕШЕНИЯ.', pageHeading: 'Каждая капля — по делу.',
     pageIntro: 'Очертите поле. Выберите культуру. Узнайте, сколько воды нужно сегодня.',
@@ -358,6 +376,8 @@ const UI_COPY = {
   },
   kz: {
     navMap: 'Алқап картасы', navSettings: 'Параметрлер', navCalculation: 'Есептеу',
+    aiEyebrow:'ФОТО · СУАРУ · КҮТІМ', aiTitle:'Өсімдік туралы сұрақ бар ма? ЖИ-агрономнан сұраңыз.',
+    aiDescription:'Ботқа фото жіберіп, белгілердің ықтимал себептерін талдаңыз.', aiButton:'ЖИ-агрономды ашу',
     navAria: 'Сайт мәзірі', languageAria: 'Тілді таңдау', sectionAria: 'Su-Tech бөлімдері',
     workspaceLabel: 'СІЗДІҢ АЛҚАП. СІЗДІҢ ШЕШІМ.', pageHeading: 'Әр тамшы — өз орнымен.',
     pageIntro: 'Алқапты белгілеңіз. Дақылды таңдаңыз. Бүгін қанша су қажет екенін біліңіз.',
@@ -470,6 +490,8 @@ I18N.en = {
 UI_COPY.en = {
   ...UI_COPY.ru,
   navMap:'Field map', navSettings:'Inputs', navCalculation:'Calculation',
+  aiEyebrow:'PHOTO · IRRIGATION · CARE', aiTitle:'A question about your plant? Ask the AI agronomist.',
+  aiDescription:'Send a photo to the bot and explore possible causes of the symptoms.', aiButton:'Open AI agronomist',
   navAria:'Navigation', languageAria:'Choose language', sectionAria:'Su-Tech sections',
   workspaceLabel:'YOUR FIELD. YOUR DECISIONS.', pageHeading:'Make every drop count.',
   pageIntro:'Mark your field. Choose a crop. Find out how much water it needs today.',
@@ -648,10 +670,10 @@ function updateBlock1StatusPill() {
 
   const baseClasses = 'text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-full whitespace-nowrap';
   if (state.latitude !== null && state.longitude !== null) {
-    pill.className = `${baseClasses} bg-[#49642c]/10 text-[#1e4628]`;
+    pill.className = `${baseClasses} bg-[#397307]/10 text-[#015219]`;
     pill.textContent = state.locationSource === 'region' ? t.block1StatusRegion : t.block1StatusReady;
   } else {
-    pill.className = `${baseClasses} bg-[#f3f9f0] text-[#1e4628]`;
+    pill.className = `${baseClasses} bg-[#f3f9f0] text-[#015219]`;
     pill.textContent = t.block1StatusWait;
   }
 }
@@ -959,10 +981,10 @@ function setMappedArea(areaM2) {
 function renderFieldContour() {
   fieldLayers?.clearLayers();
   const valid = isSimpleFieldPolygon(fieldPoints);
-  const color = valid || fieldPoints.length < 3 ? '#49642c' : '#b91c1c';
+  const color = valid || fieldPoints.length < 3 ? '#397307' : '#b91c1c';
   if (fieldLayers) {
     if (fieldPoints.length >= 3) {
-      L.polygon(fieldPoints, { color, fillColor: '#49642c', fillOpacity: valid ? 0.25 : 0.06, weight: 3, interactive: false }).addTo(fieldLayers);
+      L.polygon(fieldPoints, { color, fillColor: '#397307', fillOpacity: valid ? 0.25 : 0.06, weight: 3, interactive: false }).addTo(fieldLayers);
     } else if (fieldPoints.length === 2) {
       L.polyline(fieldPoints, { color, weight: 3, interactive: false }).addTo(fieldLayers);
     }
@@ -1055,8 +1077,8 @@ function updatePointRadius() {
   const valid = Number.isFinite(radius) && radius >= 1 && radius <= 10000;
   document.getElementById('fieldRadiusInput').setAttribute('aria-invalid', String(!valid));
   if (valid && fieldLayers) {
-    L.circle(radiusCenter, { radius, color: '#49642c', fillColor: '#49642c', fillOpacity: 0.25, weight: 3, interactive: false }).addTo(fieldLayers);
-    L.circleMarker(radiusCenter, { radius: 4, color: '#1e4628', interactive: false }).addTo(fieldLayers);
+    L.circle(radiusCenter, { radius, color: '#397307', fillColor: '#397307', fillOpacity: 0.25, weight: 3, interactive: false }).addTo(fieldLayers);
+    L.circleMarker(radiusCenter, { radius: 4, color: '#015219', interactive: false }).addTo(fieldLayers);
   }
   setMappedArea(valid ? Math.PI * radius ** 2 : 0);
 }
@@ -1187,7 +1209,7 @@ function updateAreaUnitUI() {
   const badge = document.getElementById('currentAreaUnitBadge');
   if (badge) {
     badge.textContent = isHect ? t.unitBadge_hectare : t.unitBadge_sotka;
-    badge.className = 'text-[10px] px-2.5 py-0.5 rounded-full bg-[#49642c]/10 text-[#1e4628] font-bold whitespace-nowrap';
+    badge.className = 'text-[10px] px-2.5 py-0.5 rounded-full bg-[#397307]/10 text-[#015219] font-bold whitespace-nowrap';
   }
   document.getElementById('inputUnitSuffix').textContent =
     isHect ? t.unitSuffix_hectare : t.unitSuffix_sotka;
@@ -1344,8 +1366,8 @@ function updateFieldTypeUI() {
   if (badge) {
     badge.textContent = isOpen ? t.fieldTypeBadge_open : t.fieldTypeBadge_greenhouse;
     badge.className = isOpen ?
-      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#49642c]/10 text-[#1e4628] font-bold' :
-      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#f3f9f0] text-[#1e4628] font-bold';
+      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#397307]/10 text-[#015219] font-bold' :
+      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#f3f9f0] text-[#015219] font-bold';
   }
 }
 
@@ -1378,7 +1400,7 @@ function updateSalinityUI() {
     badge.textContent = isNormal ? t.salineBadge_no : t.salineBadge_yes;
     badge.className = isNormal ?
       'text-[10px] px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold' :
-      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#f3f9f0] text-[#1e4628] font-bold';
+      'text-[10px] px-2.5 py-0.5 rounded-full bg-[#f3f9f0] text-[#015219] font-bold';
   }
 }
 
@@ -1391,7 +1413,7 @@ function updateSummaryCard() {
   const coordsVal = document.getElementById('sumValCoords');
   if (state.latitude !== null && state.longitude !== null) {
     coordsVal.textContent = `${state.locationSource === 'region' ? '≈ ' : ''}${state.latitude.toFixed(4)}°, ${state.longitude.toFixed(4)}°`;
-    coordsVal.className = 'text-xs font-semibold text-[#49642c]';
+    coordsVal.className = 'text-xs font-semibold text-[#397307]';
   } else {
     coordsVal.textContent = t.noCoordsYet;
     coordsVal.className = 'text-xs font-semibold text-[#9cc781]';
@@ -1431,7 +1453,7 @@ function updateSummaryCard() {
     const ready = state.latitude !== null && state.longitude !== null && state.area > 0 && state.area < 50000 && !!window.SuBalance?.complete();
     summaryStatusBadge.textContent = ready ? t.summaryStatusReady : t.summaryStatusIncomplete;
     summaryStatusBadge.className = 'text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-full '
-      + (ready ? 'bg-[#49642c]/10 text-[#1e4628]' : 'bg-slate-100 text-slate-600');
+      + (ready ? 'bg-[#397307]/10 text-[#015219]' : 'bg-slate-100 text-slate-600');
   }
 }
 
@@ -1629,8 +1651,8 @@ function showToast(message, type = 'info') {
 
   const baseClass = 'toast';
   const typeClasses = {
-    success: 'bg-[#fffcef] text-[#1e4628] border-[#49642c]/40 shadow-[#49642c]/10',
-    warning: 'bg-[#f7fbf4] text-[#1e4628] border-[#d5e7ca]',
+    success: 'bg-[#fffcef] text-[#015219] border-[#397307]/40 shadow-[#397307]/10',
+    warning: 'bg-[#f7fbf4] text-[#015219] border-[#d5e7ca]',
     error:   'bg-red-50 text-red-800 border-red-300',
     info:    'bg-slate-50 text-slate-800 border-slate-300',
   };

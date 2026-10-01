@@ -366,7 +366,7 @@ const I18N = {
 const UI_COPY = {
   ru: {
     navMap: 'Карта поля', navSettings: 'Параметры', navCalculation: 'Расчет',
-    aiEyebrow:'ФОТО · ПОЛИВ · УХОД', aiTitle:'Вопрос о растении? Спросите ИИ-агронома.',
+    aiTitle:'Вопрос о растении? Спросите ИИ-агронома.',
     aiDescription:'Пришлите фото в бот и разберите возможные причины симптомов.', aiButton:'Открыть ИИ-агронома',
     navAria: 'Навигация', languageAria: 'Выбор языка', sectionAria: 'Разделы Su-Tech',
     workspaceLabel: 'ВАШЕ ПОЛЕ. ВАШИ РЕШЕНИЯ.', pageHeading: 'Каждая капля — по делу.',
@@ -382,7 +382,7 @@ const UI_COPY = {
   },
   kz: {
     navMap: 'Алқап картасы', navSettings: 'Параметрлер', navCalculation: 'Есептеу',
-    aiEyebrow:'ФОТО · СУАРУ · КҮТІМ', aiTitle:'Өсімдік туралы сұрақ бар ма? ЖИ-агрономнан сұраңыз.',
+    aiTitle:'Өсімдік туралы сұрақ бар ма? ЖИ-агрономнан сұраңыз.',
     aiDescription:'Ботқа фото жіберіп, белгілердің ықтимал себептерін талдаңыз.', aiButton:'ЖИ-агрономды ашу',
     navAria: 'Сайт мәзірі', languageAria: 'Тілді таңдау', sectionAria: 'Su-Tech бөлімдері',
     workspaceLabel: 'СІЗДІҢ АЛҚАП. СІЗДІҢ ШЕШІМ.', pageHeading: 'Әр тамшы — өз орнымен.',
@@ -496,7 +496,7 @@ I18N.en = {
 UI_COPY.en = {
   ...UI_COPY.ru,
   navMap:'Field map', navSettings:'Inputs', navCalculation:'Calculation',
-  aiEyebrow:'PHOTO · IRRIGATION · CARE', aiTitle:'A question about your plant? Ask the AI agronomist.',
+  aiTitle:'A question about your plant? Ask the AI agronomist.',
   aiDescription:'Send a photo to the bot and explore possible causes of the symptoms.', aiButton:'Open AI agronomist',
   navAria:'Navigation', languageAria:'Choose language', sectionAria:'Su-Tech sections',
   workspaceLabel:'YOUR FIELD. YOUR DECISIONS.', pageHeading:'Make every drop count.',
@@ -525,7 +525,7 @@ function initLanguage() {
   applyLanguage(state.lang);
   window.addEventListener('resize', () => {
     positionLanguageIndicator(state.lang);
-    document.querySelectorAll('.segmented-toggle').forEach(positionSegmentIndicator);
+    syncSegmentedToggles();
   });
   // Telegram changes the viewport after the first paint; web fonts can also
   // change the width of ҚАЗ. Keep the pill fitted to its actual button.
@@ -537,6 +537,30 @@ function initLanguage() {
   }
   document.fonts?.ready.then(() => positionLanguageIndicator(state.lang));
   window.addEventListener('pageshow', () => positionLanguageIndicator(state.lang));
+  initSegmentedToggles();
+}
+
+function syncSegmentedToggles() {
+  document.querySelectorAll('.segmented-toggle').forEach(positionSegmentIndicator);
+}
+
+function initSegmentedToggles() {
+  const groups = [...document.querySelectorAll('.segmented-toggle')];
+  syncSegmentedToggles();
+  if (window.ResizeObserver) {
+    const observer = new ResizeObserver(syncSegmentedToggles);
+    groups.forEach(group => {
+      observer.observe(group);
+      group.querySelectorAll('button').forEach(button => observer.observe(button));
+    });
+  }
+  const refresh = () => requestAnimationFrame(syncSegmentedToggles);
+  document.fonts?.ready.then(refresh);
+  window.addEventListener('pageshow', refresh);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') refresh();
+  });
+  [80, 260, 700].forEach(delay => window.setTimeout(refresh, delay));
 }
 
 function setLanguage(lang) {
@@ -1714,11 +1738,12 @@ function positionSegmentIndicator(container) {
   const indicator = container?.querySelector('.segmented-toggle__indicator');
   const selected = container?.querySelector('button[aria-pressed="true"]');
   if (!indicator || !selected) return;
-  indicator.style.width = `${selected.offsetWidth}px`;
-  indicator.style.transform = `translate3d(${selected.offsetLeft}px, 0, 0)`;
-  if (!container.classList.contains('is-ready')) {
-    requestAnimationFrame(() => container.classList.add('is-ready'));
-  }
+  const containerRect = container.getBoundingClientRect();
+  const selectedRect = selected.getBoundingClientRect();
+  if (!containerRect.width || !selectedRect.width) return;
+  indicator.style.width = `${selectedRect.width}px`;
+  indicator.style.transform = `translate3d(${selectedRect.left - containerRect.left}px, 0, 0)`;
+  container.classList.add('is-ready');
 }
 
 function triggerHaptic(type) {

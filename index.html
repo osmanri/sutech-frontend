@@ -11,11 +11,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.10.41" />
+  <link rel="stylesheet" href="css/app.css?v=5.10.44" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/balance.js?v=5.10.13"></script>
-  <script defer src="js/app.js?v=5.10.43"></script>
+  <script defer src="js/app.js?v=5.10.44"></script>
 </head>
 <body>
   <div class="signal-strip" aria-hidden="true">
@@ -45,7 +45,7 @@
   </section>
   <section class="ai-entry" aria-labelledby="aiEntryTitle">
     <span class="ai-entry__symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4c-9-1-15 3-15 9a6 6 0 0 0 6 6c6 0 10-6 9-15Z"/><path d="M4 20 15 9m-7 7v-5m0 5h5"/></svg></span>
-    <div class="ai-entry__copy"><span class="ai-entry__label" data-copy="aiEyebrow">ФОТО · ПОЛИВ · УХОД</span><h2 id="aiEntryTitle" data-copy="aiTitle">Вопрос о растении? Спросите ИИ-агронома.</h2><p data-copy="aiDescription">Пришлите фото в бот и разберите возможные причины симптомов.</p></div>
+    <div class="ai-entry__copy"><h2 id="aiEntryTitle" data-copy="aiTitle">Вопрос о растении? Спросите ИИ-агронома.</h2><p data-copy="aiDescription">Пришлите фото в бот и разберите возможные причины симптомов.</p></div>
     <a id="aiEntryLink" class="ai-entry__button" href="https://t.me/Su_Tech_bot?start=ai" onclick="openAgronomistChat(event)"><span data-copy="aiButton">Открыть ИИ-агронома</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
   </section>
   <nav class="section-nav" aria-label="Разделы Su-Tech" data-copy-aria="sectionAria"><a href="#block1" data-copy="navMap" aria-current="location">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>

@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 300" fill="none">
   <defs>
-    <linearGradient id="field" x1="65" y1="118" x2="287" y2="234" gradientUnits="userSpaceOnUse"><stop stop-color="#d9ebbd"/><stop offset="1" stop-color="#a5dc24"/></linearGradient>
-    <linearGradient id="soil" x1="23" y1="210" x2="321" y2="220" gradientUnits="userSpaceOnUse"><stop stop-color="#456b38"/><stop offset="1" stop-color="#015219"/></linearGradient>
+    <linearGradient id="field" x1="65" y1="118" x2="287" y2="234" gradientUnits="userSpaceOnUse"><stop stop-color="#d9ebbd"/><stop offset="1" stop-color="#96c969"/></linearGradient>
+    <linearGradient id="soil" x1="23" y1="210" x2="321" y2="220" gradientUnits="userSpaceOnUse"><stop stop-color="#456b38"/><stop offset="1" stop-color="#234d34"/></linearGradient>
     <clipPath id="plot"><path d="m180 84 150 87-150 87-150-87z"/></clipPath>
     <g id="crop">
-      <path d="M0 1V-12" stroke="#015219" stroke-width="1.6" stroke-linecap="round"/>
-      <path d="M0-4C-9-4-12-12-12-17c8 0 13 5 12 13Z" fill="#4c9908"/>
-      <path d="M0-6C1-16 7-21 15-20c-1 9-7 16-15 14Z" fill="#a5dc24"/>
-      <path d="M0-11c-5-7-3-15 2-20 6 7 6 15-2 20Z" fill="#6bab0e"/>
+      <path d="M0 1V-12" stroke="#245c37" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M0-4C-9-4-12-12-12-17c8 0 13 5 12 13Z" fill="#2b863c"/>
+      <path d="M0-6C1-16 7-21 15-20c-1 9-7 16-15 14Z" fill="#80c343"/>
+      <path d="M0-11c-5-7-3-15 2-20 6 7 6 15-2 20Z" fill="#4c9f3d"/>
       <path d="m-8-14 8 10 10-12" stroke="#c6e497" stroke-width=".8" stroke-linecap="round"/>
     </g>
     <style>
@@ -17,13 +17,13 @@
     </style>
   </defs>
   <path d="m30 171 150 87 150-87v21l-150 87-150-87z" fill="url(#soil)"/>
-  <path d="m180 258 150-87v21l-150 87z" fill="#015219"/>
+  <path d="m180 258 150-87v21l-150 87z" fill="#004b35"/>
   <path d="m180 84 150 87-150 87-150-87z" fill="url(#field)"/>
   <g clip-path="url(#plot)" stroke-linecap="round">
     <path d="m83 125 176 102m-200-87 176 102M35 155l176 102m-104-147 176 102m-152-117 176 102" stroke="#75aa52" stroke-width="13"/>
     <path d="m83 125 176 102m-200-87 176 102M35 155l176 102m-104-147 176 102m-152-117 176 102" stroke="#d9ebbd" stroke-opacity=".55" stroke-width="1"/>
     <path d="m88 123 172 100M64 137l172 100m-148-128 172 100m-148-127 172 100" stroke="#286544" stroke-width="2.4"/>
-    <path class="water-flow" d="m88 123 172 100M64 137l172 100m-148-128 172 100m-148-127 172 100" stroke="#e2f5b8" stroke-width="2.6"/>
+    <path class="water-flow" d="m88 123 172 100M64 137l172 100m-148-128 172 100m-148-127 172 100" stroke="#c8f1e1" stroke-width="2.6"/>
   </g>
   <g>
     <use href="#crop" x="102" y="140"/><use href="#crop" x="139" y="162"/><use href="#crop" x="177" y="184"/><use href="#crop" x="215" y="206"/>
@@ -31,12 +31,12 @@
     <use href="#crop" x="76" y="155"/><use href="#crop" x="114" y="177"/><use href="#crop" x="152" y="199"/><use href="#crop" x="190" y="221"/>
     <use href="#crop" x="151" y="112"/><use href="#crop" x="189" y="134"/><use href="#crop" x="227" y="156"/><use href="#crop" x="265" y="178"/>
   </g>
-  <path d="m47 172 120-70" stroke="#015219" stroke-width="5" stroke-linecap="round"/>
+  <path d="m47 172 120-70" stroke="#004b35" stroke-width="5" stroke-linecap="round"/>
   <path d="m47 172 120-70" stroke="#c1dfad" stroke-width="1.2" stroke-linecap="round"/>
   <g transform="translate(176 87)">
-    <path d="M0 0v-27" stroke="#015219" stroke-width="3"/>
-    <rect x="-17" y="-50" width="34" height="26" rx="7" fill="#fff" stroke="#015219" stroke-width="1.5"/>
-    <path d="M0-43c-3 4-6 6-6 9a6 6 0 0 0 12 0c0-3-3-5-6-9Z" fill="#4c9908"/>
+    <path d="M0 0v-27" stroke="#004b35" stroke-width="3"/>
+    <rect x="-17" y="-50" width="34" height="26" rx="7" fill="#fff" stroke="#004b35" stroke-width="1.5"/>
+    <path d="M0-43c-3 4-6 6-6 9a6 6 0 0 0 12 0c0-3-3-5-6-9Z" fill="#2b863c"/>
   </g>
   <path d="m45 189 24 14m224 2 18-10M166 270l14 8 14-8" stroke="#91b77a" stroke-width="1.2" stroke-linecap="round"/>
 </svg>

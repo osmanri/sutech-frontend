@@ -1741,9 +1741,10 @@ function positionSegmentIndicator(container) {
   const containerRect = container.getBoundingClientRect();
   const selectedRect = selected.getBoundingClientRect();
   if (!containerRect.width || !selectedRect.width) return;
+  const isReady = container.classList.contains('is-ready');
   indicator.style.width = `${selectedRect.width}px`;
   indicator.style.transform = `translate3d(${selectedRect.left - containerRect.left}px, 0, 0)`;
-  container.classList.add('is-ready');
+  if (!isReady) requestAnimationFrame(() => container.classList.add('is-ready'));
 }
 
 function triggerHaptic(type) {

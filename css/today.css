@@ -1,0 +1,34 @@
+.today-panel{margin:0 0 28px;padding:28px;border:1px solid #dce7db;border-radius:22px;background:#fff}
+.today-panel [hidden]{display:none!important}
+.today-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.today-heading h2{margin:0;color:#123d2a;font-family:Manrope,Inter,sans-serif;font-size:26px;letter-spacing:-.7px}
+.today-eyebrow{margin:0 0 7px;color:#547058;font-size:10px;font-weight:700;letter-spacing:1.3px}
+.today-state{color:#617167;font-size:13px;line-height:1.65;margin:0}
+.today-state:not(:empty){margin-bottom:16px}
+.today-panel[aria-busy=true] .today-state:before{content:'';display:inline-block;width:12px;height:12px;border:2px solid #d8e7db;border-top-color:#185637;border-radius:50%;vertical-align:-2px;margin-right:9px;animation:spin 1s linear infinite}
+.today-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:14px}
+.today-card{display:flex;flex-direction:column;padding:22px;border:1px solid #e1e9e0;border-radius:16px;background:#f8fbf7;min-width:0}
+.today-card h3{font-size:18px;line-height:1.4;margin:12px 0 4px;overflow-wrap:anywhere;color:#183b28}
+.today-badge{align-self:flex-start;border-radius:20px;padding:6px 10px;background:#e5f1df;color:#245134;font-size:11px;font-weight:650}
+.today-badge[data-status=critical]{background:#fff0de;color:#815115}
+.today-badge[data-status=irrigate]{background:#d8ebcc;color:#245134}
+.today-badge[data-status=unavailable],.today-badge[data-status=season_ended]{background:#edf0eb;color:#5b685e}
+.today-meta{font-size:11px;color:#617167;line-height:1.7;margin:0 0 18px;overflow-wrap:anywhere}
+.today-volume{font-family:Manrope,Inter,sans-serif;font-size:34px;font-weight:750;letter-spacing:-1px;color:#16472d;line-height:1.15;margin:0 0 5px}
+.today-volume-label{font-size:11px;color:#617167;margin:0 0 17px}
+.today-reason{font-size:13px;color:#42594a;line-height:1.7;margin:0 0 20px}
+.today-primary,.today-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 17px;border-radius:11px;font:600 12px Inter,sans-serif;text-decoration:none;cursor:pointer;transition:background .15s,color .15s}
+.today-primary{border:1px solid #185637;background:#185637;color:#fff;margin-top:auto}
+.today-primary:hover{background:#236b43;color:#fff}.today-secondary{border:1px solid #d6e2d5;color:#245134;background:#fff}
+.today-secondary:hover{background:#edf5e8}.today-primary:disabled,.today-secondary:disabled{opacity:.55;cursor:wait}
+.today-primary:focus-visible,.today-secondary:focus-visible{outline:3px solid #90ba71;outline-offset:3px}
+.today-empty{border:1px dashed #c7d9c3;border-radius:15px;padding:22px;background:#f8fbf7}
+.today-empty p{font-size:13px;line-height:1.7;color:#42594a;margin:0 0 15px;max-width:650px}
+.water-dialog{width:min(440px,calc(100% - 28px));padding:28px;border:1px solid #dce7db;border-radius:20px;color:#183b28;background:#fff;box-shadow:0 24px 80px #123d2a26}
+.water-dialog::backdrop{background:#0c271f66}.water-dialog h2{font-size:23px;letter-spacing:-.6px;margin:0 0 12px}
+.water-dialog p{font-size:13px;line-height:1.7}.water-dialog label{display:block;font-size:12px;font-weight:600;margin:20px 0 8px}
+.water-dialog input{box-sizing:border-box;width:100%;min-height:48px;padding:12px;border:1px solid #bdd1b7;border-radius:10px;font:500 18px Inter,sans-serif;color:#183b28;background:#f8fbf7}
+.water-dialog input:focus{outline:2px solid #90ba71;outline-offset:2px}.water-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px}
+#waterError{color:#9b3f29;margin-top:12px}
+@media(max-width:760px){.today-panel{padding:19px 16px;border-radius:17px;margin-bottom:18px}.today-heading{gap:10px}.today-heading h2{font-size:21px}.today-eyebrow{font-size:9px;letter-spacing:1px}.today-card{padding:18px}.water-dialog{padding:22px}.water-actions{flex-wrap:wrap}.water-actions button{flex:1}}
+@media(prefers-reduced-motion:reduce){.today-panel[aria-busy=true] .today-state:before{animation:none}.today-primary,.today-secondary{transition:none}}

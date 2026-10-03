@@ -15,7 +15,9 @@
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/balance.js?v=5.10.13"></script>
-  <script defer src="js/app.js?v=5.10.51"></script>
+  <script defer src="js/app.js?v=5.10.52"></script>
+  <link rel="stylesheet" href="css/today.css?v=5.10.52" />
+  <script defer src="js/today.js?v=5.10.52"></script>
 </head>
 <body>
   <div class="signal-strip" aria-hidden="true">
@@ -50,6 +52,11 @@
   </section>
   <nav class="section-nav" aria-label="Разделы Su-Tech" data-copy-aria="sectionAria"><a href="#block1" data-copy="navMap" aria-current="location">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>
   <main class="workspace">
+    <section id="todayPanel" class="today-panel" aria-labelledby="todayTitle">
+      <div class="today-heading"><div><p class="today-eyebrow" id="todayEyebrow">ВАШ ЕЖЕДНЕВНЫЙ ПЛАН</p><h2 id="todayTitle">Мои поля сегодня</h2></div><button id="todayRefresh" class="today-secondary" type="button">Обновить</button></div>
+      <p id="todayState" class="today-state" role="status" aria-live="polite"></p>
+      <div id="todayCards" class="today-cards"></div>
+    </section>
     <div class="workspace-grid">
       <div class="map-column">
         <section id="block1" class="map-panel">
@@ -578,5 +585,14 @@
     <footer class="page-footer"><span>Su-Tech · Smart Irrigation</span><span data-copy="footerNote">Вода с заботой о будущем.</span></footer>
   </main>
   <div id="appToast" class="toast" role="status" aria-live="polite" style="display:none"></div>
+  <dialog id="waterDialog" class="water-dialog" aria-labelledby="waterDialogTitle">
+    <form id="waterForm">
+      <p id="waterFieldName" class="today-eyebrow"></p><h2 id="waterDialogTitle">Записать полив</h2>
+      <p id="waterDialogHint"></p><label id="waterVolumeLabel" for="waterVolume">Фактически внесено, м³</label>
+      <input id="waterVolume" name="volume" type="number" min="0.000001" max="1000000000" step="any" inputmode="decimal" required />
+      <p id="waterError" class="today-state" role="alert"></p>
+      <div class="water-actions"><button id="waterCancel" class="today-secondary" type="button">Отмена</button><button id="waterSave" class="today-primary" type="submit">Подтвердить полив</button></div>
+    </form>
+  </dialog>
 </body>
 </html>

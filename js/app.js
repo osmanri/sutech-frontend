@@ -593,6 +593,7 @@ function setLanguage(lang) {
   window.history.replaceState({}, '', url);
   applyLanguage(lang, true);
   updateSummaryCard();
+  window.SuToday?.render();
   triggerHaptic('light');
 }
 

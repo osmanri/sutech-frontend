@@ -533,10 +533,6 @@ UI_COPY.en = {
   summaryEyebrow:'READY FOR THE NEXT STEP?', footerNote:'Saving water for the future.',
 };
 
-Object.assign(UI_COPY.ru,{studioEyebrow:'ВОДА. ПОЧВА. ВАШЕ РЕШЕНИЕ.',studioWeather:'Погода вашего поля',studioBalance:'Баланс влаги',studioVolume:'Точный объём',studioGraphicCaption:'Данные поля превращаются в план полива',studioFlowAria:'Как работает Su-Tech',studioStepField:'Выберите поле',studioStepInputs:'Укажите культуру',studioStepPlan:'Получите план полива'});
-Object.assign(UI_COPY.kz,{studioEyebrow:'СУ. ТОПЫРАҚ. СІЗДІҢ ШЕШІМІҢІЗ.',studioWeather:'Алқаптың ауа райы',studioBalance:'Ылғал балансы',studioVolume:'Нақты су көлемі',studioGraphicCaption:'Алқап деректерінен суару жоспарына',studioFlowAria:'Su-Tech қалай жұмыс істейді',studioStepField:'Алқапты таңдаңыз',studioStepInputs:'Дақылды көрсетіңіз',studioStepPlan:'Суару жоспарын алыңыз'});
-Object.assign(UI_COPY.en,{studioEyebrow:'WATER. SOIL. YOUR DECISION.',studioWeather:'Local field weather',studioBalance:'Moisture balance',studioVolume:'The right volume',studioGraphicCaption:'From field data to an irrigation plan',studioFlowAria:'How Su-Tech works',studioStepField:'Choose your field',studioStepInputs:'Select your crop',studioStepPlan:'Get an irrigation plan'});
-
 const TICKER_COPY = {
   ru: ['Расчёт водного баланса корней FAO-56', 'Точный метеопрогноз Open-Meteo', 'Рекомендации с объяснением расчёта', 'Защита растений от водного стресса'],
   kz: ['FAO-56 бойынша су балансын дәл есептеу', 'Open-Meteo ауа райы болжамы', 'Есептеу түсіндірмесі бар ұсыныстар', 'Өсімдікті кебуден қорғау'],

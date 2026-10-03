@@ -1,0 +1,7 @@
+/* Original layout; only the hero palette changes. */
+.eco-hero{background:radial-gradient(ellipse at 87% 100%,#1b6949 0,transparent 65%),#073e2d;border-color:#0e5239;box-shadow:0 18px 42px #093c2b12}
+.eco-hero::before{background-image:linear-gradient(#c2ec9e0a 1px,transparent 1px),linear-gradient(90deg,#c2ec9e0a 1px,transparent 1px)}
+.eco-hero h1{color:#fff}
+.eco-hero h1 em{color:#b7ed6c}
+.eco-hero .hero-description{color:#d0dfd2}
+.eco-hero .hero-ambient{opacity:.035}

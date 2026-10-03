@@ -83,9 +83,6 @@ for (const [language, placeholder] of [
   assert.equal(elements.get('aiEntryLink').getAttribute('href'),
     `https://t.me/Su_Tech_bot?start=ai_${language}`,
     `AI chat deep link must preserve ${language}`);
-  assert.equal(elements.get('pilotEntryLink').getAttribute('href'),
-    `https://t.me/Su_Tech_bot?start=pilot_${language}`,
-    `Pilot invitation must preserve ${language}`);
 }
 for (const lang of ['ru', 'kz', 'en']) {
   let opened;

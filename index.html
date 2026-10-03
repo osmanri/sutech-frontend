@@ -11,14 +11,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.10.51" />
+  <link rel="stylesheet" href="css/app.css?v=5.10.44" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/balance.js?v=5.10.13"></script>
-  <script defer src="js/app.js?v=5.10.52"></script>
-  <link rel="stylesheet" href="css/today.css?v=5.10.52" />
-  <script defer src="js/today.js?v=5.10.52"></script>
-  <link rel="stylesheet" href="css/hero-colors.css?v=5.10.55" />
+  <script defer src="js/app.js?v=5.10.45"></script>
 </head>
 <body>
   <div class="signal-strip" aria-hidden="true">
@@ -53,11 +50,6 @@
   </section>
   <nav class="section-nav" aria-label="Разделы Su-Tech" data-copy-aria="sectionAria"><a href="#block1" data-copy="navMap" aria-current="location">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>
   <main class="workspace">
-    <section id="todayPanel" class="today-panel" aria-labelledby="todayTitle">
-      <div class="today-heading"><div><p class="today-eyebrow" id="todayEyebrow">ВАШ ЕЖЕДНЕВНЫЙ ПЛАН</p><h2 id="todayTitle">Мои поля сегодня</h2></div><button id="todayRefresh" class="today-secondary" type="button">Обновить</button></div>
-      <p id="todayState" class="today-state" role="status" aria-live="polite"></p>
-      <div id="todayCards" class="today-cards"></div>
-    </section>
     <div class="workspace-grid">
       <div class="map-column">
         <section id="block1" class="map-panel">
@@ -579,21 +571,8 @@
       <dl class="summary-grid"><div><dt id="sumLabelCoords"></dt><dd id="sumValCoords">—</dd></div><div><dt id="sumLabelCrop"></dt><dd id="sumValCrop">—</dd></div><div><dt id="sumLabelArea"></dt><dd id="sumValArea">—</dd></div><div><dt id="sumLabelIrrig"></dt><dd id="sumValIrrig">—</dd></div><div><dt id="sumLabelFieldType"></dt><dd id="sumValFieldType">—</dd></div><div><dt id="sumLabelSaline"></dt><dd id="sumValSaline">—</dd></div></dl>
       <div class="summary-footer"><p id="submitHint"></p><button id="btnSubmitAll" class="submit-button" onclick="submitFinalCalculation()"><span id="btnSubmitText">Рассчитать полив</span><span class="motion-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-6-6 6 6-6 6"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></button></div>
     </section>
-    <section class="pilot-entry" aria-labelledby="pilotTitle">
-      <div class="pilot-entry__copy"><h2 id="pilotTitle" data-copy="pilotTitle">Попробуйте Su-Tech бесплатно</h2><p data-copy="pilotDescription">5 дней на своём участке: расчёт полива и ваш отзыв. Без покупки оборудования.</p></div>
-      <a id="pilotEntryLink" class="hero-cta pilot-entry__button" href="https://t.me/Su_Tech_bot?start=pilot_ru" onclick="openPilotChat(event)"><span data-copy="pilotButton">Участвовать в акции</span><span class="motion-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></span></a>
-    </section>
     <footer class="page-footer"><span>Su-Tech · Smart Irrigation</span><span data-copy="footerNote">Вода с заботой о будущем.</span></footer>
   </main>
   <div id="appToast" class="toast" role="status" aria-live="polite" style="display:none"></div>
-  <dialog id="waterDialog" class="water-dialog" aria-labelledby="waterDialogTitle">
-    <form id="waterForm">
-      <p id="waterFieldName" class="today-eyebrow"></p><h2 id="waterDialogTitle">Записать полив</h2>
-      <p id="waterDialogHint"></p><label id="waterVolumeLabel" for="waterVolume">Фактически внесено, м³</label>
-      <input id="waterVolume" name="volume" type="number" min="0.000001" max="1000000000" step="any" inputmode="decimal" required />
-      <p id="waterError" class="today-state" role="alert"></p>
-      <div class="water-actions"><button id="waterCancel" class="today-secondary" type="button">Отмена</button><button id="waterSave" class="today-primary" type="submit">Подтвердить полив</button></div>
-    </form>
-  </dialog>
 </body>
 </html>

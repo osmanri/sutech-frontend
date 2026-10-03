@@ -15,9 +15,10 @@
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/balance.js?v=5.10.13"></script>
-  <script defer src="js/app.js?v=5.10.52"></script>
-  <link rel="stylesheet" href="css/today.css?v=5.10.52" />
-  <script defer src="js/today.js?v=5.10.52"></script>
+  <script defer src="js/app.js?v=5.10.53"></script>
+  <link rel="stylesheet" href="css/today.css?v=5.10.53" />
+  <script defer src="js/today.js?v=5.10.53"></script>
+  <link rel="stylesheet" href="css/field-studio.css?v=5.10.53" />
 </head>
 <body>
   <div class="signal-strip" aria-hidden="true">
@@ -38,13 +39,34 @@
   <section class="eco-hero" aria-labelledby="heroTitle">
     <div class="hero-ambient hero-ambient-one" aria-hidden="true"></div><div class="hero-ambient hero-ambient-two" aria-hidden="true"></div>
     <div class="hero-copy">
+      <p class="studio-eyebrow"><span aria-hidden="true"></span><span data-copy="studioEyebrow">ВОДА. ПОЧВА. ВАШЕ РЕШЕНИЕ.</span></p>
       <h1 id="heroTitle"><span data-copy="heroTitleTop">Точный полив.</span> <em data-copy="heroTitleAccent">Живое поле.</em></h1>
       <p class="hero-description" data-copy="heroDescription">Погода и данные поля подскажут, когда и сколько поливать.</p>
       <div class="hero-actions">
         <a class="hero-cta" href="#block1"><span data-copy="heroCta">Настроить поле</span><span class="motion-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></span></a>
       </div>
+      <div class="studio-capabilities"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 17a4 4 0 0 1 0-8 6 6 0 0 1 11-2 5 5 0 0 1 2 10M8 20v2m5-2v2m5-2v2"/></svg><span data-copy="studioWeather">Погода вашего поля</span></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Zm6-3v15m6-12v15"/></svg><span data-copy="studioBalance">Баланс влаги</span></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C9 8 5 12 5 16a7 7 0 0 0 14 0c0-4-4-8-7-13Zm-4 13a4 4 0 0 0 4 4"/></svg><span data-copy="studioVolume">Точный объём</span></span></div>
+    </div>
+    <div class="studio-landscape">
+      <svg class="studio-field" viewBox="0 0 520 400" fill="none" aria-hidden="true">
+        <defs><pattern id="studioRows" width="13" height="13" patternUnits="userSpaceOnUse" patternTransform="rotate(-27)"><path d="M0 1h13" stroke="#075235" stroke-width="3"/></pattern><pattern id="studioRowsLight" width="11" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(28)"><path d="M0 1h11" stroke="#abd66b" stroke-width="2"/></pattern></defs>
+        <g class="studio-contours" stroke="#86bb76" stroke-opacity=".2"><path d="M16 250C-25 181 83 148 89 95S197 14 269 29s81 64 153 61 119 62 85 113-48 46-43 100-62 99-130 82-109-44-183-23S9 323 16 250Z"/><path d="M33 242C0 185 101 155 107 109S199 38 259 48s79 62 147 63 99 51 74 89-43 48-39 92-48 79-110 65-106-38-173-22S31 306 33 242Z"/><path d="M54 238C23 192 119 163 129 123s76-62 124-52 78 52 139 58 78 46 57 76-37 47-34 80-36 59-87 51-103-35-164-16S57 289 54 238Z"/></g>
+        <path d="m96 263 171-116 185 83-171 123-185-90Z" fill="#071e18" stroke="#769d6e" stroke-opacity=".35"/>
+        <path d="m96 250 171-116 185 83-171 123-185-90Z" fill="#9acc62" stroke="#d8f2a8" stroke-width="2"/>
+        <path d="m108 249 65-44 78 37-64 46-79-39Z" fill="#417d49"/><path d="m108 249 65-44 78 37-64 46-79-39Z" fill="url(#studioRowsLight)"/>
+        <path d="m183 198 84-57 80 36-86 58-78-37Z" fill="#b6e875"/><path d="m183 198 84-57 80 36-86 58-78-37Z" fill="url(#studioRows)"/>
+        <path d="m199 294 63-46 80 37-62 45-81-36Z" fill="#b6e875"/><path d="m199 294 63-46 80 37-62 45-81-36Z" fill="url(#studioRows)"/>
+        <path d="m273 239 85-58 81 36-84 61-82-39Z" fill="#417d49"/><path d="m273 239 85-58 81 36-84 61-82-39Z" fill="url(#studioRowsLight)"/>
+        <path class="studio-scan" d="m96 250 171-116 185 83-171 123-185-90Z" stroke="#e5ffc0" stroke-width="3" stroke-dasharray="90 580"/>
+        <path d="M267 133v-52" stroke="#d8f2a8" stroke-dasharray="3 5"/><circle cx="267" cy="134" r="5" fill="#e5ffc0"/>
+        <g transform="translate(267 56)"><circle r="24" fill="#bcf076"/><path d="M0-12C-5-4-10 0-10 5a10 10 0 0 0 20 0c0-5-5-9-10-17Z" fill="#0a4d35"/><path d="M-5 4a5 5 0 0 0 5 5" stroke="#bcf076" stroke-width="2" stroke-linecap="round"/></g>
+        <path d="M82 280h-24v-24m392-100h24v24" stroke="#b6e875" stroke-width="2"/>
+        <circle cx="119" cy="137" r="3" fill="#b6e875"/><circle cx="426" cy="329" r="3" fill="#b6e875"/>
+      </svg>
+      <p class="studio-landscape-caption"><span aria-hidden="true">↳</span><span data-copy="studioGraphicCaption">Данные поля превращаются в план полива</span></p>
     </div>
   </section>
+  <div class="studio-flow" aria-label="Как работает Su-Tech" data-copy-aria="studioFlowAria"><span><b>01</b><span data-copy="studioStepField">Выберите поле</span></span><i aria-hidden="true">→</i><span><b>02</b><span data-copy="studioStepInputs">Укажите культуру</span></span><i aria-hidden="true">→</i><span><b>03</b><span data-copy="studioStepPlan">Получите план полива</span></span></div>
   <section class="ai-entry" aria-labelledby="aiEntryTitle">
     <span class="ai-entry__symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4c-9-1-15 3-15 9a6 6 0 0 0 6 6c6 0 10-6 9-15Z"/><path d="M4 20 15 9m-7 7v-5m0 5h5"/></svg></span>
     <div class="ai-entry__copy"><h2 id="aiEntryTitle" data-copy="aiTitle">Вопрос о растении? Спросите ИИ-агронома.</h2><p data-copy="aiDescription">Пришлите фото в бот и разберите возможные причины симптомов.</p></div>
@@ -287,7 +309,7 @@
         <div class="flex flex-col gap-2">
           <span class=""
                 id="labelQuickPresets">Быстрый выбор:</span>
-          <div class="flex gap-2" role="group" aria-labelledby="labelQuickPresets">
+          <div class="flex gap-2 quick-preset-list" role="group" aria-labelledby="labelQuickPresets">
             <button type="button"
                     class=""
                     onclick="setPresetArea(1)">1</button>

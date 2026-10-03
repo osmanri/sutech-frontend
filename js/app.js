@@ -382,8 +382,8 @@ const I18N = {
 const UI_COPY = {
   ru: {
     navMap: 'Карта поля', navSettings: 'Параметры', navCalculation: 'Расчет',
-    pilotTitle:'Вы отвечаете за полив? Попробуйте Su-Tech.',
-    pilotDescription:'5 дней на своём поле: расчёты и ваш отзыв. Участие бесплатное, оборудование не требуется.', pilotButton:'Участвовать в пилоте',
+    pilotTitle:'Попробуйте Su-Tech бесплатно',
+    pilotDescription:'5 дней на своём участке: расчёт полива и ваш отзыв. Без покупки оборудования.', pilotButton:'Участвовать в акции',
     aiTitle:'Вопрос о растении? Спросите ИИ-агронома.',
     aiDescription:'Пришлите фото в бот и разберите возможные причины симптомов.', aiButton:'Открыть ИИ-агронома',
     navAria: 'Навигация', languageAria: 'Выбор языка', sectionAria: 'Разделы Su-Tech',
@@ -400,8 +400,8 @@ const UI_COPY = {
   },
   kz: {
     navMap: 'Алқап картасы', navSettings: 'Параметрлер', navCalculation: 'Есептеу',
-    pilotTitle:'Суаруға жауап бересіз бе? Su-Tech-ті сынап көріңіз.',
-    pilotDescription:'Өз алқабыңызда 5 күн: есептер және пікіріңіз. Қатысу тегін, жабдық қажет емес.', pilotButton:'Пилотқа қатысу',
+    pilotTitle:'Su-Tech-ті тегін сынап көріңіз',
+    pilotDescription:'Өз алқабыңызда 5 күн: суару есебі және пікіріңіз. Жабдық сатып алудың қажеті жоқ.', pilotButton:'Акцияға қатысу',
     aiTitle:'Өсімдік туралы сұрақ бар ма? ЖИ-агрономнан сұраңыз.',
     aiDescription:'Ботқа фото жіберіп, белгілердің ықтимал себептерін талдаңыз.', aiButton:'ЖИ-агрономды ашу',
     navAria: 'Сайт мәзірі', languageAria: 'Тілді таңдау', sectionAria: 'Su-Tech бөлімдері',
@@ -516,8 +516,8 @@ I18N.en = {
 UI_COPY.en = {
   ...UI_COPY.ru,
   navMap:'Field map', navSettings:'Inputs', navCalculation:'Calculation',
-  pilotTitle:'Manage irrigation? Try Su-Tech.',
-  pilotDescription:'5 days on your own field: calculations and your feedback. Free participation, no equipment needed.', pilotButton:'Join the pilot',
+  pilotTitle:'Try Su-Tech for free',
+  pilotDescription:'5 days on your own plot: irrigation calculations and your feedback. No equipment purchase needed.', pilotButton:'Join the offer',
   aiTitle:'A question about your plant? Ask the AI agronomist.',
   aiDescription:'Send a photo to the bot and explore possible causes of the symptoms.', aiButton:'Open AI agronomist',
   navAria:'Navigation', languageAria:'Choose language', sectionAria:'Su-Tech sections',

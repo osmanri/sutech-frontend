@@ -11,11 +11,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.10.47" />
+  <link rel="stylesheet" href="css/app.css?v=5.10.48" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/balance.js?v=5.10.13"></script>
-  <script defer src="js/app.js?v=5.10.47"></script>
+  <script defer src="js/app.js?v=5.10.48"></script>
 </head>
 <body>
   <div class="signal-strip" aria-hidden="true">
@@ -571,10 +571,9 @@
       <dl class="summary-grid"><div><dt id="sumLabelCoords"></dt><dd id="sumValCoords">—</dd></div><div><dt id="sumLabelCrop"></dt><dd id="sumValCrop">—</dd></div><div><dt id="sumLabelArea"></dt><dd id="sumValArea">—</dd></div><div><dt id="sumLabelIrrig"></dt><dd id="sumValIrrig">—</dd></div><div><dt id="sumLabelFieldType"></dt><dd id="sumValFieldType">—</dd></div><div><dt id="sumLabelSaline"></dt><dd id="sumValSaline">—</dd></div></dl>
       <div class="summary-footer"><p id="submitHint"></p><button id="btnSubmitAll" class="submit-button" onclick="submitFinalCalculation()"><span id="btnSubmitText">Рассчитать полив</span><span class="motion-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-6-6 6 6-6 6"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></button></div>
     </section>
-    <section class="ai-entry pilot-entry" aria-labelledby="pilotTitle">
-      <span class="ai-entry__symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4c-9-1-15 3-15 9a6 6 0 0 0 6 6c6 0 10-6 9-15Z"/><path d="M4 20 15 9m-7 7v-5m0 5h5"/></svg></span>
-      <div class="ai-entry__copy"><h2 id="pilotTitle" data-copy="pilotTitle">Вы отвечаете за полив? Попробуйте Su-Tech.</h2><p data-copy="pilotDescription">5 дней на своём поле: расчёты и ваш отзыв. Участие бесплатное, оборудование не требуется.</p></div>
-      <a id="pilotEntryLink" class="ai-entry__button" href="https://t.me/Su_Tech_bot?start=pilot_ru" onclick="openPilotChat(event)"><span data-copy="pilotButton">Участвовать в пилоте</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+    <section class="pilot-entry" aria-labelledby="pilotTitle">
+      <div class="pilot-entry__copy"><h2 id="pilotTitle" data-copy="pilotTitle">Попробуйте Su-Tech бесплатно</h2><p data-copy="pilotDescription">5 дней на своём участке: расчёт полива и ваш отзыв. Без покупки оборудования.</p></div>
+      <a id="pilotEntryLink" class="pilot-entry__button" href="https://t.me/Su_Tech_bot?start=pilot_ru" onclick="openPilotChat(event)"><span data-copy="pilotButton">Участвовать в акции</span><span class="pilot-entry__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></span></a>
     </section>
     <footer class="page-footer"><span>Su-Tech · Smart Irrigation</span><span data-copy="footerNote">Вода с заботой о будущем.</span></footer>
   </main>

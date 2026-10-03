@@ -818,6 +818,9 @@ body{background-image:linear-gradient(rgba(40,119,67,.045) 1px,transparent 1px),
   .brand-logo{width:30px;height:35px}
 }
 
+/* Banner background; preserve the restored layout and typography. */
+.eco-hero{background:#dcefcf}
+
 /* AI is a direct route to the bot, adjacent to field planning. */
 .ai-entry{max-width:1300px;margin:18px auto 0;padding:22px 26px;display:flex;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 6px 24px rgba(40,119,67,.035)}
 .ai-entry__symbol{display:grid;place-items:center;flex:0 0 54px;width:54px;height:54px;border-radius:16px;color:#004b35;background:linear-gradient(140deg,#ecf8cd,#afd97f)}

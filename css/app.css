@@ -836,3 +836,5 @@ body{background-image:linear-gradient(rgba(40,119,67,.045) 1px,transparent 1px),
   .ai-entry__button{grid-column:1/-1;width:100%}
   .ai-entry p{line-height:1.6}
 }
+
+.workspace .pilot-entry{margin:24px 0 0;width:100%}

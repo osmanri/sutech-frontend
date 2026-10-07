@@ -11,10 +11,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.10.44" />
+  <link rel="stylesheet" href="css/app.css?v=5.10.58" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
-  <script defer src="js/balance.js?v=5.10.13"></script>
+  <script defer src="js/field-guidance.js?v=5.10.58"></script>
+  <script defer src="js/balance.js?v=5.10.58"></script>
   <script defer src="js/app.js?v=5.10.45"></script>
 </head>
 <body>
@@ -381,6 +382,10 @@
       </button>
     </div>
     <input type="hidden" id="soilType" value="loam" />
+    <details id="soilHelp" class="field-help">
+      <summary data-balance-copy="soilHelp">Как определить?</summary>
+      <p id="soilHelpText" class="balance-help field-help__text"></p>
+    </details>
 
     <label for="growthDay" data-balance-copy="day">Дней от посадки</label>
     <div class="growth-stepper">
@@ -393,6 +398,18 @@
       <label for="plantingDate" data-balance-copy="dateLabel">Дата посева или посадки</label>
       <input id="plantingDate" type="date" autocomplete="off" />
     </details>
+    <details id="growthStageHelp" class="field-help">
+      <summary data-balance-copy="stageHelp">Не знаю дату посадки</summary>
+      <p class="balance-help" data-balance-copy="stageHelpIntro">Выберите стадию по виду растений. Возраст будет приблизительным.</p>
+      <fieldset class="growth-stage-options">
+        <legend id="growthStageLabel" class="sr-only" data-balance-copy="stageLabel">Стадия роста</legend>
+        <button type="button" data-growth-stage="initial" aria-pressed="false"><strong data-stage-label></strong><span data-stage-description></span></button>
+        <button type="button" data-growth-stage="development" aria-pressed="false"><strong data-stage-label></strong><span data-stage-description></span></button>
+        <button type="button" data-growth-stage="middle" aria-pressed="false"><strong data-stage-label></strong><span data-stage-description></span></button>
+        <button type="button" data-growth-stage="late" aria-pressed="false"><strong data-stage-label></strong><span data-stage-description></span></button>
+      </fieldset>
+    </details>
+    <p id="growthEstimateNote" class="balance-help growth-estimate-note" role="status" hidden></p>
 
     <label id="moistureLabel" data-balance-copy="moisture">Состояние почвы</label>
     <div id="moistureChips" class="segmented-chips" role="radiogroup" aria-labelledby="moistureLabel">

@@ -7,15 +7,20 @@ window.SuBalance = (() => {
   const stageIds = ['stageInitial', 'stageDevelopment', 'stageMiddle', 'stageLate'];
   const edits = {};
   let crop = null, field = 'open', lang = 'ru';
+  let estimatedStage = null, estimateCrop = null, updatingFromStage = false;
+  const stageNames = ['initial','development','middle','late'];
   const copy = {
     ru: {
       title:'Запас влаги', intro:'Решение по запасу воды у корней и суточному прогнозу Open-Meteo.',
       soil:'Тип почвы', choose:'Выберите', sand:'Песок', loam:'Суглинок', clay:'Глина',
       day:'Дней от посадки', dayHint:'Укажите возраст культуры или выберите дату посева ниже.',
       dateOption:'Знаю дату посева, но не число дней', dateLabel:'Дата посева или посадки',
+      soilHelp:'Как определить?', stageHelp:'Не знаю дату посадки', stageLabel:'Стадия роста',
+      stageHelpIntro:'Выберите стадию по виду растений. Возраст будет приблизительным, по календарю выбранной культуры.',
+      estimateNote:'Оценка по стадии: около {day} дней. Можно заменить точным возрастом или датой посадки.',
       moisture:'Состояние почвы', chooseMoisture:'Выберите состояние',
       moistureRecent:'Недавно полито / был дождь', moistureNormal:'Нормальная влажность', moistureDry:'Почва сухая',
-      moistureHint:'Песок рассыпается, суглинок сжимается в непрочный комок, глина липкая. Выберите состояние после последнего полива; миллиметры система рассчитает сама.',
+      moistureHint:'Проверьте почву в зоне корней: после обильного полива, умеренно влажная или сухая. По выбранному состоянию система оценит начальный запас воды.',
       daySuffix:'дн.', decreaseDay:'Уменьшить число дней', increaseDay:'Увеличить число дней',
       rice:'Для риса рассчитывается норма затопления чека (слой 10–15 см + фильтрация в грунт).',
       calendar:'Расширенные настройки', calendarHint:'Сроки стадий заполнены автоматически для выбранной культуры. При необходимости измените их под сорт и климат. Люцерна — первый цикл.',
@@ -33,9 +38,12 @@ window.SuBalance = (() => {
       soil:'Топырақ түрі', choose:'Таңдаңыз', sand:'Құм', loam:'Саздақ', clay:'Саз',
       day:'Отырғызудан кейінгі күн', dayHint:'Дақыл жасын енгізіңіз немесе төменнен егу күнін таңдаңыз.',
       dateOption:'Егу күнін білемін, бірақ күн санын білмеймін', dateLabel:'Егу немесе отырғызу күні',
+      soilHelp:'Қалай анықтауға болады?', stageHelp:'Отырғызу күнін білмеймін', stageLabel:'Өсу кезеңі',
+      stageHelpIntro:'Өсімдікке қарап кезеңді таңдаңыз. Жас таңдалған дақыл күнтізбесі бойынша шамамен есептеледі.',
+      estimateNote:'Кезең бойынша баға: шамамен {day} күн. Нақты жаспен немесе отырғызу күнімен ауыстыруға болады.',
       moisture:'Топырақ күйі', chooseMoisture:'Топырақ күйін таңдаңыз',
       moistureRecent:'Жақында суарылды / Жаңбыр', moistureNormal:'Қалыпты ылғалдылық', moistureDry:'Топырақ құрғақ',
-      moistureHint:'Құм үгітіледі, саздақ әлсіз түйірге жиналады, саз жабысқақ. Соңғы суарудан кейінгі күйді таңдаңыз; миллиметрді жүйе өзі есептейді.',
+      moistureHint:'Тамыр аймағындағы топырақты тексеріңіз: мол суарылған, орташа ылғалды немесе құрғақ. Жүйе таңдалған күй бойынша бастапқы су қорын бағалайды.',
       daySuffix:'күн', decreaseDay:'Күн санын азайту', increaseDay:'Күн санын көбейту',
       rice:'Күрішке атызды басу нормасы есептеледі (10–15 см қабат + топыраққа сүзілу).',
       calendar:'Кеңейтілген баптаулар', calendarHint:'Кезең мерзімдері таңдалған дақылға автоматты толтырылды. Қажет болса, сорт пен климатқа сай өзгертіңіз. Жоңышқа — алғашқы цикл.',
@@ -53,10 +61,13 @@ window.SuBalance = (() => {
       soil:'Soil type', choose:'Select', sand:'Sand', loam:'Loam', clay:'Clay',
       day:'Days after planting', dayHint:'Enter the crop age or choose the planting date below.',
       dateOption:'I know the planting date, not the day count', dateLabel:'Sowing or planting date',
+      soilHelp:'How do I identify it?', stageHelp:'I do not know the planting date', stageLabel:'Growth stage',
+      stageHelpIntro:'Choose a stage from the plants you see. Age will be estimated using this crop calendar.',
+      estimateNote:'Stage-based estimate: about {day} days. You can replace it with the exact age or planting date.',
       daySuffix:'days', decreaseDay:'Decrease days', increaseDay:'Increase days',
       moisture:'Soil condition', chooseMoisture:'Select condition',
       moistureRecent:'Recently irrigated / rain', moistureNormal:'Normal moisture', moistureDry:'Dry soil',
-      moistureHint:'Sand crumbles, loam forms a weak ball, and clay feels sticky. Choose the condition since the last irrigation; the system estimates the deficit.',
+      moistureHint:'Check soil in the root zone: thoroughly irrigated, moderately moist, or dry. The system estimates the initial water reserve from this choice.',
       rice:'Rice uses a flooded-paddy requirement (10–15 cm water layer plus soil seepage).',
       calendar:'Advanced settings', calendarHint:'Stage lengths are filled automatically. Adjust them for the variety and local climate when needed. Alfalfa uses the first cycle.',
       initial:'Initial, days', development:'Development, days', middle:'Mid-season, days', late:'Late season, days',
@@ -92,6 +103,51 @@ window.SuBalance = (() => {
     if (!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(raw) || !Number.isFinite(value) || value < min || value > max || (integer && !Number.isInteger(value))) error(id);
     return value;
   }
+  function estimateGrowthDay(stage, lengths) {
+    const index = stageNames.indexOf(stage);
+    if (index < 0 || !Array.isArray(lengths) || lengths.length !== 4 ||
+        lengths.some(v => !Number.isInteger(v) || v < 1 || v > 730)) error('growthDay');
+    const previous = lengths.slice(0,index).reduce((a,b) => a+b,0);
+    return previous + Math.max(index ? 1 : 0, Math.floor(lengths[index]/2));
+  }
+  function chooseStage(stage) {
+    if (!calendars[crop]) return;
+    try {
+      const lengths = stageIds.map(id => read(id,1,730,true));
+      const day = estimateGrowthDay(stage, lengths);
+      estimatedStage = stage; estimateCrop = crop;
+      el('plantingDate').value = '';
+      updatingFromStage = true;
+      el('growthDay').value = String(day);
+      el('growthDay').dispatchEvent(new Event('input', {bubbles:true}));
+    } finally {
+      updatingFromStage = false;
+      refreshGuidance();
+    }
+  }
+  function refreshGuidance() {
+    const guidance = window.SuFieldGuidance;
+    if (!guidance) return;
+    const language = copy[lang] ? lang : 'ru';
+    const currentCopy = copy[language];
+    el('soilHelpText').textContent = guidance.soil[language];
+    el('growthStageHelp').hidden = !calendars[crop];
+    let validCalendar = true;
+    try { stageIds.map(id => read(id,1,730,true)); } catch (_) { validCalendar = false; }
+    document.querySelectorAll('[data-growth-stage]').forEach(button => {
+      const index = stageNames.indexOf(button.dataset.growthStage);
+      let description = guidance.descriptions[language][index];
+      if (index === 2 && guidance.middle[crop]) description = guidance.middle[crop][{'ru':0,'kz':1,'en':2}[language]];
+      if (index === 3 && crop === 'alfalfa') description = guidance.alfalfaLate[language];
+      button.querySelector('[data-stage-label]').textContent = guidance.names[language][index];
+      button.querySelector('[data-stage-description]').textContent = description;
+      button.setAttribute('aria-pressed', String(estimatedStage === button.dataset.growthStage && estimateCrop === crop));
+      button.disabled = !validCalendar;
+    });
+    const hasEstimate = !!estimatedStage && estimateCrop === crop;
+    el('growthEstimateNote').hidden = !hasEstimate;
+    el('growthEstimateNote').textContent = hasEstimate ? currentCopy.estimateNote.replace('{day}', el('growthDay').value) : '';
+  }
   function collect() {
     const soil = el('soilType').value;
     if (!['sand','loam','clay'].includes(soil)) error('soilType','soilError');
@@ -106,6 +162,10 @@ window.SuBalance = (() => {
     if (calendars[crop]) {
       data.stage_days = stageIds.map(id => read(id,1,730,true));
       if (data.day_of_growth > data.stage_days.reduce((a,b) => a+b,0)) error(plantingDate ? 'plantingDate' : 'growthDay','season');
+      if (estimatedStage && estimateCrop === crop) {
+        data.growth_day_source = 'stage';
+        data.growth_stage = estimatedStage;
+      }
     } else if (crop === 'other') {
       data.custom_kc = read('customKc',.05,2);
       data.custom_p = read('customP',.1,.8);
@@ -120,6 +180,10 @@ window.SuBalance = (() => {
   function sync(nextCrop, nextField, nextLang) {
     lang = nextLang; field = nextField;
     if (crop !== nextCrop) {
+      if (estimatedStage) {
+        estimatedStage = null; estimateCrop = null;
+        el('growthDay').value = '';
+      }
       if (calendars[crop]) edits[crop] = stageIds.map(id => el(id).value);
       crop = nextCrop;
       (edits[crop] || calendars[crop] || []).forEach((v,i) => { el(stageIds[i]).value = v; });
@@ -131,6 +195,7 @@ window.SuBalance = (() => {
     el('customCropBalance').classList.toggle('hidden', crop !== 'other');
     el('riceBalanceNote').classList.toggle('hidden', crop !== 'rice');
     el('greenhouseBalance').classList.toggle('hidden', field !== 'greenhouse' || crop === 'rice');
+    refreshGuidance();
   }
   function payload() {
     document.querySelectorAll('#balanceBlock [aria-invalid]').forEach(node => node.removeAttribute('aria-invalid'));
@@ -175,9 +240,19 @@ window.SuBalance = (() => {
     });
     growthDay.addEventListener('input', () => {
       if (!updatingFromDate) plantingDate.value = '';
+      if (!updatingFromStage) { estimatedStage = null; estimateCrop = null; }
+      refreshGuidance();
     });
+    document.querySelectorAll('[data-growth-stage]').forEach(button => {
+      button.addEventListener('click', () => chooseStage(button.dataset.growthStage));
+    });
+    stageIds.forEach(id => el(id).addEventListener('input', () => {
+      if (estimatedStage) {
+        try { chooseStage(estimatedStage); } catch (_) { refreshGuidance(); }
+      }
+    }));
     el('balanceBlock').addEventListener('input', () => window.updateSummaryCard?.());
     el('balanceBlock').addEventListener('change', () => window.updateSummaryCard?.());
   }
-  return {init, sync, payload, complete};
+  return {init, sync, payload, complete, estimateGrowthDay};
 })();

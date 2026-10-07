@@ -819,6 +819,20 @@ body{background-image:linear-gradient(rgba(40,119,67,.045) 1px,transparent 1px),
 }
 
 /* AI is a direct route to the bot, adjacent to field planning. */
+.field-help{border:0!important;padding:0!important;margin:0 0 10px!important;min-width:0}
+.field-help summary{font-size:13px!important;color:var(--accent-dark);min-height:44px;display:flex;align-items:center;gap:8px;cursor:pointer;width:fit-content}
+.field-help summary::before{content:'+';font-size:18px;font-weight:500;flex-shrink:0}
+.field-help[open] summary::before{content:'−'}
+.field-help summary:focus-visible,.growth-stage-options button:focus-visible{outline:2px solid var(--accent-dark);outline-offset:3px}
+.field-help__text{white-space:pre-line;margin:0 0 12px;line-height:1.7}
+.growth-stage-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0;padding:0;border:0;min-width:0}
+.growth-stage-options button{display:flex;flex-direction:column;text-align:left;gap:5px;min-height:74px;padding:12px;background:#fff;border:1px solid var(--line);border-radius:12px;color:var(--ink);font:inherit;cursor:pointer}
+.growth-stage-options strong{font-size:13px;font-weight:650;line-height:1.4}
+.growth-stage-options span[data-stage-description]{font-size:12px;line-height:1.5;color:var(--muted)}
+.growth-stage-options button[aria-pressed=true]{background:var(--pale);border-color:var(--accent)}
+.growth-stage-options button:disabled{opacity:.5;cursor:default}
+.growth-estimate-note{border-left:2px solid var(--accent);padding-left:10px;line-height:1.6}
+@media(max-width:600px){.growth-stage-options{grid-template-columns:1fr}}
 .ai-entry{max-width:1300px;margin:18px auto 0;padding:22px 26px;display:flex;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 6px 24px rgba(40,119,67,.035)}
 .ai-entry__symbol{display:grid;place-items:center;flex:0 0 54px;width:54px;height:54px;border-radius:16px;color:#004b35;background:linear-gradient(140deg,#ecf8cd,#afd97f)}
 .ai-entry__symbol svg{width:29px;height:29px}

@@ -861,6 +861,11 @@ body{background-image:linear-gradient(rgba(40,119,67,.045) 1px,transparent 1px),
 .calculation-recovery__actions button[hidden] { display: none; }
 .calculation-recovery__actions button:focus-visible { outline: 2px solid #49642c; outline-offset: 3px; }
 .calculation-recovery[data-mode="loading"] strong::before { content: ''; display: inline-block; width: 14px; height: 14px; margin-right: 10px; border: 2px solid #c7d3bb; border-top-color: #49642c; border-radius: 50%; vertical-align: -2px; animation: recovery-spin .8s linear infinite; }
-.calculation-recovery[data-mode="loading"] .calculation-recovery__actions { display: none; }
+.balance-field-error { font-size: 13px; line-height: 1.5; color: #923e22; margin: 6px 0 12px; }
+.telegram-notice { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; margin-bottom: 20px; padding: 14px 18px; border-radius: 14px; border: 1px solid #d8e1cf; background: #f5f8f1; font-size: 13px; line-height: 1.6; }
+.telegram-notice[hidden] { display: none; }
+.telegram-notice p { flex: 1 1 300px; margin: 0; }
+.telegram-notice a { color: #49642c; font-weight: 650; text-decoration: underline; text-underline-offset: 3px; min-height: 44px; display: inline-flex; align-items: center; }
+#balanceBlock [aria-invalid="true"] { outline: 2px solid #923e22; outline-offset: 2px; }
 @keyframes recovery-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .calculation-recovery[data-mode="loading"] strong::before { animation: none; } }

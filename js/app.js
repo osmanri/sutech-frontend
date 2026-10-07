@@ -67,6 +67,8 @@ let currentIrrigation = 'drip';
 let currentFieldType = 'open';
 let currentSaline = 'no';
 let isSubmitting = false;
+let calculationController = null;
+let calculationWaitingStopped = false;
 let fieldMap = null;
 let gpsMarker = null;
 let fieldLayers = null;
@@ -577,6 +579,7 @@ function setLanguage(lang) {
 
 function applyLanguage(lang, animateIndicator = false) {
   window.SuRecovery?.sync(lang);
+  updateTelegramNotice(lang);
   const aiLink = document.getElementById('aiEntryLink');
   if (aiLink) aiLink.setAttribute('href', agronomistChatUrl(lang));
   window.SuBalance?.sync(state.crop, state.field_type, lang);
@@ -1499,10 +1502,26 @@ function isTelegramMiniApp() {
 }
 
 function updateSubmitMode() {
+  updateTelegramNotice(state.lang);
   const label = document.getElementById('btnSubmitText');
   if (!label) return;
   const t = I18N[state.lang] || I18N.ru;
   label.textContent = isTelegramMiniApp() ? t.btnSubmitText : t.openBotText;
+}
+
+function updateTelegramNotice(lang) {
+  const notice = document.getElementById('telegramNotice');
+  if (!notice) return;
+  notice.hidden = isTelegramMiniApp();
+  const copy = {
+    ru:['Расчёт и сохранение полей работают в Telegram. Начните с бота, затем откройте Su-Tech в его меню.','Открыть в Telegram'],
+    kz:['Есеп пен алқаптарды сақтау Telegram-да жұмыс істейді. Боттан бастап, мәзірінен Su-Tech ашыңыз.','Telegram-да ашу'],
+    en:['Calculations and saved fields work in Telegram. Start with the bot, then open Su-Tech from its menu.','Open in Telegram']
+  }[lang] || [];
+  document.getElementById('telegramNoticeText').textContent = copy[0] || '';
+  const link = document.getElementById('telegramNoticeLink');
+  link.textContent = copy[1] || '';
+  link.href = `https://t.me/Su_Tech_bot?start=app_${lang}`;
 }
 
 function submitFinalCalculation() {
@@ -1660,6 +1679,8 @@ function submitFinalCalculation() {
   }
 
   const controller = new AbortController();
+  calculationController = controller;
+  calculationWaitingStopped = false;
   const timeout = setTimeout(() => controller.abort(), 65000);
   return fetch('https://sutech-core.onrender.com/api/analyze', {
     method: 'POST',
@@ -1681,13 +1702,20 @@ function submitFinalCalculation() {
   }).catch(err => {
     console.error('[Su-Tech] analysis delivery error:', err);
     if (!window.SuRecovery) showToast(t.errSendFailed, 'error');
-    window.SuRecovery?.show('retry');
+    window.SuRecovery?.show(calculationWaitingStopped ? 'cancelled' : 'retry');
   }).finally(() => {
     clearTimeout(timeout);
+    if (calculationController === controller) calculationController = null;
     isSubmitting = false;
     if (btn) btn.disabled = false;
     btn?.removeAttribute('aria-busy');
   });
+}
+
+function stopCalculationWaiting() {
+  if (!calculationController || !isSubmitting) return;
+  calculationWaitingStopped = true;
+  calculationController.abort();
 }
 
 function restoreSavedCalculation(draft) {

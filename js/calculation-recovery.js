@@ -5,16 +5,19 @@ window.SuRecovery = (() => {
       retryBody:'Введённые параметры сохранены. Проверьте соединение и повторите расчёт.',
       saved:'Сохранены параметры расчёта', savedBody:'Верните введённые данные, если нужно повторить расчёт.',
       restore:'Вернуть параметры', again:'Повторить расчёт', dismiss:'Убрать',
+      stop:'Остановить ожидание', cancelled:'Ожидание остановлено', cancelledBody:'Параметры сохранены. Если бот уже получил запрос, он может прислать результат в Telegram.',
       validation:'Проверьте параметры', validationBody:'Бот прислал пояснение. Исправьте параметры здесь и отправьте расчёт ещё раз.'},
     kz: {loading:'Ауа райын алып, суаруды есептеймін…', retry:'Есеп аяқталмады',
       retryBody:'Енгізілген параметрлер сақталды. Байланысты тексеріп, есепті қайталаңыз.',
       saved:'Есеп параметрлері сақталған', savedBody:'Есепті қайталау қажет болса, енгізілген деректерді қайтарыңыз.',
       restore:'Параметрлерді қайтару', again:'Есепті қайталау', dismiss:'Алып тастау',
+      stop:'Күтуді тоқтату', cancelled:'Күту тоқтатылды', cancelledBody:'Параметрлер сақталған. Бот сұрауды алып қойған болса, нәтижені Telegram-ға жіберуі мүмкін.',
       validation:'Параметрлерді тексеріңіз', validationBody:'Бот түсіндірме жіберді. Параметрлерді осы жерде түзетіп, есепті қайта жіберіңіз.'},
     en: {loading:'Fetching weather and calculating irrigation…', retry:'Calculation not completed',
       retryBody:'Your inputs are saved. Check your connection and retry.',
       saved:'Calculation inputs are saved', savedBody:'Restore your inputs if you need to repeat the calculation.',
       restore:'Restore inputs', again:'Retry calculation', dismiss:'Dismiss',
+      stop:'Stop waiting', cancelled:'Waiting stopped', cancelledBody:'Your inputs are saved. If the bot already received your request, it may still send the result to Telegram.',
       validation:'Check your inputs', validationBody:'The bot sent an explanation. Correct your inputs here and submit again.'}
   };
   let mode = null, draft = null, language = 'ru';
@@ -50,15 +53,15 @@ window.SuRecovery = (() => {
     document.getElementById('recoveryTitle').textContent = t[mode];
     document.getElementById('recoveryBody').textContent = t[`${mode}Body`] || '';
     const action = document.getElementById('recoveryAction');
-    action.hidden = !['saved','retry'].includes(mode);
+    action.hidden = !['saved','retry','cancelled'].includes(mode);
     action.textContent = mode === 'saved' ? t.restore : t.again;
     action.onclick = mode === 'saved' ? () => {
       if (draft && window.restoreSavedCalculation?.(draft)) show('retry');
     } : () => window.submitFinalCalculation?.();
     const dismiss = document.getElementById('recoveryDismiss');
-    dismiss.hidden = mode === 'loading';
-    dismiss.textContent = t.dismiss;
-    dismiss.onclick = clear;
+    dismiss.hidden = false;
+    dismiss.textContent = mode === 'loading' ? t.stop : t.dismiss;
+    dismiss.onclick = mode === 'loading' ? () => window.stopCalculationWaiting?.() : clear;
     panel.setAttribute('aria-busy', String(mode === 'loading'));
   }
   function sync(lang) { language = lang; render(); }

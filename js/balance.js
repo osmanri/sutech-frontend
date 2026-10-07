@@ -29,7 +29,7 @@ window.SuBalance = (() => {
       greenhouseSettings:'Микроклимат теплицы · необязательно', greenhouseEt0:'Измеренный ET₀, мм/сутки', greenhouseHint:'Оставьте пустым — система автоматически возьмёт FAO-56 ET₀ из Open-Meteo и учтёт 70% светопропускания покрытия. Заполняйте только при наличии измерения или значения агронома; внешние осадки внутри равны нулю.',
       energy:'Стоимость насоса · необязательно', price:'Тариф, ₸/кВт·ч',
       pumpPower:'Мощность насоса (кВт)', pumpProductivity:'Производительность (м³/ч)',
-      energyHint:'22 кВт и 60 м³/ч — пример, не данные вашего насоса. Уточните их по паспорту оборудования и добавьте тариф для оценки стоимости.',
+      energyHint:'Для оценки стоимости заполните тариф, мощность и производительность своего насоса. Если не знаете — оставьте раздел пустым: объём воды рассчитается без стоимости.',
       error:'Проверьте выделенное поле и введите допустимое число.', soilError:'Выберите тип почвы.',
       season:'День роста превышает календарь. Уточните сроки стадий.',
     },
@@ -52,7 +52,7 @@ window.SuBalance = (() => {
       greenhouseSettings:'Жылыжай микроклиматы · міндетті емес', greenhouseEt0:'Өлшенген ET₀, мм/тәулік', greenhouseHint:'Бос қалдырыңыз — жүйе Open-Meteo FAO-56 ET₀ мәнін автоматты алып, жабынның 70% жарық өткізгіштігін ескереді. Тек өлшем немесе агроном мәні болса енгізіңіз; сыртқы жауын-шашын іште нөлге тең.',
       energy:'Сорғы құны · міндетті емес', price:'Тариф, ₸/кВт·сағ',
       pumpPower:'Сорғы қуаты (кВт)', pumpProductivity:'Өнімділігі (м³/сағ)',
-      energyHint:'22 кВт және 60 м³/сағ — сіздің сорғыңыздың өлшемі емес, мысал. Жабдық құжаты бойынша нақтылап, құнды бағалау үшін тарифті енгізіңіз.',
+      energyHint:'Құнын бағалау үшін тарифті, сорғы қуатын және өнімділігін енгізіңіз. Білмесеңіз, бөлімді бос қалдырыңыз: су көлемі құнсыз есептеледі.',
       error:'Белгіленген өрісті тексеріп, жарамды сан енгізіңіз.', soilError:'Топырақ түрін таңдаңыз.',
       season:'Өсу күні күнтізбеден асып кетті. Кезең ұзақтығын нақтылаңыз.',
     },
@@ -75,13 +75,13 @@ window.SuBalance = (() => {
       greenhouseSettings:'Greenhouse microclimate · optional', greenhouseEt0:'Measured ET₀, mm/day',
       greenhouseHint:'Leave empty to estimate greenhouse ET₀ from Open-Meteo FAO-56 ET₀ with 70% cover transmission. Enter a value only when measured or supplied by an agronomist; outdoor rain is zero indoors.',
       energy:'Pump cost · optional', price:'Tariff, ₸/kWh', pumpPower:'Pump power (kW)', pumpProductivity:'Flow rate (m³/h)',
-      energyHint:'22 kW and 60 m³/h are examples, not measurements of your pump. Check the pump specification and enter your tariff for a cost estimate.',
+      energyHint:'For a cost estimate, enter your tariff, pump power and flow rate. If unknown, leave this section empty: water volume can be calculated without cost.',
       error:'Check the highlighted field and enter a valid number.', soilError:'Select a soil type.',
       season:'Growth day exceeds the stage calendar. Adjust the stage lengths.',
     },
   };
   const el = id => document.getElementById(id);
-  function error(id, message = 'error') { throw {id, message}; }
+  function error(id, message = 'error', limits = {}) { throw {id, message, ...limits}; }
   function localToday() {
     const now = new Date();
     return [now.getFullYear(), String(now.getMonth()+1).padStart(2,'0'), String(now.getDate()).padStart(2,'0')].join('-');
@@ -99,8 +99,11 @@ window.SuBalance = (() => {
   function read(id, min, max, integer = false, optional = false) {
     const raw = String(el(id)?.value ?? '').trim().replace(',', '.');
     if (!raw && optional) return null;
+    if (!raw) error(id, 'required');
     const value = Number(raw);
-    if (!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(raw) || !Number.isFinite(value) || value < min || value > max || (integer && !Number.isInteger(value))) error(id);
+    if (!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(raw) || !Number.isFinite(value)) error(id, 'numeric');
+    if (integer && !Number.isInteger(value)) error(id, 'integer');
+    if (value < min || value > max) error(id, 'range', {min, max});
     return value;
   }
   function estimateGrowthDay(stage, lengths) {
@@ -159,6 +162,10 @@ window.SuBalance = (() => {
       power_price:read('powerPrice',0,10000,false,true),
       pump_power_kw:read('pumpPower',.000001,100000,false,true),
       pump_productivity_m3h:read('pumpProductivity',.000001,1000000,false,true)};
+    if (data.power_price !== null) {
+      if (data.pump_power_kw === null) error('pumpPower', 'pumpRequired');
+      if (data.pump_productivity_m3h === null) error('pumpProductivity', 'pumpRequired');
+    }
     if (calendars[crop]) {
       data.stage_days = stageIds.map(id => read(id,1,730,true));
       if (data.day_of_growth > data.stage_days.reduce((a,b) => a+b,0)) error(plantingDate ? 'plantingDate' : 'growthDay','season');
@@ -198,7 +205,13 @@ window.SuBalance = (() => {
     refreshGuidance();
   }
   function payload() {
-    document.querySelectorAll('#balanceBlock [aria-invalid]').forEach(node => node.removeAttribute('aria-invalid'));
+    document.querySelectorAll('#balanceBlock [aria-invalid]').forEach(node => {
+      node.removeAttribute('aria-invalid');
+      const description = (node.getAttribute('aria-describedby') || '').split(' ').filter(id => id && !id.startsWith('balanceFieldError_'));
+      if (description.length) node.setAttribute('aria-describedby', description.join(' '));
+      else node.removeAttribute('aria-describedby');
+    });
+    document.querySelectorAll('.balance-field-error').forEach(node => node.remove());
     el('balanceError').hidden = true;
     try { return collect(); } catch (err) {
       const input = el(err.id);
@@ -210,7 +223,24 @@ window.SuBalance = (() => {
         if (sc) sc.open = true;
       }
       const currentCopy = copy[lang] || copy.ru;
-      const errMsg = currentCopy[err.message] || currentCopy.error;
+      const validationCopy = {
+        ru: {required:'Укажите значение.', numeric:'Введите число. Для дробей можно использовать запятую.', integer:'Введите целое число дней.', range:'Допустимо от {min} до {max}.', pumpRequired:'Для стоимости полива укажите характеристику своего насоса или очистите тариф — расчёт воды останется доступен.'},
+        kz: {required:'Мәнді енгізіңіз.', numeric:'Санды енгізіңіз. Бөлшек үшін үтірді қолдануға болады.', integer:'Күн санын бүтін санмен енгізіңіз.', range:'{min} және {max} аралығындағы мәнді енгізіңіз.', pumpRequired:'Суару құнын есептеу үшін сорғы сипаттамасын енгізіңіз немесе тарифті өшіріңіз — су есебі қолжетімді болады.'},
+        en: {required:'Enter a value.', numeric:'Enter a number. A decimal comma is also accepted.', integer:'Enter a whole number of days.', range:'Enter a value from {min} to {max}.', pumpRequired:'For irrigation cost, enter your pump specification or clear the tariff to calculate water only.'}
+      };
+      const labels = {growthDay:'day', soilType:'soil', moistureCondition:'moisture', powerPrice:'price', pumpPower:'pumpPower', pumpProductivity:'pumpProductivity', customP:'customP', customRoot:'root', greenhouseEt0:'greenhouseEt0', stageInitial:'initial', stageDevelopment:'development', stageMiddle:'middle', stageLate:'late', plantingDate:'dateLabel'};
+      const label = currentCopy[labels[err.id]] || (err.id === 'customKc' ? 'Kc' : '');
+      const detail = (validationCopy[lang]?.[err.message] || currentCopy[err.message] || currentCopy.error)
+        .replace('{min}', err.min).replace('{max}', err.max);
+      const errMsg = label ? `${label}: ${detail}` : detail;
+      if (input && document.createElement) {
+        const inline = document.createElement('p');
+        inline.id = `balanceFieldError_${err.id}`;
+        inline.className = 'balance-field-error';
+        inline.textContent = detail;
+        (input.closest('.growth-stepper') || input).insertAdjacentElement('afterend', inline);
+        input.setAttribute('aria-describedby', [input.getAttribute('aria-describedby'), inline.id].filter(Boolean).join(' '));
+      }
       el('balanceError').textContent = errMsg;
       el('balanceError').hidden = false;
       if (window.showToast) window.showToast(errMsg, 'warning');

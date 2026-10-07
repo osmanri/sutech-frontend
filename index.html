@@ -11,13 +11,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.10.59" />
+  <link rel="stylesheet" href="css/app.css?v=5.10.60" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/field-guidance.js?v=5.10.58"></script>
-  <script defer src="js/balance.js?v=5.10.59"></script>
-  <script defer src="js/calculation-recovery.js?v=5.10.59"></script>
-  <script defer src="js/app.js?v=5.10.59"></script>
+  <script defer src="js/balance.js?v=5.10.60"></script>
+  <script defer src="js/calculation-recovery.js?v=5.10.60"></script>
+  <script defer src="js/app.js?v=5.10.60"></script>
 </head>
 <body>
   <div class="signal-strip" aria-hidden="true">
@@ -52,6 +52,9 @@
   </section>
   <nav class="section-nav" aria-label="Разделы Su-Tech" data-copy-aria="sectionAria"><a href="#block1" data-copy="navMap" aria-current="location">Карта поля</a><a href="#block2" data-copy="navSettings">Параметры</a><a href="#summaryCard" data-copy="navCalculation">Расчет</a></nav>
   <main class="workspace">
+    <div id="telegramNotice" class="telegram-notice" hidden>
+      <p id="telegramNoticeText"></p><a id="telegramNoticeLink" href="https://t.me/Su_Tech_bot?start=app_ru">Открыть в Telegram</a>
+    </div>
     <div class="workspace-grid">
       <div class="map-column">
         <section id="block1" class="map-panel">
@@ -454,8 +457,8 @@
       <div class="balance-fields">
         <label for="powerPrice" data-balance-copy="price">Тариф, ₸/кВт·ч</label><input id="powerPrice" type="text" inputmode="decimal" />
         <div class="balance-pair">
-          <div><label for="pumpPower" data-balance-copy="pumpPower">Мощность насоса (кВт)</label><input id="pumpPower" type="text" inputmode="decimal" value="22" /></div>
-          <div><label for="pumpProductivity" data-balance-copy="pumpProductivity">Производительность (м³/ч)</label><input id="pumpProductivity" type="text" inputmode="decimal" value="60" /></div>
+          <div><label for="pumpPower" data-balance-copy="pumpPower">Мощность насоса (кВт)</label><input id="pumpPower" type="text" inputmode="decimal" /></div>
+          <div><label for="pumpProductivity" data-balance-copy="pumpProductivity">Производительность (м³/ч)</label><input id="pumpProductivity" type="text" inputmode="decimal" /></div>
         </div>
       </div>
       <p class="balance-help" data-balance-copy="energyHint">Уточните мощность и производительность вашего насоса. Добавьте тариф, чтобы сравнить стоимость полива.</p>

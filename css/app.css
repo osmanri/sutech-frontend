@@ -850,3 +850,17 @@ body{background-image:linear-gradient(rgba(40,119,67,.045) 1px,transparent 1px),
   .ai-entry__button{grid-column:1/-1;width:100%}
   .ai-entry p{line-height:1.6}
 }
+/* Calculation recovery uses the existing palette and native controls. */
+.calculation-recovery { margin-bottom: 20px; padding: 18px; border: 1px solid #d8e1cf; border-radius: 16px; background: #f5f8f1; color: #243627; }
+.calculation-recovery[hidden] { display: none; }
+.calculation-recovery strong { display: block; font-size: 15px; line-height: 1.5; }
+.calculation-recovery p { margin: 8px 0 0; font-size: 13px; line-height: 1.6; }
+.calculation-recovery__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.calculation-recovery__actions button { min-height: 44px; padding: 10px 16px; border: 1px solid #c7d3bb; border-radius: 12px; color: #243627; background: #fff; font: inherit; font-size: 13px; cursor: pointer; }
+.calculation-recovery__actions button:first-child { background: #49642c; color: #fff; border-color: #49642c; }
+.calculation-recovery__actions button[hidden] { display: none; }
+.calculation-recovery__actions button:focus-visible { outline: 2px solid #49642c; outline-offset: 3px; }
+.calculation-recovery[data-mode="loading"] strong::before { content: ''; display: inline-block; width: 14px; height: 14px; margin-right: 10px; border: 2px solid #c7d3bb; border-top-color: #49642c; border-radius: 50%; vertical-align: -2px; animation: recovery-spin .8s linear infinite; }
+.calculation-recovery[data-mode="loading"] .calculation-recovery__actions { display: none; }
+@keyframes recovery-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .calculation-recovery[data-mode="loading"] strong::before { animation: none; } }

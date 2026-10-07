@@ -340,7 +340,7 @@ tg.initData = 'test-launch';
   const beforeCorrection = closed;
   run("selectCrop('corn'); isSubmitting = false");
   await run('submitFinalCalculation()');
-  assert.equal(closed, beforeCorrection + 1, 'A correction reply must return the farmer to the bot');
+  assert.equal(closed, beforeCorrection, 'Keep the form open so the farmer can correct inputs without starting over');
   // A failed request must allow retry; repeated taps must not submit twice.
   const originalFetch = context.fetch;
   let requests = 0;

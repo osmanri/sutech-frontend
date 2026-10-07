@@ -22,6 +22,7 @@ function connectTelegram() {
   if (!window.Telegram?.WebApp) return;
   tg = window.Telegram.WebApp;
   updateSubmitMode();
+  window.SuRecovery?.init(state.lang);
   try {
     tg.ready();
     tg.expand();
@@ -575,6 +576,7 @@ function setLanguage(lang) {
 }
 
 function applyLanguage(lang, animateIndicator = false) {
+  window.SuRecovery?.sync(lang);
   const aiLink = document.getElementById('aiEntryLink');
   if (aiLink) aiLink.setAttribute('href', agronomistChatUrl(lang));
   window.SuBalance?.sync(state.crop, state.field_type, lang);
@@ -1621,11 +1623,18 @@ function submitFinalCalculation() {
   }
 
   const payloadString = JSON.stringify(payload);
+  const inputs = Object.fromEntries([...document.querySelectorAll('main input[id], main select[id]')]
+    .map(input => [input.id, input.value]));
+  window.SuRecovery?.save({payload, inputs,
+    map: {mode:fieldMode, points:fieldPoints, radiusCenter, areaM2:mappedAreaM2,
+          locationSource:state.locationSource}});
+  window.SuRecovery?.show('loading');
 
   isSubmitting = true;
   const btn = document.getElementById('btnSubmitAll');
   if (btn) {
     btn.disabled = true;
+    btn.setAttribute('aria-busy', 'true');
     btn.style.transform = 'scale(0.97)';
     setTimeout(() => { btn.style.transform = ''; }, 180);
   }
@@ -1635,13 +1644,17 @@ function submitFinalCalculation() {
     // have signed initData and use the server route below.
     try {
       tg.sendData(payloadString);
+      // Sending inputs is not confirmation of a finished calculation.
+      window.SuRecovery?.show(null);
       showToast(t.successPayloadSent, 'success');
     } catch (err) {
       console.error('[Su-Tech] sendData error:', err);
       showToast(t.errSendFailed, 'error');
+      window.SuRecovery?.show('retry');
     } finally {
       isSubmitting = false;
       if (btn) btn.disabled = false;
+      btn?.removeAttribute('aria-busy');
     }
     return;
   }
@@ -1657,21 +1670,67 @@ function submitFinalCalculation() {
     const result = await response.json();
     if (!response.ok || !result.bot_replied) throw new Error('analysis not delivered');
     if (!result.ok) {
-      showToast(t.botNeedsCorrection, 'warning');
-      try { tg.close(); } catch (_) {}
+      if (!result.recoverable) showToast(t.botNeedsCorrection, 'warning');
+      window.SuRecovery?.show(result.recoverable ? 'retry' : 'validation');
       return;
     }
+    window.SuRecovery?.clear();
     showToast(t.successPayloadSent, 'success');
     triggerHaptic('success');
     try { tg.close(); } catch (_) {}
   }).catch(err => {
     console.error('[Su-Tech] analysis delivery error:', err);
-    showToast(t.errSendFailed, 'error');
+    if (!window.SuRecovery) showToast(t.errSendFailed, 'error');
+    window.SuRecovery?.show('retry');
   }).finally(() => {
     clearTimeout(timeout);
     isSubmitting = false;
     if (btn) btn.disabled = false;
+    btn?.removeAttribute('aria-busy');
   });
+}
+
+function restoreSavedCalculation(draft) {
+  const payload = draft.payload;
+  if (!CROPS[payload.crop] || !['hectare','sotka'].includes(payload.area_unit)
+      || !Number.isFinite(payload.latitude) || Math.abs(payload.latitude) > 90
+      || !Number.isFinite(payload.longitude) || Math.abs(payload.longitude) > 180) return false;
+  selectCrop(payload.crop);
+  selectIrrigation(payload.irrigation_type);
+  setFieldType(payload.field_type || 'open');
+  setSalinity(payload.is_saline || 'no');
+  setAreaUnit(payload.area_unit);
+  state.latitude = payload.latitude;
+  state.longitude = payload.longitude;
+  state.accuracy = payload.accuracy || null;
+  state.locationSource = draft.map?.locationSource || 'map';
+  for (const [id, value] of Object.entries(draft.inputs)) {
+    const input = document.getElementById(id);
+    if (input?.matches('main input, main select') && typeof value === 'string') input.value = value;
+  }
+  fieldMode = ['manual','polygon','radius'].includes(draft.map?.mode) ? draft.map.mode : 'manual';
+  fieldPoints = Array.isArray(draft.map?.points) ? draft.map.points.filter(point =>
+    Number.isFinite(point.lat) && Math.abs(point.lat) < 85 && Number.isFinite(point.lng) && Math.abs(point.lng) <= 180) : [];
+  radiusCenter = draft.map?.radiusCenter;
+  if (!radiusCenter || !Number.isFinite(radiusCenter.lat) || !Number.isFinite(radiusCenter.lng)) radiusCenter = null;
+  mappedAreaM2 = Math.max(0, Number(draft.map?.areaM2) || 0);
+  state.area = currentArea = window.currentArea = Number(payload.area);
+  window.SuBalance?.restoreDraft(payload);
+  setSoilType(payload.soil_type);
+  renderCoordinates();
+  updateBlock1StatusPill();
+  fieldLayers?.clearLayers();
+  if (fieldMode === 'polygon') renderFieldContour();
+  if (fieldMode === 'radius' && radiusCenter) updatePointRadius();
+  if (fieldMap) {
+    fieldMap.setView([state.latitude, state.longitude], 14);
+    if (gpsMarker) gpsMarker.setLatLng([state.latitude, state.longitude]);
+    else if (window.L) gpsMarker = L.marker([state.latitude, state.longitude]).addTo(fieldMap);
+  }
+  updateAreaUnitUI();
+  updateMapUI();
+  updateSummaryCard();
+  return true;
 }
 
 // ─── 13. Toast-уведомления ───────────────────────────────────────────────
@@ -1869,6 +1928,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMotion();
   initScrollProgress();
   initSectionNav();
+  window.SuRecovery?.init(state.lang);
 
   if (window.lucide) {
     lucide.createIcons();

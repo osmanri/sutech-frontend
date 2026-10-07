@@ -254,5 +254,13 @@ window.SuBalance = (() => {
     el('balanceBlock').addEventListener('input', () => window.updateSummaryCard?.());
     el('balanceBlock').addEventListener('change', () => window.updateSummaryCard?.());
   }
-  return {init, sync, payload, complete, estimateGrowthDay};
+  function restoreDraft(data) {
+    estimatedStage = data.growth_day_source === 'stage' && stageNames.includes(data.growth_stage)
+      && calendars[crop] ? data.growth_stage : null;
+    estimateCrop = estimatedStage ? crop : null;
+    if (estimatedStage) el('growthStageHelp').open = true;
+    if (el('plantingDate').value) el('plantingDateDetails').open = true;
+    refreshGuidance();
+  }
+  return {init, sync, payload, complete, estimateGrowthDay, restoreDraft};
 })();

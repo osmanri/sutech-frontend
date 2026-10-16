@@ -1682,7 +1682,7 @@ function submitFinalCalculation() {
   calculationController = controller;
   calculationWaitingStopped = false;
   const timeout = setTimeout(() => controller.abort(), 65000);
-  return fetch('https://sutech-core.onrender.com/api/analyze', {
+  return window.SuTechServerless.request('analyze', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ init_data: tg.initData, payload }),

@@ -40,24 +40,6 @@ function connectTelegram() {
 }
 window.addEventListener('telegram-ready', connectTelegram);
 
-function openAgronomistChat(event) {
-  const url = agronomistChatUrl(state.lang);
-  if (event?.currentTarget) event.currentTarget.href = url;
-  if (!tg.initData || typeof tg.openTelegramLink !== 'function') return;
-  try {
-    tg.openTelegramLink(url);
-    event.preventDefault();
-    tg.close();
-  } catch (_) {
-    // The ordinary Telegram link still works in browsers and older clients.
-  }
-}
-
-function agronomistChatUrl(lang) {
-  const language = ['ru', 'kz', 'en'].includes(lang) ? lang : 'ru';
-  return `https://t.me/Su_Tech_bot?start=ai_${language}`;
-}
-
 // ─── 2. Состояние приложения ───────────────────────────────────────────────
 let currentCrop = 'cotton';
 let selectedCrop = currentCrop; // Псевдоним для совместимости
@@ -369,8 +351,6 @@ const I18N = {
 const UI_COPY = {
   ru: {
     navMap: 'Карта поля', navSettings: 'Параметры', navCalculation: 'Расчет',
-    aiTitle:'Вопрос о растении? Спросите ИИ-агронома.',
-    aiDescription:'Пришлите фото в бот и разберите возможные причины симптомов.', aiButton:'Открыть ИИ-агронома',
     navAria: 'Навигация', languageAria: 'Выбор языка', sectionAria: 'Разделы Su-Tech',
     workspaceLabel: 'ВАШЕ ПОЛЕ. ВАШИ РЕШЕНИЯ.', pageHeading: 'Каждая капля — по делу.',
     pageIntro: 'Очертите поле. Выберите культуру. Узнайте, сколько воды нужно сегодня.',
@@ -385,8 +365,6 @@ const UI_COPY = {
   },
   kz: {
     navMap: 'Алқап картасы', navSettings: 'Параметрлер', navCalculation: 'Есептеу',
-    aiTitle:'Өсімдік туралы сұрақ бар ма? ЖИ-агрономнан сұраңыз.',
-    aiDescription:'Ботқа фото жіберіп, белгілердің ықтимал себептерін талдаңыз.', aiButton:'ЖИ-агрономды ашу',
     navAria: 'Сайт мәзірі', languageAria: 'Тілді таңдау', sectionAria: 'Su-Tech бөлімдері',
     workspaceLabel: 'СІЗДІҢ АЛҚАП. СІЗДІҢ ШЕШІМ.', pageHeading: 'Әр тамшы — өз орнымен.',
     pageIntro: 'Алқапты белгілеңіз. Дақылды таңдаңыз. Бүгін қанша су қажет екенін біліңіз.',
@@ -499,8 +477,6 @@ I18N.en = {
 UI_COPY.en = {
   ...UI_COPY.ru,
   navMap:'Field map', navSettings:'Inputs', navCalculation:'Calculation',
-  aiTitle:'A question about your plant? Ask the AI agronomist.',
-  aiDescription:'Send a photo to the bot and explore possible causes of the symptoms.', aiButton:'Open AI agronomist',
   navAria:'Navigation', languageAria:'Choose language', sectionAria:'Su-Tech sections',
   workspaceLabel:'YOUR FIELD. YOUR DECISIONS.', pageHeading:'Make every drop count.',
   pageIntro:'Mark your field. Choose a crop. Find out how much water it needs today.',
@@ -580,8 +556,6 @@ function setLanguage(lang) {
 function applyLanguage(lang, animateIndicator = false) {
   window.SuRecovery?.sync(lang);
   updateTelegramNotice(lang);
-  const aiLink = document.getElementById('aiEntryLink');
-  if (aiLink) aiLink.setAttribute('href', agronomistChatUrl(lang));
   window.SuBalance?.sync(state.crop, state.field_type, lang);
   const t = I18N[lang] || I18N.ru;
   document.querySelectorAll('[data-copy]').forEach(el => {

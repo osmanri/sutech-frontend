@@ -784,6 +784,7 @@ body{
 /* Two colors sampled from the logo: forest #015133 and leaf #71c02a. */
 :root{
   --brand-forest:#015133;--brand-leaf:#71c02a;--brand-ink:#00381f;
+  --active-fill:var(--brand-leaf);--active-ink:var(--brand-ink);
   --leaf-tint:#e2f3d5;--leaf-wash:#f5faef;--leaf-border:#b6d99b;
   --ink:#153d2c;--muted:#597061;--accent:var(--brand-forest);--accent-dark:var(--brand-forest);
   --soft-accent:var(--leaf-tint);--pale:var(--leaf-wash);--canvas:#fff;
@@ -799,18 +800,20 @@ body{background-image:linear-gradient(rgba(1,81,51,.025) 1px,transparent 1px),li
 .eco-hero .hero-description{color:#3f6651}
 .hero-ambient{opacity:.06}
 .language-switch,.basemap-switch.segmented-toggle,#block3 .segmented-toggle{background:var(--leaf-wash);border-color:var(--line)}
-.language-switch__indicator,.segmented-toggle__indicator,.gps-button{background:var(--leaf-tint);box-shadow:none}
-.language-switch button[aria-pressed=true],.language-switch button[aria-pressed=true]:hover,.basemap-switch.segmented-toggle button[aria-pressed=true],#block3 .segmented-toggle button[aria-pressed=true],.gps-button{color:var(--brand-forest)!important}
-.gps-button{border:1px solid var(--leaf-border)}
-.gps-button::before{background:#d0ecba}
+.language-switch__indicator,.segmented-toggle__indicator,.gps-button{background:var(--active-fill);box-shadow:none}
+.language-switch button[aria-pressed=true],.language-switch button[aria-pressed=true]:hover,.basemap-switch.segmented-toggle button[aria-pressed=true],#block3 .segmented-toggle button[aria-pressed=true],.gps-button{color:var(--active-ink)!important}
+.gps-button{border:1px solid var(--brand-leaf)}
+.gps-button::before{background:#85cb3d}
 .hero-cta,.submit-button{background:#fff;border-color:var(--leaf-border);color:var(--brand-ink);box-shadow:0 4px 12px rgba(1,81,51,.075);transition:background .18s ease,border-color .18s ease,box-shadow .18s ease}
 .hero-cta::before,.submit-button::before{background:var(--brand-leaf);transition:transform .2s ease}
 .motion-arrow{background:var(--brand-leaf);color:var(--brand-ink);box-shadow:none}
 .crop-card,.irrig-card,#balanceBlock .chip-btn,.settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare{background-color:#fbfdf9!important}
-.crop-card[aria-checked=true]{background-image:linear-gradient(145deg,#f3faeb,var(--leaf-tint))!important;border-color:var(--brand-leaf)!important;color:var(--brand-forest)!important;box-shadow:inset 0 0 0 1px #71c02a33!important}
-.irrig-card[aria-checked=true],#balanceBlock .chip-btn[aria-checked=true],#balanceBlock .chip-btn.chip-active,.settings-column [data-field][aria-pressed=true],.settings-column [data-saline][aria-pressed=true],#unitBtn_sotka[aria-pressed=true],#unitBtn_hectare[aria-pressed=true]{background:var(--leaf-tint)!important;border-color:var(--brand-leaf)!important;color:var(--brand-forest)!important;box-shadow:inset 0 0 0 1px #71c02a22!important}
-.irrig-card[aria-checked=true] [id^=irrigTitle],.irrig-card[aria-checked=true] [id^=irrigBadge],.irrig-card[aria-checked=true] [id^=irrigDesc],.irrig-card[aria-checked=true] .irrig-symbol,.irrig-card[aria-checked=true] .irrig-check,#balanceBlock .chip-btn.chip-active .chip-icon,#balanceBlock .chip-btn[aria-checked=true] .chip-icon{color:var(--brand-forest)!important}
-.crop-card::after,.irrig-card::after,.section-nav a::after,.scroll-progress span{background:var(--brand-leaf)}
+.crop-card[aria-checked=true]{background:var(--active-fill)!important;border-color:var(--brand-forest)!important;color:var(--active-ink)!important;box-shadow:none!important}
+.crop-card[aria-checked=true] [id^=cropName],.crop-card[aria-checked=true] [id^=cropSub]{color:var(--active-ink)!important}
+.irrig-card[aria-checked=true],#balanceBlock .chip-btn[aria-checked=true],#balanceBlock .chip-btn.chip-active,.settings-column [data-field][aria-pressed=true],.settings-column [data-saline][aria-pressed=true],#unitBtn_sotka[aria-pressed=true],#unitBtn_hectare[aria-pressed=true]{background:var(--active-fill)!important;border-color:var(--brand-forest)!important;color:var(--active-ink)!important;box-shadow:none!important}
+.irrig-card[aria-checked=true] [id^=irrigTitle],.irrig-card[aria-checked=true] [id^=irrigBadge],.irrig-card[aria-checked=true] [id^=irrigDesc],.irrig-card[aria-checked=true] .irrig-symbol,.irrig-card[aria-checked=true] .irrig-check,#balanceBlock .chip-btn.chip-active .chip-icon,#balanceBlock .chip-btn[aria-checked=true] .chip-icon{color:var(--active-ink)!important}
+.crop-card::after,.irrig-card::after{background:var(--brand-forest)}
+.section-nav a::after,.scroll-progress span{background:linear-gradient(90deg,var(--brand-forest),var(--brand-leaf))}
 .section-nav a{color:#647b6b}
 .section-nav a:hover,.section-nav a[aria-current=location]{color:var(--brand-forest)}
 .summary-card{background-image:linear-gradient(rgba(1,81,51,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(1,81,51,.03) 1px,transparent 1px),linear-gradient(145deg,#fff,var(--leaf-wash));background-size:36px 36px,36px 36px,100% 100%;border-color:#d5e8c8;color:var(--ink);box-shadow:0 10px 28px rgba(1,81,51,.055)}
@@ -842,7 +845,8 @@ body{background-image:linear-gradient(rgba(1,81,51,.025) 1px,transparent 1px),li
 .growth-stage-options button{display:flex;flex-direction:column;text-align:left;gap:5px;min-height:74px;padding:12px;background:#fff;border:1px solid var(--line);border-radius:12px;color:var(--ink);font:inherit;cursor:pointer}
 .growth-stage-options strong{font-size:13px;font-weight:650;line-height:1.4}
 .growth-stage-options span[data-stage-description]{font-size:12px;line-height:1.5;color:var(--muted)}
-.growth-stage-options button[aria-pressed=true]{background:var(--pale);border-color:var(--accent)}
+.growth-stage-options button[aria-pressed=true]{background:var(--active-fill);border-color:var(--brand-forest);color:var(--active-ink)}
+.growth-stage-options button[aria-pressed=true] span[data-stage-description]{color:var(--active-ink)}
 .growth-stage-options button:disabled{opacity:.5;cursor:default}
 .growth-estimate-note{border-left:2px solid var(--accent);padding-left:10px;line-height:1.6}
 @media(max-width:600px){.growth-stage-options{grid-template-columns:1fr}}

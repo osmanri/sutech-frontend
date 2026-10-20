@@ -555,7 +555,6 @@ function setLanguage(lang) {
 
 function applyLanguage(lang, animateIndicator = false) {
   window.SuRecovery?.sync(lang);
-  updateTelegramNotice(lang);
   window.SuBalance?.sync(state.crop, state.field_type, lang);
   const t = I18N[lang] || I18N.ru;
   document.querySelectorAll('[data-copy]').forEach(el => {
@@ -1476,26 +1475,10 @@ function isTelegramMiniApp() {
 }
 
 function updateSubmitMode() {
-  updateTelegramNotice(state.lang);
   const label = document.getElementById('btnSubmitText');
   if (!label) return;
   const t = I18N[state.lang] || I18N.ru;
   label.textContent = isTelegramMiniApp() ? t.btnSubmitText : t.openBotText;
-}
-
-function updateTelegramNotice(lang) {
-  const notice = document.getElementById('telegramNotice');
-  if (!notice) return;
-  notice.hidden = isTelegramMiniApp();
-  const copy = {
-    ru:['Расчёт и сохранение полей работают в Telegram. Начните с бота, затем откройте Su-Tech в его меню.','Открыть в Telegram'],
-    kz:['Есеп пен алқаптарды сақтау Telegram-да жұмыс істейді. Боттан бастап, мәзірінен Su-Tech ашыңыз.','Telegram-да ашу'],
-    en:['Calculations and saved fields work in Telegram. Start with the bot, then open Su-Tech from its menu.','Open in Telegram']
-  }[lang] || [];
-  document.getElementById('telegramNoticeText').textContent = copy[0] || '';
-  const link = document.getElementById('telegramNoticeLink');
-  link.textContent = copy[1] || '';
-  link.href = `https://t.me/Su_Tech_bot?start=app_${lang}`;
 }
 
 function submitFinalCalculation() {

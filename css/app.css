@@ -276,7 +276,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .crop-card[aria-checked=true] .crop-symbol,.irrig-card>div>div:first-child,.crop-check,.irrig-check,#balanceBlock .chip-btn.chip-active .chip-icon,#balanceBlock .chip-btn[aria-checked=true] .chip-icon{color:var(--accent)!important}
 .settings-column [aria-pressed=true],#unitBtn_sotka[aria-pressed=true],#unitBtn_hectare[aria-pressed=true]{border-color:#b0d29b;background:#f3f9f0;color:var(--accent-dark)}
 .settings-column [data-field]:hover,.settings-column [data-saline]:hover,.map-toolbar button:hover,#block3 button[onclick^="setPresetArea"]:hover{border-color:#b6d6a3;color:var(--accent-dark)}
-#fieldAreaInput,.growth-stepper,#balanceBlock .chip-btn,.settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare{background-color:#fbfdf9!important}
+#fieldAreaInput,.growth-stepper,#balanceBlock .chip-btn,.settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare{background-color:#fbfdf9!important;background-image:linear-gradient(145deg,#fff,#f8fbf4)!important}
 #fieldAreaInput[readonly]{background-color:#f3f9f0!important}
 .growth-stepper{border-color:#e3f1db}.growth-stepper>button{background:#f3f9f0;color:var(--accent-dark)}.growth-stepper>button:hover{background:#eaf5e3}
 .balance-info{border-color:#e3f1db;background:#f7fbf4;color:#6b8b57!important}.balance-info svg{color:var(--accent)}
@@ -785,6 +785,9 @@ body{
 :root{
   --brand-forest:#015133;--brand-leaf:#71c02a;--brand-ink:#00381f;
   --active-fill:var(--brand-leaf);--active-ink:var(--brand-ink);
+  --leaf-surface:radial-gradient(ellipse at 18% 0%,rgba(255,255,255,.34),transparent 68%),linear-gradient(135deg,#9bd746 0%,#79c735 56%,#69b42a 100%);
+  --forest-surface:radial-gradient(ellipse at 18% 0%,rgba(255,255,255,.10),transparent 68%),linear-gradient(120deg,#087443 0%,#015133 76%,#003e29 100%);
+  --leaf-relief:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(1,81,51,.12),0 3px 9px rgba(1,81,51,.09);
   --leaf-tint:#e2f3d5;--leaf-wash:#f5faef;--leaf-border:#b6d99b;
   --ink:#153d2c;--muted:#597061;--accent:var(--brand-forest);--accent-dark:var(--brand-forest);
   --soft-accent:var(--leaf-tint);--pale:var(--leaf-wash);--canvas:#fff;
@@ -800,17 +803,17 @@ body{background-image:linear-gradient(rgba(1,81,51,.025) 1px,transparent 1px),li
 .eco-hero .hero-description{color:#3f6651}
 .hero-ambient{opacity:.06}
 .language-switch,.basemap-switch.segmented-toggle,#block3 .segmented-toggle{background:var(--leaf-wash);border-color:var(--line)}
-.language-switch__indicator,.segmented-toggle__indicator,.gps-button{background:var(--active-fill);box-shadow:none}
+.language-switch__indicator,.segmented-toggle__indicator,.gps-button{background:var(--leaf-surface);box-shadow:var(--leaf-relief)}
 .language-switch button[aria-pressed=true],.language-switch button[aria-pressed=true]:hover,.basemap-switch.segmented-toggle button[aria-pressed=true],#block3 .segmented-toggle button[aria-pressed=true],.gps-button{color:var(--active-ink)!important}
-.gps-button{border:1px solid var(--brand-leaf)}
-.gps-button::before{background:#85cb3d}
-.hero-cta,.submit-button{background:#fff;border-color:var(--leaf-border);color:var(--brand-ink);box-shadow:0 4px 12px rgba(1,81,51,.075);transition:background .18s ease,border-color .18s ease,box-shadow .18s ease}
-.hero-cta::before,.submit-button::before{background:var(--brand-leaf);transition:transform .2s ease}
-.motion-arrow{background:var(--brand-leaf);color:var(--brand-ink);box-shadow:none}
-.crop-card,.irrig-card,#balanceBlock .chip-btn,.settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare{background-color:#fbfdf9!important}
-.crop-card[aria-checked=true]{background:var(--active-fill)!important;border-color:var(--brand-forest)!important;color:var(--active-ink)!important;box-shadow:none!important}
+.gps-button{border:1px solid #64ad33}
+.gps-button::before{background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.04))}
+.hero-cta,.submit-button{background:var(--forest-surface);border-color:#07633d;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.23),0 5px 14px rgba(1,81,51,.17);transition:border-color .18s ease,box-shadow .18s ease}
+.hero-cta::before,.submit-button::before{display:none}
+.motion-arrow{background:var(--leaf-surface);color:var(--brand-ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.55)}
+.crop-card,.irrig-card,#balanceBlock .chip-btn,.settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare{background-color:#fbfdf9!important;background-image:linear-gradient(145deg,#fff,#f8fbf4)!important}
+.crop-card[aria-checked=true]{background:var(--leaf-surface)!important;border-color:#4f9933!important;color:var(--active-ink)!important;box-shadow:var(--leaf-relief)!important}
 .crop-card[aria-checked=true] [id^=cropName],.crop-card[aria-checked=true] [id^=cropSub]{color:var(--active-ink)!important}
-.irrig-card[aria-checked=true],#balanceBlock .chip-btn[aria-checked=true],#balanceBlock .chip-btn.chip-active,.settings-column [data-field][aria-pressed=true],.settings-column [data-saline][aria-pressed=true],#unitBtn_sotka[aria-pressed=true],#unitBtn_hectare[aria-pressed=true]{background:var(--active-fill)!important;border-color:var(--brand-forest)!important;color:var(--active-ink)!important;box-shadow:none!important}
+.irrig-card[aria-checked=true],#balanceBlock .chip-btn[aria-checked=true],#balanceBlock .chip-btn.chip-active,.settings-column [data-field][aria-pressed=true],.settings-column [data-saline][aria-pressed=true],#unitBtn_sotka[aria-pressed=true],#unitBtn_hectare[aria-pressed=true]{background:var(--leaf-surface)!important;border-color:#4f9933!important;color:var(--active-ink)!important;box-shadow:var(--leaf-relief)!important}
 .irrig-card[aria-checked=true] [id^=irrigTitle],.irrig-card[aria-checked=true] [id^=irrigBadge],.irrig-card[aria-checked=true] [id^=irrigDesc],.irrig-card[aria-checked=true] .irrig-symbol,.irrig-card[aria-checked=true] .irrig-check,#balanceBlock .chip-btn.chip-active .chip-icon,#balanceBlock .chip-btn[aria-checked=true] .chip-icon{color:var(--active-ink)!important}
 .crop-card::after,.irrig-card::after{background:var(--brand-forest)}
 .section-nav a::after,.scroll-progress span{background:linear-gradient(90deg,var(--brand-forest),var(--brand-leaf))}
@@ -821,11 +824,18 @@ body{background-image:linear-gradient(rgba(1,81,51,.025) 1px,transparent 1px),li
 .summary-card .eyebrow,.summary-grid dt,.summary-footer p{color:#486b56}
 .summary-card #summaryStatusBadge{border-color:var(--leaf-border);color:var(--brand-forest)}
 .summary-grid>div,.summary-footer{border-color:var(--line)}
-.hero-cta:is(:hover,:focus-visible),.submit-button:is(:hover,:focus-visible){color:var(--brand-ink)!important;border-color:var(--brand-leaf);box-shadow:0 5px 15px rgba(1,81,51,.1);transform:none}
-.hero-cta>span:first-child,.submit-button>span:first-child,.hero-cta:is(:hover,:focus-visible)>span:first-child,.submit-button:is(:hover,:focus-visible)>span:first-child{color:var(--brand-ink)!important}
-.hero-cta .motion-arrow,.submit-button .motion-arrow{background:var(--brand-leaf);color:var(--brand-ink)}
-.hero-cta:is(:hover,:focus-visible) .motion-arrow,.submit-button:is(:hover,:focus-visible) .motion-arrow{background:#ecf8e4;color:var(--brand-forest)}
+.hero-cta:is(:hover,:focus-visible),.submit-button:is(:hover,:focus-visible){color:#fff!important;border-color:#0a7a49;box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 7px 18px rgba(1,81,51,.22);transform:none}
+.hero-cta>span:first-child,.submit-button>span:first-child,.hero-cta:is(:hover,:focus-visible)>span:first-child,.submit-button:is(:hover,:focus-visible)>span:first-child{color:#fff!important}
+.hero-cta .motion-arrow,.submit-button .motion-arrow{background:var(--leaf-surface);color:var(--brand-ink)}
+.hero-cta:is(:hover,:focus-visible) .motion-arrow,.submit-button:is(:hover,:focus-visible) .motion-arrow{background:var(--leaf-surface);color:var(--brand-ink)}
 .map-panel,.settings-column section{border-color:var(--line);box-shadow:0 5px 20px rgba(1,81,51,.04)}
+
+/* A visible outline and a subtle edge highlight work without animated shine. */
+.hero-cta:focus-visible,.submit-button:focus-visible{outline:3px solid var(--brand-forest);outline-offset:4px}
+@media(hover:hover){
+  .crop-card:hover,.irrig-card:hover,#balanceBlock .chip-btn:hover{transform:none}
+  .crop-card[aria-checked=true]:hover,.irrig-card[aria-checked=true]:hover,#balanceBlock .chip-btn[aria-checked=true]:hover{box-shadow:var(--leaf-relief)!important}
+}
 
 /* Transparent leaf mark; no background or crop is needed. */
 .brand-logo{position:relative;display:block;width:44px;height:52px;overflow:hidden;border-radius:8px;flex-shrink:0}
@@ -845,7 +855,7 @@ body{background-image:linear-gradient(rgba(1,81,51,.025) 1px,transparent 1px),li
 .growth-stage-options button{display:flex;flex-direction:column;text-align:left;gap:5px;min-height:74px;padding:12px;background:#fff;border:1px solid var(--line);border-radius:12px;color:var(--ink);font:inherit;cursor:pointer}
 .growth-stage-options strong{font-size:13px;font-weight:650;line-height:1.4}
 .growth-stage-options span[data-stage-description]{font-size:12px;line-height:1.5;color:var(--muted)}
-.growth-stage-options button[aria-pressed=true]{background:var(--active-fill);border-color:var(--brand-forest);color:var(--active-ink)}
+.growth-stage-options button[aria-pressed=true]{background:var(--leaf-surface);border-color:#4f9933;color:var(--active-ink);box-shadow:var(--leaf-relief)}
 .growth-stage-options button[aria-pressed=true] span[data-stage-description]{color:var(--active-ink)}
 .growth-stage-options button:disabled{opacity:.5;cursor:default}
 .growth-estimate-note{border-left:2px solid var(--accent);padding-left:10px;line-height:1.6}

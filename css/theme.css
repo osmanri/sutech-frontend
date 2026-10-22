@@ -33,19 +33,17 @@ html[data-theme="dark"] {
   --pale: var(--leaf-wash);
 }
 html[data-theme="dark"] body {
-  background: linear-gradient(rgba(113,192,42,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(113,192,42,.025) 1px,transparent 1px),var(--canvas);
-  background-size: 40px 40px;
+  background-image: linear-gradient(rgba(113,192,42,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(113,192,42,.025) 1px,transparent 1px),linear-gradient(180deg,#142019 0,var(--canvas) 820px,var(--canvas) 100%);
+  background-size: 40px 40px,40px 40px,100% 100%;
 }
 html[data-theme="dark"] :is(.app-header,.section-nav,.map-panel,.settings-column section,.toast,.map-error) {
   background: var(--surface);
   color: var(--ink);
   border-color: var(--line);
-  box-shadow: 0 8px 28px rgba(0,0,0,.14);
 }
 html[data-theme="dark"] .eco-hero {
-  background: radial-gradient(ellipse at 100% 100%,rgba(113,192,42,.12),transparent 60%),linear-gradient(145deg,#17271d,#122018);
+  background: radial-gradient(ellipse at 100% 100%,rgba(113,192,42,.16),transparent 58%),linear-gradient(145deg,#17271d 0%,#14231a 65%,#1c321e 100%);
   border-color: var(--line);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.035),0 10px 30px rgba(0,0,0,.14);
 }
 html[data-theme="dark"] .eco-hero::before {
   background-image: linear-gradient(rgba(113,192,42,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(113,192,42,.045) 1px,transparent 1px);
@@ -62,7 +60,6 @@ html[data-theme="dark"] :is(.settings-column [data-field],.settings-column [data
   background: linear-gradient(145deg,#203026,#1b291f)!important;
   color: var(--ink)!important;
   border-color: var(--line)!important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.025)!important;
 }
 html[data-theme="dark"] :is(.crop-card,.irrig-card,#balanceBlock .chip-btn):not([aria-checked="true"]):not(.chip-active):hover { border-color: var(--leaf-border)!important; }
 html[data-theme="dark"] .crop-card:not([aria-checked="true"]) :is([id^="cropSub"],.crop-symbol),
@@ -72,7 +69,6 @@ html[data-theme="dark"] :is(.settings-column input,.settings-column select,.regi
   background: var(--canvas);
   color: var(--ink);
   border-color: var(--line);
-  box-shadow: none;
 }
 html[data-theme="dark"] input::placeholder { color: #8c9e90; opacity: 1; }
 html[data-theme="dark"] :is(#fieldAreaInput,.growth-stepper) { background: var(--canvas)!important; }
@@ -91,7 +87,6 @@ html[data-theme="dark"] .summary-card {
   background: linear-gradient(rgba(113,192,42,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(113,192,42,.025) 1px,transparent 1px),linear-gradient(145deg,#192b20,#17221b);
   background-size: 36px 36px,36px 36px,100% 100%;
   border-color: var(--line);
-  box-shadow: 0 10px 28px rgba(0,0,0,.14);
 }
 html[data-theme="dark"] :is(.summary-card h2,.summary-grid dd) { color: var(--ink); }
 html[data-theme="dark"] :is(.summary-card .eyebrow,.summary-grid dt,.summary-footer p) { color: var(--muted); }
@@ -105,3 +100,11 @@ html[data-theme="dark"] :is(.map-stage,#map) { background: #29382c; }
 html[data-theme="dark"] :is(.leaflet-control-zoom a,.leaflet-popup-content-wrapper,.leaflet-popup-tip) { background: var(--surface)!important; color: var(--ink)!important; }
 html[data-theme="dark"] .leaflet-control-attribution { background: #17221bed!important; color: var(--muted); }
 html[data-theme="dark"] .leaflet-control-attribution a { color: #b3d990; }
+
+/* A segmented control has one moving surface, never a surface on each button.
+   Keep the light-theme layering, focus effects and animation rules unchanged. */
+html[data-theme="dark"] :is(#block3 .segmented-toggle,.basemap-switch.segmented-toggle) button {
+  background: transparent!important;
+  border-color: transparent!important;
+  box-shadow: none!important;
+}

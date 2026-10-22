@@ -8,7 +8,7 @@ async page => {
     await page.setViewportSize({width,height:960});
     for (const scheme of ['dark','light']) {
       await page.emulateMedia({colorScheme:scheme,reducedMotion:'reduce'});
-      await page.goto(base+'?lang=ru&v=5.10.69');
+      await page.goto(base+'?lang=ru&v=5.10.70');
       await page.waitForFunction(expected=>document.documentElement.dataset.theme===expected,scheme);
       await page.locator('[data-crop="tomato"]').click();
       for (const lang of ['kz','en','ru']) {
@@ -32,7 +32,7 @@ async page => {
   }
   await page.setViewportSize({width:390,height:960});
   await page.emulateMedia({colorScheme:'dark',reducedMotion:'no-preference'});
-  await page.goto(base+'?lang=ru&v=5.10.69');
+  await page.goto(base+'?lang=ru&v=5.10.70');
   await page.evaluate(()=>{
     tg={initData:'theme-ui-test',platform:'tdesktop',HapticFeedback:{notificationOccurred(){},impactOccurred(){}}};
     window.__focusCalls=[];window.__scrollCalls=[];

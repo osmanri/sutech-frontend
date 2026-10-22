@@ -6,20 +6,22 @@
   <title>Su-Tech — Smart Irrigation</title>
   <meta id="pageDesc" name="description" content="Карта поля и точный расчет полива Su-Tech" />
   <meta name="theme-color" content="#ffffff" />
+  <script src="js/theme.js?v=5.10.69"></script>
   <link rel="icon" href="img/sutech-leaf-logo-transparent.png?v=5.10.35" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=5.10.68" />
+  <link rel="stylesheet" href="css/app.css?v=5.10.69" />
+  <link rel="stylesheet" href="css/theme.css?v=5.10.69" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/serverless-location.js?v=5.10.61"></script>
   <script defer src="js/serverless-transport.js?v=5.10.61"></script>
   <script defer src="js/field-guidance.js?v=5.10.58"></script>
-  <script defer src="js/balance.js?v=5.10.60"></script>
+  <script defer src="js/balance.js?v=5.10.69"></script>
   <script defer src="js/calculation-recovery.js?v=5.10.60"></script>
-  <script defer src="js/app.js?v=5.10.64"></script>
+  <script defer src="js/app.js?v=5.10.69"></script>
 </head>
 <body>
   <div class="signal-strip" aria-hidden="true">
@@ -56,7 +58,7 @@
           <div class="map-topbar">
             <div class="basemap-switch segmented-toggle"><span class="segmented-toggle__indicator" aria-hidden="true"></span><button id="btnSatellite" aria-pressed="true" onclick="setMapBasemap('satellite')" data-copy="satellite">Спутник</button><button id="btnStreets" aria-pressed="false" onclick="setMapBasemap('streets')" data-copy="streets">Схема</button></div>
             <div class="map-location-actions">
-              <select id="regionSelect" class="region-select" onchange="selectRegion(this.value)" aria-label="Быстрый выбор региона">
+              <select id="regionSelect" class="region-select" onchange="selectRegion(this.value)" aria-label="Быстрый выбор региона" aria-describedby="locationPrompt">
                 <option value="" selected data-copy="selectRegionPrompt">Выберите город или регион…</option>
                 <option value="atyrau">Атырау</option>
                 <option value="kyzylorda">Кызылорда (Сырдария)</option>
@@ -75,6 +77,7 @@
               <button id="btnGetLocation" class="gps-button" onclick="requestGeolocation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z M15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg><span id="btnLocationText">GPS</span></button>
             </div>
           </div>
+          <p id="locationPrompt" class="location-prompt" role="status" tabindex="-1" hidden></p>
           <div class="map-stage"><div id="map" role="region" aria-label="Карта поля" aria-describedby="mapHint"></div>
             <div id="mapError" class="map-error hidden" role="status"><strong data-copy="mapErrorTitle">Не удалось загрузить карту</strong><span data-copy="mapErrorBody">Проверьте соединение и повторите загрузку. Площадь можно ввести вручную.</span><button id="btnRetryMap" onclick="retryFieldMap()" data-copy="retryMap">Повторить загрузку</button></div>
           </div>

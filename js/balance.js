@@ -244,7 +244,7 @@ window.SuBalance = (() => {
       el('balanceError').textContent = errMsg;
       el('balanceError').hidden = false;
       if (window.showToast) window.showToast(errMsg, 'warning');
-      input?.focus();
+      input?.focus({ preventScroll: true });
       return null;
     }
   }

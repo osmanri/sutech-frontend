@@ -26,10 +26,7 @@ function connectTelegram() {
   try {
     tg.ready();
     tg.expand();
-    if (tg.initData && tg.isVersionAtLeast?.('6.1')) {
-      tg.setHeaderColor?.('#ffffff');
-      tg.setBackgroundColor?.('#ffffff');
-    }
+    window.SuTheme?.connectTelegram(tg);
     tg.onEvent?.('viewportChanged', () => {
       fieldMap?.invalidateSize({ pan: false });
       positionLanguageIndicator(state.lang);
@@ -678,6 +675,11 @@ function updateBlock1StatusPill() {
   const t    = I18N[state.lang] || I18N.ru;
   const pill = document.getElementById('block1StatusPill');
   if (!pill) return;
+  const prompt = document.getElementById('locationPrompt');
+  if (prompt) {
+    if (state.latitude !== null && state.longitude !== null) prompt.hidden = true;
+    else prompt.textContent = locationPromptText();
+  }
 
   const baseClasses = 'text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-full whitespace-nowrap';
   if (state.latitude !== null && state.longitude !== null) {
@@ -1481,6 +1483,22 @@ function updateSubmitMode() {
   label.textContent = isTelegramMiniApp() ? t.btnSubmitText : t.openBotText;
 }
 
+function locationPromptText() {
+  return {
+    ru: 'Укажите место поля: нажмите GPS, выберите город или отметьте точку на карте.',
+    kz: 'Алқаптың орнын көрсетіңіз: GPS басыңыз, қаланы таңдаңыз немесе картаға нүкте қойыңыз.',
+    en: 'Set your field location: use GPS, choose a city or mark a point on the map.',
+  }[state.lang] || '';
+}
+
+function guideToInput(target, focusTarget = target) {
+  if (!target) return;
+  // Focus must not jump the viewport before the smooth scroll begins.
+  focusTarget?.focus({ preventScroll: true });
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  target.scrollIntoView({ behavior: reduced ? 'instant' : 'smooth', block: 'center' });
+}
+
 function submitFinalCalculation() {
   if (isSubmitting) return;
   const t = I18N[state.lang] || I18N.ru;
@@ -1500,19 +1518,13 @@ function submitFinalCalculation() {
     }
   }
   if (state.latitude === null || state.longitude === null) {
-    const msg = state.lang === 'kz'
-      ? 'Алдымен өңірді/қаланы таңдаңыз немесе картада алқапты көрсетіңіз!'
-      : state.lang === 'en' ? 'Select your region or mark your field on the map first.'
-      : 'Пожалуйста, выберите ваш город/регион в списке или укажите поле на карте!';
-    showToast(msg, 'warning');
     triggerHaptic('warning');
-    const regSelect = document.getElementById('regionSelect');
-    if (regSelect) {
-      regSelect.focus();
-      regSelect.classList.add('select-highlight');
-      setTimeout(() => regSelect.classList.remove('select-highlight'), 2500);
+    const prompt = document.getElementById('locationPrompt');
+    if (prompt) {
+      prompt.textContent = locationPromptText();
+      prompt.hidden = false;
+      guideToInput(document.querySelector('.map-topbar'), prompt);
     }
-    document.getElementById('block1')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
 
@@ -1536,7 +1548,7 @@ function submitFinalCalculation() {
   // Валидация площади: > 0 и < 50 000
   if (!Number.isFinite(currentArea) || currentArea <= 0 || currentArea >= 50000) {
     showToast(t.errInvalidArea, 'warning');
-    document.getElementById('block3')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    guideToInput(areaInput);
     return;
   }
 
@@ -1578,7 +1590,8 @@ function submitFinalCalculation() {
 
   const balance = window.SuBalance?.payload();
   if (!balance) {
-    document.getElementById('balanceBlock')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const invalid = document.querySelector('#balanceBlock [aria-invalid="true"]');
+    guideToInput(invalid || document.getElementById('balanceBlock'), invalid);
     return;
   }
   // Собираем динамический payload:

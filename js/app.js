@@ -551,6 +551,7 @@ function setLanguage(lang) {
 }
 
 function applyLanguage(lang, animateIndicator = false) {
+  window.SuTheme?.syncLanguage(lang);
   window.SuRecovery?.sync(lang);
   window.SuBalance?.sync(state.crop, state.field_type, lang);
   const t = I18N[lang] || I18N.ru;

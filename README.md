@@ -29,6 +29,8 @@
 for t in test_*.js test_*.cjs; do node "$t"; done
 ```
 
+Известно: `test_field_map.cjs` сейчас падает (ожидает элемент `aiEntryLink`, которого нет в `index.html`); остальные 6 тестов проходят.
+
 ## English
 
 Su-Tech Mini App: field map, crop / soil / irrigation / pump inputs, three languages (RU / KZ / EN), light and dark themes. It runs inside Telegram and sends the field to the bot; calculations are done by [sutech-core](https://github.com/osmanri/sutech-core). `api/weather.js` is a cached Open-Meteo proxy that accepts coordinates only. Run the tests with `node test_*.js` / `node test_*.cjs`.

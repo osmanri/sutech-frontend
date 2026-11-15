@@ -14,6 +14,7 @@
 | `js/field-guidance.js` | Подсказки по незаполненным полям |
 | `js/calculation-recovery.js` | Восстановление ввода после сбоя погоды |
 | `js/serverless-*.js` | Передача данных боту |
+| `results.html`, `js/results.js`, `css/results.css` | Страница «Results»: графики исследования на реальной погоде (RU / KZ / EN). Данные берёт из `data/results.json`, который строится в sutech-core командой `python -m research.export_web --out ../sutech-frontend/data/results.json` |
 | `api/weather.js` | Прокси погоды Open-Meteo с кэшем (принимает только координаты) |
 | `vendor/leaflet` | Карта (BSD-2, локальная копия) |
 
@@ -28,6 +29,8 @@
 ```bash
 for t in test_*.js test_*.cjs; do node "$t"; done
 ```
+
+Страница результатов проверяется `test_results.cjs` (целостность данных и совпадение переводов).
 
 Известно: `test_field_map.cjs` сейчас падает (ожидает элемент `aiEntryLink`, которого нет в `index.html`); остальные 6 тестов проходят.
 

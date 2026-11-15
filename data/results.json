@@ -1,0 +1,142 @@
+{
+ "source": "sutech-core research/results (NASA POWER 2021-2025, 5 regions)",
+ "model_vs_model": true,
+ "combos": [
+  {
+   "crop": "cotton",
+   "method": "drip",
+   "n": 25,
+   "sutech_m3_ha": 11321,
+   "calendar_m3_ha": 15536,
+   "saving_pct": 26.92,
+   "ci_low": 25.17,
+   "ci_high": 28.67,
+   "worst_pct": 19.92,
+   "best_pct": 35.93,
+   "seasons_less": 25,
+   "sutech_stress_days": 0.0,
+   "plain_calendar_stress_days": 64.6
+  },
+  {
+   "crop": "cotton",
+   "method": "furrow",
+   "n": 25,
+   "sutech_m3_ha": 19751,
+   "calendar_m3_ha": 30199,
+   "saving_pct": 34.3,
+   "ci_low": 32.32,
+   "ci_high": 36.26,
+   "worst_pct": 25.83,
+   "best_pct": 44.01,
+   "seasons_less": 25,
+   "sutech_stress_days": 0.0,
+   "plain_calendar_stress_days": 60.1
+  },
+  {
+   "crop": "corn",
+   "method": "drip",
+   "n": 25,
+   "sutech_m3_ha": 9039,
+   "calendar_m3_ha": 11009,
+   "saving_pct": 17.58,
+   "ci_low": 15.8,
+   "ci_high": 19.44,
+   "worst_pct": 10.55,
+   "best_pct": 28.95,
+   "seasons_less": 25,
+   "sutech_stress_days": 0.0,
+   "plain_calendar_stress_days": 39.4
+  },
+  {
+   "crop": "corn",
+   "method": "furrow",
+   "n": 25,
+   "sutech_m3_ha": 15781,
+   "calendar_m3_ha": 21848,
+   "saving_pct": 27.47,
+   "ci_low": 25.6,
+   "ci_high": 29.43,
+   "worst_pct": 19.28,
+   "best_pct": 39.14,
+   "seasons_less": 25,
+   "sutech_stress_days": 0.0,
+   "plain_calendar_stress_days": 38.2
+  }
+ ],
+ "sensitivity_cotton": {
+  "drip": [
+   {
+    "scenario": "perfect",
+    "stress_days": 0.0,
+    "water_vs_calendar_pct": -26.9
+   },
+   {
+    "scenario": "et0_error_30pct",
+    "stress_days": 0.0,
+    "water_vs_calendar_pct": -23.5
+   },
+   {
+    "scenario": "rain_never_forecast",
+    "stress_days": 0.0,
+    "water_vs_calendar_pct": -25.5
+   },
+   {
+    "scenario": "soil_entered_sand",
+    "stress_days": 0.0,
+    "water_vs_calendar_pct": -26.9
+   },
+   {
+    "scenario": "et0_bias_+20pct",
+    "stress_days": 0.0,
+    "water_vs_calendar_pct": -12.1
+   },
+   {
+    "scenario": "et0_bias_-20pct",
+    "stress_days": 72.8,
+    "water_vs_calendar_pct": -41.7
+   },
+   {
+    "scenario": "et0_bias_-20pct_3level_check_7d",
+    "stress_days": 0.0,
+    "water_vs_calendar_pct": -19.3
+   }
+  ],
+  "furrow": [
+   {
+    "scenario": "perfect",
+    "stress_days": 0.0,
+    "water_vs_calendar_pct": -34.3
+   },
+   {
+    "scenario": "et0_error_30pct",
+    "stress_days": 0.0,
+    "water_vs_calendar_pct": -31.0
+   },
+   {
+    "scenario": "rain_never_forecast",
+    "stress_days": 0.0,
+    "water_vs_calendar_pct": -32.1
+   },
+   {
+    "scenario": "soil_entered_sand",
+    "stress_days": 0.0,
+    "water_vs_calendar_pct": -34.3
+   },
+   {
+    "scenario": "et0_bias_+20pct",
+    "stress_days": 0.0,
+    "water_vs_calendar_pct": -20.5
+   },
+   {
+    "scenario": "et0_bias_-20pct",
+    "stress_days": 70.8,
+    "water_vs_calendar_pct": -48.0
+   },
+   {
+    "scenario": "et0_bias_-20pct_3level_check_7d",
+    "stress_days": 0.0,
+    "water_vs_calendar_pct": -20.7
+   }
+  ]
+ }
+}

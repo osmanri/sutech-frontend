@@ -37,7 +37,3 @@ for t in test_*.js test_*.cjs; do node "$t"; done
 ## English
 
 Su-Tech Mini App: field map, crop / soil / irrigation / pump inputs, three languages (RU / KZ / EN), light and dark themes. It runs inside Telegram and sends the field to the bot; calculations are done by [sutech-core](https://github.com/osmanri/sutech-core). `api/weather.js` is a cached Open-Meteo proxy that accepts coordinates only. Run the tests with `node test_*.js` / `node test_*.cjs`.
-
-## Credits
-
-- 3D seedling image (`img/seedling-3d.png`): Microsoft Fluent Emoji, MIT licence.

@@ -124,26 +124,14 @@ html body :is(.hero-cta,.submit-button):active{transform:translate3d(0,1px,0) sc
 html body :is(.hero-cta,.submit-button) .motion-arrow{background:var(--forest-surface)!important;color:#d6f2a6!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 4px 10px -4px rgba(0,36,26,.6)!important}
 html body :is(.hero-cta,.submit-button) svg{color:inherit!important}
 
-/* 3D glass drop (pure CSS, decorative) */
-.hero-orb{position:absolute;z-index:2;right:clamp(10px,4vw,40px);bottom:clamp(14px,3vw,34px);width:clamp(124px,34vw,210px);aspect-ratio:1;pointer-events:none;perspective:700px}
-.hero-orb__body{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(var(--orb-rx,8deg)) rotateY(var(--orb-ry,-14deg));transition:transform .5s cubic-bezier(.22,1,.36,1);animation:gFloat 6.5s ease-in-out infinite}
-.hero-orb__drop{
-  position:absolute;left:20%;top:24%;width:60%;aspect-ratio:1;border-radius:0 50% 50% 50%;transform:rotate(45deg);
-  background:
-    radial-gradient(30% 22% at 22% 52%,rgba(255,255,255,.95),rgba(255,255,255,0) 72%),
-    radial-gradient(55% 55% at 78% 78%,rgba(149,212,46,.6),rgba(149,212,46,0) 70%),
-    radial-gradient(100% 100% at 40% 40%,rgba(255,255,255,.20),rgba(185,224,122,.12) 55%,rgba(1,81,51,.4) 100%);
-  box-shadow:inset -8px -8px 20px rgba(0,56,31,.45),inset 6px 6px 16px rgba(255,255,255,.35),0 26px 36px -16px rgba(0,0,0,.55);
-  border:1px solid rgba(255,255,255,.4);
-  -webkit-backdrop-filter:blur(6px) saturate(160%);backdrop-filter:blur(6px) saturate(160%);
-}
-.hero-orb__logo{position:absolute;left:50%;top:60%;width:36%;transform:translate(-50%,-50%) translateZ(30px);filter:drop-shadow(0 6px 10px rgba(0,36,26,.45))}
-.hero-orb__ring{position:absolute;left:-6%;right:-6%;top:58%;height:22%;border-radius:50%;border:2px solid rgba(185,224,122,.7);transform:translateY(-50%) rotateX(72deg);box-shadow:0 0 18px rgba(149,212,46,.35)}
-.hero-orb__ring i{position:absolute;width:9px;height:9px;border-radius:50%;background:#d6f2a6;box-shadow:0 0 12px #95d42e;left:50%;top:-5px;offset-path:ellipse(50% 50% at 50% 50%);animation:gOrbit 7s linear infinite}
-.hero-orb__shadow{position:absolute;left:18%;right:18%;bottom:-10%;height:12%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,20,12,.55),transparent);filter:blur(4px);animation:gShadow 6.5s ease-in-out infinite}
+/* 3D seedling (Microsoft Fluent Emoji 3D, MIT licence), decorative */
+.hero-orb{position:absolute;z-index:2;right:clamp(10px,4vw,48px);bottom:clamp(10px,3vw,30px);width:clamp(124px,34vw,220px);aspect-ratio:1;pointer-events:none;perspective:700px}
+.hero-orb__body{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(var(--orb-rx,6deg)) rotateY(var(--orb-ry,-12deg));transition:transform .5s cubic-bezier(.22,1,.36,1);animation:gFloat 6.5s ease-in-out infinite}
+.hero-orb__art{position:absolute;inset:6%;width:88%;height:88%;object-fit:contain;transform:translateZ(30px);filter:drop-shadow(0 18px 22px rgba(0,20,12,.45)) drop-shadow(0 0 22px rgba(149,212,46,.25))}
+.hero-orb__glow{position:absolute;inset:4%;border-radius:50%;background:radial-gradient(closest-side,rgba(149,212,46,.45),rgba(149,212,46,0));filter:blur(10px);animation:gShadow 6.5s ease-in-out infinite reverse}
+.hero-orb__shadow{position:absolute;left:20%;right:20%;bottom:-6%;height:12%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,20,12,.6),transparent);filter:blur(4px);animation:gShadow 6.5s ease-in-out infinite}
 @keyframes gFloat{0%,100%{translate:0 0}50%{translate:0 -9px}}
 @keyframes gShadow{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(.86);opacity:.6}}
-@keyframes gOrbit{to{offset-distance:100%}}
 html body .eco-hero .hero-copy{z-index:3}
 @media(max-width:420px){.hero-orb{width:124px;right:8px;bottom:22px}}
 
@@ -215,6 +203,6 @@ html body .summary-footer{border-top-color:rgba(255,255,255,.12)!important}
 html body .page-footer{color:var(--muted)}
 
 @media(prefers-reduced-motion:reduce){
-  html body::before,.hero-orb__body,.hero-orb__ring i,.hero-orb__shadow,html body :is(.hero-cta,.submit-button)::after{animation:none!important}
+  html body::before,.hero-orb__body,.hero-orb__glow,.hero-orb__shadow,html body :is(.hero-cta,.submit-button)::after{animation:none!important}
   html body :is(.map-panel,.settings-column section,.summary-card){animation:none!important}
 }

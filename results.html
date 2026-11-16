@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Su-Tech — Results</title>
+  <meta id="pageDesc" name="description" content="Результаты исследования Su-Tech на реальной погоде Казахстана" />
+  <meta name="theme-color" content="#ffffff" />
+  <script src="js/theme.js?v=5.10.71"></script>
+  <link rel="icon" href="img/sutech-leaf-logo-transparent.png?v=5.10.35" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/results.css" />
+  <script defer src="js/results.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-t="skip">К содержимому</a>
+  <header class="top">
+    <a class="brand" href="index.html" aria-label="Su-Tech">
+      <img src="img/sutech-leaf-logo-transparent.png?v=5.10.35" alt="" width="30" height="30" />
+      <strong>Su-Tech<span aria-hidden="true">.</span></strong>
+    </a>
+    <div class="top-actions">
+      <a class="back" href="index.html" data-t="back">← Карта поля</a>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+        <button type="button" data-lang="kz" aria-pressed="false">ҚАЗ</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="h1">
+      <p class="eyebrow" data-t="eyebrow">Исследование на реальной погоде</p>
+      <h1 id="h1" data-t="title">Сколько воды можно сэкономить без потери урожая</h1>
+      <p class="lead" data-t="lead"></p>
+      <ul class="stats" id="stats" aria-live="polite"></ul>
+    </section>
+
+    <section class="card" aria-labelledby="h-water">
+      <h2 id="h-water" data-t="waterTitle">Вода за сезон при одинаковом урожае</h2>
+      <p class="sub" data-t="waterSub"></p>
+      <div id="waterChart" class="chart" role="img" aria-labelledby="h-water"></div>
+      <div class="legend" aria-hidden="true"><span class="legend-item"><span class="key key-sutech"></span><span data-t="keySutech">Su-Tech</span></span><span class="legend-item"><span class="key key-cal"></span><span data-t="keyCal">График с запасом</span></span></div>
+      <details><summary data-t="table">Таблица данных</summary><div class="table-wrap" id="waterTable"></div></details>
+    </section>
+
+    <section class="card" aria-labelledby="h-sens">
+      <h2 id="h-sens" data-t="sensTitle">Что будет, если входные данные неточны</h2>
+      <p class="sub" data-t="sensSub"></p>
+      <div id="sensChart" class="chart" role="img" aria-labelledby="h-sens"></div>
+      <details><summary data-t="table">Таблица данных</summary><div class="table-wrap" id="sensTable"></div></details>
+    </section>
+
+    <section class="card notice" aria-labelledby="h-honest">
+      <h2 id="h-honest" data-t="honestTitle">Чего эти результаты не показывают</h2>
+      <ul id="honest"></ul>
+    </section>
+
+    <section class="links" aria-label="Links">
+      <a class="btn" href="https://github.com/osmanri/sutech-core/blob/main/research/README.md" data-t="linkMethod">Метод и воспроизведение</a>
+      <a class="btn ghost" href="https://t.me/Su_Tech_bot" data-t="linkBot">Открыть бота</a>
+    </section>
+    <p class="foot" data-t="foot"></p>
+  </main>
+</body>
+</html>

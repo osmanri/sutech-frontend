@@ -32,7 +32,7 @@ for t in test_*.js test_*.cjs; do node "$t"; done
 
 Страница результатов проверяется `test_results.cjs` (целостность данных и совпадение переводов).
 
-Известно: `test_field_map.cjs` сейчас падает (ожидает элемент `aiEntryLink`, которого нет в `index.html`); остальные 6 тестов проходят.
+Все тесты сайта проходят: `node test_results.cjs`, `test_theme.cjs`, `test_weather.cjs`, `test_field_map.cjs` и остальные `test_*.js`.
 
 ## English
 

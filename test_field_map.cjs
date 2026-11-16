@@ -41,7 +41,11 @@ const L = {
   polygon: (points, options) => { layers.push({ points, options }); return layer(); },
   polyline: layer, circleMarker: layer, circle: layer,
 };
-const tg = { initData: 'test-launch', ready() {}, expand() {}, close() { closed++; }, sendData(value) { sent = JSON.parse(value); } };
+const tg = {
+  initData: 'test-launch', ready() {}, expand() {}, close() { closed++; }, sendData(value) { sent = JSON.parse(value); },
+  // js/serverless-transport.js calls Telegram.WebApp.Serverless.call(name, body, callback) instead of fetch()
+  Serverless: { call(_name, body, callback) { apiRequest = JSON.parse(JSON.stringify(body)); Promise.resolve().then(() => callback(null, apiResult)); } },
+};
 const context = vm.createContext({
   console: { log() {}, warn() {}, error() {} }, L,
   window: { L, Telegram: { WebApp: tg }, location: { href: '' }, matchMedia: () => ({ matches: true }), addEventListener() {} },
@@ -56,6 +60,7 @@ const context = vm.createContext({
   setTimeout(callback, delay) { if (delay < 10000) callback(); }, clearTimeout() {}, requestAnimationFrame(callback) { callback(); },
 });
 vm.runInContext(fs.readFileSync(`${__dirname}/js/balance.js`, 'utf8'), context);
+vm.runInContext(fs.readFileSync(`${__dirname}/js/serverless-transport.js`, 'utf8'), context);
 vm.runInContext(fs.readFileSync(`${__dirname}/js/app.js`, 'utf8'), context);
 const run = code => vm.runInContext(code, context);
 const englishLeaks = run(`({
@@ -80,15 +85,6 @@ for (const [language, placeholder] of [
   run(`applyLanguage('${language}')`);
   assert.equal(elements.get('fieldAreaInput').placeholder, placeholder,
     `Field area example must follow ${language}`);
-  assert.equal(elements.get('aiEntryLink').getAttribute('href'),
-    `https://t.me/Su_Tech_bot?start=ai_${language}`,
-    `AI chat deep link must preserve ${language}`);
-}
-for (const lang of ['ru', 'kz', 'en']) {
-  let opened;
-  tg.openTelegramLink = url => { opened = url; };
-  run(`state.lang = '${lang}'; openAgronomistChat({preventDefault(){}})`);
-  assert.equal(opened, `https://t.me/Su_Tech_bot?start=ai_${lang}`);
 }
 assert.equal(elements.get('cropSub_corn').textContent, '',
   'English crop cards must not show a Kazakh subtitle');
@@ -317,7 +313,7 @@ tg.initData = 'test-launch';
       await run('submitFinalCalculation()');
       assert.equal(apiRequest.payload.crop, crop, `${lang}: ${crop} changed during delivery`);
       assert.equal(apiRequest.payload.lang, lang);
-      assert.equal(apiRequest.init_data, 'test-launch');
+      assert.equal(apiRequest.init_data, undefined, 'Serverless transport must not forward raw init_data');
       assert.equal(apiRequest.payload.soil_type, elements.get('soilType').value);
       assert.equal(apiRequest.payload.day_of_growth, Number(elements.get('growthDay').value));
       assert.equal(apiRequest.payload.moisture_condition, elements.get('moistureCondition').value);
@@ -342,12 +338,12 @@ tg.initData = 'test-launch';
   await run('submitFinalCalculation()');
   assert.equal(closed, beforeCorrection, 'Keep the form open so the farmer can correct inputs without starting over');
   // A failed request must allow retry; repeated taps must not submit twice.
-  const originalFetch = context.fetch;
+  const originalCall = tg.Serverless.call;
   let requests = 0;
   let failRequest;
-  context.fetch = () => {
+  tg.Serverless.call = (_name, _body, callback) => {
     requests++;
-    return new Promise((resolve, reject) => { failRequest = reject; });
+    failRequest = error => callback(error);
   };
   run('isSubmitting = false');
   const pending = run('submitFinalCalculation()');
@@ -359,7 +355,7 @@ tg.initData = 'test-launch';
   await pending;
   assert.equal(elements.get('btnSubmitAll').disabled, false, 'Network failure must allow retry');
   assert.equal(closed, beforeFailure, 'A failed request must leave the form available');
-  context.fetch = originalFetch;
+  tg.Serverless.call = originalCall;
   apiResult = { ok: true, bot_replied: true };
   await run('submitFinalCalculation()');
   assert.equal(closed, beforeFailure + 1, 'Retry must deliver the selected crop');

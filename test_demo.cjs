@@ -57,5 +57,13 @@ const path = require('path');
   const html2 = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
   assert.ok(html2.indexOf('js/crops-catalog.js') < html2.indexOf('js/balance.js'), 'catalog must load before balance.js');
   assert.ok(html2.includes('id="cropMore"'), 'picker present');
+  // Privacy page: the same sections in all three languages; every public page links to it.
+  const pv = fs.readFileSync(path.join(__dirname, 'js', 'privacy.js'), 'utf8');
+  const box = {document: {addEventListener() {}, getElementById() {}}, window: {}};
+  vm.runInNewContext(pv.replace("document.addEventListener('DOMContentLoaded'", "window.C = C; document.addEventListener('DOMContentLoaded'"), box);
+  const P = JSON.parse(JSON.stringify(box.window.C));
+  for (const lang of ['ru', 'kz']) assert.strictEqual(P[lang].sections.length, P.en.sections.length, `privacy ${lang} sections`);
+  for (const lang of ['en', 'ru', 'kz']) for (const [h, items] of P[lang].sections) assert.ok(h && items.length, 'privacy section filled');
+  for (const page of ['about.html', 'demo.html', 'results.html']) assert.ok(fs.readFileSync(path.join(__dirname, page), 'utf8').includes('privacy.html'), `${page} links to privacy`);
   console.log('demo and about tests passed');
 })().catch(e => { console.error(e); process.exit(1); });

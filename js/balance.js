@@ -27,6 +27,7 @@ window.SuBalance = (() => {
       initial:'Начало, дней', development:'Развитие, дней', middle:'Середина, дней', late:'Созревание, дней',
       customHint:'Введите параметры текущей стадии вашей культуры.', customP:'Доля истощения p (0,1–0,8)', root:'Глубина корней, м',
       salinitySettings:'Засоление · необязательно', waterEc:'Солёность воды для полива ECw, дСм/м', soilEc:'Солёность почвы ECe, дСм/м', salinityHint:'Берутся из лабораторного анализа воды и почвы. Пустые поля: система ничего не добавляет и не придумывает. С ECw бот добавит воду для промывки солей (FAO-29), с ECe покажет ожидаемую потерю урожая от соли (FAO-56). Для дыни в книге нет данных.',
+      greenhouseMedium:'Где растут растения', mediumSoil:'В грунте', mediumSubstrate:'На субстрате (минвата, кокос)', greenhouseHeated:'Отопление', heatedNo:'Не отапливается', heatedYes:'Отапливается зимой', greenhouseWarn:'Для субстрата, а также для отапливаемой теплицы без измеренного ET₀ бот честно не выдаёт совет: там расчёт по уличной погоде неверен.',
       greenhouseSettings:'Микроклимат теплицы · необязательно', greenhouseEt0:'Измеренный ET₀, мм/сутки', greenhouseHint:'Оставьте пустым — система автоматически возьмёт FAO-56 ET₀ из Open-Meteo и учтёт 70% светопропускания покрытия. Заполняйте только при наличии измерения или значения агронома; внешние осадки внутри равны нулю.',
       energy:'Стоимость насоса · необязательно', price:'Тариф, ₸/кВт·ч',
       pumpPower:'Мощность насоса (кВт)', pumpProductivity:'Производительность (м³/ч)',
@@ -51,6 +52,7 @@ window.SuBalance = (() => {
       initial:'Басы, күн', development:'Даму, күн', middle:'Ортасы, күн', late:'Пісу, күн',
       customHint:'Дақылдың ағымдағы кезең параметрлерін енгізіңіз.', customP:'Сарқылу үлесі p (0,1–0,8)', root:'Тамыр тереңдігі, м',
       salinitySettings:'Тұздану · міндетті емес', waterEc:'Суару суының тұздылығы ECw, дСм/м', soilEc:'Топырақ тұздылығы ECe, дСм/м', salinityHint:'Су мен топырақтың зертханалық талдауынан алынады. Бос өрістер: жүйе ештеңе қоспайды және ойдан шығармайды. ECw болса, бот тұзды шаю суын қосады (FAO-29), ECe болса, тұздан өнімнің күтілетін шығынын көрсетеді (FAO-56). Бақша үшін кітапта дерек жоқ.',
+      greenhouseMedium:'Өсімдіктер қайда өседі', mediumSoil:'Топырақта', mediumSubstrate:'Субстратта (минвата, кокос)', greenhouseHeated:'Жылыту', heatedNo:'Жылытылмайды', heatedYes:'Қыста жылытылады', greenhouseWarn:'Субстрат үшін, сондай-ақ өлшенген ET₀ жоқ жылытылатын жылыжай үшін бот адал түрде кеңес бермейді: онда сыртқы ауа райы бойынша есеп дұрыс емес.',
       greenhouseSettings:'Жылыжай микроклиматы · міндетті емес', greenhouseEt0:'Өлшенген ET₀, мм/тәулік', greenhouseHint:'Бос қалдырыңыз — жүйе Open-Meteo FAO-56 ET₀ мәнін автоматты алып, жабынның 70% жарық өткізгіштігін ескереді. Тек өлшем немесе агроном мәні болса енгізіңіз; сыртқы жауын-шашын іште нөлге тең.',
       energy:'Сорғы құны · міндетті емес', price:'Тариф, ₸/кВт·сағ',
       pumpPower:'Сорғы қуаты (кВт)', pumpProductivity:'Өнімділігі (м³/сағ)',
@@ -75,6 +77,7 @@ window.SuBalance = (() => {
       initial:'Initial, days', development:'Development, days', middle:'Mid-season, days', late:'Late season, days',
       customHint:'Enter the current-stage parameters for your crop.', customP:'Depletion fraction p (0.1–0.8)', root:'Root depth, m',
       salinitySettings:'Salinity · optional', waterEc:'Irrigation water salinity ECw, dS/m', soilEc:'Soil salinity ECe, dS/m', salinityHint:'Take them from a laboratory analysis of the water and the soil. Empty fields: the system adds and invents nothing. With ECw the bot adds leaching water (FAO-29); with ECe it shows the expected salt yield loss (FAO-56). The book has no data for melons.',
+      greenhouseMedium:'Where the plants grow', mediumSoil:'In soil', mediumSubstrate:'On a substrate (rockwool, coco)', greenhouseHeated:'Heating', heatedNo:'Not heated', heatedYes:'Heated in winter', greenhouseWarn:'For a substrate, and for a heated greenhouse without a measured ET₀, the bot honestly gives no advice: a calculation from outdoor weather is wrong there.',
       greenhouseSettings:'Greenhouse microclimate · optional', greenhouseEt0:'Measured ET₀, mm/day',
       greenhouseHint:'Leave empty to estimate greenhouse ET₀ from Open-Meteo FAO-56 ET₀ with 70% cover transmission. Enter a value only when measured or supplied by an agronomist; outdoor rain is zero indoors.',
       energy:'Pump cost · optional', price:'Tariff, ₸/kWh', pumpPower:'Pump power (kW)', pumpProductivity:'Flow rate (m³/h)',
@@ -187,6 +190,8 @@ window.SuBalance = (() => {
     if (field === 'greenhouse' && crop !== 'rice') {
       const measuredEt0 = read('greenhouseEt0',0,50,false,true);
       if (measuredEt0 !== null) data.greenhouse_et0 = measuredEt0;
+      data.greenhouse_medium = el('greenhouseMedium').value === 'substrate' ? 'substrate' : 'soil';
+      data.greenhouse_heated = el('greenhouseHeated').value === 'yes' ? 'yes' : 'no';
     }
     return data;
   }

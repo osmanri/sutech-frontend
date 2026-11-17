@@ -15,6 +15,10 @@
 | `js/calculation-recovery.js` | Восстановление ввода после сбоя погоды |
 | `js/serverless-*.js` | Передача данных боту |
 | `results.html`, `js/results.js`, `css/results.css` | Страница «Results»: графики исследования на реальной погоде (RU / KZ / EN). Данные берёт из `data/results.json`, который строится в sutech-core командой `python -m research.export_web --out ../sutech-frontend/data/results.json` |
+| `about.html`, `js/about.js` | Страница проекта для жюри и гостей (EN по умолчанию, RU / KZ): проблема, метод, результат, проверка расчётов, ограничения, открытые данные |
+| `demo.html`, `js/demo.js` | Демо в браузере без Telegram: тот же расчёт, что в боте, с каждым шагом формулы |
+| `js/sutech-engine.js` | **Точная копия** движка бота `sutech-core/serverless/tgcloud/lib/balance.js`. Не править вручную: копировать из бота; тест `serverless/test/web-engine.test.js` в sutech-core падает, если файлы разошлись |
+| `js/site.js`, `css/site.css` | Общие навигация, выбор языка и стиль страниц about / demo / results |
 | `api/weather.js` | Прокси погоды Open-Meteo с кэшем (принимает только координаты) |
 | `vendor/leaflet` | Карта (BSD-2, локальная копия) |
 
@@ -35,5 +39,7 @@ for t in test_*.js test_*.cjs; do node "$t"; done
 Все тесты сайта проходят: `node test_results.cjs`, `test_theme.cjs`, `test_weather.cjs`, `test_field_map.cjs` и остальные `test_*.js`.
 
 ## English
+
+Public pages for judges: `about.html` (project overview, validation, limitations, open data) and `demo.html` (the bot's engine in the browser, every FAO-56 step shown; `js/sutech-engine.js` is a byte-for-byte copy of the bot engine, enforced by a test in sutech-core).
 
 Su-Tech Mini App: field map, crop / soil / irrigation / pump inputs, three languages (RU / KZ / EN), light and dark themes. It runs inside Telegram and sends the field to the bot; calculations are done by [sutech-core](https://github.com/osmanri/sutech-core). `api/weather.js` is a cached Open-Meteo proxy that accepts coordinates only. Run the tests with `node test_*.js` / `node test_*.cjs`.

@@ -15,7 +15,7 @@
       sc:{perfect:'Идеальный прогноз', et0_error_30pct:'Случайная ошибка испарения ±30%', rain_never_forecast:'Дожди не учтены', soil_entered_sand:'Указана не та почва', 'et0_bias_+20pct':'Испарение завышено на 20%', 'et0_bias_-20pct':'Испарение занижено на 20%', 'et0_bias_-20pct_3level_check_7d':'…и проверка влажности почвы раз в 7 дней'},
       honestTitle:'Чего эти результаты не показывают',
       honest:['Это модель против модели, а не измерение на поле. Опыт с взвешиванием горшков и полевой опыт ещё впереди.','Погода — реанализ NASA POWER для областных центров; урожай оценён по формуле FAO-33.','В худшем из 25 сезонов экономия была {worst}%, поэтому надёжнее говорить о диапазоне, а не о среднем.','Экономия существует только при равном урожае: обычный график с той же средней нормой тратит чуть меньше воды, но растения страдают от стресса.','Если прогноз испарения систематически занижен, ошибка копится; раз в неделю проверка влажности почвы в боте устраняет её.'],
-      linkMethod:'Метод и воспроизведение', linkBot:'Открыть бота', foot:'Данные погоды: NASA POWER. Все числа на странице берутся из файла data/results.json, который строится из таблиц исследования.',
+      linkMethod:'Метод и воспроизведение', linkBot:'Открыть бота', linkData:'Данные (CSV)', linkDemo:'Попробовать расчёт', foot:'Данные погоды: NASA POWER. Все числа на странице берутся из файла data/results.json, который строится из таблиц исследования.',
       error:'Не удалось загрузить результаты. Обновите страницу.'
     },
     kz: {
@@ -32,7 +32,7 @@
       sc:{perfect:'Мінсіз болжам', et0_error_30pct:'Булануда кездейсоқ қате ±30%', rain_never_forecast:'Жауын ескерілмеген', soil_entered_sand:'Топырақ дұрыс емес көрсетілген', 'et0_bias_+20pct':'Булану 20%-ға көтеріңкі', 'et0_bias_-20pct':'Булану 20%-ға төмен', 'et0_bias_-20pct_3level_check_7d':'…және топырақ ылғалын аптасына бір тексеру'},
       honestTitle:'Бұл нәтижелер нені көрсетпейді',
       honest:['Бұл — модель модельге қарсы, егістіктегі өлшем емес. Құмыраларды таразылау тәжірибесі мен дала тәжірибесі әлі алда.','Ауа райы — облыс орталықтары үшін NASA POWER реанализі; өнім FAO-33 формуласымен бағаланған.','25 маусымның ең нашарында үнемдеу {worst}% болды, сондықтан орташаны емес, аралықты айтқан дұрыс.','Үнемдеу тек бірдей өнімде бар: қарапайым кесте суды сәл аз жұмсайды, бірақ өсімдік күйзеліске ұшырайды.','Булану болжамы жүйелі түрде төмен болса, қате жиналады; ботта топырақ ылғалын аптасына бір тексеру оны жояды.'],
-      linkMethod:'Әдіс және қайталау', linkBot:'Ботты ашу', foot:'Ауа райы деректері: NASA POWER. Беттегі барлық сандар зерттеу кестелерінен жасалған data/results.json файлынан алынады.',
+      linkMethod:'Әдіс және қайталау', linkBot:'Ботты ашу', linkData:'Деректер (CSV)', linkDemo:'Есепті байқап көру', foot:'Ауа райы деректері: NASA POWER. Беттегі барлық сандар зерттеу кестелерінен жасалған data/results.json файлынан алынады.',
       error:'Нәтижелерді жүктеу мүмкін болмады. Бетті жаңартыңыз.'
     },
     en: {
@@ -49,7 +49,7 @@
       sc:{perfect:'Perfect forecast', et0_error_30pct:'Random evaporation error ±30%', rain_never_forecast:'Rain never forecast', soil_entered_sand:'Wrong soil entered', 'et0_bias_+20pct':'Evaporation overestimated by 20%', 'et0_bias_-20pct':'Evaporation underestimated by 20%', 'et0_bias_-20pct_3level_check_7d':'…with a soil-moisture check every 7 days'},
       honestTitle:'What these results do not show',
       honest:['This is model versus model, not a field measurement. The pot-weighing experiment and a field trial are still ahead.','Weather is NASA POWER reanalysis for regional centres; yield is estimated with the FAO-33 relation.','In the worst of 25 seasons the saving was {worst}%, so state a range rather than the mean.','The saving exists only at equal yield: a plain calendar with the same mean dose uses a little less water but the crop suffers stress.','If the evaporation forecast is systematically too low the error accumulates; a weekly soil-moisture check in the bot removes it.'],
-      linkMethod:'Method and reproduction', linkBot:'Open the bot', foot:'Weather data: NASA POWER. Every number on this page is read from data/results.json, generated from the study tables.',
+      linkMethod:'Method and reproduction', linkBot:'Open the bot', linkData:'Data (CSV)', linkDemo:'Try the calculation', foot:'Weather data: NASA POWER. Every number on this page is read from data/results.json, generated from the study tables.',
       error:'Could not load the results. Please reload the page.'
     }
   };
@@ -59,7 +59,7 @@
     const l = p === 'kk' ? 'kz' : p;
     return T[l] ? l : 'ru';
   };
-  let lang = chosen(), data = null;
+  let lang = window.SuSite ? window.SuSite.lang : chosen(), data = null;
   const $ = id => document.getElementById(id);
   const fmt = n => Number(n).toLocaleString('en-US', {maximumFractionDigits: 0}).replace(/,/g, ' ');
   const pct = n => `${Math.round(n)}%`;
@@ -130,7 +130,8 @@
     $('honest').replaceChildren(...t.honest.map(h => el('li', '', h.replace('{worst}', worst))));
   }
 
-  document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
+  if (window.SuSite) window.SuSite.onLang(l => { lang = l; render(); });
+  else document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
     lang = b.dataset.lang;
     const u = new URL(location.href); u.searchParams.set('lang', lang); history.replaceState(null, '', u);
     render();

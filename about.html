@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-default-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Su-Tech — irrigation advice from the weather</title>
+  <meta name="description" content="Su-Tech: a free Telegram bot that gives daily FAO-56 irrigation advice from the weather. Method, results, validation, limitations and open data." />
+  <meta property="og:title" content="Su-Tech — every cubic metre counts" />
+  <meta property="og:description" content="Daily irrigation advice from the weather, no sensors. 15–28% less water at equal yield in a model study on real weather." />
+  <meta property="og:image" content="img/sutech-leaf-logo.jpg" />
+  <meta name="theme-color" content="#015133" />
+  <script src="js/theme.js?v=5.10.71"></script>
+  <link rel="icon" href="img/sutech-leaf-logo-transparent.png?v=5.10.35" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css?v=1" />
+  <style>.tiles{list-style:none;margin:12px 0 0;padding:0}.tile span{display:block}</style>
+  <script defer src="js/site.js?v=1"></script>
+  <script defer src="js/about.js?v=1"></script>
+</head>
+<body>
+  <header class="site-top glass">
+    <a class="site-brand" href="about.html"><img src="img/sutech-leaf-logo-transparent.png?v=5.10.35" alt="" width="28" height="28" />Su-Tech<span>.</span></a>
+    <nav class="site-nav" aria-label="Pages"><a href="about.html" data-nav="about" aria-current="page">Project</a><a href="demo.html" data-nav="demo">Try it</a><a href="results.html" data-nav="results">Results</a><a href="https://t.me/Su_Tech_bot?start=demo_en" data-nav="bot">Open the bot</a></nav>
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="ru">RU</button><button type="button" data-lang="kz">ҚАЗ</button></div>
+  </header>
+  <main class="page" id="main">
+    <section class="hero-band">
+      <p class="eyebrow" data-c="eyebrow"></p>
+      <h1 id="h1">Every cubic metre <em>counts</em></h1>
+      <p data-c="lead"></p>
+      <div class="cta-row">
+        <a class="btn" href="demo.html" data-keep-lang data-c="ctaDemo">Try it in the browser</a>
+        <a class="btn ghost" href="results.html" data-keep-lang data-c="ctaResults">See the results</a>
+        <a class="btn ghost" id="ctaBot" href="https://t.me/Su_Tech_bot" data-c="ctaBot">Open the bot</a>
+      </div>
+    </section>
+
+    <section class="block glass" aria-labelledby="h-problem">
+      <h2 id="h-problem" data-c="problemT"></h2>
+      <ul class="grid tiles" id="problem"></ul>
+      <p class="muted" style="margin-top:14px" data-c="problemNote"></p>
+    </section>
+
+    <section class="block glass" aria-labelledby="h-how">
+      <h2 id="h-how" data-c="howT"></h2>
+      <ol class="steps" id="how"></ol>
+    </section>
+
+    <section class="block glass" aria-labelledby="h-res">
+      <h2 id="h-res" data-c="resT"></h2>
+      <ul class="grid tiles" id="res"></ul>
+      <p class="muted small" style="margin-top:14px" data-c="resNote"></p>
+      <a class="btn" href="results.html" data-keep-lang data-c="resBtn">Full results</a>
+    </section>
+
+    <section class="block glass notice" aria-labelledby="h-weak">
+      <h2 id="h-weak" data-c="weakT"></h2>
+      <p data-c="weak"></p>
+    </section>
+
+    <section class="block glass" aria-labelledby="h-val">
+      <h2 id="h-val" data-c="valT"></h2>
+      <ul class="check" id="val"></ul>
+    </section>
+
+    <section class="block glass" aria-labelledby="h-lim">
+      <h2 id="h-lim" data-c="limT"></h2>
+      <ul id="lim"></ul>
+    </section>
+
+    <section class="block glass" aria-labelledby="h-data">
+      <h2 id="h-data" data-c="dataT"></h2>
+      <ul id="data"></ul>
+      <p class="small"><code data-c="repro"></code></p>
+    </section>
+
+    <section class="block glass" aria-labelledby="h-team">
+      <h2 id="h-team" data-c="teamT"></h2>
+      <p data-c="team"></p>
+    </section>
+    <p class="foot" data-c="foot"></p>
+  </main>
+</body>
+</html>

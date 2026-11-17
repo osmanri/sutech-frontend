@@ -20,6 +20,7 @@
   <script defer src="js/serverless-location.js?v=5.10.61"></script>
   <script defer src="js/serverless-transport.js?v=5.10.61"></script>
   <script defer src="js/field-guidance.js?v=5.10.58"></script>
+  <script defer src="js/crops-catalog.js?v=1"></script>
   <script defer src="js/balance.js?v=5.10.69"></script>
   <script defer src="js/calculation-recovery.js?v=5.10.60"></script>
   <script defer src="js/app.js?v=5.10.71"></script>
@@ -238,7 +239,12 @@
                 aria-hidden="true">✓</span>
         </div>
       </div>
-    </section>
+          <div class="more-crops">
+        <label for="cropMore" id="cropMoreLabel">Другие культуры</label>
+        <select id="cropMore" aria-describedby="cropMoreHint"><option value="">—</option></select>
+        <p id="cropMoreHint" class="balance-help"></p>
+      </div>
+</section>
 <section id="block3" class="flex flex-col gap-4">
 
       <div class="flex gap-3">

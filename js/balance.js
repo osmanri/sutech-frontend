@@ -4,6 +4,7 @@ window.SuBalance = (() => {
     wheat: [20,25,60,30], cotton: [30,50,60,55], corn: [20,35,40,30],
     alfalfa: [10,20,20,10], melon: [25,35,40,20], tomato: [30,40,45,30], potato: [25,30,45,30],
   };
+  (window.SU_CROPS || []).forEach(c => { if (!calendars[c.key]) calendars[c.key] = c.stages; });  // crops of the catalog
   const stageIds = ['stageInitial', 'stageDevelopment', 'stageMiddle', 'stageLate'];
   const edits = {};
   let crop = null, field = 'open', lang = 'ru';

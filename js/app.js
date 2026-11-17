@@ -99,6 +99,10 @@ const CROPS = {
   other:     { kc: 1.00 },
 };
 
+// Crops of the catalog (crops/catalog.json in sutech-core) that have no card: chosen from the list under the cards.
+const CARD_CROPS = new Set(['wheat','cotton','corn','rice','alfalfa','melon','tomato','potato','other']);
+(window.SU_CROPS || []).forEach(c => { if (!CROPS[c.key]) CROPS[c.key] = { kc: 1.00 }; });
+
 // ─── 4. Данные методов полива (5 методов) ─────────────────────────────────
 const IRRIGATION_EFFICIENCY = {
   drip:       0.90,
@@ -554,6 +558,7 @@ function applyLanguage(lang, animateIndicator = false) {
   window.SuTheme?.syncLanguage(lang);
   window.SuRecovery?.sync(lang);
   window.SuBalance?.sync(state.crop, state.field_type, lang);
+  renderMoreCrops();
   const t = I18N[lang] || I18N.ru;
   document.querySelectorAll('[data-copy]').forEach(el => {
     const key = el.dataset.copy;
@@ -1144,6 +1149,35 @@ function updateMapUI() {
 // ─── 8. Выбор культуры (Блок 2 — 9 культур) ──────────────────────────────
 const ALL_CROPS = Object.keys(CROPS);
 
+const MORE_CROP_COPY = {
+  ru: { label: 'Другие культуры', hint: 'Поиск по списку: значения Kc, корней и стадий берутся из таблиц FAO-56.', none: 'Выберите культуру' },
+  kz: { label: 'Басқа дақылдар', hint: 'Тізімнен таңдаңыз: Kc, тамыр және кезең мәндері FAO-56 кестелерінен алынады.', none: 'Дақылды таңдаңыз' },
+  en: { label: 'More crops', hint: 'Pick from the list: Kc, roots and stages come from the FAO-56 tables.', none: 'Choose a crop' },
+};
+function cropDisplayName(key, lang) {
+  const c = (window.SU_CROPS || []).find(x => x.key === key);
+  return c ? c.names[lang] || c.names.ru : (I18N[lang]?.crops?.[key]?.name ?? key);
+}
+function renderMoreCrops() {
+  const select = document.getElementById('cropMore');
+  if (!select || !(window.SU_CROPS || []).length || !document.createElement) return;
+  const lang = state.lang || 'ru', copy = MORE_CROP_COPY[lang] || MORE_CROP_COPY.ru;
+  document.getElementById('cropMoreLabel').textContent = copy.label;
+  document.getElementById('cropMoreHint').textContent = copy.hint;
+  const options = (window.SU_CROPS || []).filter(c => !CARD_CROPS.has(c.key))
+    .sort((a, b) => (a.names[lang] || '').localeCompare(b.names[lang] || '', lang === 'kz' ? 'kk' : lang));
+  select.replaceChildren(Object.assign(document.createElement('option'), { value: '', textContent: copy.none }),
+    ...options.map(c => Object.assign(document.createElement('option'), { value: c.key, textContent: c.names[lang] || c.names.ru })));
+  select.value = CARD_CROPS.has(state.crop) ? '' : state.crop;
+}
+function initMoreCrops() {
+  const select = document.getElementById('cropMore');
+  if (!select) return;
+  select.addEventListener('change', () => { if (select.value) selectCrop(select.value); });
+  renderMoreCrops();
+}
+document.addEventListener('DOMContentLoaded', initMoreCrops);
+
 function selectCrop(cropKey) {
   if (!cropKey || !CROPS[cropKey]) return;
   currentCrop = cropKey;
@@ -1173,6 +1207,9 @@ function selectCrop(cropKey) {
       }
     }
   });
+
+  const more = document.getElementById('cropMore');
+  if (more) more.value = CARD_CROPS.has(cropKey) ? '' : cropKey;
 
   updateSummaryCard();
   triggerHaptic('light');
@@ -1434,7 +1471,7 @@ function updateSummaryCard() {
   }
 
   // Crop (no empty brackets in KZ)
-  const cropInfo = t.crops[state.crop] || { name: state.crop, sub: '' };
+  const cropInfo = t.crops[state.crop] || { name: cropDisplayName(state.crop, state.lang || 'ru'), sub: '' };
   document.getElementById('sumValCrop').textContent =
     cropInfo.name;
 

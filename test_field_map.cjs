@@ -271,6 +271,15 @@ assert.equal(run('window.SuBalance.complete()'), true, 'Greenhouse must work wit
 assert.equal(run('window.SuBalance.payload().greenhouse_et0'), undefined, 'Empty expert override must stay absent');
 elements.get('greenhouseEt0').value = '2,5';
 near(run('window.SuBalance.payload().greenhouse_et0'), 2.5);
+// Greenhouse honesty inputs reach the payload (soil / not heated by default).
+assert.equal(run('window.SuBalance.payload().greenhouse_medium'), 'soil');
+assert.equal(run('window.SuBalance.payload().greenhouse_heated'), 'no');
+elements.get('greenhouseMedium').value = 'substrate';
+elements.get('greenhouseHeated').value = 'yes';
+assert.equal(run('window.SuBalance.payload().greenhouse_medium'), 'substrate');
+assert.equal(run('window.SuBalance.payload().greenhouse_heated'), 'yes');
+elements.get('greenhouseMedium').value = 'soil';
+elements.get('greenhouseHeated').value = 'no';
 // Salinity: optional laboratory values reach the payload; empty stays absent; out-of-range is refused.
 run("window.SuBalance.sync('corn','open','ru')");
 assert.equal(run('window.SuBalance.payload().water_ec'), undefined, 'Empty ECw must stay absent');

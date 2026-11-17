@@ -460,6 +460,11 @@
     <details id="greenhouseBalance" class="hidden">
       <summary data-balance-copy="greenhouseSettings">Микроклимат теплицы · необязательно</summary>
       <div class="balance-fields">
+        <label for="greenhouseMedium" data-balance-copy="greenhouseMedium">Где растут растения</label>
+        <select id="greenhouseMedium"><option value="soil" data-balance-copy="mediumSoil">В грунте</option><option value="substrate" data-balance-copy="mediumSubstrate">На субстрате (минвата, кокос)</option></select>
+        <label for="greenhouseHeated" data-balance-copy="greenhouseHeated">Отопление</label>
+        <select id="greenhouseHeated"><option value="no" data-balance-copy="heatedNo">Не отапливается</option><option value="yes" data-balance-copy="heatedYes">Отапливается зимой</option></select>
+        <p class="balance-help" data-balance-copy="greenhouseWarn">Для субстрата, а также для отапливаемой теплицы без измеренного ET₀ бот честно не выдаёт совет: там расчёт по уличной погоде неверен.</p>
         <label for="greenhouseEt0" data-balance-copy="greenhouseEt0">Измеренный ET₀, мм/сутки</label><input id="greenhouseEt0" type="text" inputmode="decimal" />
         <p class="balance-help" data-balance-copy="greenhouseHint">Оставьте пустым — система автоматически рассчитает ET₀ теплицы по Open-Meteo.</p>
       </div>

@@ -1,6 +1,6 @@
 // Browser demo: the bot's own calculation engine (sutech-engine.js is a byte-for-byte copy of the bot's balance.js),
 // run on a preset field. Nothing is sent anywhere; no Telegram needed.
-import {parseField, calculate, SOILS, METHODS, CROPS, VERSION} from './sutech-engine.js';
+import {parseField, calculate, SOILS, METHODS, CROPS, VERSION, PUMP_MAX_HOURS_PER_DAY} from './sutech-engine.js';
 
 // Identical to DEMO_FIELD / DEMO_WEATHER in the bot (serverless/tgcloud/lib/demo.js).
 export const DEMO = {crop: 'wheat', soil_type: 'loam', irrigation_type: 'drip', area: 1, day_of_growth: 60,
@@ -21,6 +21,7 @@ export const COPY = {
     rainRule: 'Effective rain: below 5 mm counts as 0, otherwise 75 % (project rule).',
     trigger: 'Irrigation trigger = min(technology threshold {t} mm, RAW)',
     dec: {critical: 'deficit is above RAW: water now', irrigate: 'deficit reached the trigger: irrigate', deferred: 'deficit is below the trigger: wait'},
+    pumpSplit: 'The pump delivers at most {max} m³ in {h} h a day, so the watering is split over {days} days, about {per} m³ a day.',
     note: 'This is a model calculation, not a measurement on a real field. Soil and crop parameters are project values, not a local calibration. In the bot, ET₀ and rain come from the Open-Meteo forecast for the field; here you set them yourself.',
     engine: 'Engine', open: 'Calculate your own field in the bot',
     crops: {wheat: 'Wheat', cotton: 'Cotton', corn: 'Maize', alfalfa: 'Alfalfa', melon: 'Melon', tomato: 'Tomato', potato: 'Potato'},
@@ -43,6 +44,7 @@ export const COPY = {
     rainRule: 'Эффективный дождь: меньше 5 мм не учитывается, иначе 75 % (правило проекта).',
     trigger: 'Порог полива = min(порог технологии {t} мм, RAW)',
     dec: {critical: 'дефицит больше RAW: поливать сейчас', irrigate: 'дефицит достиг порога: поливать', deferred: 'дефицит ниже порога: ждать'},
+    pumpSplit: 'Насос подаёт не больше {max} м³ за {h} ч в сутки, поэтому полив разделён на {days} дн., около {per} м³ в день.',
     note: 'Это расчёт по модели, а не измерение на реальном поле. Параметры почвы и культуры — значения проекта, не местная калибровка. В боте ET₀ и дождь берутся из прогноза Open-Meteo для поля, здесь вы задаёте их сами.',
     engine: 'Движок', open: 'Рассчитать своё поле в боте',
     crops: {wheat: 'Пшеница', cotton: 'Хлопок', corn: 'Кукуруза', alfalfa: 'Люцерна', melon: 'Бахча', tomato: 'Томаты', potato: 'Картофель'},
@@ -65,6 +67,7 @@ export const COPY = {
     rainRule: 'Тиімді жауын: 5 мм-ден аз болса есептелмейді, әйтпесе 75 % (жоба ережесі).',
     trigger: 'Суару шегі = min(технология шегі {t} мм, RAW)',
     dec: {critical: 'тапшылық RAW-дан көп: қазір суару', irrigate: 'тапшылық шекке жетті: суару', deferred: 'тапшылық шектен төмен: күту'},
+    pumpSplit: 'Сорғы тәулігіне {h} сағатта {max} м³-ден артық бермейді, сондықтан суару {days} күнге бөлінді, күніне шамамен {per} м³.',
     note: 'Бұл нақты алқаптағы өлшеу емес, модель есебі. Топырақ пен дақыл параметрлері — жоба мәндері, жергілікті калибрлеу емес. Ботта ET₀ мен жауын алқапқа арналған Open-Meteo болжамынан алынады, мұнда оларды өзіңіз бересіз.',
     engine: 'Қозғалтқыш', open: 'Өз алқабыңызды ботта есептеу',
     crops: {wheat: 'Бидай', cotton: 'Мақта', corn: 'Жүгері', alfalfa: 'Жоңышқа', melon: 'Бақша', tomato: 'Қызанақ', potato: 'Картоп'},
@@ -102,7 +105,7 @@ export function explain(field, r, input, lang) {
   ];
   if (r.status !== 'deferred') {
     steps.push({title: t.volume, formula: `${t.deficit} × 10 × ${t.area_w} ÷ η = ${f(r.deficit)} × 10 × ${f(field.area_ha, 2)} ÷ ${f(eff, 2)}`, value: `${f(r.gross_m3, 0)} ${u.m3}`});
-    steps.push({title: t.pump, formula: `${f(r.gross_m3, 0)} ÷ ${f(field.pump_productivity_m3h, 0)} = ${f(r.ai_time_hours)} ${u.h}; ${f(r.ai_time_hours)} × ${f(field.pump_power_kw, 0)} kW × ${f(field.power_price, 0)} ₸`, value: `${f(r.cost, 0)} ₸`});
+    steps.push({title: t.pump, formula: `${f(r.gross_m3, 0)} ÷ ${f(field.pump_productivity_m3h, 0)} = ${f(r.ai_time_hours)} ${u.h}; ${f(r.ai_time_hours)} × ${f(field.pump_power_kw, 0)} kW × ${f(field.power_price, 0)} ₸`, value: `${f(r.cost, 0)} ₸`, note: r.irrigation_days > 1 ? t.pumpSplit.replace('{max}', f(r.max_daily_m3, 0)).replace('{h}', String(PUMP_MAX_HOURS_PER_DAY)).replace('{days}', String(r.irrigation_days)).replace('{per}', f(r.gross_m3 / r.irrigation_days, 0)) : ''});
   }
   return steps;
 }

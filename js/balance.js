@@ -26,6 +26,7 @@ window.SuBalance = (() => {
       calendar:'Расширенные настройки', calendarHint:'Сроки стадий заполнены автоматически для выбранной культуры. При необходимости измените их под сорт и климат. Люцерна — первый цикл.',
       initial:'Начало, дней', development:'Развитие, дней', middle:'Середина, дней', late:'Созревание, дней',
       customHint:'Введите параметры текущей стадии вашей культуры.', customP:'Доля истощения p (0,1–0,8)', root:'Глубина корней, м',
+      salinitySettings:'Засоление · необязательно', waterEc:'Солёность воды для полива ECw, дСм/м', soilEc:'Солёность почвы ECe, дСм/м', salinityHint:'Берутся из лабораторного анализа воды и почвы. Пустые поля: система ничего не добавляет и не придумывает. С ECw бот добавит воду для промывки солей (FAO-29), с ECe покажет ожидаемую потерю урожая от соли (FAO-56). Для дыни в книге нет данных.',
       greenhouseSettings:'Микроклимат теплицы · необязательно', greenhouseEt0:'Измеренный ET₀, мм/сутки', greenhouseHint:'Оставьте пустым — система автоматически возьмёт FAO-56 ET₀ из Open-Meteo и учтёт 70% светопропускания покрытия. Заполняйте только при наличии измерения или значения агронома; внешние осадки внутри равны нулю.',
       energy:'Стоимость насоса · необязательно', price:'Тариф, ₸/кВт·ч',
       pumpPower:'Мощность насоса (кВт)', pumpProductivity:'Производительность (м³/ч)',
@@ -49,6 +50,7 @@ window.SuBalance = (() => {
       calendar:'Кеңейтілген баптаулар', calendarHint:'Кезең мерзімдері таңдалған дақылға автоматты толтырылды. Қажет болса, сорт пен климатқа сай өзгертіңіз. Жоңышқа — алғашқы цикл.',
       initial:'Басы, күн', development:'Даму, күн', middle:'Ортасы, күн', late:'Пісу, күн',
       customHint:'Дақылдың ағымдағы кезең параметрлерін енгізіңіз.', customP:'Сарқылу үлесі p (0,1–0,8)', root:'Тамыр тереңдігі, м',
+      salinitySettings:'Тұздану · міндетті емес', waterEc:'Суару суының тұздылығы ECw, дСм/м', soilEc:'Топырақ тұздылығы ECe, дСм/м', salinityHint:'Су мен топырақтың зертханалық талдауынан алынады. Бос өрістер: жүйе ештеңе қоспайды және ойдан шығармайды. ECw болса, бот тұзды шаю суын қосады (FAO-29), ECe болса, тұздан өнімнің күтілетін шығынын көрсетеді (FAO-56). Бақша үшін кітапта дерек жоқ.',
       greenhouseSettings:'Жылыжай микроклиматы · міндетті емес', greenhouseEt0:'Өлшенген ET₀, мм/тәулік', greenhouseHint:'Бос қалдырыңыз — жүйе Open-Meteo FAO-56 ET₀ мәнін автоматты алып, жабынның 70% жарық өткізгіштігін ескереді. Тек өлшем немесе агроном мәні болса енгізіңіз; сыртқы жауын-шашын іште нөлге тең.',
       energy:'Сорғы құны · міндетті емес', price:'Тариф, ₸/кВт·сағ',
       pumpPower:'Сорғы қуаты (кВт)', pumpProductivity:'Өнімділігі (м³/сағ)',
@@ -72,6 +74,7 @@ window.SuBalance = (() => {
       calendar:'Advanced settings', calendarHint:'Stage lengths are filled automatically. Adjust them for the variety and local climate when needed. Alfalfa uses the first cycle.',
       initial:'Initial, days', development:'Development, days', middle:'Mid-season, days', late:'Late season, days',
       customHint:'Enter the current-stage parameters for your crop.', customP:'Depletion fraction p (0.1–0.8)', root:'Root depth, m',
+      salinitySettings:'Salinity · optional', waterEc:'Irrigation water salinity ECw, dS/m', soilEc:'Soil salinity ECe, dS/m', salinityHint:'Take them from a laboratory analysis of the water and the soil. Empty fields: the system adds and invents nothing. With ECw the bot adds leaching water (FAO-29); with ECe it shows the expected salt yield loss (FAO-56). The book has no data for melons.',
       greenhouseSettings:'Greenhouse microclimate · optional', greenhouseEt0:'Measured ET₀, mm/day',
       greenhouseHint:'Leave empty to estimate greenhouse ET₀ from Open-Meteo FAO-56 ET₀ with 70% cover transmission. Enter a value only when measured or supplied by an agronomist; outdoor rain is zero indoors.',
       energy:'Pump cost · optional', price:'Tariff, ₸/kWh', pumpPower:'Pump power (kW)', pumpProductivity:'Flow rate (m³/h)',
@@ -178,6 +181,9 @@ window.SuBalance = (() => {
       data.custom_p = read('customP',.1,.8);
       data.custom_root_depth = read('customRoot',.05,3);
     }
+    const waterEc = read('waterEc',0,25,false,true), soilEc = read('soilEc',0,50,false,true);
+    if (waterEc !== null) data.water_ec = waterEc;
+    if (soilEc !== null) data.soil_ec = soilEc;
     if (field === 'greenhouse' && crop !== 'rice') {
       const measuredEt0 = read('greenhouseEt0',0,50,false,true);
       if (measuredEt0 !== null) data.greenhouse_et0 = measuredEt0;
@@ -228,7 +234,7 @@ window.SuBalance = (() => {
         kz: {required:'Мәнді енгізіңіз.', numeric:'Санды енгізіңіз. Бөлшек үшін үтірді қолдануға болады.', integer:'Күн санын бүтін санмен енгізіңіз.', range:'{min} және {max} аралығындағы мәнді енгізіңіз.', pumpRequired:'Суару құнын есептеу үшін сорғы сипаттамасын енгізіңіз немесе тарифті өшіріңіз — су есебі қолжетімді болады.'},
         en: {required:'Enter a value.', numeric:'Enter a number. A decimal comma is also accepted.', integer:'Enter a whole number of days.', range:'Enter a value from {min} to {max}.', pumpRequired:'For irrigation cost, enter your pump specification or clear the tariff to calculate water only.'}
       };
-      const labels = {growthDay:'day', soilType:'soil', moistureCondition:'moisture', powerPrice:'price', pumpPower:'pumpPower', pumpProductivity:'pumpProductivity', customP:'customP', customRoot:'root', greenhouseEt0:'greenhouseEt0', stageInitial:'initial', stageDevelopment:'development', stageMiddle:'middle', stageLate:'late', plantingDate:'dateLabel'};
+      const labels = {growthDay:'day', soilType:'soil', moistureCondition:'moisture', powerPrice:'price', pumpPower:'pumpPower', pumpProductivity:'pumpProductivity', customP:'customP', customRoot:'root', greenhouseEt0:'greenhouseEt0', waterEc:'waterEc', soilEc:'soilEc', stageInitial:'initial', stageDevelopment:'development', stageMiddle:'middle', stageLate:'late', plantingDate:'dateLabel'};
       const label = currentCopy[labels[err.id]] || (err.id === 'customKc' ? 'Kc' : '');
       const detail = (validationCopy[lang]?.[err.message] || currentCopy[err.message] || currentCopy.error)
         .replace('{min}', err.min).replace('{max}', err.max);

@@ -80,39 +80,19 @@ test('legacy media listener and invalid Telegram scheme fall back to device', ()
   const app = setup({legacyMedia: true, host}); app.change(true);
   assert.equal(app.root.dataset.theme, 'dark');
 });
-test('manual choice persists across reloads and overrides device and Telegram', () => {
-  const storage = new Map(), app = setup({storage});
-  app.window.SuTheme.setPreference('dark');
-  assert.equal(app.root.dataset.theme, 'dark');
-  assert.equal(setup({storage}).root.dataset.theme, 'dark');
-  const host = telegram(); host.colorScheme = 'light';
-  const miniApp = setup({host, storage});
-  host.listeners[0].fn(); miniApp.change(false);
-  assert.equal(miniApp.root.dataset.theme, 'dark');
-});
-test('returning to automatic clears saved choice and follows the host again', () => {
+test('there is no manual override: a choice saved by an older version is ignored and removed', () => {
   const storage = new Map([['sutech:theme:v1','light']]), app = setup({dark:true,storage});
-  assert.equal(app.root.dataset.theme, 'light');
-  app.window.SuTheme.setPreference('auto');
   assert.equal(app.root.dataset.theme, 'dark');
   assert.equal(storage.size, 0);
+  assert.equal(app.window.SuTheme.setPreference, undefined);
   app.change(false);
   assert.equal(app.root.dataset.theme, 'light');
 });
-test('invalid saved values are ignored and blocked storage does not break switching', () => {
-  const app = setup({dark:true,storage:new Map([['sutech:theme:v1','invalid']])});
-  assert.equal(app.root.dataset.theme, 'dark');
-  app.window.SuTheme.setPreference('wrong');
-  assert.equal(app.root.dataset.theme, 'dark');
-  const blocked = setup({blockedStorage:true});
-  blocked.window.SuTheme.setPreference('dark');
+test('blocked storage does not break the device theme', () => {
+  const blocked = setup({dark:true,blockedStorage:true});
   assert.equal(blocked.root.dataset.theme, 'dark');
 });
-test('storage events synchronize another tab', () => {
-  const storage = new Map(), app = setup({storage});
-  storage.set('sutech:theme:v1','dark');
-  app.events.storage({key:'sutech:theme:v1'});
-  assert.equal(app.root.dataset.theme, 'dark');
-  storage.clear(); app.events.storage({key:null});
-  assert.equal(app.root.dataset.theme, 'light');
+test('the page has no theme switch', () => {
+  const html = fs.readFileSync(`${__dirname}/index.html`, 'utf8');
+  assert.doesNotMatch(html, /themeToggle|data-theme-choice|theme-picker/);
 });

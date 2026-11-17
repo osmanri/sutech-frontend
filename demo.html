@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" data-default-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Su-Tech — Try it</title>
+  <meta name="description" content="Su-Tech irrigation advice in the browser: the bot's FAO-56 engine on a preset field, every step shown." />
+  <meta name="theme-color" content="#015133" />
+  <script src="js/theme.js?v=5.10.71"></script>
+  <link rel="icon" href="img/sutech-leaf-logo-transparent.png?v=5.10.35" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css?v=1" />
+  <style>
+    .demo-grid{display:grid;gap:16px;grid-template-columns:1fr}
+    @media(min-width:860px){.demo-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start}.demo-grid .inputs{position:sticky;top:96px}}
+    .inputs{padding:20px}
+    .inputs h2,.out h2{margin:0 0 12px;font-size:20px}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:10px 0 4px}
+    select,input[type=number]{width:100%;min-height:44px;padding:0 12px;border-radius:13px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 15px Inter,sans-serif}
+    input[type=range]{width:100%;accent-color:#71c02a;min-height:32px}
+    .range-head{display:flex;justify-content:space-between;align-items:baseline}
+    .range-head output{font-weight:700;color:var(--ink);font-size:14px}
+    .reset{margin-top:16px;width:100%}
+    fieldset{border:0;padding:0;margin:12px 0 0}
+    legend{font-size:13px;font-weight:700;color:var(--ink);padding:0}
+    .out{padding:22px}
+    .verdict{border-radius:22px;padding:20px;color:#f4fbef;background:radial-gradient(70% 90% at 100% 0%,rgba(149,212,46,.32),transparent 60%),linear-gradient(160deg,#0b6a40,#015133 50%,#00281b);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+    .verdict .eyebrow{color:#b9e07a}
+    #status{font:800 22px/1.2 Manrope,Inter,sans-serif;margin:0 0 14px}
+    #status[data-status="deferred"]{color:#d6f2a6}
+    .nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .nums div{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:10px 12px}
+    .nums span{display:block;font-size:12px;color:rgba(232,245,222,.75)}
+    .nums b{display:block;font:800 20px/1.2 Manrope,Inter,sans-serif;overflow-wrap:anywhere}
+    #steps{margin-top:14px}
+    .step-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:4px}
+    .step-value{font-weight:800;color:var(--accent);text-align:right}
+    #steps code{display:block;white-space:normal;overflow-wrap:anywhere;padding:6px 8px}
+    #steps p{margin:6px 0 0}
+  </style>
+  <script defer src="js/site.js?v=1"></script>
+  <script type="module" src="js/demo.js?v=1"></script>
+</head>
+<body>
+  <header class="site-top glass">
+    <a class="site-brand" href="about.html"><img src="img/sutech-leaf-logo-transparent.png?v=5.10.35" alt="" width="28" height="28" />Su-Tech<span>.</span></a>
+    <nav class="site-nav" aria-label="Pages"><a href="about.html" data-nav="about">Project</a><a href="demo.html" data-nav="demo" aria-current="page">Try it</a><a href="results.html" data-nav="results">Results</a><a href="https://t.me/Su_Tech_bot?start=demo_en" data-nav="bot">Open the bot</a></nav>
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="ru">RU</button><button type="button" data-lang="kz">ҚАЗ</button></div>
+  </header>
+  <main class="page" id="main">
+    <section class="hero-band">
+      <p class="eyebrow" data-c="eyebrow">Live demo · no Telegram needed</p>
+      <h1 data-c="title">Try Su-Tech in your browser</h1>
+      <p data-c="lead"></p>
+    </section>
+    <div class="demo-grid">
+      <form class="inputs glass" onsubmit="return false" aria-labelledby="h-in">
+        <h2 id="h-in" data-c="inputs">Field and weather</h2>
+        <div class="row2">
+          <div><label for="crop" data-c="crop">Crop</label><select id="crop"></select></div>
+          <div><label for="soil_type" data-c="soil">Soil</label><select id="soil_type"></select></div>
+          <div><label for="irrigation_type" data-c="method">Irrigation</label><select id="irrigation_type"></select></div>
+          <div><label for="area" data-c="area">Area, ha</label><input id="area" type="number" min="0.01" max="49999" step="0.01" inputmode="decimal" /></div>
+        </div>
+        <label for="moisture_condition" data-c="moisture">Soil moisture yesterday</label><select id="moisture_condition"></select>
+        <div class="range-head"><label for="day_of_growth" data-c="day">Days since sowing</label><output id="out-day" for="day_of_growth"></output></div>
+        <input id="day_of_growth" type="range" min="0" max="135" step="1" />
+        <div class="range-head"><label for="et0" data-c="et0">ET₀</label><output id="out-et0" for="et0"></output></div>
+        <input id="et0" type="range" min="0" max="12" step="0.1" />
+        <div class="range-head"><label for="rain" data-c="rain">Rain</label><output id="out-rain" for="rain"></output></div>
+        <input id="rain" type="range" min="0" max="40" step="0.5" />
+        <fieldset><legend data-c="pump">Pump</legend>
+          <div class="row3">
+            <div><label for="pump_power_kw" data-c="power">kW</label><input id="pump_power_kw" type="number" min="0.1" step="0.1" inputmode="decimal" /></div>
+            <div><label for="pump_productivity_m3h" data-c="flow">m³/h</label><input id="pump_productivity_m3h" type="number" min="1" step="1" inputmode="decimal" /></div>
+            <div><label for="power_price" data-c="price">₸/kWh</label><input id="power_price" type="number" min="0" step="0.5" inputmode="decimal" /></div>
+          </div>
+        </fieldset>
+        <button type="button" id="reset" class="btn ghost reset" data-c="reset">Reset</button>
+      </form>
+      <section class="out glass" aria-live="polite" aria-labelledby="h-out">
+        <div class="verdict">
+          <p class="eyebrow" id="h-out" data-c="result">Today's advice</p>
+          <p id="status">…</p>
+          <div class="nums">
+            <div><span data-c="apply">Apply</span><b id="m3">—</b></div>
+            <div><span data-c="hours">Pump time</span><b id="hours">—</b></div>
+            <div><span data-c="cost">Electricity</span><b id="cost">—</b></div>
+          </div>
+        </div>
+        <h2 style="margin-top:20px" data-c="how">How it is calculated</h2>
+        <ol class="steps" id="steps"></ol>
+        <p class="muted small" style="margin-top:14px" data-c="note"></p>
+        <p class="muted small" id="engine"></p>
+        <a class="btn" href="https://t.me/Su_Tech_bot" data-c="open">Calculate your own field in the bot</a>
+      </section>
+    </div>
+    <p class="foot">Su-Tech · FAO-56 · <a href="https://github.com/osmanri/sutech-core">GitHub</a></p>
+  </main>
+</body>
+</html>

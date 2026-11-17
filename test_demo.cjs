@@ -1,0 +1,45 @@
+// Browser demo: runs the bot's engine copy on the bot's demo field and explains every step.
+const assert = require('assert');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+
+(async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'sutech-demo-'));
+  fs.writeFileSync(path.join(dir, 'package.json'), '{"type":"module"}');
+  for (const f of ['sutech-engine.js', 'demo.js']) fs.copyFileSync(path.join(__dirname, 'js', f), path.join(dir, f));
+  const demo = await import(path.join(dir, 'demo.js'));
+
+  const {result: r, field} = demo.compute(demo.DEMO);
+  assert.strictEqual(r.status, 'critical');
+  assert.ok(Math.abs(r.taw - 187.5) < 1e-9 && Math.abs(r.raw - 103.125) < 1e-9 && Math.abs(r.deficit - 108.875) < 1e-9);
+  assert.ok(Math.abs(r.gross_m3 - 1088.75 / 0.9) < 1e-9);
+  assert.ok(Math.abs(r.cost - 1088.75 / 0.9 / 60 * 22 * 25) < 1e-9);
+
+  for (const lang of ['en', 'ru', 'kz']) {
+    const steps = demo.explain(field, r, demo.DEMO, lang);
+    assert.strictEqual(steps.length, 7, lang);
+    steps.forEach(s => assert.ok(s.title && s.formula && s.value, `${lang} step`));
+    assert.deepStrictEqual(Object.keys(demo.COPY[lang]).sort(), Object.keys(demo.COPY.en).sort(), `${lang} keys`);
+  }
+  const wait = demo.compute({...demo.DEMO, moisture_condition: 'recent', et0: 2});
+  assert.strictEqual(wait.result.status, 'deferred');
+  assert.strictEqual(demo.explain(wait.field, wait.result, demo.DEMO, 'en').length, 5, 'no volume or pump step when waiting');
+
+  const html = fs.readFileSync(path.join(__dirname, 'demo.html'), 'utf8');
+  for (const id of ['crop', 'soil_type', 'irrigation_type', 'area', 'moisture_condition', 'day_of_growth', 'et0', 'rain',
+    'pump_power_kw', 'pump_productivity_m3h', 'power_price', 'reset', 'status', 'm3', 'hours', 'cost', 'steps', 'engine'])
+    assert.ok(html.includes(`id="${id}"`), `demo.html has #${id}`);
+  for (const key of new Set([...html.matchAll(/data-c="(\w+)"/g)].map(m => m[1]))) assert.ok(key in demo.COPY.en, `copy for ${key}`);
+
+  // about.js: every language has the same sections with the same number of items
+  const src = fs.readFileSync(path.join(__dirname, 'js', 'about.js'), 'utf8');
+  const sandbox = {document: {addEventListener() {}}, window: {}};
+  new Function('document', 'window', src.replace("document.addEventListener('DOMContentLoaded'", 'window.C = C; document.addEventListener(\'DOMContentLoaded\''))(sandbox.document, sandbox.window);
+  const C = sandbox.window.C;
+  for (const lang of ['ru', 'kz']) for (const [k, v] of Object.entries(C.en)) {
+    assert.ok(k in C[lang], `about ${lang}.${k}`);
+    if (Array.isArray(v)) assert.strictEqual(C[lang][k].length, v.length, `about ${lang}.${k} length`);
+  }
+  console.log('demo and about tests passed');
+})().catch(e => { console.error(e); process.exit(1); });

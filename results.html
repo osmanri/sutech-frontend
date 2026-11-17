@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" id="htmlRoot">
+<html lang="en" id="htmlRoot" data-default-lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -12,23 +12,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/results.css" />
+  <link rel="stylesheet" href="css/site.css?v=1" />
+  <script defer src="js/site.js?v=1"></script>
   <script defer src="js/results.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-t="skip">К содержимому</a>
-  <header class="top">
-    <a class="brand" href="index.html" aria-label="Su-Tech">
-      <img src="img/sutech-leaf-logo-transparent.png?v=5.10.35" alt="" width="30" height="30" />
-      <strong>Su-Tech<span aria-hidden="true">.</span></strong>
-    </a>
-    <div class="top-actions">
-      <a class="back" href="index.html" data-t="back">← Карта поля</a>
-      <div class="lang" role="group" aria-label="Language">
-        <button type="button" data-lang="ru" aria-pressed="true">RU</button>
-        <button type="button" data-lang="kz" aria-pressed="false">ҚАЗ</button>
-        <button type="button" data-lang="en" aria-pressed="false">EN</button>
-      </div>
-    </div>
+  <header class="site-top glass">
+    <a class="site-brand" href="about.html"><img src="img/sutech-leaf-logo-transparent.png?v=5.10.35" alt="" width="28" height="28" />Su-Tech<span>.</span></a>
+    <nav class="site-nav" aria-label="Pages"><a href="about.html" data-nav="about">Project</a><a href="demo.html" data-nav="demo">Try it</a><a href="results.html" data-nav="results" aria-current="page">Results</a><a href="https://t.me/Su_Tech_bot?start=demo_en" data-nav="bot">Open the bot</a></nav>
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="ru">RU</button><button type="button" data-lang="kz">ҚАЗ</button></div>
   </header>
 
   <main id="main">
@@ -61,7 +54,8 @@
 
     <section class="links" aria-label="Links">
       <a class="btn" href="https://github.com/osmanri/sutech-core/blob/main/research/README.md" data-t="linkMethod">Метод и воспроизведение</a>
-      <a class="btn ghost" href="https://t.me/Su_Tech_bot" data-t="linkBot">Открыть бота</a>
+      <a class="btn ghost" href="https://github.com/osmanri/sutech-core/tree/main/research/results" data-t="linkData">Данные (CSV)</a>
+      <a class="btn ghost" href="demo.html" data-t="linkDemo">Попробовать расчёт</a>
     </section>
     <p class="foot" data-t="foot"></p>
   </main>

@@ -464,6 +464,14 @@
         <p class="balance-help" data-balance-copy="greenhouseHint">Оставьте пустым — система автоматически рассчитает ET₀ теплицы по Open-Meteo.</p>
       </div>
     </details>
+    <details id="salinityBalance">
+      <summary data-balance-copy="salinitySettings">Засоление · необязательно</summary>
+      <div class="balance-fields">
+        <label for="waterEc" data-balance-copy="waterEc">Солёность воды для полива ECw, дСм/м</label><input id="waterEc" type="text" inputmode="decimal" />
+        <label for="soilEc" data-balance-copy="soilEc">Солёность почвы ECe, дСм/м</label><input id="soilEc" type="text" inputmode="decimal" />
+        <p class="balance-help" data-balance-copy="salinityHint">Берутся из лабораторного анализа воды и почвы. Пустые поля: система ничего не добавляет и не придумывает. С ECw бот добавит воду для промывки солей (FAO-29), с ECe покажет ожидаемую потерю урожая от соли (FAO-56). Для дыни в книге нет данных.</p>
+      </div>
+    </details>
     <details><summary data-balance-copy="energy">Стоимость насоса · необязательно</summary>
       <div class="balance-fields">
         <label for="powerPrice" data-balance-copy="price">Тариф, ₸/кВт·ч</label><input id="powerPrice" type="text" inputmode="decimal" />

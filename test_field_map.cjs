@@ -271,6 +271,18 @@ assert.equal(run('window.SuBalance.complete()'), true, 'Greenhouse must work wit
 assert.equal(run('window.SuBalance.payload().greenhouse_et0'), undefined, 'Empty expert override must stay absent');
 elements.get('greenhouseEt0').value = '2,5';
 near(run('window.SuBalance.payload().greenhouse_et0'), 2.5);
+// Salinity: optional laboratory values reach the payload; empty stays absent; out-of-range is refused.
+run("window.SuBalance.sync('corn','open','ru')");
+assert.equal(run('window.SuBalance.payload().water_ec'), undefined, 'Empty ECw must stay absent');
+assert.equal(run('window.SuBalance.payload().soil_ec'), undefined, 'Empty ECe must stay absent');
+elements.get('waterEc').value = '1,2';
+elements.get('soilEc').value = '4,7';
+near(run('window.SuBalance.payload().water_ec'), 1.2);
+near(run('window.SuBalance.payload().soil_ec'), 4.7);
+elements.get('waterEc').value = '26';
+assert.equal(run('window.SuBalance.payload()'), null, 'ECw above 25 dS/m must be refused');
+elements.get('waterEc').value = '';
+elements.get('soilEc').value = '';
 run("window.SuBalance.sync('other','open','ru')");
 assert.equal(run('window.SuBalance.payload()'), null);
 elements.get('customKc').value = '1,1';

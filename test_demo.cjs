@@ -7,7 +7,7 @@ const path = require('path');
 (async () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'sutech-demo-'));
   fs.writeFileSync(path.join(dir, 'package.json'), '{"type":"module"}');
-  for (const f of ['sutech-engine.js', 'demo.js']) fs.copyFileSync(path.join(__dirname, 'js', f), path.join(dir, f));
+  for (const f of ['sutech-engine.js', 'crops-data.js', 'demo.js']) fs.copyFileSync(path.join(__dirname, 'js', f), path.join(dir, f));
   const demo = await import(path.join(dir, 'demo.js'));
 
   const {result: r, field} = demo.compute(demo.DEMO);
@@ -43,5 +43,19 @@ const path = require('path');
     assert.ok(k in C[lang], `about ${lang}.${k}`);
     if (Array.isArray(v)) assert.strictEqual(C[lang][k].length, v.length, `about ${lang}.${k} length`);
   }
+  // Crop picker: the catalog the Mini App shows equals the crops the engine knows.
+  const vm = require('vm');
+  const pickerBox = {window: {}};
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname, 'js', 'crops-catalog.js'), 'utf8'), pickerBox);
+  const picked = JSON.parse(JSON.stringify(pickerBox.window.SU_CROPS));  // leave the vm realm
+  const engine = await import(path.join(dir, 'sutech-engine.js'));
+  assert.deepStrictEqual(picked.map(c => c.key), Object.keys(engine.CROPS), 'picker list = engine crops');
+  for (const c of picked) {
+    assert.ok(c.names.ru && c.names.kz && c.names.en, `${c.key} has three names`);
+    assert.deepStrictEqual(c.stages, engine.CROPS[c.key][4], `${c.key} default calendar = engine calendar`);
+  }
+  const html2 = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+  assert.ok(html2.indexOf('js/crops-catalog.js') < html2.indexOf('js/balance.js'), 'catalog must load before balance.js');
+  assert.ok(html2.includes('id="cropMore"'), 'picker present');
   console.log('demo and about tests passed');
 })().catch(e => { console.error(e); process.exit(1); });

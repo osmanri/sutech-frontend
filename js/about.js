@@ -23,6 +23,9 @@
       res: [['15–28%', 'less water at the same yield than the best fixed calendar'], ['25 / 25', 'seasons with a saving, in every crop and method combination'], ['9–20%', 'saving in the worst season']],
       resNote: 'Real weather (NASA POWER) for 5 irrigated regions of Kazakhstan, 2021–2025, cotton and maize, drip and furrow. The calendar was given the best interval and dose with hindsight, so it is the strongest schedule a farmer could possibly have. This is model against model, not a field measurement.',
       resBtn: 'Full results',
+      wrongT: 'What if the bot’s own assumptions are wrong?',
+      wrong: 'In the main study the bot and the simulated field share the same equations, which flatters the bot. So I repeated it with a real crop and soil that differ from the bot’s parameters (crop coefficient ±15%, soil water capacity ±20%), against the strongest calendar tuned on the real field.',
+      wrongList: ['With the weekly “dry / normal / wet” check the bot keeps crop stress at 0.0–0.4 days per season in every case (the best calendar has 7–11).', 'The saving then ranges from about 20–25% (parameters right, or the bot overestimates demand) down to about 0% when the bot overestimates the crop’s water need by 15% and the soil holds 20% more than assumed. In the worst season of that case it used 28% more water than the best calendar, with full yield.', 'Without the weekly check, a bot that underestimates the crop by 15% gives 25 stress days a season (41 in the worst case; worst-season yield 92%). The check is therefore part of the method, not an option.'],
       weakT: 'Where it breaks, and the fix',
       weak: 'I looked for the conditions under which the model fails. Random forecast errors up to ±30% barely matter. A forecast that always underestimates evaporation by 20% does: the error accumulates to up to 73 crop-stress days per season. A weekly “dry / normal / wet” check by the farmer removes the stress and keeps a 14–17% saving. That button is already in the bot.',
       valT: 'How the calculations are checked',
@@ -73,6 +76,9 @@
       res: [['15–28%', 'меньше воды при том же урожае, чем у лучшего графика'], ['25 / 25', 'сезонов с экономией в каждой комбинации культуры и способа полива'], ['9–20%', 'экономия в худшем сезоне']],
       resNote: 'Реальная погода (NASA POWER) пяти орошаемых регионов Казахстана, 2021–2025, хлопок и кукуруза, капля и арык. Графику подобрали лучший интервал и норму со знанием всех сезонов, то есть это самый сильный график, какой только может быть у фермера. Это модель против модели, а не измерение на поле.',
       resBtn: 'Все результаты',
+      wrongT: 'А если допущения самого бота неверны?',
+      wrong: 'В основном исследовании бот и «настоящее поле» считаются одними уравнениями, это льстит боту. Поэтому я повторил расчёт, когда настоящая культура и почва отличаются от параметров бота (коэффициент культуры ±15%, запас воды почвы ±20%), против самого сильного графика, подобранного на настоящем поле.',
+      wrongList: ['С еженедельной проверкой «сухо / нормально / влажно» стресс растений остаётся 0,0–0,4 дня за сезон во всех случаях (у лучшего графика 7–11).', 'Экономия при этом от 20–25% (параметры верны или бот переоценивает потребность) до около 0%, когда бот переоценивает потребность культуры на 15%, а почва держит на 20% больше. В худшем сезоне этого случая он потратил на 28% больше воды, чем лучший график, при полном урожае.', 'Без еженедельной проверки бот, который недооценивает культуру на 15%, даёт 25 дней стресса за сезон (41 в худшем случае; урожай в худшем сезоне 92%). Поэтому проверка — часть метода, а не опция.'],
       weakT: 'Где модель ломается и как это исправлено',
       weak: 'Я специально искал условия, при которых модель ошибается. Случайные ошибки прогноза до ±30% почти не влияют. А прогноз, который всё время занижает испарение на 20%, влияет: ошибка копится, до 73 дней стресса растений за сезон. Проверка «сухо / нормально / влажно» раз в неделю убирает стресс и сохраняет экономию 14–17%. Эта кнопка уже есть в боте.',
       valT: 'Как проверены расчёты',
@@ -123,6 +129,9 @@
       res: [['15–28%', 'өнім бірдей болғанда ең жақсы кестеден аз су'], ['25 / 25', 'маусымда үнемдеу бар, әр дақыл мен тәсіл тіркесімінде'], ['9–20%', 'ең нашар маусымдағы үнемдеу']],
       resNote: 'Қазақстанның бес суармалы өңірінің нақты ауа райы (NASA POWER), 2021–2025, мақта мен жүгері, тамшылатып және арықпен. Кестеге барлық маусымды біле отырып ең жақсы аралық пен мөлшер таңдалды, яғни бұл фермерде болуы мүмкін ең күшті кесте. Бұл — модель модельге қарсы, алқаптағы өлшем емес.',
       resBtn: 'Барлық нәтижелер',
+      wrongT: 'Ал боттың өз болжамдары қате болса ше?',
+      wrong: 'Негізгі зерттеуде бот пен «нақты алқап» бірдей теңдеулермен есептеледі, бұл ботқа тиімді. Сондықтан нақты дақыл мен топырақ бот параметрлерінен өзгеше болғанда (дақыл коэффициенті ±15%, топырақ су қоры ±20%) есепті қайталадым, нақты алқапта таңдалған ең күшті кестемен салыстырдым.',
+      wrongList: ['Апта сайынғы «құрғақ / қалыпты / ылғалды» тексерумен өсімдік күйзелісі барлық жағдайда маусымына 0,0–0,4 күн болады (ең жақсы кестеде 7–11).', 'Үнемдеу 20–25%-дан (параметрлер дұрыс немесе бот қажеттілікті асыра бағалайды) 0%-ға жуық дейін ауытқиды: бот дақылдың су қажеттілігін 15%-ға асыра бағалап, топырақ 20%-ға көп ұстағанда. Бұл жағдайдың ең нашар маусымында ол ең жақсы кестеден 28%-ға көп су жұмсады, өнім толық.', 'Апта сайынғы тексерусіз дақылды 15%-ға төмен бағалайтын бот маусымына 25 күн күйзеліс береді (ең нашарында 41; ең нашар маусымдағы өнім 92%). Сондықтан тексеру — әдістің бөлігі, міндетті емес қосымша емес.'],
       weakT: 'Модель қай жерде қателеседі және қалай түзетілді',
       weak: 'Мен модель қателесетін жағдайларды әдейі іздедім. Болжамның ±30%-ға дейінгі кездейсоқ қателері әсер етпейді дерлік. Ал буланушылықты үнемі 20%-ға төмендететін болжам әсер етеді: қате жинақталып, маусымына 73 күнге дейін өсімдік күйзелісі болады. Аптасына бір рет «құрғақ / қалыпты / ылғалды» тексеру күйзелісті жояды және 14–17% үнемдеуді сақтайды. Бұл батырма ботта бар.',
       valT: 'Есептеулер қалай тексерілді',
@@ -170,6 +179,7 @@
       if (src) li.append(link(`(${t.source})`, src));
       return li;
     }));
+    $('wrongList').replaceChildren(...t.wrongList.map(x => el('li', '', x)));
     $('lim').replaceChildren(...t.lim.map(x => el('li', '', x)));
     $('data').replaceChildren(...t.data.map(([x, href]) => { const li = el('li'); li.append(link(x, href)); return li; }));
     document.querySelectorAll('[data-keep-lang]').forEach(a => { const u = new URL(a.getAttribute('href').split('?')[0], location.href); u.searchParams.set('lang', lang); a.href = u.pathname.split('/').pop() + u.search; });

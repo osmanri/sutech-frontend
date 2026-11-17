@@ -22,6 +22,8 @@ const path = require('path');
     steps.forEach(s => assert.ok(s.title && s.formula && s.value, `${lang} step`));
     assert.deepStrictEqual(Object.keys(demo.COPY[lang]).sort(), Object.keys(demo.COPY.en).sort(), `${lang} keys`);
   }
+  const split = demo.explain(field, r, demo.DEMO, 'en').find(x => x.title === demo.COPY.en.pump);
+  assert.ok(split && /split over 2 days/.test(split.note), 'demo (1 210 m3 vs 1 200 m3/day) shows the pump split');
   const wait = demo.compute({...demo.DEMO, moisture_condition: 'recent', et0: 2});
   assert.strictEqual(wait.result.status, 'deferred');
   assert.strictEqual(demo.explain(wait.field, wait.result, demo.DEMO, 'en').length, 5, 'no volume or pump step when waiting');

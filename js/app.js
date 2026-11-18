@@ -118,9 +118,9 @@ const I18N = {
     pageTitle:      'Su-Tech — Smart Irrigation',
     pageDesc:       'Интеллектуальная система управления орошением на базе модели FAO-56 Penman-Monteith',
     headerSubtitle: 'Smart Irrigation',
-    heroTitleTop: 'Расчёт полива',
-    heroTitleAccent: 'для вашего поля',
-    heroDescription: 'Выберите участок и культуру. Su-Tech рассчитает потребность в воде по погоде и модели FAO-56.',
+    heroTitleTop: 'Точный полив.',
+    heroTitleAccent: 'Живое поле.',
+    heroDescription: 'Погода и данные поля подскажут, когда и сколько поливать.',
     heroCta: 'Настроить поле',
 
     block1Title:        'Карта вашего поля',
@@ -183,14 +183,14 @@ const I18N = {
 
     // Два переключателя
     labelFieldType:          'Тип участка:',
-    fieldText_open:          'Открытое поле',
-    fieldText_greenhouse:    'Теплица',
+    fieldText_open:          '☀️ Открытое поле',
+    fieldText_greenhouse:    '🏡 Теплица',
     fieldTypeBadge_open:     'Открытое поле',
     fieldTypeBadge_greenhouse:'Теплица',
 
     labelSalinity:           'Засоленность почвы:',
     salineText_no:           'Обычная почва',
-    salineText_yes:          'Солончак',
+    salineText_yes:          '🧂 Солончак',
     salineBadge_no:          'Обычная почва',
     salineBadge_yes:         'Солончак · промывка отдельно',
 
@@ -212,10 +212,10 @@ const I18N = {
     sumLabelFieldType: 'Тип участка:',
     sumLabelSaline:    'Почва:',
     noCoordsYet:       'Не определены (нажмите GPS)',
-    btnSubmitText:      'Рассчитать норму полива (FAO-56)',
+    btnSubmitText:      '💧 Рассчитать норму полива (FAO-56)',
     submitHint:        'Спутниковый анализ и расчёт по формуле FAO-56 Penman-Monteith',
-    summaryStatusReady:'Готово к расчёту',
-    summaryStatusIncomplete:'Заполните параметры',
+    summaryStatusReady:'ГОТОВО К РАСЧЁТУ',
+    summaryStatusIncomplete:'ЗАПОЛНИТЕ ПАРАМЕТРЫ',
 
     errNoGpsSupport:    'Ваш браузер не поддерживает геолокацию.',
     errGpsDenied:       'Доступ к GPS отклонён. Разрешите геолокацию или выберите поле на карте.',
@@ -235,9 +235,9 @@ const I18N = {
     pageTitle:      'Su-Tech — Smart Irrigation',
     pageDesc:       'FAO-56 Penman-Monteith моделі негізінде суаруды басқарудың зияткерлік жүйесі',
     headerSubtitle: 'Smart Irrigation',
-    heroTitleTop: 'Алқабыңызға',
-    heroTitleAccent: 'суару есебі',
-    heroDescription: 'Алқап пен дақылды таңдаңыз. Su-Tech ауа райы мен FAO-56 моделі бойынша су қажеттілігін есептейді.',
+    heroTitleTop: 'Дәл суару.',
+    heroTitleAccent: 'Өнімді алқап.',
+    heroDescription: 'Ауа райы мен алқап деректері қашан және қанша суару керегін көрсетеді.',
     heroCta: 'Алқапты баптау',
 
     block1Title:        'Алқап картасы',
@@ -300,14 +300,14 @@ const I18N = {
 
     // Екі қосқыш
     labelFieldType:          'Алқап түрі:',
-    fieldText_open:          'Ашық алқап',
-    fieldText_greenhouse:    'Жылыжай',
+    fieldText_open:          '☀️ Ашық алқап',
+    fieldText_greenhouse:    '🏡 Жылыжай',
     fieldTypeBadge_open:     'Ашық алқап',
     fieldTypeBadge_greenhouse:'Жылыжай',
 
     labelSalinity:           'Топырақтың тұздануы:',
     salineText_no:           'Қалыпты топырақ',
-    salineText_yes:          'Сортаң',
+    salineText_yes:          '🧂 Сортаң',
     salineBadge_no:          'Қалыпты топырақ',
     salineBadge_yes:         'Сортаң · шаю бөлек',
 
@@ -329,10 +329,10 @@ const I18N = {
     sumLabelFieldType: 'Алқап түрі:',
     sumLabelSaline:    'Топырақ:',
     noCoordsYet:       'Анықталмаған (GPS басыңыз)',
-    btnSubmitText:      'Суару нормасын есептеу',
+    btnSubmitText:      '💧 Суару нормасын есептеу',
     submitHint:        'Спутниктік талдау және FAO-56 Penman-Monteith формуласымен есептеу',
-    summaryStatusReady:'Есептеуге дайын',
-    summaryStatusIncomplete:'Параметрлерді толтырыңыз',
+    summaryStatusReady:'ЕСЕПТЕУГЕ ДАЙЫН',
+    summaryStatusIncomplete:'ПАРАМЕТРЛЕРДІ ТОЛТЫРЫҢЫЗ',
 
     errNoGpsSupport:    'Құрылғыңыз немесе браузер геолокацияны қолдамайды.',
     errGpsDenied:       'GPS рұқсаты берілмеді. Геолокацияны қосыңыз немесе картадан алқапты таңдаңыз.',
@@ -352,31 +352,31 @@ const I18N = {
 const UI_COPY = {
   ru: {
     navMap: 'Карта поля', navSettings: 'Параметры', navCalculation: 'Расчет',
-    skipToMap: 'Перейти к карте поля', navAria: 'Навигация', languageAria: 'Выбор языка', sectionAria: 'Разделы Su-Tech',
+    navAria: 'Навигация', languageAria: 'Выбор языка', sectionAria: 'Разделы Su-Tech',
     workspaceLabel: 'ВАШЕ ПОЛЕ. ВАШИ РЕШЕНИЯ.', pageHeading: 'Каждая капля — по делу.',
     pageIntro: 'Очертите поле. Выберите культуру. Узнайте, сколько воды нужно сегодня.',
     methodNote: 'Расчет на основе погоды и потребности культуры', mapEyebrow: '01 / ГРАНИЦЫ УЧАСТКА',
     satellite: 'Спутник', streets: 'Схема', mapDrawLabel: 'Нажмите, чтобы добавить угол поля',
-    selectRegion: 'Выбрать регион...', selectRegionPrompt: 'Выберите город / регион...', btnUndoPoint: 'Отменить точку',
-    btnResetContour: 'Сбросить', btnClearLocation: 'Убрать маркер',
+    selectRegion: '📍 Выбрать регион...', selectRegionPrompt: '📍 Выберите город / регион...', btnUndoPoint: '↩️ Отменить точку',
+    btnResetContour: '🔄 Сбросить', btnClearLocation: 'Убрать маркер',
     mapErrorTitle: 'Не удалось загрузить карту', mapErrorBody: 'Проверьте соединение и повторите загрузку. Площадь можно ввести вручную.',
     retryMap: 'Повторить загрузку', noteTitle: 'Точность начинается с границ',
     noteBody: 'Отмечайте углы по порядку. Минимум три точки — и площадь автоматически появится в расчете. Спутниковая подложка поможет найти границы.',
-    summaryEyebrow: 'ГОТОВЫ К СЛЕДУЮЩЕМУ ШАГУ?', footerNote: 'По погоде и параметрам поля',
+    summaryEyebrow: 'ГОТОВЫ К СЛЕДУЮЩЕМУ ШАГУ?', footerNote: 'Вода с заботой о будущем.',
   },
   kz: {
     navMap: 'Алқап картасы', navSettings: 'Параметрлер', navCalculation: 'Есептеу',
-    skipToMap: 'Алқап картасына өту', navAria: 'Сайт мәзірі', languageAria: 'Тілді таңдау', sectionAria: 'Su-Tech бөлімдері',
+    navAria: 'Сайт мәзірі', languageAria: 'Тілді таңдау', sectionAria: 'Su-Tech бөлімдері',
     workspaceLabel: 'СІЗДІҢ АЛҚАП. СІЗДІҢ ШЕШІМ.', pageHeading: 'Әр тамшы — өз орнымен.',
     pageIntro: 'Алқапты белгілеңіз. Дақылды таңдаңыз. Бүгін қанша су қажет екенін біліңіз.',
     methodNote: 'Ауа райы мен дақыл қажеттілігіне негізделген есеп', mapEyebrow: '01 / АЛҚАП ШЕКАРАСЫ',
     satellite: 'Жерсерік', streets: 'Сызба', mapDrawLabel: 'Алқап бұрышын қосу үшін басыңыз',
-    selectRegion: 'Аймақты таңдау...', selectRegionPrompt: 'Өңірді / қаланы таңдаңыз...', btnUndoPoint: 'Нүктені жою',
-    btnResetContour: 'Қайтару', btnClearLocation: 'Белгіні жою',
+    selectRegion: '📍 Аймақты таңдау...', selectRegionPrompt: '📍 Өңірді / қаланы таңдаңыз...', btnUndoPoint: '↩️ Нүктені жою',
+    btnResetContour: '🔄 Қайтару', btnClearLocation: 'Белгіні жою',
     mapErrorTitle: 'Картаны жүктеу мүмкін болмады', mapErrorBody: 'Байланысты тексеріп, қайта жүктеңіз. Ауданды қолмен енгізуге болады.',
     retryMap: 'Қайта жүктеу', noteTitle: 'Дәлдік шекарадан басталады',
     noteBody: 'Бұрыштарды ретімен белгілеңіз. Кемінде үш нүкте — аудан есепке автоматты енгізіледі. Спутниктік карта шекараны табуға көмектеседі.',
-    summaryEyebrow: 'КЕЛЕСІ ҚАДАМҒА ДАЙЫНСЫЗ БА?', footerNote: 'Ауа райы мен алқап деректері бойынша',
+    summaryEyebrow: 'КЕЛЕСІ ҚАДАМҒА ДАЙЫНСЫЗ БА?', footerNote: 'Болашаққа қамқорлықпен суару.',
   },
 };
 Object.assign(I18N.ru, {
@@ -417,9 +417,9 @@ I18N.en = {
   pageTitle: 'Su-Tech — Smart Irrigation',
   pageDesc: 'FAO-56 smart irrigation planning with live weather and field inputs',
   headerSubtitle: 'Smart Irrigation',
-  heroTitleTop: 'Irrigation planning',
-  heroTitleAccent: 'for your field',
-  heroDescription: 'Choose your field and crop. Su-Tech estimates water needs using the weather and the FAO-56 model.',
+  heroTitleTop: 'Precise irrigation.',
+  heroTitleAccent: 'Healthier crops.',
+  heroDescription: 'Weather and field data show when and how much to irrigate.',
   heroCta: 'Set up the field',
   block1Title: 'Your field on the map', block1Desc: 'Find the plot and mark its boundaries.',
   block1StatusWait: 'Select a field', block1StatusReady: 'Field selected',
@@ -461,7 +461,7 @@ I18N.en = {
   sumLabelIrrig: 'Technology:', sumLabelFieldType: 'Field type:', sumLabelSaline: 'Soil:',
   noCoordsYet: 'Select a field on the map or choose a region', btnSubmitText: 'Calculate irrigation',
   submitHint: 'Check the crop, area, soil and days since planting. The estimate will arrive in Telegram.',
-  summaryStatusReady: 'Ready to calculate', summaryStatusIncomplete: 'Complete the inputs',
+  summaryStatusReady: 'READY TO CALCULATE', summaryStatusIncomplete: 'COMPLETE THE INPUTS',
   errNoGpsSupport: 'Your browser does not support geolocation.',
   errGpsDenied: 'Location access was denied. Enable GPS or select the field on the map.',
   errGpsTimeout: 'GPS timed out. Try again or select the field on the map.',
@@ -478,7 +478,7 @@ I18N.en = {
 UI_COPY.en = {
   ...UI_COPY.ru,
   navMap:'Field map', navSettings:'Inputs', navCalculation:'Calculation',
-  skipToMap:'Skip to field map', navAria:'Navigation', languageAria:'Choose language', sectionAria:'Su-Tech sections',
+  navAria:'Navigation', languageAria:'Choose language', sectionAria:'Su-Tech sections',
   workspaceLabel:'YOUR FIELD. YOUR DECISIONS.', pageHeading:'Make every drop count.',
   pageIntro:'Mark your field. Choose a crop. Find out how much water it needs today.',
   methodNote:'Calculated from the weather and crop water needs', mapEyebrow:'01 / FIELD BOUNDARY',
@@ -488,9 +488,14 @@ UI_COPY.en = {
   mapErrorTitle:'Could not load the map', mapErrorBody:'Check the connection and retry. You can enter the area manually.',
   retryMap:'Retry', noteTitle:'Accuracy starts with the boundary',
   noteBody:'Mark the corners in order. With at least three points, the area appears in your calculation. Satellite imagery helps you find the boundary.',
-  summaryEyebrow:'READY FOR THE NEXT STEP?', footerNote:'Based on weather and field data',
+  summaryEyebrow:'READY FOR THE NEXT STEP?', footerNote:'Saving water for the future.',
 };
 
+const TICKER_COPY = {
+  ru: ['Расчёт водного баланса корней FAO-56', 'Точный метеопрогноз Open-Meteo', 'Рекомендации с объяснением расчёта', 'Защита растений от водного стресса'],
+  kz: ['FAO-56 бойынша су балансын дәл есептеу', 'Open-Meteo ауа райы болжамы', 'Есептеу түсіндірмесі бар ұсыныстар', 'Өсімдікті кебуден қорғау'],
+  en: ['FAO-56 Root Zone Water Balance', 'Live Open-Meteo Weather', 'Recommendations with calculation details', 'Crop Stress Prevention'],
+};
 
 // ─── 6. Языковое управление ───────────────────────────────────────────────
 function initLanguage() {
@@ -560,6 +565,10 @@ function applyLanguage(lang, animateIndicator = false) {
   });
   document.querySelectorAll('[data-copy-aria]').forEach(el => {
     el.setAttribute('aria-label', UI_COPY[lang]?.[el.dataset.copyAria] || '');
+  });
+  const ticker = TICKER_COPY[lang] || TICKER_COPY.ru;
+  document.querySelectorAll('[data-ticker-index]').forEach(el => {
+    el.textContent = ticker[Number(el.dataset.tickerIndex)] || '';
   });
 
   document.getElementById('htmlRoot').setAttribute('lang', lang);
@@ -1488,7 +1497,7 @@ function updateSummaryCard() {
     salineVal.textContent = state.is_saline === 'no' ? t.salineBadge_no : t.salineBadge_yes;
   }
 
-  // Dynamic Ready Badge: 'Есептеуге дайын' / 'Готово к расчёту'
+  // Dynamic Ready Badge: 'ЕСЕПТЕУГЕ ДАЙЫН' / 'ГОТОВО К РАСЧЁТУ'
   const summaryStatusBadge = document.getElementById('summaryStatusBadge');
   if (summaryStatusBadge) {
     const ready = state.latitude !== null && state.longitude !== null && state.area > 0 && state.area < 50000 && !!window.SuBalance?.complete();
@@ -1796,6 +1805,33 @@ function _setLangBtn(id, isActive) {
   el.setAttribute('aria-pressed', String(isActive));
 }
 
+const selectionPositions = new WeakMap();
+const selectionAnimations = new Set();
+
+// FLIP keeps differently sized labels continuous without animating layout width.
+function moveSelectionIndicator(indicator, containerRect, buttonRect, animate) {
+  const next = {left:buttonRect.left-containerRect.left, width:buttonRect.width};
+  const previous = selectionPositions.get(indicator);
+  if (previous && previous.left === next.left && previous.width === next.width) {
+    if (!animate) indicator.getAnimations?.().forEach(animation => animation.cancel());
+    return;
+  }
+  const before = indicator.getBoundingClientRect?.();
+  indicator.getAnimations?.().forEach(animation => animation.cancel());
+  selectionPositions.set(indicator, next);
+  indicator.style.width = next.width + 'px';
+  indicator.style.transform = 'translate3d(' + next.left + 'px, 0, 0)';
+  if (!animate || !before?.width || !indicator.animate ||
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+  const from = before.left-containerRect.left-(indicator.parentElement?.clientLeft || 0);
+  const animation = indicator.animate([
+    {transform:'translate3d('+from+'px, 0, 0) scaleX('+(before.width/next.width)+')'},
+    {transform:'translate3d('+next.left+'px, 0, 0) scaleX(1)'}
+  ], {duration:180,easing:'cubic-bezier(.22,1,.36,1)'});
+  selectionAnimations.add(animation);
+  animation.finished.catch(() => {}).finally(() => selectionAnimations.delete(animation));
+}
+
 function positionLanguageIndicator(lang, animate = false) {
   const switcher = document.querySelector('.language-switch');
   const indicator = switcher?.querySelector('.language-switch__indicator');
@@ -1809,8 +1845,7 @@ function positionLanguageIndicator(lang, animate = false) {
   // place; only a deliberate language change should travel between labels.
   if (animate) switcher.classList.add('is-ready');
   else switcher.classList.remove?.('is-ready');
-  indicator.style.width = `${buttonRect.width}px`;
-  indicator.style.transform = `translate3d(${buttonRect.left - switchRect.left}px, 0, 0)`;
+  moveSelectionIndicator(indicator, switchRect, buttonRect, animate);
   if (!animate) {
     requestAnimationFrame(() => switcher.classList.add('is-ready'));
   }
@@ -1825,8 +1860,7 @@ function positionSegmentIndicator(container) {
   const selectedRect = selected.getBoundingClientRect();
   if (!containerRect.width || !selectedRect.width) return;
   const isReady = container.classList.contains('is-ready');
-  indicator.style.width = `${selectedRect.width}px`;
-  indicator.style.transform = `translate3d(${selectedRect.left - containerRect.left}px, 0, 0)`;
+  moveSelectionIndicator(indicator, containerRect, selectedRect, isReady);
   if (!isReady) requestAnimationFrame(() => container.classList.add('is-ready'));
 }
 
@@ -1853,7 +1887,7 @@ function addKeyboardCardSupport() {
 }
 
 // ─── 16. Lightweight motion system ─────────────────────────────────────
-// User-triggered feedback uses the browser's animation API, without a runtime dependency.
+// Keep the original visual design; animate only deliberate selection and help.
 function initMotion() {
   // The field stays visible. Only user-opened help receives a short reveal.
   const preference = window.matchMedia?.('(prefers-reduced-motion: reduce)');
@@ -1876,8 +1910,20 @@ function initMotion() {
     });
   });
   preference?.addEventListener?.('change', event => {
-    if (event.matches) active.forEach(animation => animation.cancel());
+    if (event.matches) {
+      active.forEach(animation => animation.cancel());
+      selectionAnimations.forEach(animation => animation.cancel());
+    }
   });
+  const visibility = () => document.body.classList.toggle('motion-paused', document.hidden);
+  document.addEventListener('visibilitychange', visibility);
+  visibility();
+  const strip = document.querySelector('.signal-strip');
+  if (strip && window.IntersectionObserver) {
+    new IntersectionObserver(entries => entries.forEach(entry => {
+      entry.target.classList.toggle('motion-offscreen', !entry.isIntersecting);
+    })).observe(strip);
+  }
 }
 
 function initScrollProgress() {

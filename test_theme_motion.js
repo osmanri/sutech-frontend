@@ -28,8 +28,8 @@ async page => {
     const indicator=page.locator('#fieldTypeBtn_greenhouse').locator('..').locator('.segmented-toggle__indicator');
     const initial=await indicator.evaluate(e=>getComputedStyle(e).transform);
     await page.locator('#fieldTypeBtn_greenhouse').click();
-    const moving=await indicator.evaluate(e=>({transform:getComputedStyle(e).transform,duration:getComputedStyle(e).transitionDuration,animations:e.getAnimations().length}));
-    if(moving.animations===0||!moving.duration.includes('0.18s'))throw Error('Sliding selection missing in '+theme+': '+JSON.stringify(moving));
+    const moving=await indicator.evaluate(e=>({transform:getComputedStyle(e).transform,animations:e.getAnimations().map(a=>({duration:a.effect.getTiming().duration,properties:Object.keys(a.effect.getKeyframes()[0])}))}));
+    if(!moving.animations.some(a=>a.duration===180&&a.properties.includes('transform')))throw Error('Sliding selection missing in '+theme+': '+JSON.stringify(moving));
     if(await indicator.evaluate(e=>getComputedStyle(e).transitionProperty.includes('width')))throw Error('Selection animates layout width');
     await indicator.evaluate(async e=>{await Promise.all(e.getAnimations().map(a=>a.finished));});
     if(initial===await indicator.evaluate(e=>getComputedStyle(e).transform))throw Error('Indicator did not move in '+theme);

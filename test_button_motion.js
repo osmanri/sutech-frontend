@@ -12,7 +12,7 @@ async page => {
  const span=key=>Math.max(...frames.map(x=>x[key]))-Math.min(...frames.map(x=>x[key]));
  const drift={x:span('x'),y:span('y'),width:span('width'),height:span('height')};
  if(Object.values(drift).some(x=>x>.5))throw new Error('GPS moves while hovering: '+JSON.stringify(drift));
- if(baseFill!=='none'||await gps.evaluate(el=>getComputedStyle(el).backgroundImage)!=='none')throw new Error('GPS uses a decorative gradient');
+ if(!baseFill.includes('linear-gradient')||await gps.evaluate(el=>getComputedStyle(el).backgroundImage)!==baseFill)throw new Error('GPS hover changes the restored logo-color surface');
  const shine=await gps.evaluate(el=>{const c=getComputedStyle(el,'::after');return {name:c.animationName,iterations:c.animationIterationCount,duration:c.animationDuration};});
  if(shine.name!=='none')throw new Error('GPS has a decorative sheen: '+JSON.stringify(shine));
  if(await gps.evaluate(el=>{const s=getComputedStyle(el,'::after');return s.content!=='none'&&s.pointerEvents!=='none';}))throw new Error('Decoration intercepts button input');

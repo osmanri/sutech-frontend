@@ -3,12 +3,13 @@ const assert = require('assert');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const {pathToFileURL} = require('node:url');
 
 (async () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'sutech-demo-'));
   fs.writeFileSync(path.join(dir, 'package.json'), '{"type":"module"}');
   for (const f of ['sutech-engine.js', 'crops-data.js', 'demo.js']) fs.copyFileSync(path.join(__dirname, 'js', f), path.join(dir, f));
-  const demo = await import(path.join(dir, 'demo.js'));
+  const demo = await import(pathToFileURL(path.join(dir, 'demo.js')).href);
 
   const {result: r, field} = demo.compute(demo.DEMO);
   assert.strictEqual(r.status, 'critical');
@@ -48,7 +49,7 @@ const path = require('path');
   const pickerBox = {window: {}};
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, 'js', 'crops-catalog.js'), 'utf8'), pickerBox);
   const picked = JSON.parse(JSON.stringify(pickerBox.window.SU_CROPS));  // leave the vm realm
-  const engine = await import(path.join(dir, 'sutech-engine.js'));
+  const engine = await import(pathToFileURL(path.join(dir, 'sutech-engine.js')).href);
   assert.deepStrictEqual(picked.map(c => c.key), Object.keys(engine.CROPS), 'picker list = engine crops');
   for (const c of picked) {
     assert.ok(c.names.ru && c.names.kz && c.names.en, `${c.key} has three names`);

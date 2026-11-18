@@ -17,7 +17,7 @@ for (const m of ['drip', 'furrow']) {
   assert.ok(byKey['et0_bias_-20pct'].stress_days > 50, 'the bias scenario must show stress');
   assert.equal(byKey['et0_bias_-20pct_3level_check_7d'].stress_days, 0, 'weekly check removes the stress');
 }
-const source = fs.readFileSync(__dirname + '/js/results.js', 'utf8');
+const source = fs.readFileSync(__dirname + '/js/results.js', 'utf8').replace(/\r\n/g, '\n');
 const T = new Function(source.slice(source.indexOf('const T = ') + 'const T = '.length, source.indexOf('};\n  const root') + 1).replace(/^/, 'return '))();
 const keys = o => Object.keys(o).sort().join();
 assert.deepEqual(Object.keys(T).sort(), ['en', 'kz', 'ru']);

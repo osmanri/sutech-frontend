@@ -10,7 +10,8 @@
 |---|---|
 | `index.html` | Страница и тексты |
 | `js/app.js` | Форма, карта поля (Leaflet), переключение языка |
-| `js/theme.js`, `css/theme.css` | Автоматическая и ручная тема, палитра по логотипу |
+| `js/theme.js`, `css/workspace.css` | Автоматическая тема устройства/Telegram и фирменная зелёная палитра |
+| `css/app.css` | Структура интерфейса и состояния формы |
 | `js/field-guidance.js` | Подсказки по незаполненным полям |
 | `js/calculation-recovery.js` | Восстановление ввода после сбоя погоды |
 | `js/serverless-*.js` | Передача данных боту |
@@ -31,15 +32,15 @@
 Из корня репозитория, Node 18+:
 
 ```bash
-for t in test_*.js test_*.cjs; do node "$t"; done
+node --test test_*.cjs
 ```
 
 Страница результатов проверяется `test_results.cjs` (целостность данных и совпадение переводов).
 
-Все тесты сайта проходят: `node test_results.cjs`, `test_theme.cjs`, `test_weather.cjs`, `test_field_map.cjs` и остальные `test_*.js`.
+Файлы `test_*.cjs` проверяют расчёты, карту, локализацию, погоду и темы. Файлы `test_theme_ui.js`, `test_theme_motion.js` и `test_button_motion.js` запускаются в открытом браузере командой `playwright-cli run-code --filename=<файл>`.
 
 ## English
 
 Public pages for judges: `about.html` (project overview, validation, limitations, open data) and `demo.html` (the bot's engine in the browser, every FAO-56 step shown; `js/sutech-engine.js` is a byte-for-byte copy of the bot engine, enforced by a test in sutech-core).
 
-Su-Tech Mini App: field map, crop / soil / irrigation / pump inputs, three languages (RU / KZ / EN), light and dark themes. It runs inside Telegram and sends the field to the bot; calculations are done by [sutech-core](https://github.com/osmanri/sutech-core). `api/weather.js` is a cached Open-Meteo proxy that accepts coordinates only. Run the tests with `node test_*.js` / `node test_*.cjs`.
+Su-Tech Mini App: field map, crop / soil / irrigation / pump inputs, three languages (RU / KZ / EN), automatic light and dark themes. It runs inside Telegram and sends the field to the bot; calculations are done by [sutech-core](https://github.com/osmanri/sutech-core). `api/weather.js` is a cached Open-Meteo proxy that accepts coordinates only. Run functional tests with `node --test test_*.cjs`; run the browser checks through `playwright-cli run-code --filename=<file>`.

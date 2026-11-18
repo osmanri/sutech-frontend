@@ -1,0 +1,267 @@
+/* Su-Tech field workspace. Refinement guided by unslop by Damir Sokolovsky
+   (https://github.com/heydamir/unslop), CC BY 4.0. */
+
+/* 1. Spacing: one rhythm for the existing field setup workflow. */
+html:root body .app-header { height:72px; padding:0 24px; gap:16px; margin:0 auto; }
+html:root body .eco-hero { margin:24px auto 0; padding:32px 24px; min-height:0; }
+html:root body .eco-hero .hero-copy { min-height:0; max-width:720px; display:block; }
+html:root body .eco-hero .hero-description { margin-top:16px; max-width:560px; }
+html:root body .eco-hero .hero-actions { margin-top:24px; }
+html:root body .section-nav { margin:24px auto 0; padding:4px; gap:4px; }
+html:root body .workspace { padding:24px 16px 32px; }
+html:root body .workspace-grid { gap:24px; }
+html:root body .settings-column { gap:24px; }
+html:root body .settings-column section { padding:24px; }
+html:root body .settings-column section>div:first-child { margin-bottom:16px; gap:12px; }
+html:root body .section-heading { padding:24px 24px 0; gap:12px; }
+html:root body .map-topbar { padding:16px 24px; gap:12px; }
+html:root body .map-location-actions { gap:8px; min-width:0; }
+html:root body .map-stage { margin:0 16px 16px; }
+html:root body .map-toolbar { padding:0 16px 16px; gap:8px; }
+html:root body .crop-card { padding:12px 8px!important; gap:4px; min-height:64px; justify-content:center; }
+html:root body .irrig-card { padding:16px!important; }
+html:root body .irrig-card>div { gap:12px; }
+html:root body .balance-fields { gap:12px; }
+html:root body .balance-pair>div { gap:8px; }
+html:root body .settings-column #block3>div:not(:first-child) { margin-top:16px; }
+html:root body .segmented-chips { margin:8px 0 16px; gap:8px; }
+html:root body #balanceBlock .chip-btn { padding:12px 8px; gap:8px; min-height:80px; }
+html:root body .more-crops { display:grid; gap:8px; margin-top:16px; }
+html:root body .summary-card { margin-top:24px; padding:24px; }
+html:root body .summary-grid { margin:24px 0; }
+html:root body .summary-grid>div { padding:16px 0; }
+html:root body .summary-footer { gap:16px; padding-top:16px; }
+html:root body .page-footer { padding:24px 0; gap:16px; }
+
+/* 2. Color: the map carries the richness; chrome stays almost neutral. */
+html:root {
+  --canvas:#f6f7f5; --surface:#ffffff; --surface-raised:#f0f2ef;
+  --ink:#202822; --secondary:#525e56; --muted:#637067; --line:#dfe4df;
+  --accent:#015133; --accent-dark:#015133; --accent-ink:#ffffff;
+  --selected:#eaf2ec; --selected-ink:#01462c; --control-line:#87948b;
+  --brand-forest:#015133; --brand-ink:#00381f; --brand-leaf:#71c02a;
+  --leaf-surface:var(--selected); --forest-surface:var(--accent);
+  --leaf-relief:none; --leaf-tint:var(--selected); --leaf-wash:var(--surface-raised);
+  --leaf-border:var(--control-line); --pale:var(--surface-raised); --copper:var(--secondary);
+  --active-ink:var(--selected-ink); --soft-accent:var(--selected);
+  --ease-out:cubic-bezier(.22,1,.36,1); --control-motion:var(--ease-out);
+}
+html[data-theme="dark"] {
+  --canvas:#141715; --surface:#1c201d; --surface-raised:#262c28;
+  --ink:#edf1ed; --secondary:#bac4bc; --muted:#a1afa4; --line:#363f38;
+  --accent:#a5d4ad; --accent-dark:#a5d4ad; --accent-ink:#142218;
+  --selected:#283b2f; --selected-ink:#d7efdb; --control-line:#758479;
+  --leaf-surface:var(--selected); --forest-surface:var(--accent);
+  --leaf-tint:var(--selected); --leaf-wash:var(--surface-raised);
+  --pale:var(--surface-raised); --leaf-border:var(--control-line); --copper:var(--secondary);
+}
+html { background:var(--canvas); scrollbar-color:var(--control-line) var(--canvas); }
+html:root body { background:var(--canvas)!important; color:var(--ink); }
+html:root body :is(.app-header,.section-nav,.eco-hero,.map-panel,.settings-column section,.summary-card,.toast,.map-error) {
+  background:var(--surface)!important; border:1px solid var(--line); box-shadow:none!important;
+  backdrop-filter:none; -webkit-backdrop-filter:none; color:var(--ink);
+}
+html:root body :is(.crop-card,.irrig-card,#balanceBlock .chip-btn,.settings-column [data-field],.settings-column [data-saline],#unitBtn_sotka,#unitBtn_hectare,.growth-stage-options button) {
+  background:var(--surface)!important; color:var(--ink)!important;
+  border:1px solid var(--control-line)!important; box-shadow:none!important;
+}
+html:root body :is(.crop-card[aria-checked=true],.irrig-card[aria-checked=true],#balanceBlock .chip-btn[aria-checked=true],#balanceBlock .chip-btn.chip-active,.settings-column [data-field][aria-pressed=true],.settings-column [data-saline][aria-pressed=true],#unitBtn_sotka[aria-pressed=true],#unitBtn_hectare[aria-pressed=true],.growth-stage-options button[aria-pressed=true]) {
+  background:var(--selected)!important; color:var(--selected-ink)!important;
+  border-color:var(--accent)!important; box-shadow:inset 0 0 0 1px var(--accent)!important;
+}
+html:root body :is(.crop-card,.irrig-card,.chip-btn,.growth-stage-options button)[aria-checked=true] *,
+html:root body .growth-stage-options button[aria-pressed=true] * { color:var(--selected-ink)!important; }
+html:root body :is(.language-switch,.basemap-switch.segmented-toggle,#block3 .segmented-toggle) {
+  background:var(--surface-raised)!important; border:1px solid var(--line); box-shadow:none;
+}
+html:root body :is(.language-switch__indicator,.segmented-toggle__indicator) {
+  background:var(--surface)!important; border:1px solid var(--control-line); box-shadow:none;
+}
+html:root body :is(.language-switch,.basemap-switch.segmented-toggle,#block3 .segmented-toggle) button {
+  background:transparent!important; border:1px solid transparent!important;
+  box-shadow:none!important; color:var(--secondary)!important;
+}
+html:root body :is(.language-switch,.basemap-switch.segmented-toggle,#block3 .segmented-toggle) button[aria-pressed=true] { color:var(--ink)!important; }
+html:root body .language-switch button { width:44px; min-width:44px; padding-inline:0; }
+html:root body #block3 .segmented-toggle button[aria-pressed] { background:transparent!important; border-color:transparent!important; box-shadow:none!important; color:var(--secondary)!important; }
+html:root body #block3 .segmented-toggle button[aria-pressed=true] { color:var(--ink)!important; }
+html:root body :is(.settings-column input,.settings-column select,.region-select,#fieldAreaInput,.growth-stepper,.radius-controls input) {
+  background:var(--surface)!important; color:var(--ink); border:1px solid var(--control-line); box-shadow:none;
+  caret-color:var(--accent);
+}
+html:root body .balance-form .growth-value input { background:transparent!important; border:0; }
+html:root body :is(.growth-stepper>button,.map-toolbar button,#block3 button[onclick^="setPresetArea"],.gps-button,.calculation-recovery__actions button) {
+  background:var(--surface-raised)!important; color:var(--ink)!important;
+  border:1px solid var(--control-line); box-shadow:none!important;
+}
+html:root body :is(.hero-cta,.submit-button) {
+  background:var(--accent)!important; border:1px solid var(--accent)!important;
+  color:var(--accent-ink)!important; box-shadow:none!important;
+}
+html:root body :is(.hero-cta,.submit-button)>span { color:inherit!important; }
+html:root body :is(.hero-cta,.submit-button):is(:hover,:focus-visible)>span:first-child { color:inherit!important; }
+html:root body :is(.hero-cta,.submit-button) .motion-arrow { background:transparent!important; color:inherit!important; box-shadow:none; }
+html:root body :is(.brand strong,.eco-hero h1,.eco-hero h1 em,.summary-card h2,.summary-grid dd) { color:var(--ink); }
+html:root body .eco-hero h1 em { background:none; -webkit-text-fill-color:currentColor; filter:none; }
+html:root body .eco-hero h1 em { color:var(--ink)!important; }
+html:root body :is(.eco-hero .hero-description,.settings-column label,.settings-column #labelFieldType,.settings-column #labelSalinity,.balance-help,.more-crops label,.summary-grid dt,.summary-footer p,.page-footer,.coords-card,.area-readout span) { color:var(--secondary); }
+html:root body :is(.balance-info,.area-readout,.calculation-recovery,.location-prompt) {
+  background:var(--surface-raised)!important; color:var(--secondary)!important; border-color:var(--line);
+}
+html:root body :is(.summary-grid>div,.summary-footer) { border-color:var(--line); }
+html:root body #summaryStatusBadge { background:transparent; color:var(--secondary); border:0; padding:0; }
+html:root body input::placeholder { color:var(--muted); opacity:1; }
+html:root body ::selection { background:var(--selected-ink); color:var(--selected); }
+
+/* 3. Icons: existing line family; crop names do not need decorative pictures. */
+html:root body :is(.irrig-symbol,.chip-icon,.gps-button svg,.motion-arrow svg,.balance-info svg) {
+  width:18px; height:18px; stroke-width:1.5; filter:none; color:inherit;
+}
+html:root body :is(.irrig-symbol,.chip-icon) { color:var(--secondary); }
+html:root body .irrig-card>div>div:first-child { width:20px; color:var(--secondary); }
+
+/* 4. Copy lives in app.js. No decorative kicker above the actual title. */
+html:root body .brand small { text-transform:none; letter-spacing:0; }
+
+/* 5. Type: readable work labels, calm hierarchy and aligned numbers. */
+html:root body { font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:14px; line-height:1.5; }
+html:root body :is(h1,h2,h3,.brand strong,.hero-cta,.submit-button) { font-family:inherit; font-weight:500; }
+html:root body .brand strong { font-size:20px; font-weight:600; letter-spacing:-.02em; }
+html:root body .eco-hero h1 { max-width:720px; font-size:36px; line-height:1.1; font-weight:500; letter-spacing:-.025em; text-wrap:balance; }
+html:root body .eco-hero h1 em { font-style:normal; font-weight:500; }
+html:root body .eco-hero .hero-description { font-size:16px; line-height:1.6; }
+html:root body :is(.section-heading h2,.settings-column h2) { font-size:20px; font-weight:500; line-height:1.3; letter-spacing:0; }
+html:root body .summary-card h2 { font-size:28px; font-weight:500; letter-spacing:-.02em; }
+html:root body :is(.language-switch button,.basemap-switch button,.section-nav a,.gps-button,.map-toolbar button,.region-select,.settings-column label,.settings-column #labelFieldType,.settings-column #labelSalinity,#block3 .segmented-toggle button,.crop-card>[id^=cropName],#balanceBlock .chip-btn,.growth-stage-options strong) {
+  font-size:13px; font-weight:500; line-height:1.5; letter-spacing:0; text-transform:none;
+}
+html:root body :is(.more-crops select,.settings-column input,.settings-column select) { font:400 16px/1.5 Inter,sans-serif; }
+html:root body :is(.balance-form .balance-help,.more-crops .balance-help,.more-crops label,.settings-column section>p,.balance-info span,.summary-grid dt,.summary-footer p,.page-footer,.coords-card,#block1StatusPill,#summaryStatusBadge,.settings-column section>div:first-child>span:last-child) { font-size:12px; line-height:1.6; font-weight:400; letter-spacing:0; text-transform:none; }
+html:root body :is(.irrig-card [id^=irrigTitle],.summary-grid dd) { font-size:14px; font-weight:500; }
+html:root body .irrig-card :is([id^=irrigDesc],[id^=irrigBadge]) { font-size:12px; font-weight:400; line-height:1.6; color:var(--secondary); }
+html:root body .crop-card>[id^=cropSub] { display:none; }
+html:root body :is(.summary-grid dd,#fieldAreaInput,.growth-value input,.coords-card strong,.area-readout strong) { font-variant-numeric:tabular-nums; }
+html:root body #fieldAreaInput { font-size:28px; font-weight:500; }
+html:root body .balance-form .growth-value input { font-size:24px; font-weight:500; }
+html:root body :is(.hero-cta,.submit-button) { font-size:14px; font-weight:500; }
+
+/* 6. Layout: actual product first, with working desktop proportions. */
+html { scroll-padding-top:96px; }
+html:root body .skip-link { position:fixed; z-index:2000; top:8px; left:16px; padding:12px 16px; background:var(--surface); color:var(--ink); border:1px solid var(--control-line); border-radius:8px; transform:translateY(-160%); }
+html:root body .skip-link:focus { transform:none; }
+html:root body :is(.app-header,.eco-hero,.section-nav) { width:calc(100% - 32px); max-width:1320px; }
+html:root body .app-header { position:sticky; top:0; z-index:1000; border-top:0; }
+html:root body .hero-copy { width:100%; }
+html:root body .section-nav { display:flex; position:relative; top:auto; }
+html:root body .section-nav a { flex:1; min-height:44px; display:grid; place-items:center; }
+html:root body .workspace { width:100%; max-width:1352px; }
+html:root body .workspace-grid { display:flex; flex-direction:column; }
+html:root body :is(.map-column,.settings-column) { width:100%; min-width:0; }
+html:root body .map-column { position:static; }
+html:root body .map-topbar { display:flex; flex-wrap:wrap; align-items:center; }
+html:root body .map-location-actions { display:flex; flex:1; }
+html:root body .region-select { flex:1; width:100%; min-width:0; text-overflow:ellipsis; }
+html:root body .summary-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 24px; }
+html:root body .summary-grid dd { overflow-wrap:anywhere; }
+html:root body .summary-footer { display:flex; flex-direction:column; }
+html:root body .submit-button { position:static; width:100%; }
+html:root body .page-footer { flex-wrap:wrap; }
+html:root body .page-footer span:last-child { max-width:none; text-align:start; }
+@media(min-width:1000px) {
+  html:root body .eco-hero { padding:40px 32px; }
+  html:root body .eco-hero .hero-copy { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:16px 48px; max-width:none; }
+  html:root body .eco-hero h1 { grid-column:1; grid-row:1 / 3; }
+  html:root body .eco-hero .hero-description { grid-column:2; margin:0; }
+  html:root body .eco-hero .hero-actions { grid-column:2; margin:0; }
+  html:root body .eco-hero h1 { font-size:56px; letter-spacing:-.03em; }
+  html:root body .eco-hero h1 :is(span,em) { display:inline; }
+  html:root body .eco-hero .hero-description { font-size:18px; }
+  html:root body .workspace-grid { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(360px,1fr); align-items:start; }
+  html:root body .map-column { position:sticky; top:96px; }
+  html:root body #map { height:520px; }
+  html:root body .summary-heading { flex-direction:row; }
+  html:root body .summary-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  html:root body .summary-footer { flex-direction:row; align-items:center; }
+  html:root body .submit-button { width:auto; min-width:240px; }
+}
+@media(max-width:599px) {
+  html:root body .app-header { padding:0 12px; gap:8px; }
+  html:root body .eco-hero { padding:24px 20px; }
+  html:root body .map-topbar { padding:16px; }
+  html:root body .map-location-actions { flex-basis:100%; }
+  html:root body .section-heading { padding:20px 16px 0; flex-wrap:wrap; }
+  html:root body .section-heading>div { flex:1; }
+  html:root body #block1StatusPill { max-width:none; flex-basis:100%; text-align:start; }
+  html:root body .settings-column section { padding:20px 16px; }
+  html:root body .summary-card { padding:24px 20px; }
+  html:root body #map { height:320px; min-height:320px; }
+  html:root body .language-switch button { padding-inline:8px; }
+  html:root body .section-nav a { font-size:12px; }
+}
+@media(max-width:380px) {
+  html:root body .brand { gap:6px; }
+  html:root body .brand strong { font-size:18px; }
+  html:root body .brand-logo { width:24px; height:28px; }
+  html:root body .language-switch button { padding-inline:0; }
+}
+
+/* 7. Details: nested radii, real selection, focus outside the hit area. */
+html:root body :is(.app-header,.eco-hero,.map-panel,.settings-column section,.summary-card,.toast,.map-error) { border-radius:16px; }
+html:root body :is(.section-nav,.map-stage,.calculation-recovery) { border-radius:12px; }
+html:root body :is(button,.hero-cta,.crop-card,.irrig-card,input,select,.growth-stepper,.language-switch,.basemap-switch,#block3 .segmented-toggle,.balance-info,.location-prompt) { border-radius:8px; }
+html:root body :is(.language-switch__indicator,.segmented-toggle__indicator) { border-radius:4px; }
+html:root body :is(.section-heading .section-index,.settings-column section>div:first-child>span:first-child) {
+  min-width:24px; width:auto; height:24px; padding:0; background:none!important; border:0;
+  color:var(--muted); font:400 12px/24px Inter,sans-serif; letter-spacing:0; box-shadow:none;
+}
+html:root body :is(.gps-button,.region-select,.hero-cta,.submit-button,#block3 button,.language-switch button,.basemap-switch button,.map-toolbar button) { min-height:44px; }
+html:root body :is(.hero-cta,.submit-button) { padding:12px 16px; gap:24px; }
+html:root body .hero-cta { min-height:48px; padding:0 16px; }
+html:root body :is(.hero-cta,.submit-button) .motion-arrow { width:24px; height:24px; min-width:24px; }
+html:root body :is(button,.hero-cta,.crop-card,.irrig-card,.language-switch,.segmented-toggle) { overflow:visible; }
+html:root body :is(button,a,input,select,summary,[role=radio]):focus-visible {
+  outline:2px solid var(--accent)!important; outline-offset:4px; box-shadow:none!important;
+}
+html:root body .section-nav a::after { height:1px; background:var(--accent); box-shadow:none; }
+html:root body .section-nav a[aria-current=location] { color:var(--accent)!important; }
+html:root body :is(.location-prompt,.growth-estimate-note) { border-left-width:1px; }
+html:root body :is(.balance-error,.balance-field-error) { color:#a13321; background:#fff3ef; border-color:#b64b35; }
+html[data-theme=dark] body :is(.balance-error,.balance-field-error) { color:#ffbba9; background:#34251f; border-color:#c9826d; }
+html:root body :is(button,[role=radio])[aria-disabled=true],html:root body button:disabled { opacity:.5; cursor:default; }
+html:root body .growth-stepper>button { border-radius:0; border:0; }
+
+/* 8. Visuals: the existing satellite map is the visual. No filler. */
+html:root body :is(.hero-ambient,.hero-orbit,.agro-radar,.satellite-visual,.scroll-progress) { display:none; }
+html:root body::before,html:root body::after,
+html:root body .eco-hero::before,html:root body .eco-hero::after,
+html:root body .summary-card::before,html:root body .map-stage::after,
+html:root body :is(button,.hero-cta,.crop-card,.irrig-card)::after { content:none!important; display:none!important; animation:none!important; }
+html:root body .brand-logo img { filter:none; }
+html:root body .map-stage { border:1px solid var(--line); box-shadow:none; }
+
+/* 9. Motion: selection continuity, disclosure feedback, no scroll choreography. */
+html:root body :is(.motion-card,.reveal,.motion-intro,.eco-hero,.section-nav,.summary-card,#map),
+html:root body .motion-card * { animation:none!important; opacity:1; transform:none; will-change:auto; }
+html:root body :is(button,a,.crop-card,.irrig-card,input,select) {
+  transition:color 160ms var(--ease-out),background-color 160ms var(--ease-out),border-color 160ms var(--ease-out)!important;
+}
+html:root body .language-switch.is-ready .language-switch__indicator,
+html:root body .segmented-toggle.is-ready .segmented-toggle__indicator { transition:transform 180ms var(--ease-out); }
+html:root body .section-nav a::after { transition:transform 180ms var(--ease-out); }
+html:root body .motion-arrow svg { transition:transform 160ms var(--ease-out)!important; }
+html:root body .motion-arrow svg:last-child { display:none; }
+@media(hover:hover) {
+  html:root body :is(.crop-card,.irrig-card,.chip-btn,.gps-button,.growth-stage-options button):not(:disabled):hover { background:var(--surface-raised)!important; transform:none!important; }
+  html:root body :is(.hero-cta,.submit-button):not(:disabled):hover { background:var(--selected-ink)!important; color:var(--selected)!important; transform:none!important; }
+  html:root body :is(.hero-cta,.submit-button):hover .motion-arrow svg { transform:translateX(2px)!important; }
+}
+html:root body :is(.hero-cta,.submit-button,.gps-button,.crop-card,.irrig-card,.chip-btn):not(:disabled):active { opacity:.8; }
+@media(prefers-reduced-motion:reduce) {
+  html { scroll-behavior:auto; }
+  html:root body *,html:root body *::before,html:root body *::after { transition:none!important; animation:none!important; }
+  html:root body :is(.hero-cta,.submit-button):hover .motion-arrow svg { transform:none!important; }
+  html:root body :is(button,a,.crop-card,.irrig-card,input,select) { transition:none!important; }
+  html:root body .language-switch.is-ready .language-switch__indicator,
+  html:root body .segmented-toggle.is-ready .segmented-toggle__indicator,
+  html:root body .section-nav a::after { transition:none!important; }
+}

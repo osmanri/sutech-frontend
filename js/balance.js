@@ -188,7 +188,7 @@ window.SuBalance = (() => {
     const waterEc = read('waterEc',0,25,false,true), soilEc = read('soilEc',0,50,false,true);
     if (waterEc !== null) data.water_ec = waterEc;
     if (soilEc !== null) data.soil_ec = soilEc;
-    if (field === 'greenhouse' && crop !== 'rice') {
+    if (field === 'greenhouse') {
       const measuredEt0 = read('greenhouseEt0',0,50,false,true);
       if (measuredEt0 !== null) data.greenhouse_et0 = measuredEt0;
       data.greenhouse_medium = el('greenhouseMedium').value === 'substrate' ? 'substrate' : 'soil';
@@ -213,7 +213,7 @@ window.SuBalance = (() => {
     el('stageCalendar').classList.toggle('hidden', !calendars[crop]);
     el('customCropBalance').classList.toggle('hidden', crop !== 'other');
     el('riceBalanceNote').classList.toggle('hidden', crop !== 'rice');
-    el('greenhouseBalance').classList.toggle('hidden', field !== 'greenhouse' || crop === 'rice');
+    el('greenhouseBalance').classList.toggle('hidden', field !== 'greenhouse');
     refreshGuidance();
   }
   function payload() {

@@ -12,10 +12,10 @@ async page => {
  const span=key=>Math.max(...frames.map(x=>x[key]))-Math.min(...frames.map(x=>x[key]));
  const drift={x:span('x'),y:span('y'),width:span('width'),height:span('height')};
  if(Object.values(drift).some(x=>x>.5))throw new Error('GPS moves while hovering: '+JSON.stringify(drift));
- if(!baseFill.includes('linear-gradient')||await gps.evaluate(el=>getComputedStyle(el).backgroundImage)!==baseFill)throw new Error('GPS hover replaces its gradient with a legacy fill');
+ if(baseFill!=='none'||await gps.evaluate(el=>getComputedStyle(el).backgroundImage)!=='none')throw new Error('GPS uses a decorative gradient');
  const shine=await gps.evaluate(el=>{const c=getComputedStyle(el,'::after');return {name:c.animationName,iterations:c.animationIterationCount,duration:c.animationDuration};});
- if(shine.name!=='su-button-sheen'||shine.iterations!=='1')throw new Error('Expected one passing sheen: '+JSON.stringify(shine));
- if(await gps.evaluate(el=>getComputedStyle(el,'::after').pointerEvents)!=='none')throw new Error('Shine intercepts button input');
+ if(shine.name!=='none')throw new Error('GPS has a decorative sheen: '+JSON.stringify(shine));
+ if(await gps.evaluate(el=>{const s=getComputedStyle(el,'::after');return s.content!=='none'&&s.pointerEvents!=='none';}))throw new Error('Decoration intercepts button input');
  for(let i=0;i<8;i++){await page.mouse.move(0,0);await gps.hover();await page.evaluate(()=>new Promise(requestAnimationFrame));}
  await page.mouse.move(0,0);
  await gps.evaluate(el=>el.disabled=true);await gps.hover({force:true});
@@ -26,5 +26,17 @@ async page => {
  await gps.evaluate(el=>el.removeAttribute('aria-busy'));
  await page.emulateMedia({reducedMotion:'reduce'});await page.mouse.move(0,0);await gps.hover();
  if(await gps.evaluate(el=>getComputedStyle(el,'::after').animationName)!=='none')throw new Error('Reduced motion is ignored');
- return {gpsStable:true,singleShine:true,rapidHover:true,disabledSafe:true,busySafe:true,reducedMotion:true,drift};
+ const submission=await page.evaluate(()=>{
+   let sent=null;
+   tg={initData:'',platform:'tdesktop',sendData(value){sent=JSON.parse(value);},HapticFeedback:{notificationOccurred(){},impactOccurred(){}}};
+   selectRegion('atyrau');setFieldType('open');setSalinity('no');
+   document.getElementById('fieldAreaInput').value='1';handleAreaChange('1');
+   document.getElementById('growthDay').value='60';
+   document.getElementById('powerPrice').value='';
+   submitFinalCalculation();
+   return {sent:!!sent,transform:getComputedStyle(document.getElementById('btnSubmitAll')).transform};
+ });
+ if(!submission.sent)throw new Error('Submission check did not reach data delivery');
+ if(submission.transform!=='none')throw new Error('Valid submission moves under reduced motion: '+JSON.stringify(submission));
+ return {gpsStable:true,noDecorativeSheen:true,rapidHover:true,disabledSafe:true,busySafe:true,reducedMotion:true,submissionStable:true,drift};
 }

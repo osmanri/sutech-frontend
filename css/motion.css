@@ -1,0 +1,42 @@
+/* Motion only: the existing app/theme/glass styles own every visual decision. */
+html body .language-switch.is-ready .language-switch__indicator,
+html body .segmented-toggle.is-ready .segmented-toggle__indicator {
+  transition:none!important;
+  transform-origin:left center;
+}
+/* One moving gel surface, with the original color and shadow underneath. */
+html body #block3 .segmented-toggle button[aria-pressed],
+html body .basemap-switch.segmented-toggle button[aria-pressed] {
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
+html body :is(button,.hero-cta,.crop-card,.irrig-card) {
+  transform:none!important;
+  transition:color 160ms cubic-bezier(.22,1,.36,1),border-color 160ms cubic-bezier(.22,1,.36,1),opacity 120ms ease-out!important;
+}
+html body :is(button,.hero-cta,.crop-card,.irrig-card)::after {
+  content:none!important;
+  animation:none!important;
+  pointer-events:none;
+}
+/* Keep sections visible; short help disclosures run only after a user action. */
+html body :is(.map-panel,.settings-column section,.summary-card) { animation:none!important; }
+html body .settings-column details[open]>:not(summary) { animation:none!important; }
+html body .summary-card::before,html body .map-stage::after { animation:none!important; opacity:0; }
+html body .motion-arrow svg { transition:transform 160ms cubic-bezier(.22,1,.36,1)!important; }
+html body .motion-arrow svg:last-child { display:none; }
+@media(hover:hover) {
+  html body :is(.hero-cta,.submit-button):hover .motion-arrow svg:first-child { transform:translateX(2px)!important; }
+}
+html body :is(.hero-cta,.submit-button,.gps-button,.crop-card,.irrig-card,.chip-btn):not(:disabled):active { opacity:.85; }
+html body.motion-paused::before,html body.motion-paused .signal-track,
+html body .signal-strip.motion-offscreen .signal-track,
+html body .signal-strip:hover .signal-track { animation-play-state:paused!important; }
+@media(prefers-reduced-motion:reduce) {
+  html { scroll-behavior:auto; }
+  html body *,html body *::before,html body *::after { animation:none!important; transition:none!important; }
+  html body :is(button,.hero-cta,.crop-card,.irrig-card),
+  html body .motion-arrow svg { transition:none!important; }
+  html body :is(.hero-cta,.submit-button):hover .motion-arrow svg:first-child { transform:none!important; }
+}

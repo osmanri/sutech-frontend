@@ -10,22 +10,29 @@
   <link rel="icon" href="img/sutech-leaf-logo-transparent.png?v=5.10.35" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=7.0.1" />
-  <link rel="stylesheet" href="css/workspace.css?v=7.0.1" />
+  <link rel="stylesheet" href="css/app.css?v=7.1.0" />
+  <link rel="stylesheet" href="css/theme.css?v=7.1.0" />
+  <link rel="stylesheet" href="css/glass.css?v=7.1.0" />
+  <link rel="stylesheet" href="css/motion.css?v=7.1.0" />
   <script defer src="vendor/leaflet/leaflet.js"></script>
   <script async src="https://telegram.org/js/telegram-web-app.js" onload="window.dispatchEvent(new Event('telegram-ready'))"></script>
   <script defer src="js/serverless-location.js?v=5.10.61"></script>
   <script defer src="js/serverless-transport.js?v=5.10.61"></script>
   <script defer src="js/field-guidance.js?v=5.10.58"></script>
   <script defer src="js/crops-catalog.js?v=1"></script>
-  <script defer src="js/balance.js?v=7.0.1"></script>
+  <script defer src="js/balance.js?v=7.1.0"></script>
   <script defer src="js/calculation-recovery.js?v=5.10.60"></script>
-  <script defer src="js/app.js?v=7.0.1"></script>
+  <script defer src="js/app.js?v=7.1.0"></script>
 </head>
 <body>
-  <a class="skip-link" href="#block1" data-copy="skipToMap">Перейти к карте поля</a>
+  <div class="signal-strip" aria-hidden="true">
+    <div class="signal-track">
+      <div class="signal-loop"><span data-ticker-index="0">Расчёт водного баланса корней FAO-56</span><i>•</i><span data-ticker-index="1">Точный метеопрогноз Open-Meteo</span><i>•</i><span data-ticker-index="2">Рекомендации с объяснением расчёта</span><i>•</i><span data-ticker-index="3">Защита растений от водного стресса</span><i>•</i></div>
+      <div class="signal-loop"><span data-ticker-index="0">Расчёт водного баланса корней FAO-56</span><i>•</i><span data-ticker-index="1">Точный метеопрогноз Open-Meteo</span><i>•</i><span data-ticker-index="2">Рекомендации с объяснением расчёта</span><i>•</i><span data-ticker-index="3">Защита растений от водного стресса</span><i>•</i></div>
+    </div>
+  </div>
   <header class="app-header">
     <a class="brand" href="#block1" aria-label="Su-Tech">
       <span class="brand-logo"><img src="img/sutech-leaf-logo-transparent.png?v=5.10.35" alt="Su-Tech" /></span>
@@ -36,10 +43,12 @@
       <div class="language-switch" role="group" aria-label="Выбор языка" data-copy-aria="languageAria"><span class="language-switch__indicator" aria-hidden="true"></span><button type="button" id="langBtnRu" onclick="setLanguage('ru')">RU</button><button type="button" id="langBtnKz" onclick="setLanguage('kz')">ҚАЗ</button><button type="button" id="langBtnEn" onclick="setLanguage('en')">EN</button></div>
     </div>
   </header>
+  <div class="scroll-progress" aria-hidden="true"><span id="scrollProgressBar"></span></div>
   <section class="eco-hero" aria-labelledby="heroTitle">
+    <div class="hero-ambient hero-ambient-one" aria-hidden="true"></div><div class="hero-ambient hero-ambient-two" aria-hidden="true"></div>
     <div class="hero-copy">
-      <h1 id="heroTitle"><span data-copy="heroTitleTop">Расчёт полива</span> <em data-copy="heroTitleAccent">для вашего поля</em></h1>
-      <p class="hero-description" data-copy="heroDescription">Выберите участок и культуру. Su-Tech рассчитает потребность в воде по погоде и модели FAO-56.</p>
+      <h1 id="heroTitle"><span data-copy="heroTitleTop">Точный полив.</span> <em data-copy="heroTitleAccent">Живое поле.</em></h1>
+      <p class="hero-description" data-copy="heroDescription">Погода и данные поля подскажут, когда и сколько поливать.</p>
       <div class="hero-actions">
         <a class="hero-cta" href="#block1"><span data-copy="heroCta">Настроить поле</span><span class="motion-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></span></a>
       </div>
@@ -79,7 +88,7 @@
           </div>
           <div class="map-toolbar">
             <button id="btnUndoPoint" onclick="undoFieldPoint()" disabled data-copy="btnUndoPoint">Убрать точку</button>
-            <button id="btnResetContour" onclick="resetFieldContour()" disabled data-copy="btnResetContour" class="hidden" style="display:none;" aria-hidden="true">Сбросить</button>
+            <button id="btnResetContour" onclick="resetFieldContour()" disabled data-copy="btnResetContour" class="hidden" style="display:none;" aria-hidden="true">🔄 Сбросить</button>
             <button id="btnClearLocation" onclick="clearCurrentLocation()" disabled data-copy="btnClearLocation" class="hidden" style="display:none;" aria-hidden="true">Убрать маркер</button>
           </div>
           <p id="mapHint" class="map-hint sr-only"></p>
@@ -108,6 +117,7 @@
              data-crop="wheat"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('wheat')" role="radio" aria-checked="false" tabindex="0">
+          <span class="crop-symbol" aria-hidden="true">🌾</span>
           <span class="" id="cropName_wheat">Пшеница</span>
           <span class="" id="cropSub_wheat">Бидай</span>
           <span class="">Kc:1.10</span>
@@ -120,6 +130,7 @@
              data-crop="cotton"
              class="crop-card flex flex-col relative card-selected active"
              onclick="selectCrop('cotton')" role="radio" aria-checked="true" tabindex="0">
+          <span class="crop-symbol" aria-hidden="true">☁️</span>
           <span class="" id="cropName_cotton">Хлопок</span>
           <span class="" id="cropSub_cotton">Мақта</span>
           <span class="">Kc:1.15</span>
@@ -132,6 +143,7 @@
              data-crop="corn"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('corn')" role="radio" aria-checked="false" tabindex="0">
+          <span class="crop-symbol" aria-hidden="true">🌽</span>
           <span class="" id="cropName_corn">Кукуруза</span>
           <span class="" id="cropSub_corn">Жүгері</span>
           <span class="">Kc:1.20</span>
@@ -144,6 +156,7 @@
              data-crop="rice"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('rice')" role="radio" aria-checked="false" tabindex="0">
+          <span class="crop-symbol" aria-hidden="true">🍚</span>
           <span class="" id="cropName_rice">Рис</span>
           <span class="" id="cropSub_rice">Күріш</span>
           <span class="">Kc:1.25</span>
@@ -156,6 +169,7 @@
              data-crop="alfalfa"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('alfalfa')" role="radio" aria-checked="false" tabindex="0">
+          <span class="crop-symbol" aria-hidden="true">🌿</span>
           <span class="" id="cropName_alfalfa">Люцерна</span>
           <span class="" id="cropSub_alfalfa">Жоңышқа</span>
           <span class="">Kc:1.05</span>
@@ -168,6 +182,7 @@
              data-crop="melon"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('melon')" role="radio" aria-checked="false" tabindex="0">
+          <span class="crop-symbol" aria-hidden="true">🍉</span>
           <span class="" id="cropName_melon">Бахча</span>
           <span class="" id="cropSub_melon">Бақша</span>
           <span class="">Kc:1.05</span>
@@ -180,6 +195,7 @@
              data-crop="tomato"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('tomato')" role="radio" aria-checked="false" tabindex="0">
+          <span class="crop-symbol" aria-hidden="true">🍅</span>
           <span class="" id="cropName_tomato">Томаты</span>
           <span class="" id="cropSub_tomato">Қызанақ</span>
           <span class="">Kc:1.15</span>
@@ -192,6 +208,7 @@
              data-crop="potato"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('potato')" role="radio" aria-checked="false" tabindex="0">
+          <span class="crop-symbol" aria-hidden="true">🥔</span>
           <span class="" id="cropName_potato">Картофель</span>
           <span class="" id="cropSub_potato">Картоп</span>
           <span class="">Kc:1.10</span>
@@ -204,6 +221,7 @@
              data-crop="other"
              class="crop-card flex flex-col relative"
              onclick="selectCrop('other')" role="radio" aria-checked="false" tabindex="0">
+          <span class="crop-symbol" aria-hidden="true">🌱</span>
           <span class="" id="cropName_other">Другая культура</span>
           <span class="" id="cropSub_other">Басқа дақыл</span>
           <span class="">Kc:1.00</span>
@@ -594,11 +612,11 @@
         <strong id="recoveryTitle"></strong><p id="recoveryBody"></p>
         <div class="calculation-recovery__actions"><button type="button" id="recoveryAction"></button><button type="button" id="recoveryDismiss"></button></div>
       </div>
-      <div class="summary-heading"><div><h2 id="summaryTitle">Ваш расчет полива</h2></div><span id="summaryStatusBadge"></span></div>
+      <div class="summary-heading"><div><p class="eyebrow" data-copy="summaryEyebrow">ГОТОВЫ К СЛЕДУЮЩЕМУ ШАГУ?</p><h2 id="summaryTitle">Ваш расчет полива</h2></div><span id="summaryStatusBadge"></span></div>
       <dl class="summary-grid"><div><dt id="sumLabelCoords"></dt><dd id="sumValCoords">—</dd></div><div><dt id="sumLabelCrop"></dt><dd id="sumValCrop">—</dd></div><div><dt id="sumLabelArea"></dt><dd id="sumValArea">—</dd></div><div><dt id="sumLabelIrrig"></dt><dd id="sumValIrrig">—</dd></div><div><dt id="sumLabelFieldType"></dt><dd id="sumValFieldType">—</dd></div><div><dt id="sumLabelSaline"></dt><dd id="sumValSaline">—</dd></div></dl>
       <div class="summary-footer"><p id="submitHint"></p><button id="btnSubmitAll" class="submit-button" onclick="submitFinalCalculation()"><span id="btnSubmitText">Рассчитать полив</span><span class="motion-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-6-6 6 6-6 6"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></button></div>
     </section>
-    <footer class="page-footer"><span>Su-Tech · Smart Irrigation</span><span data-copy="footerNote">По погоде и параметрам поля</span></footer>
+    <footer class="page-footer"><span>Su-Tech · Smart Irrigation</span><span data-copy="footerNote">Вода с заботой о будущем.</span></footer>
   </main>
   <div id="appToast" class="toast" role="status" aria-live="polite" style="display:none"></div>
 </body>

@@ -55,6 +55,18 @@ const {pathToFileURL} = require('node:url');
     assert.ok(c.names.ru && c.names.kz && c.names.en, `${c.key} has three names`);
     assert.deepStrictEqual(c.stages, engine.CROPS[c.key][4], `${c.key} default calendar = engine calendar`);
   }
+  for (const [name, preset] of Object.entries(demo.GREENHOUSE_PRESETS)) {
+    const {field, result} = demo.compute(preset);
+    assert.equal(field.field_type, 'greenhouse');
+    assert.equal(result.rain, 0);
+    if (name === 'heated') assert.equal(result.et0, preset.greenhouse_et0);
+    if (name === 'substrate') {
+      assert.equal(result.status, 'unsupported');
+      assert.equal(result.gross_m3, 0);
+      assert.deepEqual(demo.explain(field, result, preset, 'en'), []);
+    }
+  }
+  assert.deepEqual(Object.keys(demo.GREENHOUSE_PRESETS), ['soil', 'heated', 'substrate']);
   const html2 = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
   assert.ok(html2.indexOf('js/crops-catalog.js') < html2.indexOf('js/balance.js'), 'catalog must load before balance.js');
   assert.ok(html2.includes('id="cropMore"'), 'picker present');

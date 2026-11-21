@@ -5,6 +5,31 @@ import {parseField, calculate, SOILS, METHODS, CROPS, VERSION, PUMP_MAX_HOURS_PE
 // Identical to DEMO_FIELD / DEMO_WEATHER in the bot (serverless/tgcloud/lib/demo.js).
 export const DEMO = {crop: 'wheat', soil_type: 'loam', irrigation_type: 'drip', area: 1, day_of_growth: 60,
   moisture_condition: 'dry', et0: 5, rain: 0, pump_power_kw: 22, pump_productivity_m3h: 60, power_price: 25};
+const soilHouse = {...DEMO, crop:'tomato', area:.01, day_of_growth:50, pump_power_kw:.4, pump_productivity_m3h:2,
+  field_type:'greenhouse', greenhouse_medium:'soil', greenhouse_heated:'no'};
+export const GREENHOUSE_PRESETS = {
+  soil:soilHouse,
+  heated:{...soilHouse, greenhouse_heated:'yes', greenhouse_et0:2.6},
+  substrate:{...soilHouse, greenhouse_medium:'substrate'},
+};
+
+const examples = {
+  en:{example:'Worked example', names:['Open field · wheat','Unheated soil greenhouse · tomato','Heated soil greenhouse · tomato','Substrate greenhouse · applicability check'],
+    notes:['Illustrative field and weather.','Illustrative values. Greenhouse ET₀ is estimated at 70% of outdoor ET₀. Outdoor rain is excluded.',
+      'Illustrative input of in-house ET₀: 2.6 mm/day. Replace it with a measurement when advising a real heated greenhouse.',
+      'The soil water balance does not apply to substrate. Use a substrate-specific method based on drainage.'],
+    unsupported:'No irrigation recommendation', rice:'Flooded rice estimate', riceStep:'Evaporation and seepage, less effective rainfall'},
+  ru:{example:'Пример расчёта', names:['Открытое поле · пшеница','Неотапливаемая грунтовая теплица · томат','Отапливаемая грунтовая теплица · томат','Теплица на субстрате · границы метода'],
+    notes:['Условные параметры поля и погоды.','Условные параметры. ET₀ теплицы оценивается как 70% наружной ET₀. Осадки снаружи не учитываются.',
+      'Условный ввод ET₀ внутри теплицы: 2,6 мм/сут. Для реальной отапливаемой теплицы используйте измеренное значение.',
+      'Почвенный баланс неприменим к субстрату. Для него нужен отдельный метод с учётом дренажа.'],
+    unsupported:'Рекомендация по поливу не выдаётся', rice:'Расчёт для затопляемого риса', riceStep:'Испарение и фильтрация за вычетом эффективных осадков'},
+  kz:{example:'Есептеу мысалы', names:['Ашық алқап · бидай','Жылытылмайтын топырақты жылыжай · қызанақ','Жылытылатын топырақты жылыжай · қызанақ','Субстраттағы жылыжай · әдіс шегі'],
+    notes:['Алқап пен ауа райының шартты мәндері.','Шартты мәндер. Жылыжайдағы ET₀ сыртқы ET₀-дің 70%-ы деп бағаланады. Сыртқы жауын есептелмейді.',
+      'Жылыжай ішіндегі ET₀-дің шартты мәні: 2,6 мм/тәулік. Нақты жылытылатын жылыжай үшін өлшенген мәнді қолданыңыз.',
+      'Топырақ су балансы субстратқа қолданылмайды. Дренажды ескеретін жеке әдіс қажет.'],
+    unsupported:'Суару бойынша ұсыныс берілмейді', rice:'Су басқан күріш алқабының есебі', riceStep:'Булану мен сүзілу шығынынан тиімді жауын шегеріледі'},
+};
 
 export const COPY = {
   en: {
@@ -78,12 +103,14 @@ export const COPY = {
   },
 };
 
-export const seasonLength = crop => CROPS[crop][4].reduce((a, b) => a + b, 0);
+for (const lang of Object.keys(COPY)) Object.assign(COPY[lang], examples[lang]);
+export const seasonLength = crop => CROPS[crop]?.[4].reduce((a, b) => a + b, 0) ?? 180;
 
 export function compute(input) {
   const field = parseField({balance_version: 2, crop: input.crop, soil_type: input.soil_type, irrigation_type: input.irrigation_type,
     area: input.area, area_unit: 'hectare', day_of_growth: input.day_of_growth, moisture_condition: input.moisture_condition,
-    pump_power_kw: input.pump_power_kw, pump_productivity_m3h: input.pump_productivity_m3h, power_price: input.power_price});
+    pump_power_kw: input.pump_power_kw, pump_productivity_m3h: input.pump_productivity_m3h, power_price: input.power_price,
+    field_type:input.field_type, greenhouse_medium:input.greenhouse_medium, greenhouse_heated:input.greenhouse_heated, greenhouse_et0:input.greenhouse_et0});
   return {field, result: calculate(field, input.et0, input.rain)};
 }
 
@@ -95,12 +122,14 @@ export function formatter(lang) {
 // Every step as {title, formula, value}; shared by the page and the tests.
 export function explain(field, r, input, lang) {
   const t = COPY[lang], f = formatter(lang), u = t.unit;
+  if (r.status === 'unsupported') return [];
+  if (r.status === 'rice') return [{title:t.decision,formula:t.riceStep,value:`${f(r.net_mm)} ${u.mm}`}];
   const [fc, wp] = SOILS[field.soil], [tech, eff] = METHODS[field.method];
   const steps = [
     {title: 'TAW', formula: `1000 × (θfc − θwp) × Zr = 1000 × (${f(fc, 2)} − ${f(wp, 2)}) × ${f(field.zr, 2)}`, value: `${f(r.taw)} ${u.mm}`},
     {title: 'RAW', formula: `p × TAW = ${f(field.p, 2)} × ${f(r.taw)}`, value: `${f(r.raw)} ${u.mm}`},
     {title: 'ETc', formula: `Ks × Kc × ET₀ = ${f(r.ks, 2)} × ${f(field.kc, 2)} × ${f(r.et0)}`, value: `${f(r.etc)} ${u.mm}`, note: r.ks >= 1 ? t.ks1 : t.ksLow},
-    {title: t.deficit, formula: `${t.yesterday} + ETc − Peff = ${f(field.yesterday)} + ${f(r.etc)} − ${f(r.peff)}`, value: `${f(r.deficit)} ${u.mm}`, note: input.rain > 0 ? t.rainRule : ''},
+    {title: t.deficit, formula: `${t.yesterday} + ETc − Peff = ${f(field.yesterday)} + ${f(r.etc)} − ${f(r.peff)}`, value: `${f(r.deficit)} ${u.mm}`, note: r.rain > 0 ? t.rainRule : ''},
     {title: t.decision, formula: `${t.trigger.replace('{t}', f(tech, 0))} = ${f(r.threshold)} ${u.mm}`, value: t.dec[r.status]},
   ];
   if (r.status !== 'deferred') {
@@ -113,17 +142,24 @@ export function explain(field, r, input, lang) {
 if (typeof document !== 'undefined') {
   const $ = id => document.getElementById(id);
   let input = {...DEMO};
+  const presets = [DEMO, ...Object.values(GREENHOUSE_PRESETS)];
+  let selected = new URLSearchParams(location.search).get('example') === 'greenhouse' ? 1 : 0;
+  input = {...presets[selected]};
+  const catalog = window.SU_CROPS ?? [];
   const fields = {
-    crop: ['select', 'crops', Object.keys(CROPS)], soil_type: ['select', 'soils', Object.keys(SOILS)],
+    crop: ['select', 'crops', [...Object.keys(CROPS),'rice']], soil_type: ['select', 'soils', Object.keys(SOILS)],
     irrigation_type: ['select', 'methods', Object.keys(METHODS)], moisture_condition: ['select', 'moist', ['recent', 'normal', 'dry']],
     area: ['number'], day_of_growth: ['range'], et0: ['range'], rain: ['range'],
     pump_power_kw: ['number'], pump_productivity_m3h: ['number'], power_price: ['number'],
   };
   function fillSelects(lang) {
+    $('example').replaceChildren(...COPY[lang].names.map((textContent,value) => Object.assign(document.createElement('option'), {value,textContent})));
+    $('example').value = selected;
     for (const [k, [kind, dict, keys]] of Object.entries(fields)) {
       if (kind !== 'select') continue;
       const sel = $(k), names = COPY[lang][dict];
-      sel.replaceChildren(...keys.map(v => Object.assign(document.createElement('option'), {value: v, textContent: names[v]})));
+      sel.replaceChildren(...keys.map(v => Object.assign(document.createElement('option'), {value:v,
+        textContent:k === 'crop' && v === 'rice' ? {en:'Rice',ru:'Рис',kz:'Күріш'}[lang] : k === 'crop' ? (catalog.find(c=>c.key===v)?.names[lang] ?? names[v] ?? v) : names[v]})));
       sel.value = input[k];
     }
   }
@@ -140,13 +176,19 @@ if (typeof document !== 'undefined') {
     $('out-day').textContent = `${input.day_of_growth} ${t.unit.d}`;
     $('out-et0').textContent = `${f(input.et0)} ${t.unit.mm}`;
     $('out-rain').textContent = `${f(input.rain)} ${t.unit.mm}`;
+    $('example-note').textContent = t.notes[selected];
+    $('rain').disabled = selected !== 0;
+    $('et0').disabled = selected === 2;
     let field, r;
-    try { ({field, result: r} = compute(input)); } catch (_) { $('status').textContent = '—'; return; }
-    $('status').textContent = t.status[r.status];
+    try { ({field, result: r} = compute(input)); } catch (_) {
+      $('status').textContent = '—';delete $('status').dataset.status;
+      for(const id of ['m3','hours','cost']) $(id).textContent='—';$('steps').replaceChildren();return;
+    }
+    $('status').textContent = t.status[r.status] ?? t[r.status];
     $('status').dataset.status = r.status;
-    $('m3').textContent = r.status === 'deferred' ? t.none : `${f(r.gross_m3, 0)} ${t.unit.m3}`;
-    $('hours').textContent = r.status === 'deferred' ? '—' : `${f(r.ai_time_hours)} ${t.unit.h}`;
-    $('cost').textContent = r.status === 'deferred' ? '—' : `${f(r.cost, 0)} ₸`;
+    $('m3').textContent = r.status === 'unsupported' ? '—' : r.status === 'deferred' ? t.none : `${f(r.gross_m3, r.gross_m3 < 100 ? 2 : 0)} ${t.unit.m3}`;
+    $('hours').textContent = r.gross_m3 > 0 && r.ai_time_hours != null ? `${f(r.ai_time_hours, 2)} ${t.unit.h}` : '—';
+    $('cost').textContent = r.gross_m3 > 0 && r.cost != null ? `${f(r.cost, 0)} ₸` : '—';
     $('steps').replaceChildren(...explain(field, r, input, lang).map(s => {
       const li = document.createElement('li');
       const h = document.createElement('div'); h.className = 'step-head';
@@ -169,7 +211,8 @@ if (typeof document !== 'undefined') {
         render();
       });
     }
-    $('reset').addEventListener('click', () => { input = {...DEMO}; syncControls(); render(); });
+    $('example').addEventListener('change', e => { selected = Number(e.target.value); input = {...presets[selected]}; syncControls(); render(); });
+    $('reset').addEventListener('click', () => { input = {...presets[selected]}; syncControls(); render(); });
     window.SuSite.onLang(lang => { fillSelects(lang); syncControls(); render(); });
   });
 }
